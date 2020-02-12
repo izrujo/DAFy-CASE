@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{458602DA-05FB-4D7F-9C91-B81C617AA5D8}</ProjectGuid>
+    <Keyword>QtVS_v302</Keyword>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>core;gui;widgets</QtModules>
+  </PropertyGroup>
+  <PropertyGroup Label="QtSettings" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtInstall>msvc2017_64</QtInstall>
+    <QtModules>core;gui;widgets</QtModules>
+  </PropertyGroup>
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.props')">
+    <Import Project="$(QtMsBuild)\qt.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="FlowChartEditor.cpp" />
+    <ClCompile Include="FlowChart\A4Paper.cpp" />
+    <ClCompile Include="FlowChart\AccessKey.cpp" />
+    <ClCompile Include="FlowChart\Arrow.cpp" />
+    <ClCompile Include="FlowChart\Clipboard.cpp" />
+    <ClCompile Include="FlowChart\CoordinateConverter.cpp" />
+    <ClCompile Include="FlowChart\Creator.cpp" />
+    <ClCompile Include="FlowChart\Decision.cpp" />
+    <ClCompile Include="FlowChart\DeleteKey.cpp" />
+    <ClCompile Include="FlowChart\Document.cpp" />
+    <ClCompile Include="FlowChart\DownKey.cpp" />
+    <ClCompile Include="FlowChart\DrawingPaper.cpp" />
+    <ClCompile Include="FlowChart\DrawingTool.cpp" />
+    <ClCompile Include="FlowChart\DrawVisitor.cpp" />
+    <ClCompile Include="FlowChart\EditorIntroForm.cpp" />
+    <ClCompile Include="FlowChart\EscapeKey.cpp" />
+    <ClCompile Include="FlowChart\Executions.cpp" />
+    <ClCompile Include="FlowChart\ExpressionFactory.cpp" />
+    <ClCompile Include="FlowChart\Expressions.cpp" />
+    <ClCompile Include="FlowChart\File.cpp" />
+    <ClCompile Include="FlowChart\FlowChart.cpp" />
+    <ClCompile Include="FlowChart\FlowChartCommandFactory.cpp" />
+    <ClCompile Include="FlowChart\FlowChartCommands.cpp" />
+    <ClCompile Include="FlowChart\FlowChartFont.cpp" />
+    <ClCompile Include="FlowChart\FlowChartKeyActionFactory.cpp" />
+    <ClCompile Include="FlowChart\FlowChartKeyActions.cpp" />
+    <ClCompile Include="FlowChart\FlowChartTemplate.cpp" />
+    <ClCompile Include="FlowChart\FlowChartVisitor.cpp" />
+    <ClCompile Include="FlowChart\HScrollActionFactory.cpp" />
+    <ClCompile Include="FlowChart\HScrollActions.cpp" />
+    <ClCompile Include="FlowChart\InputOutput.cpp" />
+    <ClCompile Include="FlowChart\IntervalMake.cpp" />
+    <ClCompile Include="FlowChart\IterationMake.cpp" />
+    <ClCompile Include="FlowChart\Join.cpp" />
+    <ClCompile Include="FlowChart\KeyFactory.cpp" />
+    <ClCompile Include="FlowChart\Label.cpp" />
+    <ClCompile Include="FlowChart\LeftDown.cpp" />
+    <ClCompile Include="FlowChart\LeftKey.cpp" />
+    <ClCompile Include="FlowChart\Line.cpp" />
+    <ClCompile Include="FlowChart\Memory.cpp" />
+    <ClCompile Include="FlowChart\MemoryController.cpp" />
+    <ClCompile Include="FlowChart\MoveMake.cpp" />
+    <ClCompile Include="FlowChart\MovingTool.cpp" />
+    <ClCompile Include="FlowChart\NumberBox.cpp" />
+    <ClCompile Include="FlowChart\Painter.cpp" />
+    <ClCompile Include="FlowChart\Preparation.cpp" />
+    <ClCompile Include="FlowChart\PreviewForm.cpp" />
+    <ClCompile Include="FlowChart\Process.cpp" />
+    <ClCompile Include="FlowChart\PunchedCard.cpp" />
+    <ClCompile Include="FlowChart\RectangleRegion.cpp" />
+    <ClCompile Include="FlowChart\RepeatFalse.cpp" />
+    <ClCompile Include="FlowChart\RepeatTrue.cpp" />
+    <ClCompile Include="FlowChart\ResizingTool.cpp" />
+    <ClCompile Include="FlowChart\ResolutionConverter.cpp" />
+    <ClCompile Include="FlowChart\ResolutionVisitor.cpp" />
+    <ClCompile Include="FlowChart\RightDown.cpp" />
+    <ClCompile Include="FlowChart\RightDownjoin.cpp" />
+    <ClCompile Include="FlowChart\RightKey.cpp" />
+    <ClCompile Include="FlowChart\ScrollController.cpp" />
+    <ClCompile Include="FlowChart\Scrolls.cpp" />
+    <ClCompile Include="FlowChart\SelectingTool.cpp" />
+    <ClCompile Include="FlowChart\SelectionMake.cpp" />
+    <ClCompile Include="FlowChart\SequenceMake.cpp" />
+    <ClCompile Include="FlowChart\Shape.cpp" />
+    <ClCompile Include="FlowChart\SizeController.cpp" />
+    <ClCompile Include="FlowChart\SizeMake.cpp" />
+    <ClCompile Include="FlowChart\StatusBar.cpp" />
+    <ClCompile Include="FlowChart\String.cpp" />
+    <ClCompile Include="FlowChart\Symbol.cpp" />
+    <ClCompile Include="FlowChart\Template.cpp" />
+    <ClCompile Include="FlowChart\Terminal.cpp" />
+    <ClCompile Include="FlowChart\TextRegion.cpp" />
+    <ClCompile Include="FlowChart\Tokenizer.cpp" />
+    <ClCompile Include="FlowChart\Tool.cpp" />
+    <ClCompile Include="FlowChart\ToolFactory.cpp" />
+    <ClCompile Include="FlowChart\ToolTip.cpp" />
+    <ClCompile Include="FlowChart\TutorialController.cpp" />
+    <ClCompile Include="FlowChart\TutorialForm.cpp" />
+    <ClCompile Include="FlowChart\TutorialIntroForm.cpp" />
+    <ClCompile Include="FlowChart\TutorialMark.cpp" />
+    <ClCompile Include="FlowChart\TutorialMarkFactory.cpp" />
+    <ClCompile Include="FlowChart\Tutorials.cpp" />
+    <ClCompile Include="FlowChart\UpKey.cpp" />
+    <ClCompile Include="FlowChart\VariableList.cpp" />
+    <ClCompile Include="FlowChart\VScrollActionFactory.cpp" />
+    <ClCompile Include="FlowChart\VScrollActions.cpp" />
+    <ClCompile Include="FlowChart\Zoom.cpp" />
+    <ClCompile Include="FlowChart\ZoomVisitor.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Notepad\Caret.cpp" />
+    <ClCompile Include="Notepad\CaretController.cpp" />
+    <ClCompile Include="Notepad\Character.cpp" />
+    <ClCompile Include="Notepad\CharacterMetrics.cpp" />
+    <ClCompile Include="Notepad\Command.cpp" />
+    <ClCompile Include="Notepad\CommandFactory.cpp" />
+    <ClCompile Include="Notepad\Composite.cpp" />
+    <ClCompile Include="Notepad\Editor.cpp" />
+    <ClCompile Include="Notepad\Font.cpp" />
+    <ClCompile Include="Notepad\FontCommand.cpp" />
+    <ClCompile Include="Notepad\Glyph.cpp" />
+    <ClCompile Include="Notepad\GlyphFactory.cpp" />
+    <ClCompile Include="Notepad\Highlight.cpp" />
+    <ClCompile Include="Notepad\KeyActionFactory.cpp" />
+    <ClCompile Include="Notepad\KeyActions.cpp" />
+    <ClCompile Include="Notepad\Note.cpp" />
+    <ClCompile Include="Notepad\NotepadForm.cpp" />
+    <ClCompile Include="Notepad\Observer.cpp" />
+    <ClCompile Include="Notepad\Row.cpp" />
+    <ClCompile Include="Notepad\Scanner.cpp" />
+    <ClCompile Include="Notepad\Selector.cpp" />
+    <ClCompile Include="Notepad\Subject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="FlowChartEditor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="FlowChartEditor.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="FlowChartEditor.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="FlowChart\A4Paper.h" />
+    <ClInclude Include="FlowChart\AccessKey.h" />
+    <ClInclude Include="FlowChart\Array.h" />
+    <ClInclude Include="FlowChart\Arrow.h" />
+    <ClInclude Include="FlowChart\Clipboard.h" />
+    <ClInclude Include="FlowChart\CoordinateConverter.h" />
+    <ClInclude Include="FlowChart\Creator.h" />
+    <ClInclude Include="FlowChart\Decision.h" />
+    <ClInclude Include="FlowChart\DeleteKey.h" />
+    <ClInclude Include="FlowChart\Document.h" />
+    <ClInclude Include="FlowChart\DownKey.h" />
+    <ClInclude Include="FlowChart\DrawingPaper.h" />
+    <ClInclude Include="FlowChart\DrawingTool.h" />
+    <ClInclude Include="FlowChart\DrawVisitor.h" />
+    <ClInclude Include="FlowChart\EditorIntroForm.h" />
+    <ClInclude Include="FlowChart\EscapeKey.h" />
+    <ClInclude Include="FlowChart\Executions.h" />
+    <ClInclude Include="FlowChart\ExpressionFactory.h" />
+    <ClInclude Include="FlowChart\Expressions.h" />
+    <ClInclude Include="FlowChart\File.h" />
+    <ClInclude Include="FlowChart\FlowChart.h" />
+    <ClInclude Include="FlowChart\FlowChartCommandFactory.h" />
+    <ClInclude Include="FlowChart\FlowChartCommands.h" />
+    <ClInclude Include="FlowChart\FlowChartFont.h" />
+    <ClInclude Include="FlowChart\FlowChartKeyActionFactory.h" />
+    <ClInclude Include="FlowChart\FlowChartKeyActions.h" />
+    <ClInclude Include="FlowChart\FlowChartTemplate.h" />
+    <ClInclude Include="FlowChart\FlowChartVisitor.h" />
+    <ClInclude Include="FlowChart\HScrollActionFactory.h" />
+    <ClInclude Include="FlowChart\HScrollActions.h" />
+    <ClInclude Include="FlowChart\InputOutput.h" />
+    <ClInclude Include="FlowChart\IntervalMake.h" />
+    <ClInclude Include="FlowChart\IterationMake.h" />
+    <ClInclude Include="FlowChart\Join.h" />
+    <ClInclude Include="FlowChart\KeyFactory.h" />
+    <ClInclude Include="FlowChart\Label.h" />
+    <ClInclude Include="FlowChart\LeftDown.h" />
+    <ClInclude Include="FlowChart\LeftKey.h" />
+    <ClInclude Include="FlowChart\Line.h" />
+    <ClInclude Include="FlowChart\Memory.h" />
+    <ClInclude Include="FlowChart\MemoryController.h" />
+    <ClInclude Include="FlowChart\MoveMake.h" />
+    <ClInclude Include="FlowChart\MovingTool.h" />
+    <ClInclude Include="FlowChart\NumberBox.h" />
+    <ClInclude Include="FlowChart\Painter.h" />
+    <ClInclude Include="FlowChart\Preparation.h" />
+    <ClInclude Include="FlowChart\PreviewForm.h" />
+    <ClInclude Include="FlowChart\Process.h" />
+    <ClInclude Include="FlowChart\PunchedCard.h" />
+    <ClInclude Include="FlowChart\RectangleRegion.h" />
+    <ClInclude Include="FlowChart\RepeatFalse.h" />
+    <ClInclude Include="FlowChart\RepeatTrue.h" />
+    <ClInclude Include="FlowChart\ResizingTool.h" />
+    <ClInclude Include="FlowChart\ResolutionConverter.h" />
+    <ClInclude Include="FlowChart\ResolutionVisitor.h" />
+    <ClInclude Include="FlowChart\RightDown.h" />
+    <ClInclude Include="FlowChart\RightDownJoin.h" />
+    <ClInclude Include="FlowChart\RightKey.h" />
+    <ClInclude Include="FlowChart\ScrollController.h" />
+    <ClInclude Include="FlowChart\Scrolls.h" />
+    <ClInclude Include="FlowChart\SelectingTool.h" />
+    <ClInclude Include="FlowChart\SelectionMake.h" />
+    <ClInclude Include="FlowChart\SequenceMake.h" />
+    <ClInclude Include="FlowChart\Shape.h" />
+    <ClInclude Include="FlowChart\SizeController.h" />
+    <ClInclude Include="FlowChart\SizeMake.h" />
+    <ClInclude Include="FlowChart\Stack.h" />
+    <ClInclude Include="FlowChart\StatusBar.h" />
+    <ClInclude Include="FlowChart\String.h" />
+    <ClInclude Include="FlowChart\Symbol.h" />
+    <ClInclude Include="FlowChart\Template.h" />
+    <ClInclude Include="FlowChart\Terminal.h" />
+    <ClInclude Include="FlowChart\TextRegion.h" />
+    <ClInclude Include="FlowChart\Tokenizer.h" />
+    <ClInclude Include="FlowChart\Tool.h" />
+    <ClInclude Include="FlowChart\ToolFactory.h" />
+    <ClInclude Include="FlowChart\ToolTip.h" />
+    <ClInclude Include="FlowChart\TutorialController.h" />
+    <ClInclude Include="FlowChart\TutorialForm.h" />
+    <ClInclude Include="FlowChart\TutorialIntroForm.h" />
+    <ClInclude Include="FlowChart\TutorialMark.h" />
+    <ClInclude Include="FlowChart\TutorialMarkFactory.h" />
+    <ClInclude Include="FlowChart\Tutorials.h" />
+    <ClInclude Include="FlowChart\UpKey.h" />
+    <ClInclude Include="FlowChart\VariableList.h" />
+    <ClInclude Include="FlowChart\VScrollActionFactory.h" />
+    <ClInclude Include="FlowChart\VScrollActions.h" />
+    <ClInclude Include="FlowChart\Zoom.h" />
+    <ClInclude Include="FlowChart\ZoomVisitor.h" />
+    <ClInclude Include="Notepad\Array.h" />
+    <ClInclude Include="Notepad\Caret.h" />
+    <ClInclude Include="Notepad\CaretController.h" />
+    <ClInclude Include="Notepad\Character.h" />
+    <ClInclude Include="Notepad\CharacterMetrics.h" />
+    <ClInclude Include="Notepad\Command.h" />
+    <ClInclude Include="Notepad\CommandFactory.h" />
+    <ClInclude Include="Notepad\Composite.h" />
+    <ClInclude Include="Notepad\Editor.h" />
+    <ClInclude Include="Notepad\Font.h" />
+    <ClInclude Include="Notepad\FontCommand.h" />
+    <ClInclude Include="Notepad\Glyph.h" />
+    <ClInclude Include="Notepad\GlyphFactory.h" />
+    <ClInclude Include="Notepad\Highlight.h" />
+    <ClInclude Include="Notepad\KeyActionFactory.h" />
+    <ClInclude Include="Notepad\KeyActions.h" />
+    <ClInclude Include="Notepad\Note.h" />
+    <ClInclude Include="Notepad\NotepadForm.h" />
+    <ClInclude Include="Notepad\Observer.h" />
+    <ClInclude Include="Notepad\Row.h" />
+    <ClInclude Include="Notepad\Scanner.h" />
+    <ClInclude Include="Notepad\Selector.h" />
+    <ClInclude Include="Notepad\Subject.h" />
+    <ClInclude Include="x64\Debug\uic\ui_FlowChartEditor.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
