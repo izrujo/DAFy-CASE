@@ -3,8 +3,9 @@
 * 기능 : 도형(기호,선)의 추상화 클래스
 * 작성자 : 송윤창
 * 작성일자 : 2015년 3월 30일
+* 수정 : Qt - 20.02.12
 *******************************************************************/
-#include <afxwin.h>
+
 
 #include "Shape.h"
 #include "Painter.h"
@@ -32,7 +33,7 @@ Attribute::Attribute() {
 	this->vertexTrue = ' ';
 	this->vertexFalse = ' ';
 
-	POINT initPoint = { 0,0 };
+	QPoint initPoint(0, 0);
 	this->pointIn = initPoint;
 	this->pointOut = initPoint;
 	this->pointTrue = initPoint;
@@ -47,6 +48,7 @@ Attribute::Attribute(const Attribute& source) {
 	this->vertexOut = source.vertexOut;
 	this->vertexTrue = source.vertexTrue;
 	this->vertexFalse = source.vertexFalse;
+
 	this->pointIn = source.pointIn;
 	this->pointOut = source.pointOut;
 	this->pointTrue = source.pointTrue;
@@ -58,10 +60,12 @@ Attribute& Attribute::operator = (const Attribute& source) {
 	this->vertexOut = source.vertexOut;
 	this->vertexTrue = source.vertexTrue;
 	this->vertexFalse = source.vertexFalse;
+
 	this->pointIn = source.pointIn;
 	this->pointOut = source.pointOut;
 	this->pointTrue = source.pointTrue;
 	this->pointFalse = source.pointFalse;
+
 	return *this;
 }
 
@@ -71,14 +75,14 @@ bool Attribute::IsEqual(const Attribute& other) {
 		this->vertexOut == other.vertexOut &&
 		this->vertexTrue == other.vertexTrue &&
 		this->vertexFalse == other.vertexFalse &&
-		this->pointIn.x == other.pointIn.x &&
-		this->pointIn.y == other.pointIn.y &&
-		this->pointOut.x == other.pointOut.x &&
-		this->pointOut.y == other.pointOut.y &&
-		this->pointTrue.x == other.pointTrue.x &&
-		this->pointTrue.y == other.pointTrue.y &&
-		this->pointFalse.x == other.pointFalse.x &&
-		this->pointFalse.y == other.pointFalse.y) {
+		this->pointIn.x() == other.pointIn.x() &&
+		this->pointIn.y() == other.pointIn.y() &&
+		this->pointOut.x() == other.pointOut.x() &&
+		this->pointOut.y() == other.pointOut.y() &&
+		this->pointTrue.x() == other.pointTrue.x() &&
+		this->pointTrue.y() == other.pointTrue.y() &&
+		this->pointFalse.x() == other.pointFalse.x() &&
+		this->pointFalse.y() == other.pointFalse.y()) {
 		retVO = true;
 	}
 	return retVO;
@@ -90,14 +94,14 @@ bool Attribute::IsNotEqual(const Attribute& other) {
 		this->vertexOut != other.vertexOut ||
 		this->vertexTrue != other.vertexTrue ||
 		this->vertexFalse != other.vertexFalse ||
-		this->pointIn.x != other.pointIn.x ||
-		this->pointIn.y != other.pointIn.y ||
-		this->pointOut.x != other.pointOut.x ||
-		this->pointOut.y != other.pointOut.y ||
-		this->pointTrue.x != other.pointTrue.x ||
-		this->pointTrue.y != other.pointTrue.y ||
-		this->pointFalse.x != other.pointFalse.x ||
-		this->pointFalse.y != other.pointFalse.y) {
+		this->pointIn.x() != other.pointIn.x() ||
+		this->pointIn.y() != other.pointIn.y() ||
+		this->pointOut.x() != other.pointOut.x() ||
+		this->pointOut.y() != other.pointOut.y() ||
+		this->pointTrue.x() != other.pointTrue.x() ||
+		this->pointTrue.y() != other.pointTrue.y() ||
+		this->pointFalse.x() != other.pointFalse.x() ||
+		this->pointFalse.y() != other.pointFalse.y()) {
 		retVO = true;
 	}
 	return retVO;
@@ -109,14 +113,14 @@ bool Attribute::operator == (const Attribute& other) {
 		this->vertexOut == other.vertexOut &&
 		this->vertexTrue == other.vertexTrue &&
 		this->vertexFalse == other.vertexFalse &&
-		this->pointIn.x == other.pointIn.x &&
-		this->pointIn.y == other.pointIn.y &&
-		this->pointOut.x == other.pointOut.x &&
-		this->pointOut.y == other.pointOut.y &&
-		this->pointTrue.x == other.pointTrue.x &&
-		this->pointTrue.y == other.pointTrue.y &&
-		this->pointFalse.x == other.pointFalse.x &&
-		this->pointFalse.y == other.pointFalse.y) {
+		this->pointIn.x() == other.pointIn.x() &&
+		this->pointIn.y() == other.pointIn.y() &&
+		this->pointOut.x() == other.pointOut.x() &&
+		this->pointOut.y() == other.pointOut.y() &&
+		this->pointTrue.x() == other.pointTrue.x() &&
+		this->pointTrue.y() == other.pointTrue.y() &&
+		this->pointFalse.x() == other.pointFalse.x() &&
+		this->pointFalse.y() == other.pointFalse.y()) {
 		retVO = true;
 	}
 	return retVO;
@@ -128,59 +132,55 @@ bool Attribute::operator != (const Attribute& other) {
 		this->vertexOut != other.vertexOut ||
 		this->vertexTrue != other.vertexTrue ||
 		this->vertexFalse != other.vertexFalse ||
-		this->pointIn.x != other.pointIn.x ||
-		this->pointIn.y != other.pointIn.y ||
-		this->pointOut.x != other.pointOut.x ||
-		this->pointOut.y != other.pointOut.y ||
-		this->pointTrue.x != other.pointTrue.x ||
-		this->pointTrue.y != other.pointTrue.y ||
-		this->pointFalse.x != other.pointFalse.x ||
-		this->pointFalse.y != other.pointFalse.y) {
+		this->pointIn.x() != other.pointIn.x() ||
+		this->pointIn.y() != other.pointIn.y() ||
+		this->pointOut.x() != other.pointOut.x() ||
+		this->pointOut.y() != other.pointOut.y() ||
+		this->pointTrue.x() != other.pointTrue.x() ||
+		this->pointTrue.y() != other.pointTrue.y() ||
+		this->pointFalse.x() != other.pointFalse.x() ||
+		this->pointFalse.y() != other.pointFalse.y()) {
 		retVO = true;
 	}
 	return retVO;
 }
 
 Shape::Shape()
-	:contents() {
+	: backGroundColor(QColor(255, 255, 255)),
+	borderLine(QPen(Qt::SolidLine)),
+	borderColor(QColor(0, 0, 0)),
+	contents() {
 	this->x = 0;
 	this->y = 0;
 	this->width = 0;
 	this->height = 0;
-	this->backGroundColor = RGB(255, 255, 255);
-	this->borderLine = static_cast<PenStyle>(BORDERLINE);
-	this->borderColor = BORDERCOLOR;
 	this->isSelected = false;
 }
 
-Shape::Shape(Long x, Long y, Long width, Long height, COLORREF backGroundColor,
-	PenStyle borderLine, DWORD borderColor, String contents)
-	:contents(contents) {
+Shape::Shape(Long x, Long y, Long width, Long height, QColor backGroundColor,
+	QPen borderLine, QColor borderColor, String contents)
+	: backGroundColor(backGroundColor),
+	borderLine(borderLine),
+	borderColor(borderColor),
+	contents(contents) {
 	this->x = x;
 	this->y = y;
 	this->width = width;
 	this->height = height;
-	this->backGroundColor = backGroundColor;
-	this->borderLine = borderLine;
-	this->borderColor = borderColor;
-
 	this->isSelected = false;
 }
 
 Shape::~Shape() {}
 
 Shape::Shape(const Shape& source)
-	: contents(source.contents) {
+	: backGroundColor(source.backGroundColor),
+	borderLine(source.borderLine),
+	borderColor(source.borderColor),
+	contents(source.contents) {
 	this->x = source.x;
 	this->y = source.y;
-
 	this->width = source.width;
 	this->height = source.height;
-
-	this->backGroundColor = source.backGroundColor;
-
-	this->borderLine = source.borderLine;
-	this->borderColor = source.borderColor;
 	this->isSelected = source.isSelected;
 }
 
@@ -329,24 +329,10 @@ void Shape::ReSize(Long width, Long height) {
 	this->height = height;
 }
 
-void Shape::Paint(COLORREF backGroundColor, PenStyle borderLine, DWORD borderColor) {
+void Shape::Paint(QColor backGroundColor, QPen borderLine, QColor borderColor) {
 	this->backGroundColor = backGroundColor;
 	this->borderLine = borderLine;
 	this->borderColor = borderColor;
-}
-
-void Shape::DrawActiveShape(CDC *dc) {
-	POINT point[4];
-	point[0].x = x - LINETHICKNESS;
-	point[0].y = y - LINETHICKNESS;
-	point[1].x = x + width + LINETHICKNESS;
-	point[1].y = y - LINETHICKNESS;
-	point[2].x = x + width + LINETHICKNESS;
-	point[2].y = y + height + LINETHICKNESS;
-	point[3].x = x - LINETHICKNESS;
-	point[3].y = y + height + LINETHICKNESS;
-
-	dc->Polygon(point, BOXVERTECIES);
 }
 
 void Shape::DrawActiveShape(Painter *painter) {
@@ -370,55 +356,55 @@ void Shape::Select(bool selected) {
 	this->isSelected = selected;
 }
 
-int Shape::GetHitCode(Painter *painter, CPoint point) {
-	CRgn region;
+int Shape::GetHitCode(Painter *painter, QPoint point) {
+	QRegion region;
 	this->GetRegion(painter, &region);
 	return GetHitCode(painter, point, region);
 }
 
-int Shape::GetHitCode(Painter *painter, const CPoint& point, const CRgn& region) {
+int Shape::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
-	if (region.PtInRegion(point)) {
+	if (region.contains(point)) {
 		result = HIT_BODY;
 	}
 
-	CRect rectSelect;
+	QRect rectSelect;
 	GetSelectionMarkerRect(HIT_TOPLEFT, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_TOPLEFT;
 	}
 	GetSelectionMarkerRect(HIT_TOPMIDDLE, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_TOPMIDDLE;
 	}
 	GetSelectionMarkerRect(HIT_TOPRIGHT, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_TOPRIGHT;
 	}
 	GetSelectionMarkerRect(HIT_BOTTOMLEFT, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_BOTTOMLEFT;
 	}
 	GetSelectionMarkerRect(HIT_BOTTOMMIDDLE, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_BOTTOMMIDDLE;
 	}
 	GetSelectionMarkerRect(HIT_BOTTOMRIGHT, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_BOTTOMRIGHT;
 	}
 	GetSelectionMarkerRect(HIT_LEFTMIDDLE, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_LEFTMIDDLE;
 	}
 	GetSelectionMarkerRect(HIT_RIGHTMIDDLE, &rectSelect);
-	if (rectSelect.PtInRect(point)) {
+	if (rectSelect.contains(point)) {
 		result = HIT_RIGHTMIDDLE;
 	}
 	return result;
 }
 
-void Shape::GetSelectionMarkerRect(UINT marker, CRect *rect)
+void Shape::GetSelectionMarkerRect(UINT marker, QRect *rect)
 {
 	int x_;
 	int y_;
@@ -463,54 +449,58 @@ void Shape::GetSelectionMarkerRect(UINT marker, CRect *rect)
 	rect->bottom = y_ + 5;
 }
 
-void Shape::GetSelectionMarkerAllRegion(CRgn *region) {
-	Long x_, y_;
-	CRgn region1;
-	x_ = x;
-	y_ = y;
-	region->CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
+void Shape::GetSelectionMarkerAllRegion(QRegion *region) {
+	QRect rect;
+	QRegion addRegion;
 
-	x_ = x + width / 2;
-	y_ = y;
-	region1.CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
-	region->CombineRgn(region, &region1, RGN_OR);
-	region1.DeleteObject();
+	Long x = this->x;
+	Long y = this->y;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
 
-	x_ = x + width;
-	y_ = y;
-	region1.CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
-	region->CombineRgn(region, &region1, RGN_OR);
-	region1.DeleteObject();
+	x = this->x + this->width / 2;
+	y = this->y;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
+	
 
-	x_ = x;
-	y_ = y + height / 2;
-	region1.CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
-	region->CombineRgn(region, &region1, RGN_OR);
-	region1.DeleteObject();
+	x = this->x + this->width;
+	y = this->y;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
 
-	x_ = x + width;
-	y_ = y + height / 2;
-	region1.CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
-	region->CombineRgn(region, &region1, RGN_OR);
-	region1.DeleteObject();
+	x = this->x;
+	y = this->y + this->height / 2;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
 
-	x_ = x;
-	y_ = y + height;
-	region1.CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
-	region->CombineRgn(region, &region1, RGN_OR);
-	region1.DeleteObject();
+	x = this->x + this->width;
+	y = this->y + this->height / 2;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
 
-	x_ = x + width / 2;
-	y_ = y + height;
-	region1.CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
-	region->CombineRgn(region, &region1, RGN_OR);
-	region1.DeleteObject();
+	x = this->x;
+	y = this->y + this->height;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
 
-	x_ = x + width;
-	y_ = y + height;
-	region1.CreateRectRgn(x_ - 6, y_ - 6, x_ + 7, y_ + 7);
-	region->CombineRgn(region, &region1, RGN_OR);
-	region1.DeleteObject();
+	x = this->x + this->width / 2;
+	y = this->y + this->height;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
+
+	x = this->x + this->width;
+	y = this->y + this->height;
+	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
+	addRegion = QRegion(rect);
+	*region += addRegion;
 }
 
 HCURSOR Shape::GetCursor(int hit) const {
@@ -707,7 +697,7 @@ void Shape::Rewrite(char(*text)) {
 }
 
 int Shape::GetSymbolID() {
-	int id=0;
+	int id = 0;
 	if (dynamic_cast<Document*>(this)) {
 		id = ID_DOCUMENT;
 	}

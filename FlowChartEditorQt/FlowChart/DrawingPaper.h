@@ -1,14 +1,7 @@
-/******************************************************************
-* 파일 이름 : DrawingPaper.h
-* 기능 : CFrameWnd 사용
-* 작성자 : 송윤창
-* 작성일자 : 2015년 4월 06일 
-*******************************************************************/
-
 #ifndef _DRAWINGPAPER_H
 #define _DRAWINGPAPER_H
 
-#include <afxwin.h>
+#include <QtWidgets/QFrame>
 #include "Array.h"
 #include "Shape.h"
 
@@ -25,8 +18,6 @@ typedef signed long int Long;
 
 class Tool;
 class Painter;
-//class FlowChart;
-//class Shape;
 class Label;
 class Clipboard;
 
@@ -37,14 +28,15 @@ class MemoryController;
 class VariableList;
 
 class Zoom;
-//class VertexAttribute;
-class DrawingPaper : public CWnd {
+class DrawingPaper : public QFrame 
+{
+	Q_OBJECT
 
 public:
 	enum { IDLE, SELECT, DRAWING, MOVING, SIZING};
 
 public:
-	DrawingPaper();
+	DrawingPaper(QWidget *parent = Q_NULLPTR);
 	~DrawingPaper();
 
 	void DrawTemporaryObject(Shape *entity);
@@ -65,7 +57,7 @@ public:
 	void Move(Long xDistance, Long yDistance);
 	Long Save(const char (*fileName));
 	Long Load(const char (*fileName));
-	HCURSOR GetCursor();	
+	//HCURSOR GetCursor(); //커서
 
 public:
 	Shape* templateSelected;
@@ -98,7 +90,7 @@ public:
 	Zoom *zoom;
 	Shape *a4Paper;
 
-	HMENU hPopup;
+	HMENU hPopup; //팝업메뉴(우클릭)
 private:
 	friend class Label;
 	friend class FlowChartTemplate;
@@ -133,16 +125,11 @@ private:
 	friend class Clipboard;
 
 private:
-	//FlowChart *flowChart;	
-	// Label *label;
-
-	LONG hitCode;
-
+	LONG hitCode; //도형 선택 종류 관련
 
 protected:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnDestroy();
-	afx_msg void OnPaint(); 
+	void paintEvent(QPaintEvent *event); //paintEvent
+	/*
 	afx_msg void OnLButtonDown( UINT nFlags, CPoint point); // 마우스 왼쪽 버튼 다운
 	afx_msg void OnMouseMove( UINT nFlags, CPoint point );
 	afx_msg void OnLButtonUp( UINT nFlags, CPoint point );
@@ -162,12 +149,14 @@ protected:
 	afx_msg void OnSizeMakeMenuClick();
 	afx_msg void OnIntervalMakeMenuClick();
 	afx_msg void OnMoveMakeMenuClick();
+	*/
 
 	//19.9.16 스크롤
+	/*
 	afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar);
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar);
 	afx_msg BOOL OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
-
-	DECLARE_MESSAGE_MAP() //윈32에서 ON_COMMAND ON_NOTIFY 같은것을 정의
+	*/
 };
+
 #endif  // _DRWAINGPAPER_H

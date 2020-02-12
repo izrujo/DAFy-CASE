@@ -2,14 +2,17 @@
 * 파일 이름 : Shape.h
 * 기능 : 도형(기호,선)의 추상화 클래스
 * 작성자 : 송윤창
-* 작성일자 : 2015년 3월 30일 
+* 작성일자 : 2015년 3월 30일
 *******************************************************************/
 
 #ifndef _SHAPE_H
 #define _SHAPE_H
 
 #include "String.h" //path 설정
-#include <afxwin.h>
+
+#include <qpoint.h>
+#include <qcolor.h>
+#include <qpen.h>
 
 class ScrollController;
 
@@ -30,13 +33,18 @@ class ScrollController;
 #define ID_RIGHTDOWNJOIN	40013
 #define ID_INPUTOUTPUT     	40014
 
-enum SHAPE { ALL=0, SYMBOL=1, LINE=2, TERMINAL=4, PREPARATION=8, PUNCHEDCARD=16, PROCESS=32, DECISION=64,	
-					DOCUMENT=128, INPUTOUTPUT=256, ARROW=512, LEFTDOWN=1024, RIGHTDOWN=2048, 
-					JOIN=4096, REPEATTRUE=8196, REPEATFALSE=16384, RIGHTDOWNJOIN=32768 };
+enum SHAPE {
+	ALL = 0, SYMBOL = 1, LINE = 2, TERMINAL = 4, PREPARATION = 8, PUNCHEDCARD = 16, PROCESS = 32, DECISION = 64,
+	DOCUMENT = 128, INPUTOUTPUT = 256, ARROW = 512, LEFTDOWN = 1024, RIGHTDOWN = 2048,
+	JOIN = 4096, REPEATTRUE = 8196, REPEATFALSE = 16384, RIGHTDOWNJOIN = 32768
+};
 
-enum ATTRIBUTE{ POINT_IN , POINT_OUT, POINT_TRUE, POINT_FALSE };
+enum ATTRIBUTE { POINT_IN, POINT_OUT, POINT_TRUE, POINT_FALSE };
 
-enum DECISION_ { NONE = 0, SELECTION = 1,  ITERATION = 2};
+enum DECISION_ { NONE = 0, SELECTION = 1, ITERATION = 2 };
+
+enum Direction { RIGHT = 0, LEFT = 1 };
+enum PenStyle { SOLID, DASH, DOT, DASHDOT, DASHDOTDOT, INSIEDFRAME };
 
 // 선택 관련 매크로들
 #define HIT_NONE				   0
@@ -55,9 +63,7 @@ enum DECISION_ { NONE = 0, SELECTION = 1,  ITERATION = 2};
 #define HIT_TRUE                   13
 #define HIT_FALSE                  14
 
-enum Direction { RIGHT = 0, LEFT = 1};
-enum PenStyle {SOLID, DASH, DOT, DASHDOT, DASHDOTDOT, INSIEDFRAME };
-
+// ************* 디폴트 값들이 필요한가 ? ********************
 // 속성 디폴트 값
 #define BACKGROUNDCOLOR 10
 #define BORDERLINE 0
@@ -100,7 +106,7 @@ enum PenStyle {SOLID, DASH, DOT, DASHDOT, DASHDOTDOT, INSIEDFRAME };
 class Painter;
 class FlowChartVisitor;
 
-class Attribute{
+class Attribute {
 public:
 	Attribute();
 	~Attribute();
@@ -118,60 +124,59 @@ public:
 	char GetVertexOut() const;
 	char GetVertexTrue() const;
 	char GetVertexFalse() const;
-	POINT GetPointIn() const;
-	POINT GetPointOut() const;
-	POINT GetPointTrue() const;
-	POINT GetPointFalse() const;
+	QPoint GetPointIn() const;
+	QPoint GetPointOut() const;
+	QPoint GetPointTrue() const;
+	QPoint GetPointFalse() const;
 
-public:	
+public:
 	char vertexIn;
 	char vertexOut;
 	char vertexTrue;
 	char vertexFalse;
-	POINT pointIn;
-	POINT pointOut;
-	POINT pointTrue;
-	POINT pointFalse;
+	QPoint pointIn;
+	QPoint pointOut;
+	QPoint pointTrue;
+	QPoint pointFalse;
 };
 
-inline char Attribute::GetVertexIn() const{
+inline char Attribute::GetVertexIn() const {
 	return this->vertexIn;
 }
 
-inline char Attribute::GetVertexOut() const{
+inline char Attribute::GetVertexOut() const {
 	return this->vertexOut;
 }
 
-inline char Attribute::GetVertexTrue() const{
+inline char Attribute::GetVertexTrue() const {
 	return this->vertexTrue;
 }
 
-inline char Attribute::GetVertexFalse() const{
+inline char Attribute::GetVertexFalse() const {
 	return this->vertexFalse;
 }
 
-inline POINT Attribute::GetPointIn() const{
+inline QPoint Attribute::GetPointIn() const {
 	return this->pointIn;
 }
 
-inline POINT Attribute::GetPointOut() const{
+inline QPoint Attribute::GetPointOut() const {
 	return this->pointOut;
 }
 
-inline POINT Attribute::GetPointTrue() const{
+inline QPoint Attribute::GetPointTrue() const {
 	return this->pointTrue;
 }
 
-inline POINT Attribute::GetPointFalse() const{
+inline QPoint Attribute::GetPointFalse() const {
 	return this->pointFalse;
 }
 
 class Shape {
 public:
 	Shape();
-	Shape(Long x, Long y, Long width, Long height, COLORREF backGroundColor,
-			PenStyle borderLine = static_cast<PenStyle>(BORDERLINE), DWORD borderColor = BORDERCOLOR,
-		String contents = static_cast<String>(""));
+	Shape(Long x, Long y, Long width, Long height, QColor backGroundColor,
+		QPen borderLine, QColor borderColor, String contents = static_cast<String>(""));
 
 	virtual ~Shape() = 0;
 
@@ -191,41 +196,32 @@ public:
 
 	void Move(Long x, Long y);
 	virtual void ReSize(Long width, Long height);
-	void Rewrite( char (*text) );
+	void Rewrite(char(*text));
 
-	void Paint(COLORREF backGroundColor,PenStyle borderLine, DWORD borderColor);
-		
-	//virtual void Draw(CDC *dc) = 0;
-	//virtual void Draw(Painter *painter) = 0; 
-	virtual void DrawActiveShape(CDC *dc); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
+	void Paint(QColor backGroundColor, QPen borderLine, QColor borderColor); //색깔 속성 변경
+
 	virtual void DrawActiveShape(Painter *painter); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
 
 	// Visitor 패턴 적용
 	virtual void Accept(FlowChartVisitor *draw) = 0;
-
-	//virtual void DrawSelectionMark(CDC *dc);
-
+	// Prototype 패턴 적용
 	virtual Shape* Clone() = 0;
-	
-	//virtual void GetFormattingArea(Long *left, Long *top, Long *right, Long *bottom);
-	//virtual void GetFormattingArea(Long *left, Long *top, Long *width, Long *height);
-				
-	virtual void GetRegion(CDC *dc, CRgn *region)=0;  //마우스 드래그로 여러 도형 한번에 선택시 사용
-	virtual void GetRegion(Painter *painter, CRgn *region)=0;
-	virtual void GetRegion(CDC *dc, Long thickness, CRgn *region)=0;
-	virtual void GetRegion(Painter *painter, Long thickness, CRgn *region)=0;
 
-	virtual void GetSelectionMarkerAllRegion( CRgn *region );
+	//마우스 드래그로 여러 도형 한번에 선택시 사용
+	virtual void GetRegion(Painter *painter, QRegion *region) = 0;
+	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region) = 0;
 
-	virtual void GetAttribute(Attribute *Attribute){};
-		
+	virtual void GetSelectionMarkerAllRegion(QRegion *region);
+
+	virtual void GetAttribute(Attribute *Attribute) {};
+
 	Long GetX() const;
 	Long GetY() const;
 	Long GetWidth() const;
 	Long GetHeight() const;
-	COLORREF GetBackGroundColor() const;
-	PenStyle GetBorderLine() const;
-	DWORD GetBorderColor() const;
+	QColor& GetBackGroundColor() const;
+	QPen& GetBorderLine() const;
+	QColor& GetBorderColor() const;
 
 	String& GetContents() const;
 
@@ -236,81 +232,75 @@ public:
 
 	// 선택 관련 
 	// virtual bool IsIncluded( int x, int y );
-	virtual BOOL IsIncluded(CDC *dc, POINT point){return false;};
-	virtual BOOL IsIncluded(Painter *painter, POINT point){return false;};
-	virtual BOOL IsIncluded(Painter *painter, const RECT& rect){return false;};
+	virtual BOOL IsIncluded(Painter *painter, QPoint point) { return false; };
+	virtual BOOL IsIncluded(Painter *painter, const QRect& rect) { return false; };
 
-	virtual void Select( bool selected );
+	virtual void Select(bool selected);
 	virtual bool IsSelected() const;
 
-	//virtual int GetHitCode( CPoint point ) const;
-	//virtual int GetHitCode( const CPoint& point, const CRect& rect ) const;
-	virtual int GetHitCode( Painter *painter, CPoint point );
-	virtual int GetHitCode( Painter *painter, const CPoint& point, const CRgn& region );
+	virtual int GetHitCode(Painter *painter, QPoint point);
+	virtual int GetHitCode(Painter *painter, const QPoint& point, const QRegion& region);
 
-	virtual HCURSOR GetCursor( int hit ) const;
+	virtual HCURSOR GetCursor(int hit) const; //QCursor class 존재
 
 	virtual void Copy(Shape *object);
-	//virtual void Copy(Shape *object) {}/* = 0*/;
 
-	virtual void GetLine(char (*line)){};
+	virtual void GetLine(char(*line)) {};
 
 	virtual Long CenterOfGravityY() const;
 	virtual Long CenterOfGravityX() const;
 
-	//virtual SHAPE Identify() const { return ID_SHAPE; }; // 입력을 SHAPE 출력을 BOOL로 바꾸자
-	virtual bool Identify(SHAPE identify){ return false; };
+	virtual bool Identify(SHAPE identify) { return false; };
 	virtual bool IsStyle(Long style);
 
 	int GetSymbolID(); //190903 DrawingPaper.LButtonDown에서 Creator.Create 사용하기 위함
 	int GetLineID(); //191227 Interpreter pattern 적용 중
-public:	
-	static void MakeRectToPoint(POINT point, RECT *rect);
+public:
+	static void MakeRectToPoint(QPoint point, QRect *rect);
 
 protected:
-	virtual void DrawSelectionMarkers( CDC* dc , ScrollController *scrollController);
-	virtual void DrawSelectionMarkers( Painter* painter, ScrollController *scrollController);
-	virtual void GetSelectionMarkerRect( UINT marker, CRect *rect );		
+	virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController);
+	virtual void GetSelectionMarkerRect(UINT marker, QRect *rect);
 
 protected:
 	Long x;
 	Long y;
 	Long width;
 	Long height;
-	COLORREF backGroundColor;
-	PenStyle borderLine;
-	DWORD borderColor;
+	QColor backGroundColor;
+	QPen borderLine;
+	QColor borderColor;
 	String contents;
 
 	bool isSelected;
 };
 
-inline Long Shape::GetX() const{
+inline Long Shape::GetX() const {
 	return this->x;
 }
 
-inline Long Shape::GetY() const{
+inline Long Shape::GetY() const {
 	return this->y;
 }
 
-inline Long Shape::GetWidth() const{
+inline Long Shape::GetWidth() const {
 	return this->width;
 }
 
-inline Long Shape::GetHeight() const{
+inline Long Shape::GetHeight() const {
 	return this->height;
 }
 
-inline COLORREF Shape::GetBackGroundColor() const{
-	return this->backGroundColor;
+inline QColor& Shape::GetBackGroundColor() const {
+	return const_cast<QColor&>(this->backGroundColor);
 }
 
-inline PenStyle Shape::GetBorderLine() const{
-	return this->borderLine;
+inline QPen& Shape::GetBorderLine() const {
+	return const_cast<QPen&>(this->borderLine);
 }
 
-inline DWORD Shape::GetBorderColor() const{
-	return this->borderColor;
+inline QColor& Shape::GetBorderColor() const {
+	return const_cast<QColor&>(this->borderColor);
 }
 
 inline String& Shape::GetContents() const {
@@ -336,16 +326,16 @@ inline bool Shape::IsSelected() const {
 	return this->isSelected;
 }
 
-inline Long Shape::CenterOfGravityY() const{
-	return this->y;
+inline Long Shape::CenterOfGravityY() const {
+	return this->y + this->height / 2;
 }
 
-inline Long Shape::CenterOfGravityX() const{
-	return this->x + this->width/2;
+inline Long Shape::CenterOfGravityX() const {
+	return this->x + this->width / 2;
 }
 
-inline bool Shape::IsStyle(Long style){
-	return (style==ALL)?(true):(false);
+inline bool Shape::IsStyle(Long style) {
+	return (style == ALL) ? (true) : (false);
 }
 
 #endif // _SHAPE_H

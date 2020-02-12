@@ -402,9 +402,6 @@
     <ClInclude Include="FlowChart\DownKey.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\DrawingPaper.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\DrawingTool.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -713,6 +710,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="FlowChartEditor.h">
+      <Filter>FlowChart</Filter>
+    </QtMoc>
+    <QtMoc Include="FlowChart\DrawingPaper.h">
       <Filter>FlowChart</Filter>
     </QtMoc>
   </ItemGroup>

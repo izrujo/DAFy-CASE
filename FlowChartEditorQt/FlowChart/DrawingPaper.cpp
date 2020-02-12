@@ -1,158 +1,22 @@
-/******************************************************************
- * 파일 이름 : DrawingPaper.cpp
- * 기능 : CFrameWnd 사용
- * 작성자 : 송윤창
- * 작성일자 : 2015년 4월 06일
-*******************************************************************/
 #include "DrawingPaper.h"
-
 #include "FlowChartEditor.h"
-#include "FlowChartTemplate.h"
-#include "Label.h"
-
 #include "FlowChart.h"
-#include "Shape.h"
-#include "Painter.h"
-#include "Symbol.h"
-
-#include "Decision.h"
-#include "Document.h"
-#include "Preparation.h"
-#include "Process.h"
-#include "PunchedCard.h"
-#include "Terminal.h"
-#include "InputOutput.h"
-
-#include "Arrow.h"
-#include "Join.h"
-#include "LeftDown.h"
-#include "RepeatFalse.h"
-#include "RepeatTrue.h"
-#include "RightDown.h"
-#include "RightDownJoin.h"
-
-#include "ToolFactory.h"
-#include "DrawingTool.h"
-#include "MovingTool.h"
-#include "ResizingTool.h"
-#include "SelectingTool.h"
-
-#include "SequenceMake.h"
-#include "IterationMake.h"
-#include "SelectionMake.h"
-#include "SelectionMake.h"
-
-////////////////////////////////////
-//#include "Text.h" // 테스트
-/////////////////////////////////////
-//#include "Formatter.h"
-#include "Decision.h"
-
-#include "KeyFactory.h"
-#include "AccessKey.h"
-
-#include "DeleteKey.h"
-#include "UpKey.h"
-#include "DownKey.h"
-#include "LeftKey.h"
-#include "RightKey.h"
-#include "EscapeKey.h"
-
-// Factory Pattern
-// #include "Creator.h"
-// #include "Tokenizer.h"
-
-// Save
-//#include "Configuration.h"
-
 #include "Clipboard.h"
-
-//#include <stdio.h>
-#include <string>
-#include <fstream>	//save  / load
-#include <afxdlgs.h> // CFileDialog
-#include "File.h"
-
-#include "FlowChartVisitor.h"
-#include "DrawVisitor.h"
-
-#include "../Notepad/Glyph.h"
-#include "Creator.h"
-
-#include "ScrollController.h"
-#include "VScrollActionFactory.h"
-#include "VScrollActions.h"
-#include "HScrollActionFactory.h"
-#include "HScrollActions.h"
-#include "Scrolls.h"
-#include "VariableList.h"
-
 #include "MemoryController.h"
-#include "Memory.h"
-#include "Executions.h"
-
-#include "FlowChartKeyActionFactory.h"
-#include "FlowChartKeyActions.h"
-
+#include "VariableList.h"
 #include "Zoom.h"
 #include "A4Paper.h"
-#include "ZoomVisitor.h"
-#include "CoordinateConverter.h"
 
-#include "FlowChartFont.h"
+#include <qpainter.h>
 
-#include "StatusBar.h"
-#include "ToolTip.h"
-#include "TutorialForm.h"
-#include "Tutorials.h"
-#include "TutorialMark.h"
-#include "TutorialMarkFactory.h"
-#include "TutorialController.h"
-#include "Template.h"
-
-#pragma warning (disable : 4996)
-// 메세지 맵
-BEGIN_MESSAGE_MAP(DrawingPaper, CWnd)
-	ON_WM_CREATE()
-	ON_WM_PAINT()
-	ON_WM_DESTROY()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_MOUSEMOVE()
-	ON_WM_LBUTTONUP()
-	ON_WM_LBUTTONDBLCLK()
-	ON_WM_CONTEXTMENU()
-
-	ON_WM_SETFOCUS()
-	ON_WM_KILLFOCUS()
-	ON_WM_KEYDOWN()
-	ON_WM_CHAR()
-
-	ON_WM_SIZE()
-
-	ON_WM_SETCURSOR()
-
-	ON_COMMAND(IDM_AE_SEQUENCE, OnSequnceMenuClick)
-	ON_COMMAND(IDM_AE_ITERATION, OnIterationMenuClick)
-	ON_COMMAND(IDM_AE_SELECION, OnSelectionMenuClick)
-
-	ON_COMMAND(IDM_AE_MOVEMAKE, OnMoveMakeMenuClick)
-	ON_COMMAND(IDM_AE_SIZEMAKE, OnSizeMakeMenuClick)
-	ON_COMMAND(IDM_AE_INTERVALMAKE, OnIntervalMakeMenuClick)
-
-	ON_WM_VSCROLL()
-	ON_WM_HSCROLL()
-	ON_WM_MOUSEWHEEL()
-
-END_MESSAGE_MAP()
-
-DrawingPaper::DrawingPaper() {
+DrawingPaper::DrawingPaper(QWidget *parent = Q_NULLPTR) {
 	this->templateSelected = NULL;
 
 	this->flowChart = NULL;
 
 	this->label = NULL;
 	this->painter = NULL;
-	////////////////////////////////////////////////////////////////
+
 	this->startX = 0;
 	this->startY = 0;
 
@@ -176,7 +40,26 @@ DrawingPaper::DrawingPaper() {
 
 	this->zoom = NULL;
 
-	this->hPopup = NULL;
+	//this->hPopup = NULL;
+
+	QRect frameRect = this->frameRect();
+
+	this->flowChart = new FlowChart;
+
+	//this->painter = new Painter(this); //트리플 버퍼링 유지하자.
+
+	//this->SetFocus();
+
+	this->clipboard = new Clipboard;
+
+	this->memoryController = new MemoryController(this);
+
+	this->variableList = new VariableList;
+
+	this->zoom = new Zoom(100);
+
+	this->a4Paper = new A4Paper(444, 615, 1653, 2338, RGB(255, 255, 255));
+	this->zoom->Set(40);
 }
 
 DrawingPaper::~DrawingPaper() {
@@ -188,7 +71,7 @@ DrawingPaper::~DrawingPaper() {
 		delete this->painter;
 		this->painter = NULL;
 	}
-
+	/*
 	if (Label::Instance() != NULL) {
 		Label::Destroy();
 	}
@@ -204,7 +87,7 @@ DrawingPaper::~DrawingPaper() {
 	if (SelectingTool::Instance() != NULL) {
 		SelectingTool::Destroy();
 	}
-	///////////////////////////////이건 여기 왜?
+
 	if (DeleteKey::Instance() != NULL) {
 		DeleteKey::Destroy();
 	}
@@ -223,7 +106,8 @@ DrawingPaper::~DrawingPaper() {
 	if (EscapeKey::Instance() != NULL) {
 		EscapeKey::Destroy();
 	}
-	//////////////////////////////////////////
+	*/
+
 	if (this->clipboard != NULL) {
 		delete this->clipboard;
 	}
@@ -253,37 +137,13 @@ DrawingPaper::~DrawingPaper() {
 	}
 }
 
-int DrawingPaper::OnCreate(LPCREATESTRUCT lpCreateStruct) {
-	CWnd::OnCreate(lpCreateStruct);
-
-	CRect rect;
-	GetClientRect(&rect);
-
-	this->flowChart = new FlowChart;
-
-	this->painter = new Painter(this->GetDC(), rect.Width(), rect.Height(), RGB(255, 255, 255), TRANSPARENT);
-
-	this->SetFocus();
-
-	this->clipboard = new Clipboard;
-
-	this->memoryController = new MemoryController(this);
-
-	this->variableList = new VariableList;
-
-	this->zoom = new Zoom(100);
-
-	this->a4Paper = new A4Paper(444, 615, 1653, 2338, RGB(255, 255, 255));
-	this->zoom->Set(40);
-
-	return 0;
-}
-
+/*
 void DrawingPaper::OnDestroy() {
 	CWnd::OnDestroy();
 }
+*/
 
-void DrawingPaper::OnPaint() {
+void DrawingPaper::paintEvent(QPaintEvent *event) {
 	CPaintDC dc(this);
 	CRect rect;
 	GetClientRect(&rect);

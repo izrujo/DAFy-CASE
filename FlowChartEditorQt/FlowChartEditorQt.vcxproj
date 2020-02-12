@@ -213,7 +213,7 @@
     <ClInclude Include="FlowChart\DeleteKey.h" />
     <ClInclude Include="FlowChart\Document.h" />
     <ClInclude Include="FlowChart\DownKey.h" />
-    <ClInclude Include="FlowChart\DrawingPaper.h" />
+    <QtMoc Include="FlowChart\DrawingPaper.h" />
     <ClInclude Include="FlowChart\DrawingTool.h" />
     <ClInclude Include="FlowChart\DrawVisitor.h" />
     <ClInclude Include="FlowChart\EditorIntroForm.h" />

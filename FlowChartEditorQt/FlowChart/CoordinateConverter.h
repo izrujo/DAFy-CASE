@@ -1,7 +1,7 @@
 #ifndef _COORDINATECONVERTER_H
 #define _COORDINATECONVERTER_H
 
-#include <afxwin.h>
+#include <qpoint.h>
 
 typedef signed long int Long;
 class Shape;
@@ -14,15 +14,15 @@ public:
 	CoordinateConverter& operator=(const CoordinateConverter& source);
 
 	void Update(Shape *a4Paper);
-	POINT ConvertVirtual(POINT realPoint);
-	POINT ConvertReal(POINT virtualPoint);
+	QPoint ConvertVirtual(QPoint realPoint);
+	QPoint ConvertReal(QPoint virtualPoint);
 
-	POINT GetZeroPoint() const;
+	QPoint GetZeroPoint() const;
 private:
-	POINT zeroPoint;
+	QPoint zeroPoint;
 };
 
-inline POINT CoordinateConverter::GetZeroPoint() const {
+inline QPoint CoordinateConverter::GetZeroPoint() const {
 	return this->zeroPoint;
 }
 

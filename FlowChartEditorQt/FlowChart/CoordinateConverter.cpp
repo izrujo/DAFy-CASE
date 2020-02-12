@@ -2,7 +2,7 @@
 #include "Shape.h"
 
 CoordinateConverter::CoordinateConverter() {
-	this->zeroPoint = { 0, 0 };
+	this->zeroPoint = QPoint(0, 0);
 }
 
 CoordinateConverter::CoordinateConverter(const CoordinateConverter& source) {
@@ -25,22 +25,22 @@ void CoordinateConverter::Update(Shape *a4Paper) {
 	Long width = a4Paper->GetWidth();
 	Long height = a4Paper->GetHeight();
 
-	this->zeroPoint.x = x + width / 2;
-	this->zeroPoint.y = y + height / 2;
+	this->zeroPoint.setX(x + width / 2);
+	this->zeroPoint.setY(y + height / 2);
 }
 
-POINT CoordinateConverter::ConvertVirtual(POINT realPoint) {
-	POINT virtualPoint;
-	virtualPoint.x = realPoint.x - this->zeroPoint.x;
-	virtualPoint.y = (realPoint.y - this->zeroPoint.y) * -1;
+QPoint CoordinateConverter::ConvertVirtual(QPoint realPoint) {
+	QPoint virtualPoint;
+	virtualPoint.setX(realPoint.x() - this->zeroPoint.x());
+	virtualPoint.setY((realPoint.y() - this->zeroPoint.y()) * -1);
 
 	return virtualPoint;
 }
 
-POINT CoordinateConverter::ConvertReal(POINT virtualPoint) {
-	POINT realPoint;
-	realPoint.x = virtualPoint.x + this->zeroPoint.x;
-	realPoint.y = virtualPoint.y * -1 + this->zeroPoint.y;
+QPoint CoordinateConverter::ConvertReal(QPoint virtualPoint) {
+	QPoint realPoint;
+	realPoint.setX(virtualPoint.x() + this->zeroPoint.x());
+	realPoint.setY(virtualPoint.y() * -1 + this->zeroPoint.y());
 
 	return realPoint;
 }
