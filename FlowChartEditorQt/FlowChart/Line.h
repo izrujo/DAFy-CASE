@@ -12,8 +12,8 @@
 
 class Line : public Shape {
 	public:		
-		Line(Long x, Long y, Long width, Long height, DWORD backGroundColor = BACKGROUNDCOLOR,
-			  PenStyle borderLine = static_cast<PenStyle>(BORDERLINE), DWORD borderColor = BORDERCOLOR, String contents = static_cast<String>(""));
+		Line(Long x, Long y, Long width, Long height, QColor backGroundColor,
+			QPen borderLine, QColor borderColor, String contents = static_cast<String>(""));
 
 		virtual ~Line() = 0;
 

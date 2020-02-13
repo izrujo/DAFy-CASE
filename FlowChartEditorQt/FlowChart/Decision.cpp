@@ -10,16 +10,24 @@
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
-Decision::Decision(Long x, Long y, Long width, Long height, DWORD backGroundColor, PenStyle borderLine, DWORD borderColor, String contents)
-	:Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+Decision::Decision(Long x, Long y, Long width, Long height, QColor backGroundColor,
+	QPen borderLine, QColor borderColor, String contents)
+	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+
 }
 
-Decision::~Decision() {}
+Decision::~Decision() {
 
-Decision::Decision(const Decision& source) : Symbol(source) {}
+}
+
+Decision::Decision(const Decision& source)
+	: Symbol(source) {
+
+}
 
 Decision& Decision::operator =(const Decision& source) {
 	Symbol::operator=(source);
+
 	return *this;
 }
 
@@ -54,60 +62,6 @@ bool Decision::operator !=(const Shape& other) {
 	}
 	return retVo;
 }
-/*
-void Decision::Draw(CDC* dc){
-	CRgn region;
-	CBrush brush;
-	Long halfWidth = (Long)width/2;
-	Long halfHeight = (Long)height/2;
-	POINT shapePoint[5] ={{x+halfWidth,y},{x+width,y+halfHeight},{x+halfWidth,y+height},{x,y+halfHeight},{x+halfWidth,y}};
-
-	brush.CreateStockObject(LTGRAY_BRUSH);
-	region.CreatePolygonRgn(shapePoint, 5, WINDING);
-	dc->FillRgn(&region, &brush);
-
-	dc->Polyline(shapePoint,5);
-
-	brush.DeleteObject();
-
-	// 텍스트를 출력한다.
-	Long left, top, right, bottom;
-
-	GetFormattingArea(&left, &top, &right, &bottom);
-	RECT rect = { left , top, right, bottom };
-
-	dc->DrawText( contents.operator char *(), -1, &rect, DT_CENTER );
-
-	if(this->isSelected == true){
-		DrawSelectionMarkers(dc);
-	}
-}
-
-void Decision::Draw(Painter *painter){
-	Long halfWidth = (Long)width/2;
-	Long halfHeight = (Long)height/2;
-	POINT shapePoint[5] ={{x+halfWidth,y},{x+width,y+halfHeight},{x+halfWidth,y+height},{x,y+halfHeight},{x+halfWidth,y}};
-
-	painter->FillBackground(shapePoint,5,LTGRAY_BRUSH);
-	painter->DrawPolyline(shapePoint,5);
-
-
-	// 텍스트를 출력한다.
-	Long left, top, right, bottom;
-
-	HWND hWnd = ::GetActiveWindow();
-	CWnd *cWnd = CWnd::FromHandle(hWnd);
-	Formatter formatter(cWnd);
-
-	GetFormattingArea(&left, &top, &right, &bottom);
-	RECT rect = { left , top, right, bottom };
-
-	painter->DrawText(formatter.GetHeightOfCharacter(), contents.operator char *(), -1, &rect, DT_CENTER );
-	if(this->isSelected == true){
-		DrawSelectionMarkers(painter);
-	}
-}
-*/
 
 Shape* Decision::Clone() {
 	return new Decision(*this);
@@ -116,112 +70,76 @@ Shape* Decision::Clone() {
 void Decision::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
-/*
-void Decision::GetFormattingArea(Long *left, Long *top, Long *right, Long *bottom){
-	Shape::GetFormattingArea( left, top, right, bottom );
+
+void Decision::GetRegion(Painter *painter, QRegion *region) {
+	Long halfWidth = (Long)this->width / 2;
+	Long halfHeight = (Long)this->height / 2;
+	
+	QVector<QPoint> points(5);
+	points.append(QPoint(this->x + halfWidth, this->y));
+	points.append(QPoint(this->x + this->width, this->y + halfHeight));
+	points.append(QPoint(this->x + halfWidth, this->y + this->height));
+	points.append(QPoint(this->x, this->y + halfHeight));
+	points.append(QPoint(this->x + halfWidth, this->y));
+	QPolygon polygon(points);
+
+	*region += QRegion(polygon);
 }
-*/
-#if 0
-void Decision::GetFormattingArea(Long *left, Long *top, Long *right, Long *bottom) {
+
+void Decision::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+	Long x = this->x - thickness;
+	Long y = this->y - thickness;
+	Long width = this->width + thickness * 2;
+	Long height = this->height + thickness * 2;
 	Long halfWidth = width / 2;
 	Long halfHeight = height / 2;
-	Long quarterHeight = halfHeight / 2;
 
-	*left = x + quarterHeight;
-	*top = y;
-	*right = x + width - quarterHeight;
-	*bottom = y + height;
+	QVector<QPoint> points(5);
+	points.append(QPoint(x + halfWidth, y));
+	points.append(QPoint(x + width, y + halfHeight));
+	points.append(QPoint(x + halfWidth, y + height));
+	points.append(QPoint(x, y + halfHeight));
+	points.append(QPoint(x + halfWidth, y));
+	QPolygon polygon(points);
+
+	*region += QRegion(polygon);
 }
 
-void Decision::GetFormattingArea(Long *left, Long *right) {
-	Long halfHeight = height / 2;
+bool Decision::IsIncluded(Painter *painter, QPoint point) {
+	bool ret;
+	Long halfWidth = (Long)this->width / 2;
+	Long halfHeight = (Long)this->height / 2;
 
-	*left = x + halfHeight;
-	*right = x + width - halfHeight;
-}
-#endif
+	QVector<QPoint> points(5);
+	points.append(QPoint(this->x + halfWidth, this->y));
+	points.append(QPoint(this->x + this->width, this->y + halfHeight));
+	points.append(QPoint(this->x + halfWidth, this->y + this->height));
+	points.append(QPoint(this->x, this->y + halfHeight));
+	points.append(QPoint(this->x + halfWidth, this->y));
+	QPolygon polygon(points);
 
-void Decision::GetRegion(CDC *dc, CRgn *region) {
-	Long halfWidth = (Long)width / 2;
-	Long halfHeight = (Long)height / 2;
-	POINT points[5] = { {x + halfWidth,y},{x + width,y + halfHeight},{x + halfWidth,y + height},{x,y + halfHeight},{x + halfWidth,y} };
-	region->CreatePolygonRgn(points, 5, WINDING);
-}
-
-void Decision::GetRegion(Painter *painter, CRgn *region) {
-	Long halfWidth = (Long)width / 2;
-	Long halfHeight = (Long)height / 2;
-	POINT points[5] = { {x + halfWidth,y},{x + width,y + halfHeight},{x + halfWidth,y + height},{x,y + halfHeight},{x + halfWidth,y} };
-	region->CreatePolygonRgn(points, 5, WINDING);
-}
-
-void Decision::GetRegion(CDC *dc, Long thickness, CRgn *region) {
-	Long x_, y_, width_, height_;
-	Long halfWidth_, halfHeight_;
-
-	x_ = x - thickness;
-	y_ = y - thickness;
-	width_ = width + thickness * 2;
-	height_ = height + thickness * 2;
-	halfWidth_ = width_ / 2;
-	halfHeight_ = height_ / 2;
-
-	POINT points[5] = { {x_ + halfWidth_,y_},{x_ + width_,y_ + halfHeight_},{x_ + halfWidth_,y_ + height_},{x_,y_ + halfHeight_},{x_ + halfWidth_,y_} };
-	region->CreatePolygonRgn(points, 5, WINDING);
-}
-
-void Decision::GetRegion(Painter *painter, Long thickness, CRgn *region) {
-	Long x_, y_, width_, height_;
-	Long halfWidth_, halfHeight_;
-
-	x_ = x - thickness;
-	y_ = y - thickness;
-	width_ = width + thickness * 2;
-	height_ = height + thickness * 2;
-	halfWidth_ = width_ / 2;
-	halfHeight_ = height_ / 2;
-
-	POINT points[5] = { {x_ + halfWidth_,y_},{x_ + width_,y_ + halfHeight_},{x_ + halfWidth_,y_ + height_},{x_,y_ + halfHeight_},{x_ + halfWidth_,y_} };
-	region->CreatePolygonRgn(points, 5, WINDING);
-}
-
-BOOL Decision::IsIncluded(CDC *dc, POINT point) {
-	CRgn region;
-	BOOL ret;
-	Long halfWidth = (Long)width / 2;
-	Long halfHeight = (Long)height / 2;
-	POINT points[5] = { {x + halfWidth,y},{x + width,y + halfHeight},{x + halfWidth,y + height},{x,y + halfHeight},{x + halfWidth,y} };
-
-	region.CreatePolygonRgn(points, 5, WINDING);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
+	QRegion region(polygon);
+	ret = region.contains(point);
+	
 	return ret;
 }
 
-BOOL Decision::IsIncluded(Painter *painter, POINT point) {
-	CRgn region;
-	BOOL ret;
+bool Decision::IsIncluded(Painter *painter, const QRect& rect) {
+	bool ret;
+	Long halfWidth = (Long)this->width / 2;
+	Long halfHeight = (Long)this->height / 2;
 
-	Long halfWidth = (Long)width / 2;
-	Long halfHeight = (Long)height / 2;
-	POINT points[5] = { {x + halfWidth,y},{x + width,y + halfHeight},{x + halfWidth,y + height},{x,y + halfHeight},{x + halfWidth,y} };
+	QVector<QPoint> points(5);
+	points.append(QPoint(this->x + halfWidth, this->y));
+	points.append(QPoint(this->x + this->width, this->y + halfHeight));
+	points.append(QPoint(this->x + halfWidth, this->y + this->height));
+	points.append(QPoint(this->x, this->y + halfHeight));
+	points.append(QPoint(this->x + halfWidth, this->y));
+	QPolygon polygon(points);
 
-	region.CreatePolygonRgn(points, 5, WINDING);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
-	return ret;
-}
+	QRegion region(polygon);
+	ret = region.contains(rect);
 
-BOOL Decision::IsIncluded(Painter *painter, const RECT& rect) {
-	CRgn region;
-	BOOL ret;
-	Long halfWidth = (Long)width / 2;
-	Long halfHeight = (Long)height / 2;
-	POINT points[5] = { {x + halfWidth,y},{x + width,y + halfHeight},{x + halfWidth,y + height},{x,y + halfHeight},{x + halfWidth,y} };
-
-	region.CreatePolygonRgn(points, 5, WINDING);
-	ret = region.RectInRegion(&rect);
-	region.DeleteObject();
 	return ret;
 }
 
@@ -231,24 +149,24 @@ void Decision::GetAttribute(Attribute *attribute) {
 	attribute->vertexFalse = 'Y';
 	attribute->vertexOut = 'Y';
 
-	attribute->pointIn.x = x + width / 2;
-	attribute->pointIn.y = y;
+	attribute->pointIn.setX(this->x + this->width / 2);
+	attribute->pointIn.setY(this->y);
 
-	attribute->pointTrue.x = x;
-	attribute->pointTrue.y = y + height / 2;
+	attribute->pointTrue.setX(this->x);
+	attribute->pointTrue.setY(this->y +this->height / 2);
 
-	attribute->pointFalse.x = x + width;
-	attribute->pointFalse.y = y + height / 2;
+	attribute->pointFalse.setX(this->x + this->width);
+	attribute->pointFalse.setY(this->y + this->height / 2);
 
-	attribute->pointOut.x = x + width / 2;
-	attribute->pointOut.y = y + height;
+	attribute->pointOut.setX(this->x + this->width / 2);
+	attribute->pointOut.setY(this->y + this->height);
 }
 
 void Decision::GetLine(char(*line)) {
-	String saveContents(contents);
+	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_DECISION, x, y, width, height, saveContents);
+	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_DECISION, this->x, this->y, this->width, this->height, saveContents);
 }
 
 bool Decision::IsStyle(Long style) {
@@ -259,32 +177,8 @@ bool Decision::IsStyle(Long style) {
 	return ret;
 }
 
-void Decision::DrawSelectionMarkers(CDC* dc, ScrollController *scrollController) {
-	Shape::DrawSelectionMarkers(dc, scrollController);
-}
-
+/*
 void Decision::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
 	Shape::DrawSelectionMarkers(painter, scrollController);
 }
-
-DecisionForSelection::DecisionForSelection(Long x, Long y, Long width, Long height, DWORD backGroundColor,
-	PenStyle borderLine, DWORD borderColor, String contents)
-	:Decision(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
-}
-
-DecisionForSelection::DecisionForSelection(const Decision& other) : Decision(other) {
-}
-
-DecisionForSelection::~DecisionForSelection() {
-}
-
-DecisionForIteration::DecisionForIteration(Long x, Long y, Long width, Long height, DWORD backGroundColor,
-	PenStyle borderLine, DWORD borderColor, String contents)
-	:Decision(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
-}
-
-DecisionForIteration::DecisionForIteration(const Decision& other) : Decision(other) {
-}
-
-DecisionForIteration::~DecisionForIteration() {
-}
+*/

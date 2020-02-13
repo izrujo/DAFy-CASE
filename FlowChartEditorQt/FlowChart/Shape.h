@@ -13,6 +13,7 @@
 #include <qpoint.h>
 #include <qcolor.h>
 #include <qpen.h>
+#include <qcursor.h>
 
 class ScrollController;
 
@@ -200,7 +201,7 @@ public:
 
 	void Paint(QColor backGroundColor, QPen borderLine, QColor borderColor); //색깔 속성 변경
 
-	virtual void DrawActiveShape(Painter *painter); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
+	//virtual void DrawActiveShape(Painter *painter); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
 
 	// Visitor 패턴 적용
 	virtual void Accept(FlowChartVisitor *draw) = 0;
@@ -214,7 +215,7 @@ public:
 	virtual void GetSelectionMarkerAllRegion(QRegion *region);
 
 	virtual void GetAttribute(Attribute *Attribute) {};
-
+	
 	Long GetX() const;
 	Long GetY() const;
 	Long GetWidth() const;
@@ -232,8 +233,8 @@ public:
 
 	// 선택 관련 
 	// virtual bool IsIncluded( int x, int y );
-	virtual BOOL IsIncluded(Painter *painter, QPoint point) { return false; };
-	virtual BOOL IsIncluded(Painter *painter, const QRect& rect) { return false; };
+	virtual bool IsIncluded(Painter *painter, QPoint point) { return false; };
+	virtual bool IsIncluded(Painter *painter, const QRect& rect) { return false; };
 
 	virtual void Select(bool selected);
 	virtual bool IsSelected() const;
@@ -241,7 +242,7 @@ public:
 	virtual int GetHitCode(Painter *painter, QPoint point);
 	virtual int GetHitCode(Painter *painter, const QPoint& point, const QRegion& region);
 
-	virtual HCURSOR GetCursor(int hit) const; //QCursor class 존재
+	virtual QCursor GetCursor(int hit) const; //QCursor class 존재
 
 	virtual void Copy(Shape *object);
 
@@ -259,8 +260,8 @@ public:
 	static void MakeRectToPoint(QPoint point, QRect *rect);
 
 protected:
-	virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController);
-	virtual void GetSelectionMarkerRect(UINT marker, QRect *rect);
+	//virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController); //painter, scroll 수정 후 고치기
+	virtual void GetSelectionMarkerRect(int marker, QRect *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
 
 protected:
 	Long x;

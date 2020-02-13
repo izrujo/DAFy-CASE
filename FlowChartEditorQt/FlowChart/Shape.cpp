@@ -27,6 +27,8 @@
 #include "RepeatFalse.h"
 #include "RightDownJoin.h"
 
+//#include <qcursor.h>
+
 Attribute::Attribute() {
 	this->vertexIn = ' ';
 	this->vertexOut = ' ';
@@ -335,6 +337,7 @@ void Shape::Paint(QColor backGroundColor, QPen borderLine, QColor borderColor) {
 	this->borderColor = borderColor;
 }
 
+/*
 void Shape::DrawActiveShape(Painter *painter) {
 	POINT point[4];
 	point[0].x = x - LINETHICKNESS;
@@ -348,6 +351,7 @@ void Shape::DrawActiveShape(Painter *painter) {
 
 	painter->DrawPolygon(point, BOXVERTECIES);
 }
+*/
 
 //////////////////////////////////////////////////////////////////////////
 // 선택 관련 : 2015-11-23
@@ -404,49 +408,46 @@ int Shape::GetHitCode(Painter *painter, const QPoint& point, const QRegion& regi
 	return result;
 }
 
-void Shape::GetSelectionMarkerRect(UINT marker, QRect *rect)
+void Shape::GetSelectionMarkerRect(int marker, QRect *rect)
 {
-	int x_;
-	int y_;
+	int x;
+	int y;
 	switch (marker) {
 	case HIT_TOPLEFT:
-		x_ = x;
-		y_ = y;
+		x = this->x;
+		y = this->y;
 		break;
 	case HIT_TOPMIDDLE:
-		x_ = x + width / 2;
-		y_ = y;
+		x = this->x + this->width / 2;
+		y = this->y;
 		break;
 	case HIT_TOPRIGHT:
-		x_ = x + width;
-		y_ = y;
+		x = this->x + this->width;
+		y = this->y;
 		break;
 	case HIT_LEFTMIDDLE:
-		x_ = x;
-		y_ = y + height / 2;
+		x = this->x;
+		y = this->y + this->height / 2;
 		break;
 	case HIT_RIGHTMIDDLE:
-		x_ = x + width;
-		y_ = y + height / 2;
+		x = this->x + this->width;
+		y = this->y + this->height / 2;
 		break;
 	case HIT_BOTTOMLEFT:
-		x_ = x;
-		y_ = y + height;
+		x = this->x;
+		y = this->y + this->height;
 		break;
 	case HIT_BOTTOMMIDDLE:
-		x_ = x + width / 2;
-		y_ = y + height;
+		x = this->x + this->width / 2;
+		y = this->y + this->height;
 		break;
 	case HIT_BOTTOMRIGHT:
-		x_ = x + width;
-		y_ = y + height;
+		x = this->x + this->width;
+		y = this->y + this->height;
 		break;
 	}
 
-	rect->left = x_ - 4;
-	rect->top = y_ - 4;
-	rect->right = x_ + 5;
-	rect->bottom = y_ + 5;
+	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
 void Shape::GetSelectionMarkerAllRegion(QRegion *region) {
@@ -464,7 +465,7 @@ void Shape::GetSelectionMarkerAllRegion(QRegion *region) {
 	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
 	addRegion = QRegion(rect);
 	*region += addRegion;
-	
+
 
 	x = this->x + this->width;
 	y = this->y;
@@ -503,35 +504,35 @@ void Shape::GetSelectionMarkerAllRegion(QRegion *region) {
 	*region += addRegion;
 }
 
-HCURSOR Shape::GetCursor(int hit) const {
-	HCURSOR cursor = NULL;
+QCursor Shape::GetCursor(int hit) const {
+	QCursor cursor;
 	switch (hit) {
 	case HIT_BODY:
-		cursor = LoadCursor(NULL, IDC_SIZEALL);
+		cursor.setShape(Qt::SizeAllCursor);
 		break;
 	case HIT_TOPLEFT:
-		cursor = LoadCursor(NULL, IDC_SIZENWSE);
+		cursor.setShape(Qt::SizeFDiagCursor);
 		break;
 	case HIT_TOPMIDDLE:
-		cursor = LoadCursor(NULL, IDC_SIZENS);
+		cursor.setShape(Qt::SizeBDiagCursor);
 		break;
 	case HIT_TOPRIGHT:
-		cursor = LoadCursor(NULL, IDC_SIZENESW);
+		cursor.setShape(Qt::SizeBDiagCursor);
 		break;
 	case HIT_BOTTOMLEFT:
-		cursor = LoadCursor(NULL, IDC_SIZENESW);
+		cursor.setShape(Qt::SizeBDiagCursor);
 		break;
 	case HIT_BOTTOMMIDDLE:
-		cursor = LoadCursor(NULL, IDC_SIZENS);
+		cursor.setShape(Qt::SizeBDiagCursor);
 		break;
 	case HIT_BOTTOMRIGHT:
-		cursor = LoadCursor(NULL, IDC_SIZENWSE);
+		cursor.setShape(Qt::SizeFDiagCursor);
 		break;
 	case HIT_LEFTMIDDLE:
-		cursor = LoadCursor(NULL, IDC_SIZEWE);
+		cursor.setShape(Qt::SizeHorCursor);
 		break;
 	case HIT_RIGHTMIDDLE:
-		cursor = LoadCursor(NULL, IDC_SIZEWE);
+		cursor.setShape(Qt::SizeHorCursor);
 		break;
 	}
 
@@ -551,78 +552,10 @@ void Shape::Copy(Shape *object) {
 	this->isSelected = object->IsSelected();
 }
 
-void Shape::DrawSelectionMarkers(CDC* dc, ScrollController *scrollController)
-{
-	CRect rectSelect;
-	CBrush brush;
-	CBrush *oldBrush;
-	brush.CreateSolidBrush(RGB(0, 0, 255));
-	oldBrush = dc->SelectObject(&brush);
-	GetSelectionMarkerRect(HIT_TOPLEFT, &rectSelect);
-	Long positionX = scrollController->GetScroll(1)->GetPosition();
-	Long positionY = scrollController->GetScroll(0)->GetPosition();
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	GetSelectionMarkerRect(HIT_TOPMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	GetSelectionMarkerRect(HIT_TOPRIGHT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	GetSelectionMarkerRect(HIT_BOTTOMLEFT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	GetSelectionMarkerRect(HIT_BOTTOMMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	GetSelectionMarkerRect(HIT_BOTTOMRIGHT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	GetSelectionMarkerRect(HIT_RIGHTMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	GetSelectionMarkerRect(HIT_LEFTMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	dc->Rectangle(rectSelect);
-
-	dc->SelectObject(oldBrush);
-	brush.DeleteObject();
-}
-
+/*
 void Shape::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController)
 {
-	CRect rectSelect;
+	QRect rectSelect;
 
 	painter->ChangePlaneProperty(BS_SOLID, RGB(0, 0, 255));
 
@@ -684,12 +617,14 @@ void Shape::DrawSelectionMarkers(Painter* painter, ScrollController *scrollContr
 	rectSelect.bottom -= positionY;
 	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
 }
+*/
 
-void Shape::MakeRectToPoint(POINT point, RECT *rect) {
-	rect->top = point.y - BOXSCOPE;
-	rect->bottom = point.y + BOXSCOPE;
-	rect->left = point.x - BOXSCOPE;
-	rect->right = point.x + BOXSCOPE;
+void Shape::MakeRectToPoint(QPoint point, QRect *rect) {
+	Long left = point.x() - BOXSCOPE;
+	Long top = point.y() - BOXSCOPE;
+	Long right = point.x() + BOXSCOPE;
+	Long bottom = point.y() + BOXSCOPE;
+	rect->setCoords(left, top, right, bottom);
 }
 
 void Shape::Rewrite(char(*text)) {

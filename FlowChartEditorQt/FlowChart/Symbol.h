@@ -12,8 +12,8 @@
 
 class Symbol : public Shape {
 	public:		
-		Symbol(Long x, Long y, Long width, Long height, DWORD backGroundColor = BACKGROUNDCOLOR,
-			  PenStyle borderLine = static_cast<PenStyle>(BORDERLINE), DWORD borderColor = BORDERCOLOR, String contents = static_cast<String>(""));
+		Symbol(Long x, Long y, Long width, Long height, QColor backGroundColor,
+			QPen borderLine, QColor borderColor, String contents = static_cast<String>(""));
 
 		virtual ~Symbol() = 0;
 

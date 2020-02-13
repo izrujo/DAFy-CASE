@@ -89,7 +89,6 @@
     <ClCompile Include="FlowChart\Creator.cpp" />
     <ClCompile Include="FlowChart\Decision.cpp" />
     <ClCompile Include="FlowChart\DeleteKey.cpp" />
-    <ClCompile Include="FlowChart\Document.cpp" />
     <ClCompile Include="FlowChart\DownKey.cpp" />
     <ClCompile Include="FlowChart\DrawingPaper.cpp" />
     <ClCompile Include="FlowChart\DrawingTool.cpp" />
@@ -211,7 +210,6 @@
     <ClInclude Include="FlowChart\Creator.h" />
     <ClInclude Include="FlowChart\Decision.h" />
     <ClInclude Include="FlowChart\DeleteKey.h" />
-    <ClInclude Include="FlowChart\Document.h" />
     <ClInclude Include="FlowChart\DownKey.h" />
     <QtMoc Include="FlowChart\DrawingPaper.h" />
     <ClInclude Include="FlowChart\DrawingTool.h" />
