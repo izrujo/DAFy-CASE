@@ -127,7 +127,6 @@
     <ClCompile Include="FlowChart\Preparation.cpp" />
     <ClCompile Include="FlowChart\PreviewForm.cpp" />
     <ClCompile Include="FlowChart\Process.cpp" />
-    <ClCompile Include="FlowChart\PunchedCard.cpp" />
     <ClCompile Include="FlowChart\RectangleRegion.cpp" />
     <ClCompile Include="FlowChart\RepeatFalse.cpp" />
     <ClCompile Include="FlowChart\RepeatTrue.cpp" />
@@ -248,7 +247,6 @@
     <ClInclude Include="FlowChart\Preparation.h" />
     <ClInclude Include="FlowChart\PreviewForm.h" />
     <ClInclude Include="FlowChart\Process.h" />
-    <ClInclude Include="FlowChart\PunchedCard.h" />
     <ClInclude Include="FlowChart\RectangleRegion.h" />
     <ClInclude Include="FlowChart\RepeatFalse.h" />
     <ClInclude Include="FlowChart\RepeatTrue.h" />

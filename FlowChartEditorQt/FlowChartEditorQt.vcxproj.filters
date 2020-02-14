@@ -170,9 +170,6 @@
     <ClCompile Include="FlowChart\Process.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\PunchedCard.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\RectangleRegion.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -502,9 +499,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Process.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\PunchedCard.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\RectangleRegion.h">

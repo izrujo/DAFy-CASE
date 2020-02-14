@@ -10,17 +10,23 @@
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
-Process::Process(Long x, Long y, Long width, Long height, DWORD backGroundColor, PenStyle borderLine, DWORD borderColor, String contents)
-	:Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+Process::Process(Long x, Long y, Long width, Long height, QColor backGroundColor,
+	QPen borderLine, QColor borderColor, String contents)
+	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+
 }
 
-Process::~Process() {};
+Process::~Process() {
+
+}
 
 Process::Process(const Process& source) :Symbol(source) {
+
 }
 
-Process Process::operator =(const Process& source) {
+Process& Process::operator =(const Process& source) {
 	Symbol::operator=(source);
+
 	return *this;
 }
 
@@ -64,56 +70,44 @@ Shape* Process::Clone() {
 	return new Process(*this);
 }
 
-void Process::GetRegion(CDC *dc, CRgn *region) {
-	region->CreateRectRgn(x, y, x + width, y + height);
+void Process::GetRegion(Painter *painter, QRegion *region) {
+	QRect rect;
+	rect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion addRegion(rect);
+	*region += addRegion;
 }
 
-void Process::GetRegion(Painter *painter, CRgn *region) {
-	region->CreateRectRgn(x, y, x + width, y + height);
+void Process::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+	Long x = this->x - thickness;
+	Long y = this->y - thickness;
+	Long width = this->width + thickness * 2;
+	Long height = this->height + thickness * 2;
+
+	QRect rect;
+	rect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion addRegion(rect);
+	*region += addRegion;
 }
 
-void Process::GetRegion(CDC *dc, Long thickness, CRgn *region) {
-	Long x_, y_, width_, height_;
-	x_ = x - thickness;
-	y_ = y - thickness;
-	width_ = width + thickness * 2;
-	height_ = height + thickness * 2;
-	region->CreateRectRgn(x_, y_, x_ + width_, y_ + height_);
-}
+bool Process::IsIncluded(Painter *painter, QPoint point) {
+	bool ret;
 
-void Process::GetRegion(Painter *painter, Long thickness, CRgn *region) {
-	Long x_, y_, width_, height_;
-	x_ = x - thickness;
-	y_ = y - thickness;
-	width_ = width + thickness * 2;
-	height_ = height + thickness * 2;
-	region->CreateRectRgn(x_, y_, x_ + width_, y_ + height_);
-}
-
-BOOL Process::IsIncluded(CDC *dc, POINT point) {
-	CRgn region;
-	BOOL ret;
-	region.CreateRectRgn(x, y, x + width, y + height);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
+	QRect rect;
+	rect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion region(rect);
+	ret = region.contains(point);
+	
 	return ret;
 }
 
-BOOL Process::IsIncluded(Painter *painter, POINT point) {
-	CRgn region;
-	BOOL ret;
-	region.CreateRectRgn(x, y, x + width, y + height);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
-	return ret;
-}
+bool Process::IsIncluded(Painter *painter, const QRect& rect) {
+	bool ret;
 
-BOOL Process::IsIncluded(Painter *painter, const RECT& rect) {
-	CRgn region;
-	BOOL ret;
-	region.CreateRectRgn(x, y, x + width, y + height);
-	ret = region.RectInRegion(&rect);
-	region.DeleteObject();
+	QRect regionRect;
+	regionRect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion region(regionRect);
+	ret = region.contains(rect);
+
 	return ret;
 }
 
@@ -121,18 +115,19 @@ void Process::GetAttribute(Attribute *attribute) {
 	attribute->vertexIn = 'Y';
 	attribute->vertexOut = 'Y';
 
-	attribute->pointIn.x = x + width / 2;
-	attribute->pointIn.y = y;
+	attribute->pointIn.setX(this->x + this->width / 2);
+	attribute->pointIn.setY(this->y);
 
-	attribute->pointOut.x = x + width / 2;
-	attribute->pointOut.y = y + height;
+	attribute->pointOut.setX(this->x + this->width / 2);
+	attribute->pointOut.setY(this->y + this->height);
 }
 
 void Process::GetLine(char(*line)) {
-	String saveContents(contents);
+	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_PROCESS, x, y, width, height, saveContents);
+	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+		ID_PROCESS, this->x, this->y, this->width, this->height, saveContents);
 }
 
 bool Process::IsStyle(Long style) {
@@ -142,11 +137,8 @@ bool Process::IsStyle(Long style) {
 	}
 	return ret;
 }
-
-void Process::DrawSelectionMarkers(CDC* dc, ScrollController *scrollController) {
-	Shape::DrawSelectionMarkers(dc, scrollController);
-}
-
+/*
 void Process::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
 	Shape::DrawSelectionMarkers(painter, scrollController);
 }
+*/

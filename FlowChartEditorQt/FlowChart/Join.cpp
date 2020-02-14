@@ -14,7 +14,7 @@
 #include "ScrollController.h"
 #include "Scrolls.h"
 
-Join::Join(Long x, Long y, Long width, Long height, QColor backGroundColor,
+Join::Join(Long x, Long y, Long width, Long height, Long height2, QColor backGroundColor,
 	QPen borderLine, QColor borderColor, String contents)
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->height2 = height2;

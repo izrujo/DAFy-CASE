@@ -12,8 +12,9 @@
 
 class RepeatFalse : public Line {
 public:
-	RepeatFalse(Long x, Long y, Long width, Long height, Long width2 = REPEATFALSE_WIDTH, Long height2 = REPEATFALSE_HEIGHT, DWORD backGroundColor = BACKGROUNDCOLOR,
-		PenStyle borderLine = static_cast<PenStyle>(BORDERLINE), DWORD borderColor = BORDERCOLOR, String contents = static_cast<String>(""));
+	RepeatFalse(Long x, Long y, Long width, Long height, Long width2 = REPEATFALSE_WIDTH, Long height2 = REPEATFALSE_HEIGHT,
+		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~RepeatFalse();
 	RepeatFalse(const RepeatFalse& source);
 	RepeatFalse& operator =(const RepeatFalse& source);
@@ -24,35 +25,27 @@ public:
 	virtual bool operator ==(const Shape& other);
 	virtual bool operator !=(const Shape& other);
 
-	//virtual void Draw(CDC *dc);
-	//virtual void Draw(Painter *painter);
-	virtual void DrawActiveShape(CDC *dc);
-	virtual void DrawActiveShape(Painter *painter);
+	//virtual void DrawActiveShape(Painter *painter);
 
 	virtual void Accept(FlowChartVisitor *draw);
 
 	virtual Shape* Clone();
 
-	//virtual void GetFormattingArea(Long *left, Long *top, Long *right, Long *bottom);
+	virtual void GetRegion(Painter *painter, QRegion *region);
+	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region);
+	virtual void GetSelectionMarkerAllRegion(QRegion *region);
 
-	virtual void GetRegion(CDC *dc, CRgn *region);
-	virtual void GetRegion(Painter *painter, CRgn *region);
-	virtual void GetRegion(CDC *dc, Long thickness, CRgn *region);
-	virtual void GetRegion(Painter *painter, Long thickness, CRgn *region);
-	virtual void GetSelectionMarkerAllRegion(CRgn *region);
+	void ReSize(Long width, Long height, Long width2, Long height2);
 
-	void ReSize(Long _width, Long _height, Long _width2, Long _height2);
-
-	virtual BOOL IsIncluded(CDC *dc, POINT point);
-	virtual BOOL IsIncluded(Painter *painter, POINT point);
-	virtual BOOL IsIncluded(Painter *painter, const RECT& rect);
+	virtual bool IsIncluded(Painter *painter, QPoint point);
+	virtual bool IsIncluded(Painter *painter, const QRect& rect);
 
 	Long GetWidth2() const;
 	Long GetHeight2() const;
 
 	virtual void Copy(Shape *object);
-	virtual void GetSelectionMarkerRect(UINT marker, CRect *rect);
-	virtual int GetHitCode(Painter *painter, const CPoint& point, const CRgn& region);
+	virtual void GetSelectionMarkerRect(int marker, QRect *rect);
+	virtual int GetHitCode(Painter *painter, const QPoint& point, const QRegion& region);
 
 	virtual void GetLine(char(*line));
 	virtual bool Identify(SHAPE identify);
@@ -61,8 +54,7 @@ public:
 	virtual Long CenterOfGravityY() const;
 	virtual Long CenterOfGravityX() const;
 
-	virtual void DrawSelectionMarkers(CDC* dc, ScrollController *scrollController);
-	virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController);
+	//virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController);
 	void GetAttribute(Attribute *attribute);
 
 private:

@@ -6,8 +6,9 @@
 
 class A4Paper : public Shape {
 public:
-	A4Paper(Long x, Long y, Long width, Long height, QColor backGroundColor,
-		QPen borderLine, QColor borderColor, String contents = static_cast<String>(""));
+	A4Paper(Long x, Long y, Long width, Long height,
+		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	virtual ~A4Paper();
 
 	A4Paper(const A4Paper& source);

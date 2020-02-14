@@ -2,7 +2,7 @@
 * 파일 이름 : Preparation.cpp
 * 기능 : 준비기호의 콘크리트 클래스
 * 작성자 : 송윤창
-* 작성일자 : 2015년 3월 30일 
+* 작성일자 : 2015년 3월 30일
 *******************************************************************/
 
 #include "Preparation.h"
@@ -12,167 +12,171 @@
 #pragma warning (disable : 4996)
 
 
-Preparation::Preparation(Long x, Long y, Long width, Long height, DWORD backGroundColor, PenStyle borderLine, DWORD borderColor, String contents)
-:Symbol(x,y,width,height,backGroundColor,borderLine,borderColor,contents){
+Preparation::Preparation(Long x, Long y, Long width, Long height, QColor backGroundColor,
+	QPen borderLine, QColor borderColor, String contents)
+	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+
 }
 
-Preparation::~Preparation(){}
+Preparation::~Preparation() {
 
-Preparation::Preparation(const Preparation& source):Symbol(source){
 }
 
-Preparation Preparation::operator =(const Preparation& source){
+Preparation::Preparation(const Preparation& source) : Symbol(source) {
+}
+
+Preparation& Preparation::operator =(const Preparation& source) {
 	Symbol::operator=(source);
+
 	return *this;
 }
 
-bool Preparation::IsEqual(const Shape& other){
+bool Preparation::IsEqual(const Shape& other) {
 	bool retVo = false;
-	if( dynamic_cast<Preparation *>(const_cast<Shape *>(&other)) ){
+	if (dynamic_cast<Preparation *>(const_cast<Shape *>(&other))) {
 		retVo = Shape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Preparation::IsNotEqual(const Shape& other){
+bool Preparation::IsNotEqual(const Shape& other) {
 	bool retVo = false;
-	if( !dynamic_cast<Preparation *>(const_cast<Shape*>(&other)) ){
+	if (!dynamic_cast<Preparation *>(const_cast<Shape*>(&other))) {
 		retVo = Shape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool Preparation::operator ==(const Shape& other){
+bool Preparation::operator ==(const Shape& other) {
 	bool retVo = false;
-	if( dynamic_cast<Preparation *>(const_cast<Shape *>(&other)) ){
+	if (dynamic_cast<Preparation *>(const_cast<Shape *>(&other))) {
 		retVo = Shape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Preparation::operator !=(const Shape& other){
+bool Preparation::operator !=(const Shape& other) {
 	bool retVo = false;
-	if( !dynamic_cast<Preparation *>(const_cast<Shape*>(&other)) ){
+	if (!dynamic_cast<Preparation *>(const_cast<Shape*>(&other))) {
 		retVo = Shape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-void Preparation::Accept(FlowChartVisitor *draw){
-	draw->Visit(this);	
+void Preparation::Accept(FlowChartVisitor *draw) {
+	draw->Visit(this);
 }
 
-Shape* Preparation::Clone(){
+Shape* Preparation::Clone() {
 	return new Preparation(*this);
 }
 
-void Preparation::GetRegion(CDC *dc, CRgn *region){
-	Long gap = (Long)height/2;
-	POINT shapePoints[7] ={{x+gap,y},{x+width-gap,y},{x+width,y+gap},{x+width-gap,y+height},{x+gap,y+height},{x,y+gap},{x+gap,y}};
-	region->CreatePolygonRgn(shapePoints,7,WINDING);
+void Preparation::GetRegion(Painter *painter, QRegion *region) {
+	Long halfHeight = (Long)this->height / 2;
+
+	QVector<QPoint> points(7);
+	points.append(QPoint(this->x + halfHeight, this->y));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y));
+	points.append(QPoint(this->x + this->width, this->y + halfHeight));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPoint(this->x + halfHeight, this->y + this->height));
+	points.append(QPoint(this->x, this->y + halfHeight));
+	points.append(QPoint(this->x + halfHeight, this->y));
+	QPolygon polygon(points);
+
+	*region += QRegion(polygon);
 }
 
-void Preparation::GetRegion(Painter *painter, CRgn *region){
-	Long gap = (Long)height/2;
-	POINT shapePoints[7] ={{x+gap,y},{x+width-gap,y},{x+width,y+gap},{x+width-gap,y+height},{x+gap,y+height},{x,y+gap},{x+gap,y}};
-	region->CreatePolygonRgn(shapePoints,7,WINDING);
+void Preparation::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+	Long x = this->x - thickness;
+	Long y = this->y - thickness;
+	Long width = this->width + thickness * 2;
+	Long height = this->height + thickness * 2;
+	Long halfHeight = this->height / 2;
+
+	QVector<QPoint> points(7);
+	points.append(QPoint(this->x + halfHeight, this->y));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y));
+	points.append(QPoint(this->x + this->width, this->y + halfHeight));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPoint(this->x + halfHeight, this->y + this->height));
+	points.append(QPoint(this->x, this->y + halfHeight));
+	points.append(QPoint(this->x + halfHeight, this->y));
+	QPolygon polygon(points);
+
+	*region += QRegion(polygon);
 }
 
-void Preparation::GetRegion(CDC *dc, Long thickness, CRgn *region){
-	Long x_, y_, width_, height_;
-	Long gap_;
+bool Preparation::IsIncluded(Painter *painter, QPoint point) {
+	bool ret;
+	Long halfHeight = (Long)this->height / 2;
 
-	x_ = x - thickness;
-	y_ = y - thickness;
-	width_ = width + thickness*2;
-	height_ = height + thickness*2;
-	gap_ = height_/2;
+	QVector<QPoint> points(7);
+	points.append(QPoint(this->x + halfHeight, this->y));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y));
+	points.append(QPoint(this->x + this->width, this->y + halfHeight));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPoint(this->x + halfHeight, this->y + this->height));
+	points.append(QPoint(this->x, this->y + halfHeight));
+	points.append(QPoint(this->x + halfHeight, this->y));
+	QPolygon polygon(points);
 
-	POINT shapePoints[7] ={{x_+gap_,y_},{x_+width_-gap_,y_},{x_+width_,y_+gap_},{x_+width_-gap_,y_+height_},{x_+gap_,y_+height_},{x_,y_+gap_},{x_+gap_,y_}};
-	region->CreatePolygonRgn(shapePoints,7,WINDING);
-}
+	QRegion region(polygon);
+	ret = region.contains(point);
 
-void Preparation::GetRegion(Painter *painter, Long thickness, CRgn *region){
-	Long x_, y_, width_, height_;
-	Long gap_;
-
-	x_ = x - thickness;
-	y_ = y - thickness;
-	width_ = width + thickness*2;
-	height_ = height + thickness*2;
-	gap_ = height_/2;
-
-	POINT shapePoints[7] ={{x_+gap_,y_},{x_+width_-gap_,y_},{x_+width_,y_+gap_},{x_+width_-gap_,y_+height_},{x_+gap_,y_+height_},{x_,y_+gap_},{x_+gap_,y_}};
-	region->CreatePolygonRgn(shapePoints,7,WINDING);
-}
-
-BOOL Preparation::IsIncluded(CDC *dc, POINT point){
-	CRgn region;
-	BOOL ret;
-	Long gap = (Long)height/2;
-	POINT shapePoints[7] ={{x+gap,y},{x+width-gap,y},{x+width,y+gap},{x+width-gap,y+height},{x+gap,y+height},{x,y+gap},{x+gap,y}};	
-	
-	region.CreatePolygonRgn(shapePoints,7,WINDING);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
 	return ret;
 }
 
-BOOL Preparation::IsIncluded(Painter *painter, POINT point){
-	CRgn region;
-	BOOL ret;
-	Long gap = (Long)height/2;
-	POINT shapePoints[7] ={{x+gap,y},{x+width-gap,y},{x+width,y+gap},{x+width-gap,y+height},{x+gap,y+height},{x,y+gap},{x+gap,y}};	
-	
-	region.CreatePolygonRgn(shapePoints,7,WINDING);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
+bool Preparation::IsIncluded(Painter *painter, const QRect& rect) {
+	bool ret;
+	Long halfHeight = (Long)this->height / 2;
+
+	QVector<QPoint> points(7);
+	points.append(QPoint(this->x + halfHeight, this->y));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y));
+	points.append(QPoint(this->x + this->width, this->y + halfHeight));
+	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPoint(this->x + halfHeight, this->y + this->height));
+	points.append(QPoint(this->x, this->y + halfHeight));
+	points.append(QPoint(this->x + halfHeight, this->y));
+	QPolygon polygon(points);
+
+	QRegion region(polygon);
+
+	ret = region.contains(rect);
+
 	return ret;
 }
 
-BOOL Preparation::IsIncluded(Painter *painter, const RECT& rect){
-	CRgn region;
-	BOOL ret;
-	Long gap = (Long)height/2;
-	POINT shapePoints[7] ={{x+gap,y},{x+width-gap,y},{x+width,y+gap},{x+width-gap,y+height},{x+gap,y+height},{x,y+gap},{x+gap,y}};
-	
-	region.CreatePolygonRgn(shapePoints,7,WINDING);
-	ret = region.RectInRegion(&rect);
-	region.DeleteObject();
-	return ret;
-}
-
-void Preparation::GetAttribute(Attribute *attribute){
+void Preparation::GetAttribute(Attribute *attribute) {
 	attribute->vertexIn = 'Y';
 	attribute->vertexOut = 'Y';
-	
-	attribute->pointIn.x = x + width/2;
-	attribute->pointIn.y = y;
-	
-	attribute->pointOut.x = x + width/2;
-	attribute->pointOut.y = y + height;
+
+	attribute->pointIn.setX(this->x + this->width / 2);
+	attribute->pointIn.setY(this->y);
+
+	attribute->pointOut.setX(this->x + this->width / 2);
+	attribute->pointOut.setY(this->y + this->height);
 }
 
-void Preparation::GetLine(char (*line)){
-	String saveContents(contents);
+void Preparation::GetLine(char(*line)) {
+	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line,"%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_PREPARATION,x,y,width,height,saveContents);
+	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+		ID_PREPARATION, this->x, this->y, this->width, this->height, saveContents);
 }
 
 
-bool Preparation::IsStyle(Long style){
+bool Preparation::IsStyle(Long style) {
 	bool ret = false;
-	if( Shape::IsStyle(style) || Symbol::IsStyle(style) || (style>>3)%2 ){
+	if (Shape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 3) % 2) {
 		ret = true;
 	}
 	return ret;
 }
-
-void Preparation::DrawSelectionMarkers( CDC* dc, ScrollController *scrollController){
-	Shape::DrawSelectionMarkers(dc, scrollController);
-}
-
-void Preparation::DrawSelectionMarkers( Painter* painter, ScrollController *scrollController){
+/*
+void Preparation::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
 	Shape::DrawSelectionMarkers(painter, scrollController);
 }
+*/

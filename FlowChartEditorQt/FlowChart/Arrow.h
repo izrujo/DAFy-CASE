@@ -12,8 +12,9 @@
 
 class Arrow : public Line {
 public:
-	Arrow(Long x, Long y, Long width, Long height, QColor backGroundColor,
-		QPen borderLine, QColor borderColor, String contents = static_cast<String>(""));
+	Arrow(Long x, Long y, Long width, Long height,
+		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~Arrow();
 	Arrow(const Arrow& source);
 	Arrow& operator =(const Arrow& source);

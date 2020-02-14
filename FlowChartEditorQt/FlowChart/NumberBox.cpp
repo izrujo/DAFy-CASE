@@ -1,12 +1,14 @@
 #include "NumberBox.h"
 #include "FlowChartVisitor.h"
 
-NumberBox::NumberBox(Long x, Long y, Long width, Long height, DWORD backGroundColor, PenStyle borderLine, DWORD borderColor, String contents, Direction direction)
-	:Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+NumberBox::NumberBox(Long x, Long y, Long width, Long height, QColor backGroundColor,
+	QPen borderLine, QColor borderColor, String contents)
+	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }
 
 NumberBox::~NumberBox() {
+
 }
 
 NumberBox::NumberBox(const NumberBox& source)
@@ -16,7 +18,7 @@ NumberBox::NumberBox(const NumberBox& source)
 
 NumberBox& NumberBox::operator =(const NumberBox& source) {
 	Shape::operator=(source);
-	
+
 	return *this;
 }
 

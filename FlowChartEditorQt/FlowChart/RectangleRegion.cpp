@@ -2,7 +2,8 @@
 #include "Painter.h"
 #include "FlowChartVisitor.h"
 
-RectangleRegion::RectangleRegion(Long x, Long y, Long width, Long height, DWORD backGroundColor, PenStyle borderLine, DWORD borderColor, String contents, Direction direction)
+RectangleRegion::RectangleRegion(Long x, Long y, Long width, Long height, QColor backGroundColor,
+	QPen borderLine, QColor borderColor, String contents)
 	:Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }
@@ -36,11 +37,13 @@ Shape* RectangleRegion::Clone() {
 	return new RectangleRegion(*this);
 }
 
-BOOL RectangleRegion::IsIncluded(CDC *dc, POINT point) {
-	CRgn region;
-	BOOL ret;
-	region.CreateRectRgn(x, y, x + width, y + height);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
+bool RectangleRegion::IsIncluded(Painter *painter, QPoint point) {
+	bool ret;
+
+	QRect rect;
+	rect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion region(rect);
+	ret = region.contains(point);
+
 	return ret;
 }

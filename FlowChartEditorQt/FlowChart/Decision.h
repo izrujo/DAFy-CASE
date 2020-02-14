@@ -12,8 +12,9 @@
 
 class Decision : public Symbol {
 public:
-	Decision(Long x, Long y, Long width, Long height, QColor backGroundColor,
-		QPen borderLine, QColor borderColor, String contents = static_cast<String>(""));
+	Decision(Long x, Long y, Long width, Long height,
+		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~Decision();
 	Decision(const Decision& source);
 	Decision& operator =(const Decision& source);
