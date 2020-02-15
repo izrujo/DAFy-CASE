@@ -88,7 +88,7 @@ void LeftDown::DrawActiveShape(Painter *painter) {
 }
 */
 
-void LeftDown::GetRegion(Painter *painter, QRegion *region) {
+void LeftDown::GetRegion(QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -103,7 +103,7 @@ void LeftDown::GetRegion(Painter *painter, QRegion *region) {
 	*region += addRegion;
 }
 
-void LeftDown::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void LeftDown::GetRegion(Long thickness, QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -118,7 +118,7 @@ void LeftDown::GetRegion(Painter *painter, Long thickness, QRegion *region) {
 	*region += addRegion;
 }
 
-bool LeftDown::IsIncluded(Painter *painter, QPoint point) {
+bool LeftDown::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRegion region;
@@ -140,7 +140,7 @@ bool LeftDown::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool LeftDown::IsIncluded(Painter *painter, const QRect& rect) {
+bool LeftDown::IsIncluded(const QRect& rect) {
 
 	bool ret;
 
@@ -199,7 +199,7 @@ void LeftDown::GetSelectionMarkerAllRegion(QRegion *region) {
 	*region += addRegion;
 }
 
-int LeftDown::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
+int LeftDown::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 
 	if (region.contains(point)) {

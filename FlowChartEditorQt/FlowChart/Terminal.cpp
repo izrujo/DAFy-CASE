@@ -69,7 +69,7 @@ Shape* Terminal::Clone() {
 	return new Terminal(*this);
 }
 
-void Terminal::GetRegion(Painter *painter, QRegion *region) {
+void Terminal::GetRegion(QRegion *region) {
 	Long halfHeight = (Long)this->height / 2;
 
 	QRect ellipse;
@@ -89,7 +89,7 @@ void Terminal::GetRegion(Painter *painter, QRegion *region) {
 }
 
 
-void Terminal::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void Terminal::GetRegion(Long thickness, QRegion *region) {
 	Long x = x - thickness;
 	Long y = y - thickness;
 	Long width = width + thickness * 2;
@@ -112,7 +112,7 @@ void Terminal::GetRegion(Painter *painter, Long thickness, QRegion *region) {
 	*region += addRegion;
 }
 
-bool Terminal::IsIncluded(Painter *painter, QPoint point) {
+bool Terminal::IsIncluded(QPoint point) {
 	bool ret;
 	
 	Long halfHeight = (Long)this->height / 2;
@@ -138,7 +138,7 @@ bool Terminal::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool Terminal::IsIncluded(Painter *painter, const QRect& rect) {
+bool Terminal::IsIncluded(const QRect& rect) {
 	bool ret;
 
 	Long halfHeight = (Long)this->height / 2;

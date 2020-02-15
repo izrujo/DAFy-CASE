@@ -210,8 +210,8 @@ public:
 	virtual Shape* Clone() = 0;
 
 	//마우스 드래그로 여러 도형 한번에 선택시 사용
-	virtual void GetRegion(Painter *painter, QRegion *region) = 0;
-	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region) = 0;
+	virtual void GetRegion(QRegion *region) = 0;
+	virtual void GetRegion(Long thickness, QRegion *region) = 0;
 
 	virtual void GetSelectionMarkerAllRegion(QRegion *region);
 
@@ -234,14 +234,14 @@ public:
 
 	// 선택 관련 
 	// virtual bool IsIncluded( int x, int y );
-	virtual bool IsIncluded(Painter *painter, QPoint point) { return false; };
-	virtual bool IsIncluded(Painter *painter, const QRect& rect) { return false; };
+	virtual bool IsIncluded(QPoint point) { return false; };
+	virtual bool IsIncluded(const QRect& rect) { return false; };
 
 	virtual void Select(bool selected);
 	virtual bool IsSelected() const;
 
-	virtual int GetHitCode(Painter *painter, QPoint point);
-	virtual int GetHitCode(Painter *painter, const QPoint& point, const QRegion& region);
+	virtual int GetHitCode(QPoint point);
+	virtual int GetHitCode(const QPoint& point, const QRegion& region);
 
 	virtual QCursor GetCursor(int hit) const; //QCursor class 존재
 

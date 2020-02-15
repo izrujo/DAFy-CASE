@@ -89,7 +89,7 @@ Shape* RightDown::Clone() {
 	return new RightDown(*this);
 }
 
-void RightDown::GetRegion(Painter *painter, QRegion *region) {
+void RightDown::GetRegion(QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -104,7 +104,7 @@ void RightDown::GetRegion(Painter *painter, QRegion *region) {
 	*region += addRegion;
 }
 
-void RightDown::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void RightDown::GetRegion(Long thickness, QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -119,7 +119,7 @@ void RightDown::GetRegion(Painter *painter, Long thickness, QRegion *region) {
 	*region += addRegion;
 }
 
-bool RightDown::IsIncluded(Painter *painter, QPoint point) {
+bool RightDown::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRegion region;
@@ -141,7 +141,7 @@ bool RightDown::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool RightDown::IsIncluded(Painter *painter, const QRect& rect) {
+bool RightDown::IsIncluded(const QRect& rect) {
 	bool ret;
 
 	QRegion region;
@@ -199,7 +199,7 @@ void RightDown::GetSelectionMarkerAllRegion(QRegion *region) {
 	*region += addRegion;
 }
 
-int RightDown::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
+int RightDown::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 
 	if (region.contains(point)) {

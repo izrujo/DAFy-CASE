@@ -20,10 +20,10 @@ public:
 	virtual void Accept(FlowChartVisitor *draw) {}; //Draw() 없애고 이거 만들기
 	virtual Shape* Clone();
 
-	virtual void GetRegion(Painter *painter, QRegion *region) {};
-	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region) {};
+	virtual void GetRegion(QRegion *region) {};
+	virtual void GetRegion(Long thickness, QRegion *region) {};
 
-	virtual bool IsIncluded(Painter *painter, QPoint point);
+	virtual bool IsIncluded(QPoint point);
 };
 
 #endif //_RECTANGLEREGION_H

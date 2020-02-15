@@ -32,16 +32,16 @@ public:
 	virtual Shape* Clone();
 
 
-	virtual void GetRegion(Painter *painter, QRegion *region);
-	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region);
+	virtual void GetRegion(QRegion *region);
+	virtual void GetRegion(Long thickness, QRegion *region);
 	virtual void GetSelectionMarkerAllRegion(QRegion *region);
 
 	void ReSize(Long width, Long height, Long width2, Long height2);
 
-	virtual bool IsIncluded(Painter *painter, QPoint point);
-	virtual bool IsIncluded(Painter *painter, const QRect& rect);
+	virtual bool IsIncluded(QPoint point);
+	virtual bool IsIncluded(const QRect& rect);
 
-	virtual int GetHitCode(Painter *painter, const QPoint& point, const QRegion& region);
+	virtual int GetHitCode(const QPoint& point, const QRegion& region);
 
 	virtual void Copy(Shape *object);
 

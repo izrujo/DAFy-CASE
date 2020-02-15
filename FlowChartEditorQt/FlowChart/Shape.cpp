@@ -360,13 +360,13 @@ void Shape::Select(bool selected) {
 	this->isSelected = selected;
 }
 
-int Shape::GetHitCode(Painter *painter, QPoint point) {
+int Shape::GetHitCode(QPoint point) {
 	QRegion region;
-	this->GetRegion(painter, &region);
-	return GetHitCode(painter, point, region);
+	this->GetRegion(&region);
+	return GetHitCode(point, region);
 }
 
-int Shape::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
+int Shape::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 	if (region.contains(point)) {
 		result = HIT_BODY;
@@ -633,10 +633,7 @@ void Shape::Rewrite(char(*text)) {
 
 int Shape::GetSymbolID() {
 	int id = 0;
-	if (dynamic_cast<Document*>(this)) {
-		id = ID_DOCUMENT;
-	}
-	else if (dynamic_cast<InputOutput*>(this)) {
+	if (dynamic_cast<InputOutput*>(this)) {
 		id = ID_INPUTOUTPUT;
 	}
 	else if (dynamic_cast<Preparation*>(this)) {
@@ -647,9 +644,6 @@ int Shape::GetSymbolID() {
 	}
 	else if (dynamic_cast<Process*>(this)) {
 		id = ID_PROCESS;
-	}
-	else if (dynamic_cast<PunchedCard*>(this)) {
-		id = ID_PUNCHEDCARD;
 	}
 	else if (dynamic_cast<Decision*>(this)) {
 		id = ID_DECISION;

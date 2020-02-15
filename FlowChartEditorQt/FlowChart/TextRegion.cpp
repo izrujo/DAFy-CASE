@@ -47,7 +47,7 @@ Shape* TextRegion::Clone() {
 	return new TextRegion(*this);
 }
 
-bool TextRegion::IsIncluded(Painter *painter, QPoint point) {
+bool TextRegion::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRect rect(this->x, this->y, this->x + this->width, this->y + this->height);

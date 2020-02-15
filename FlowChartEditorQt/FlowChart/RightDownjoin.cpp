@@ -98,7 +98,7 @@ Shape* RightDownJoin::Clone() {
 	return new RightDownJoin(*this);
 }
 
-void RightDownJoin::GetRegion(Painter *painter, QRegion *region) {
+void RightDownJoin::GetRegion(QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -123,7 +123,7 @@ void RightDownJoin::GetRegion(Painter *painter, QRegion *region) {
 	*region += addRegion;
 }
 
-void RightDownJoin::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void RightDownJoin::GetRegion(Long thickness, QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -155,7 +155,7 @@ void RightDownJoin::ReSize(Long width, Long height, Long width2, Long height2) {
 	this->height2 = height2;
 }
 
-bool RightDownJoin::IsIncluded(Painter *painter, QPoint point) {
+bool RightDownJoin::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRegion region;
@@ -187,7 +187,7 @@ bool RightDownJoin::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool RightDownJoin::IsIncluded(Painter *painter, const QRect& rect) {
+bool RightDownJoin::IsIncluded(const QRect& rect) {
 	bool ret;
 
 	QRegion region;
@@ -219,7 +219,7 @@ bool RightDownJoin::IsIncluded(Painter *painter, const QRect& rect) {
 	return ret;
 }
 
-int RightDownJoin::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
+int RightDownJoin::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 	if (region.contains(point)) {
 		result = HIT_BODY;

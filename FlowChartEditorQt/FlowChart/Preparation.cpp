@@ -71,7 +71,7 @@ Shape* Preparation::Clone() {
 	return new Preparation(*this);
 }
 
-void Preparation::GetRegion(Painter *painter, QRegion *region) {
+void Preparation::GetRegion(QRegion *region) {
 	Long halfHeight = (Long)this->height / 2;
 
 	QVector<QPoint> points(7);
@@ -87,7 +87,7 @@ void Preparation::GetRegion(Painter *painter, QRegion *region) {
 	*region += QRegion(polygon);
 }
 
-void Preparation::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void Preparation::GetRegion(Long thickness, QRegion *region) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
@@ -107,7 +107,7 @@ void Preparation::GetRegion(Painter *painter, Long thickness, QRegion *region) {
 	*region += QRegion(polygon);
 }
 
-bool Preparation::IsIncluded(Painter *painter, QPoint point) {
+bool Preparation::IsIncluded(QPoint point) {
 	bool ret;
 	Long halfHeight = (Long)this->height / 2;
 
@@ -127,7 +127,7 @@ bool Preparation::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool Preparation::IsIncluded(Painter *painter, const QRect& rect) {
+bool Preparation::IsIncluded(const QRect& rect) {
 	bool ret;
 	Long halfHeight = (Long)this->height / 2;
 

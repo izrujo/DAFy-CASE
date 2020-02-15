@@ -105,7 +105,7 @@ Shape* RepeatFalse::Clone() {
 	return new RepeatFalse(*this);
 }
 
-void RepeatFalse::GetRegion(Painter *painter, QRegion *region) {
+void RepeatFalse::GetRegion(QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -130,7 +130,7 @@ void RepeatFalse::GetRegion(Painter *painter, QRegion *region) {
 	*region += addRegion;
 }
 
-void RepeatFalse::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void RepeatFalse::GetRegion(Long thickness, QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -162,7 +162,7 @@ void RepeatFalse::ReSize(Long width, Long height, Long width2, Long height2) {
 	this->height2 = height2;
 }
 
-bool RepeatFalse::IsIncluded(Painter *painter, QPoint point) {
+bool RepeatFalse::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRegion region;
@@ -194,7 +194,7 @@ bool RepeatFalse::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool RepeatFalse::IsIncluded(Painter *painter, const QRect& rect) {
+bool RepeatFalse::IsIncluded(const QRect& rect) {
 	bool ret;
 
 	QRegion region;
@@ -287,7 +287,7 @@ void RepeatFalse::GetSelectionMarkerAllRegion(QRegion *region) {
 	*region += addRegion;
 }
 
-int RepeatFalse::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
+int RepeatFalse::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 
 	if (region.contains(point)) {

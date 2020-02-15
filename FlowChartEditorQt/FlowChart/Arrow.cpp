@@ -78,17 +78,17 @@ Shape* Arrow::Clone() {
 	return new Arrow(*this);
 }
 
-void Arrow::GetRegion(Painter *painter, QRegion *region) {
+void Arrow::GetRegion(QRegion *region) {
 	QRect rect(this->x - LINETHICKNESS, this->y, this->x + LINETHICKNESS, this->y + this->height);
 	*region += QRegion(rect); //empty region에만 넣는 것이면 생성자가 맞겠지? 그런데 아니면?
 }
 
-void Arrow::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void Arrow::GetRegion(Long thickness, QRegion *region) {
 	QRect rect(this->x - thickness, this->y, this->x + thickness, this->y + this->height);
 	*region += QRegion(rect);
 }
 
-bool Arrow::IsIncluded(Painter *painter, QPoint point) {
+bool Arrow::IsIncluded(QPoint point) {
 	QRect rect(this->x - LINETHICKNESS, this->y, this->x + LINETHICKNESS, this->y + this->height);
 	QRegion region(rect);
 	bool ret;
@@ -96,7 +96,7 @@ bool Arrow::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool Arrow::IsIncluded(Painter *painter, const QRect& rect) {
+bool Arrow::IsIncluded(const QRect& rect) {
 	QRect regionRect(x - LINETHICKNESS, y, x + LINETHICKNESS, y + height);
 	QRegion region(regionRect);
 	bool ret;
@@ -104,7 +104,7 @@ bool Arrow::IsIncluded(Painter *painter, const QRect& rect) {
 	return ret;
 }
 
-int Arrow::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
+int Arrow::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 	if (region.contains(point)) {
 		result = HIT_BODY;

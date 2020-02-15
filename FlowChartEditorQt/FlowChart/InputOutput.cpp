@@ -74,7 +74,7 @@ Shape* InputOutput::Clone() {
 	return new InputOutput(*this);
 }
 
-void InputOutput::GetRegion(Painter *painter, QRegion *region) {
+void InputOutput::GetRegion(QRegion *region) {
 	Long halfWidth = (Long)this->width / 2;
 	Long halfHeight = (Long)this->height / 2;
 
@@ -89,7 +89,7 @@ void InputOutput::GetRegion(Painter *painter, QRegion *region) {
 	*region += QRegion(polygon);
 }
 
-void InputOutput::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void InputOutput::GetRegion(Long thickness, QRegion *region) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
@@ -108,7 +108,7 @@ void InputOutput::GetRegion(Painter *painter, Long thickness, QRegion *region) {
 	*region += QRegion(polygon);
 }
 
-bool InputOutput::IsIncluded(Painter *painter, QPoint point) {
+bool InputOutput::IsIncluded(QPoint point) {
 	bool ret;
 	Long halfWidth = (Long)this->width / 2;
 	Long halfHeight = (Long)this->height / 2;
@@ -127,7 +127,7 @@ bool InputOutput::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool InputOutput::IsIncluded(Painter *painter, const QRect& rect) {
+bool InputOutput::IsIncluded(const QRect& rect) {
 	bool ret;
 	Long halfWidth = (Long)this->width / 2;
 	Long halfHeight = (Long)this->height / 2;

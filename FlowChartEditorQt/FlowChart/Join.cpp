@@ -92,7 +92,7 @@ void Join::DrawActiveShape(Painter *painter) {
 }
 */
 
-void Join::GetRegion(Painter *painter, QRegion *region) {
+void Join::GetRegion(QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -112,7 +112,7 @@ void Join::GetRegion(Painter *painter, QRegion *region) {
 	*region += addRegion;
 }
 
-void Join::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void Join::GetRegion(Long thickness, QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -138,7 +138,7 @@ void Join::ReSize(Long width, Long height, Long height2) {
 	this->height2 = height2;
 }
 
-bool Join::IsIncluded(Painter *painter, QPoint point) {
+bool Join::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRegion region;
@@ -165,7 +165,7 @@ bool Join::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool Join::IsIncluded(Painter *painter, const QRect& rect) {
+bool Join::IsIncluded(const QRect& rect) {
 	bool ret;
 
 	QRegion region;
@@ -252,7 +252,7 @@ void Join::GetSelectionMarkerAllRegion(QRegion *region) {
 	*region += addRegion;
 }
 
-int Join::GetHitCode(Painter *painter, const QPoint& point, const QRegion& region) {
+int Join::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 
 	if (region.contains(point)) {

@@ -19,8 +19,8 @@ public:
 	virtual Shape* Clone();
 
 	//마우스 드래그로 여러 도형 한번에 선택시 사용
-	virtual void GetRegion(Painter *painter, QRegion *region) {};
-	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region) {};
+	virtual void GetRegion(QRegion *region) {};
+	virtual void GetRegion(Long thickness, QRegion *region) {};
 
 	void SetIsMarking(bool isMarking);
 	bool GetIsMarking() const;

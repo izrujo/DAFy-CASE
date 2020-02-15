@@ -38,7 +38,7 @@ Shape* RectangleRegion::Clone() {
 	return new RectangleRegion(*this);
 }
 
-bool RectangleRegion::IsIncluded(Painter *painter, QPoint point) {
+bool RectangleRegion::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRect rect;

@@ -30,11 +30,11 @@ public:
 
 	virtual Shape* Clone();
 
-	virtual void GetRegion(Painter *painter, QRegion *region);
-	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region);
+	virtual void GetRegion(QRegion *region);
+	virtual void GetRegion(Long thickness, QRegion *region);
 
-	virtual bool IsIncluded(Painter *painter, QPoint point);
-	virtual bool IsIncluded(Painter *painter, const QRect& rect);
+	virtual bool IsIncluded(QPoint point);
+	virtual bool IsIncluded(const QRect& rect);
 
 	void GetAttribute(Attribute *attribute);
 

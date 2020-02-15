@@ -70,14 +70,14 @@ Shape* Process::Clone() {
 	return new Process(*this);
 }
 
-void Process::GetRegion(Painter *painter, QRegion *region) {
+void Process::GetRegion(QRegion *region) {
 	QRect rect;
 	rect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
 	QRegion addRegion(rect);
 	*region += addRegion;
 }
 
-void Process::GetRegion(Painter *painter, Long thickness, QRegion *region) {
+void Process::GetRegion(Long thickness, QRegion *region) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
@@ -89,7 +89,7 @@ void Process::GetRegion(Painter *painter, Long thickness, QRegion *region) {
 	*region += addRegion;
 }
 
-bool Process::IsIncluded(Painter *painter, QPoint point) {
+bool Process::IsIncluded(QPoint point) {
 	bool ret;
 
 	QRect rect;
@@ -100,7 +100,7 @@ bool Process::IsIncluded(Painter *painter, QPoint point) {
 	return ret;
 }
 
-bool Process::IsIncluded(Painter *painter, const QRect& rect) {
+bool Process::IsIncluded(const QRect& rect) {
 	bool ret;
 
 	QRect regionRect;
