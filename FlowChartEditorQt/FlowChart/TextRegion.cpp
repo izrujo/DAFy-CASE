@@ -2,12 +2,14 @@
 #include "Painter.h"
 #include "FlowChartVisitor.h"
 
-TextRegion::TextRegion(Long x, Long y, Long width, Long height, DWORD backGroundColor, PenStyle borderLine, DWORD borderColor, String contents, Direction direction)
-	:Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+TextRegion::TextRegion(Long x, Long y, Long width, Long height,
+	QColor backGroundColor, QPen borderLine, QColor borderColor, String contents)
+	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }
 
 TextRegion::~TextRegion() {
+
 }
 
 TextRegion::TextRegion(const TextRegion& source)
@@ -20,7 +22,7 @@ TextRegion& TextRegion::operator =(const TextRegion& source) {
 
 	return *this;
 }
-
+/*
 void TextRegion::Draw(CDC *dc) {
 	CFont font;
 	font.CreateFontA(-100, 0, 0, 0, FW_BOLD, FALSE, FALSE, 0, DEFAULT_CHARSET,
@@ -39,16 +41,19 @@ void TextRegion::Draw(Painter *painter) {
 	RECT rect = { this->x, this->y, this->x + this->width, this->y + this->height };
 	painter->DrawText(50, this->contents, this->contents.GetLength(), &rect, NULL);
 }
+*/
 
 Shape* TextRegion::Clone() {
 	return new TextRegion(*this);
 }
 
-BOOL TextRegion::IsIncluded(CDC *dc, POINT point) {
-	CRgn region;
-	BOOL ret;
-	region.CreateRectRgn(x, y, x + width, y + height);
-	ret = region.PtInRegion(point);
-	region.DeleteObject();
+bool TextRegion::IsIncluded(Painter *painter, QPoint point) {
+	bool ret;
+
+	QRect rect(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion region(rect);
+
+	ret = region.contains(point);
+	
 	return ret;
 }

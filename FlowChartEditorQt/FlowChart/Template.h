@@ -30,24 +30,20 @@ public:
 	Long GetCapacity() const;
 	Long GetLength() const;
 
-	//virtual void Draw(CDC *dc);
-	//virtual void Draw(Painter *painter);
-
 	virtual Long Find(CDC *dc, CPoint point);
+	virtual Long Find(Painter *painter, QPoint point);
 
 	virtual void Accept(FlowChartVisitor *draw);
 
 	virtual Shape* Clone();		
 
-	virtual void GetRegion(CDC *dc, CRgn *region){};  //마우스 드래그로 여러 도형 한번에 선택시 사용
 	virtual void GetRegion(Painter *painter, CRgn *region){};
-	virtual void GetRegion(CDC *dc, Long thickness, CRgn *region){};
 	virtual void GetRegion(Painter *painter, Long thickness, CRgn *region){};
 
 private:
+	Array<Shape *> templates;
 	Long capacity;
 	Long length;
-	Array<Shape *> templates;
 };
 Long CompareCoordinateForTemplate(void *one, void *other);
 

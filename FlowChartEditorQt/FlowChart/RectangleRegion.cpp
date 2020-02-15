@@ -21,7 +21,7 @@ RectangleRegion& RectangleRegion::operator =(const RectangleRegion& source) {
 
 	return *this;
 }
-
+/*
 void RectangleRegion::Draw(CDC *dc) {
 	dc->FillSolidRect(this->x, this->y, this->width, this->height, this->backGroundColor);
 }
@@ -32,6 +32,7 @@ void RectangleRegion::Draw(Painter *painter) {
 	POINT points[5] = { {this->x,this->y},{x2,this->y},{x2,y2},{this->x,y2},{this->x,this->y} };
 	painter->FillBackground(points, 5, this->backGroundColor);
 }
+*/
 
 Shape* RectangleRegion::Clone() {
 	return new RectangleRegion(*this);

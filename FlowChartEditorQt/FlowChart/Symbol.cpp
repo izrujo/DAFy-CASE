@@ -9,18 +9,21 @@
 
 Symbol::Symbol(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	QPen borderLine, QColor borderColor, String contents)
-	:Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+
 }
 
 Symbol::~Symbol() {
+
 }
 
 Symbol::Symbol(const Symbol& source)
 	:Shape(source) {
+
 }
 
-Symbol& Symbol::operator =(const Symbol& source)
-{
+Symbol& Symbol::operator =(const Symbol& source) {
 	Shape::operator=(source);
+
 	return *this;
 }

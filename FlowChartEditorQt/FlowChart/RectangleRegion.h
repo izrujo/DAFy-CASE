@@ -14,8 +14,8 @@ public:
 	RectangleRegion(const RectangleRegion& source);
 	RectangleRegion& operator =(const RectangleRegion& source);
 
-	void Draw(CDC *dc);
-	void Draw(Painter *painter);
+	//void Draw(CDC *dc);
+	//void Draw(Painter *painter);
 
 	virtual void Accept(FlowChartVisitor *draw) {}; //Draw() 없애고 이거 만들기
 	virtual Shape* Clone();
