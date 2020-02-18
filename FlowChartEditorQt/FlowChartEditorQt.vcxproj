@@ -84,6 +84,7 @@
     <ClCompile Include="FlowChart\A4Paper.cpp" />
     <ClCompile Include="FlowChart\AccessKey.cpp" />
     <ClCompile Include="FlowChart\Arrow.cpp" />
+    <ClCompile Include="FlowChart\Block.cpp" />
     <ClCompile Include="FlowChart\Clipboard.cpp" />
     <ClCompile Include="FlowChart\CoordinateConverter.cpp" />
     <ClCompile Include="FlowChart\Creator.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="FlowChart\AccessKey.h" />
     <ClInclude Include="FlowChart\Array.h" />
     <ClInclude Include="FlowChart\Arrow.h" />
+    <ClInclude Include="FlowChart\Block.h" />
     <ClInclude Include="FlowChart\Clipboard.h" />
     <ClInclude Include="FlowChart\CoordinateConverter.h" />
     <ClInclude Include="FlowChart\Creator.h" />

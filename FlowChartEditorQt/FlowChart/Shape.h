@@ -264,6 +264,36 @@ protected:
 	//virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController); //painter, scroll 수정 후 고치기
 	virtual void GetSelectionMarkerRect(int marker, QRect *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
 
+public: //Block virtual 선언
+	virtual Long Attach(Shape *shape);
+	virtual Long Insert(Long index, Shape *shape);
+	virtual Long Detach(Long index);
+	virtual Long Detach(SHAPE identify);
+	virtual bool DetachSelectedAll();
+	virtual Shape* GetAt(Long index);
+
+	virtual Long Find(Shape* shape);
+	virtual Long Find(QPoint point);
+	virtual Long Find(Long x, Long y);
+	virtual Long Find(QRect rect);
+	virtual Long Find(SHAPE identify);
+	virtual Long Find(Long fromIndex, SHAPE identify);
+	virtual void Find(Long styles, Long* (*indexes), Long *count);
+
+	virtual void Swap(Long toIndex, Long fromIndex);
+	virtual void Swap(Long toIndex, Shape *shape);
+	virtual void Clear();
+
+	virtual void SelectAll();
+	virtual void UnSelectAll();
+	virtual void GetSelecteds(Long* (*indexes), Long *count);
+	virtual Long CountSelecteds();
+	virtual void AscendingSort();
+	virtual void DescendingSort();
+
+	virtual Long GetCapacity() const;
+	virtual Long GetLength() const;
+	virtual Long GetCurrent() const;
 protected:
 	Long x;
 	Long y;

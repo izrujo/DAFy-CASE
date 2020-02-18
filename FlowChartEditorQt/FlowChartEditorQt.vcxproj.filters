@@ -24,6 +24,11 @@
     <Filter Include="FlowChart">
       <UniqueIdentifier>{2abe3443-8019-4a30-bcbc-f09c5b593561}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+      <ParseFiles>true</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FlowChartEditor.cpp">
@@ -352,6 +357,9 @@
     </ClCompile>
     <ClCompile Include="Notepad\Subject.cpp">
       <Filter>Notepad</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Block.cpp">
+      <Filter>FlowChart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -689,6 +697,9 @@
     </ClInclude>
     <ClInclude Include="Notepad\Subject.h">
       <Filter>Notepad</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Block.h">
+      <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -10,12 +10,10 @@
 #include "Shape.h"
 #include "Painter.h"
 
-#include "Document.h"
 #include "InputOutput.h"
 #include "Preparation.h"
 #include "Terminal.h"
 #include "Process.h"
-#include "PunchedCard.h"
 #include "Decision.h"
 #include "ScrollController.h"
 #include "Scrolls.h"
@@ -677,4 +675,104 @@ int Shape::GetLineID() {
 	}
 
 	return id;
+}
+
+//Block virtual Á¤ÀÇ
+Long Shape::Attach(Shape *shape) {
+	return -1;
+}
+
+Long Shape::Insert(Long index, Shape *shape) {
+	return -1;
+}
+
+Long Shape::Detach(Long index) {
+	return -1;
+}
+
+Long Shape::Detach(SHAPE identify) {
+	return -1;
+}
+
+bool Shape::DetachSelectedAll() {
+	return false;
+}
+
+Shape* Shape::GetAt(Long index) {
+	return 0;
+}
+
+Long Shape::Find(Shape* shape) {
+	return -1;
+}
+
+Long Shape::Find(QPoint point) {
+	return -1;
+}
+
+Long Shape::Find(Long x, Long y) {
+	return -1;
+}
+
+Long Shape::Find(QRect rect) {
+	return -1;
+}
+
+Long Shape::Find(SHAPE identify) {
+	return -1;
+}
+
+Long Shape::Find(Long fromIndex, SHAPE identify) {
+	return -1;
+}
+
+void Shape::Find(Long styles, Long* (*indexes), Long *count) {
+
+}
+
+void Shape::Swap(Long toIndex, Long fromIndex) {
+
+}
+
+void Shape::Swap(Long toIndex, Shape *shape) {
+
+}
+
+void Shape::Clear() {
+
+}
+
+void Shape::SelectAll() {
+
+}
+
+void Shape::UnSelectAll() {
+
+}
+void Shape::GetSelecteds(Long* (*indexes), Long *count) {
+
+}
+
+Long Shape::CountSelecteds() {
+	return -1;
+}
+
+void Shape::AscendingSort() {
+
+}
+
+void Shape::DescendingSort() {
+
+}
+
+Long Shape::GetCapacity() const {
+	return -1;
+}
+
+Long Shape::GetLength() const {
+	return -1;
+}
+
+Long Shape::GetCurrent() const {
+	return -1;
 }
