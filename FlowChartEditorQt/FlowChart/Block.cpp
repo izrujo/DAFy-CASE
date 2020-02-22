@@ -46,7 +46,7 @@ Block& Block::operator=(const Block& source) {
 	i = 0;
 	while (i < source.GetLength()) {
 		shape = const_cast<Block&>(source).GetAt(i)->Clone();
-		this->shapes.Store(i, shape);
+		this->shapes.Modify(i, shape);
 		i++;
 	}
 

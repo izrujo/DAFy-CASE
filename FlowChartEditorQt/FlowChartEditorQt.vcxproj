@@ -85,6 +85,7 @@
     <ClCompile Include="FlowChart\AccessKey.cpp" />
     <ClCompile Include="FlowChart\Arrow.cpp" />
     <ClCompile Include="FlowChart\Block.cpp" />
+    <ClCompile Include="FlowChart\Brush.cpp" />
     <ClCompile Include="FlowChart\Clipboard.cpp" />
     <ClCompile Include="FlowChart\CoordinateConverter.cpp" />
     <ClCompile Include="FlowChart\Creator.cpp" />
@@ -108,6 +109,9 @@
     <ClCompile Include="FlowChart\FlowChartKeyActions.cpp" />
     <ClCompile Include="FlowChart\FlowChartTemplate.cpp" />
     <ClCompile Include="FlowChart\FlowChartVisitor.cpp" />
+    <ClCompile Include="FlowChart\Font.cpp" />
+    <ClCompile Include="FlowChart\GObject.cpp" />
+    <ClCompile Include="FlowChart\GObjectFactory.cpp" />
     <ClCompile Include="FlowChart\HScrollActionFactory.cpp" />
     <ClCompile Include="FlowChart\HScrollActions.cpp" />
     <ClCompile Include="FlowChart\InputOutput.cpp" />
@@ -125,9 +129,15 @@
     <ClCompile Include="FlowChart\MovingTool.cpp" />
     <ClCompile Include="FlowChart\NumberBox.cpp" />
     <ClCompile Include="FlowChart\Painter.cpp" />
+    <ClCompile Include="FlowChart\Pen.cpp" />
     <ClCompile Include="FlowChart\Preparation.cpp" />
     <ClCompile Include="FlowChart\PreviewForm.cpp" />
     <ClCompile Include="FlowChart\Process.cpp" />
+    <ClCompile Include="FlowChart\QtBrush.cpp" />
+    <ClCompile Include="FlowChart\QtFont.cpp" />
+    <ClCompile Include="FlowChart\QtGObjectFactory.cpp" />
+    <ClCompile Include="FlowChart\QtPainter.cpp" />
+    <ClCompile Include="FlowChart\QtPen.cpp" />
     <ClCompile Include="FlowChart\RectangleRegion.cpp" />
     <ClCompile Include="FlowChart\RepeatFalse.cpp" />
     <ClCompile Include="FlowChart\RepeatTrue.cpp" />
@@ -206,6 +216,7 @@
     <ClInclude Include="FlowChart\Array.h" />
     <ClInclude Include="FlowChart\Arrow.h" />
     <ClInclude Include="FlowChart\Block.h" />
+    <ClInclude Include="FlowChart\Brush.h" />
     <ClInclude Include="FlowChart\Clipboard.h" />
     <ClInclude Include="FlowChart\CoordinateConverter.h" />
     <ClInclude Include="FlowChart\Creator.h" />
@@ -229,6 +240,9 @@
     <ClInclude Include="FlowChart\FlowChartKeyActions.h" />
     <ClInclude Include="FlowChart\FlowChartTemplate.h" />
     <ClInclude Include="FlowChart\FlowChartVisitor.h" />
+    <ClInclude Include="FlowChart\Font.h" />
+    <ClInclude Include="FlowChart\GObject.h" />
+    <ClInclude Include="FlowChart\GObjectFactory.h" />
     <ClInclude Include="FlowChart\HScrollActionFactory.h" />
     <ClInclude Include="FlowChart\HScrollActions.h" />
     <ClInclude Include="FlowChart\InputOutput.h" />
@@ -246,9 +260,15 @@
     <ClInclude Include="FlowChart\MovingTool.h" />
     <ClInclude Include="FlowChart\NumberBox.h" />
     <ClInclude Include="FlowChart\Painter.h" />
+    <ClInclude Include="FlowChart\Pen.h" />
     <ClInclude Include="FlowChart\Preparation.h" />
     <ClInclude Include="FlowChart\PreviewForm.h" />
     <ClInclude Include="FlowChart\Process.h" />
+    <ClInclude Include="FlowChart\QtBrush.h" />
+    <ClInclude Include="FlowChart\QtFont.h" />
+    <ClInclude Include="FlowChart\QtGObjectFactory.h" />
+    <ClInclude Include="FlowChart\QtPainter.h" />
+    <ClInclude Include="FlowChart\QtPen.h" />
     <ClInclude Include="FlowChart\RectangleRegion.h" />
     <ClInclude Include="FlowChart\RepeatFalse.h" />
     <ClInclude Include="FlowChart\RepeatTrue.h" />
