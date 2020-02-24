@@ -13,7 +13,7 @@ public:
 
 	virtual void SelectObject(const GObject& object, GObject *previous, Long *index);
 	virtual GObject* CurrentObject(string identify);
-	virtual void Update(Long index) = 0;
+	virtual void Update(Long index);
 
 	virtual GObject* GetAt(Long index);
 	virtual Long GetCapacity() const;

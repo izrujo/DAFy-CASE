@@ -105,6 +105,10 @@ GObject* Painter::CurrentObject(string identify) {
 	}
 }
 
+void Painter::Update(Long index) {
+
+}
+
 GObject* Painter::GetAt(Long index) {
 	return this->objects.GetAt(index);
 }
