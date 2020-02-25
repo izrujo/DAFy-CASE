@@ -25,15 +25,15 @@ string GObject::GetIdentify() {
 }
 
 //Painter 가상 함수 정의
-void GObject::SelectObject(const GObject& object, GObject *previous, Long *index) {
-
+GObject* GObject::SelectObject(const GObject& object) {
+	return 0;
 }
 
 GObject* GObject::CurrentObject(string identify) {
 	return 0;
 }
 
-void GObject::Update(Long index) {
+void GObject::Update() {
 
 }
 

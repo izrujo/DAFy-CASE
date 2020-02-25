@@ -8,18 +8,18 @@ class QPainter;
 
 class QtPainter : public Painter {
 public:
-	QtPainter(Long width, Long height, Long capacity = 3);
+	QtPainter(Long width, Long height, QColor backgroundColor = QColor(255, 255, 255), Long capacity = 3);
 	QtPainter(const QtPainter& source);
 	virtual ~QtPainter();
 	QtPainter& operator=(const QtPainter& source);
 
-	virtual void Update(Long index);
+	virtual void Update(); //SetObject(QPainter Link)
 
 	virtual GObject* Clone();
 
 	//QPainter 함수 구현
 	virtual void Render(QPainter *painter, int x, int y); //painter : 실제 화면
-	virtual void Resize(Long width, Long height);
+	virtual void Resize(Long width, Long height, QColor color = QColor(255, 255, 255));
 
 	virtual QRectF& BoundingRect(const QRectF& rectangle, int flags, const QString& text);
 	virtual QRect& BoundingRect(const QRect& rectangle, int flags, const QString& text);
@@ -30,8 +30,8 @@ public:
 	virtual void DrawChord(const QRectF& rectangle, int startAngle, int spanAngle);
 	virtual void DrawChord(const QRect& rectangle, int startAngle, int spanAngle);
 
-	virtual void DrawConvexPolygon(const QPointF *points, int pointCount);
-	virtual void DrawConvexPolygon(const QPoint *points, int pointCount);
+	virtual void DrawConvexPolygon(const QPointF(*points), int pointCount);
+	virtual void DrawConvexPolygon(const QPoint(*points), int pointCount);
 
 	virtual void DrawEllipse(const QRectF& rectangle);
 	virtual void DrawEllipse(const QRect& rectangle);
@@ -91,6 +91,9 @@ public:
 
 	virtual int GetCompositionMode();
 	virtual void SetCompositionMode(int mode);
+
+	virtual int GetRenderHints();
+	virtual void SetRenderHints(int hints);
 private:
 	QPixmap *qPixmap;
 	QPainter *qPainter;

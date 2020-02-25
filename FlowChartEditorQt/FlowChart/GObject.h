@@ -6,6 +6,7 @@
 #include <qrect.h>
 #include <qstring.h>
 #include <qpoint.h>	
+#include <qbrush.h>
 
 using namespace std;
 
@@ -26,9 +27,9 @@ public:
 	virtual string GetIdentify(); //Pen, Brush, Font
 
 	//Painter 가상 함수 선언
-	virtual void SelectObject(const GObject& object, GObject *previous, Long *index);
+	virtual GObject* SelectObject(const GObject& object);
 	virtual GObject* CurrentObject(string identify);
-	virtual void Update(Long index);
+	virtual void Update();
 
 	virtual GObject* GetAt(Long index);
 	virtual Long GetCapacity() const;
@@ -47,8 +48,8 @@ public:
 	virtual void DrawChord(const QRectF& rectangle, int startAngle, int spanAngle) {};
 	virtual void DrawChord(const QRect& rectangle, int startAngle, int spanAngle) {};
 
-	virtual void DrawConvexPolygon(const QPointF *points, int pointCount) {};
-	virtual void DrawConvexPolygon(const QPoint *points, int pointCount) {};
+	virtual void DrawConvexPolygon(const QPointF(*points), int pointCount) {};
+	virtual void DrawConvexPolygon(const QPoint(*points), int pointCount) {};
 
 	virtual void DrawEllipse(const QRectF& rectangle) {};
 	virtual void DrawEllipse(const QRect& rectangle) {};
@@ -107,6 +108,9 @@ public:
 
 	virtual int GetCompositionMode() { return -1; };
 	virtual void SetCompositionMode(int mode) {};
+
+	virtual int GetRenderHints() { return -1; };
+	virtual void SetRenderHints(int hint) {};
 };
 
 #endif //_GOBJECT_H

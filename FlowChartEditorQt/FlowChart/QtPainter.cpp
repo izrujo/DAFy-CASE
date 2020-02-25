@@ -1,13 +1,28 @@
 #include "QtPainter.h"
 #include "QtBrush.h"
+#include "QtGObjectFactory.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>
 
-QtPainter::QtPainter(Long width, Long height, Long capacity)
+QtPainter::QtPainter(Long width, Long height, QColor color, Long capacity)
 	: Painter(capacity) {
 	this->qPixmap = new QPixmap(width, height);
+	this->qPixmap->fill(color);
 	this->qPainter = new QPainter(this->qPixmap);
+
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 1.0f, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin);
+	this->objects.Store(this->length++, pen);
+	pen->SetObject(this->qPainter);
+
+	GObject *brush = factory.MakeBrush(color, Qt::SolidPattern);
+	this->objects.Store(this->length++, brush);
+	brush->SetObject(this->qPainter);
+
+	GObject *font = factory.MakeFont("Malgun Gothic", 10, 50, false);
+	this->objects.Store(this->length++, font);
+	font->SetObject(this->qPainter);
 }
 
 QtPainter::QtPainter(const QtPainter& source)
@@ -17,11 +32,11 @@ QtPainter::QtPainter(const QtPainter& source)
 }
 
 QtPainter::~QtPainter() {
+	if (this->qPainter != NULL) { //painter 먼저 소멸시켜야 오류 안남.
+		delete this->qPainter;
+	}
 	if (this->qPixmap != NULL) {
 		delete this->qPixmap;
-	}
-	if (this->qPainter != NULL) {
-		delete this->qPainter;
 	}
 }
 
@@ -31,9 +46,12 @@ QtPainter& QtPainter::operator=(const QtPainter& source) {
 	return *this;
 }
 
-void QtPainter::Update(Long index) {
-	GObject *object = this->objects.GetAt(index);
-	object->SetObject(this->qPainter);
+void QtPainter::Update() {
+	Long i = 0;
+	while (i < this->length) {
+		this->objects.GetAt(i)->SetObject(this->qPainter);
+		i++;
+	}
 }
 
 GObject* QtPainter::Clone() {
@@ -45,15 +63,16 @@ void QtPainter::Render(QPainter *painter, int x, int y) {
 	painter->drawPixmap(x, y, *this->qPixmap);
 }
 
-void QtPainter::Resize(Long width, Long height) {
-	if (this->qPixmap != NULL) {
-		delete this->qPixmap;
-		this->qPixmap = new QPixmap(width, height);
-	}
+void QtPainter::Resize(Long width, Long height, QColor color) {
 	if (this->qPainter != NULL) {
 		delete this->qPainter;
-		this->qPainter = new QPainter(this->qPixmap);
 	}
+	if (this->qPixmap != NULL) {
+		delete this->qPixmap;
+	}
+	this->qPixmap = new QPixmap(width, height);
+	this->qPixmap->fill(color);
+	this->qPainter = new QPainter(this->qPixmap);
 }
 
 QRectF& QtPainter::BoundingRect(const QRectF& rectangle, int flags, const QString& text) {
@@ -65,26 +84,34 @@ QRect& QtPainter::BoundingRect(const QRect& rectangle, int flags, const QString&
 }
 
 void QtPainter::DrawArc(const QRectF& rectangle, int startAngle, int spanAngle) {
+	startAngle *= 16;
+	spanAngle *= 16;
 	this->qPainter->drawArc(rectangle, startAngle, spanAngle);
 }
 
 void QtPainter::DrawArc(const QRect& rectangle, int startAngle, int spanAngle) {
+	startAngle *= 16;
+	spanAngle *= 16;
 	this->qPainter->drawArc(rectangle, startAngle, spanAngle);
 }
 
 void QtPainter::DrawChord(const QRectF& rectangle, int startAngle, int spanAngle) {
+	startAngle *= 16;
+	spanAngle *= 16;
 	this->qPainter->drawChord(rectangle, startAngle, spanAngle);
 }
 
 void QtPainter::DrawChord(const QRect& rectangle, int startAngle, int spanAngle) {
+	startAngle *= 16;
+	spanAngle *= 16;
 	this->qPainter->drawChord(rectangle, startAngle, spanAngle);
 }
 
-void QtPainter::DrawConvexPolygon(const QPointF *points, int pointCount) {
+void QtPainter::DrawConvexPolygon(const QPointF(*points), int pointCount) {
 	this->qPainter->drawConvexPolygon(points, pointCount);
 }
 
-void QtPainter::DrawConvexPolygon(const QPoint *points, int pointCount) {
+void QtPainter::DrawConvexPolygon(const QPoint(*points), int pointCount) {
 	this->qPainter->drawConvexPolygon(points, pointCount);
 }
 
@@ -121,23 +148,27 @@ void QtPainter::DrawLine(const QPoint& point1, const QPoint& point2) {
 }
 
 void QtPainter::DrawLines(const QPointF(*points1), const QPointF(*points2), int lineCount) {
-	QPointF(*pointPairs);
+	QPointF(*pointPairs) = new QPointF[lineCount*2];
+	int j = 0;
 	int i = 0;
 	while (i < lineCount) {
-		pointPairs[i] = points1[i];
-		pointPairs[i + 1] = points2[i];
-		i += 2;
+		pointPairs[j] = points1[i];
+		pointPairs[j + 1] = points2[i];
+		j += 2;
+		i++;
 	}
 	this->qPainter->drawLines(pointPairs, lineCount);
 }
 
 void QtPainter::DrawLines(const QPoint(*points1), const QPoint(*points2), int lineCount) {
-	QPoint(*pointPairs);
+	QPoint(*pointPairs) = new QPoint[lineCount * 2];
+	int j = 0;
 	int i = 0;
 	while (i < lineCount) {
-		pointPairs[i] = points1[i];
-		pointPairs[i + 1] = points2[i];
-		i += 2;
+		pointPairs[j] = points1[i];
+		pointPairs[j + 1] = points2[i];
+		j += 2;
+		i++;
 	}
 	this->qPainter->drawLines(pointPairs, lineCount);
 }
@@ -259,4 +290,12 @@ int QtPainter::GetCompositionMode() {
 
 void QtPainter::SetCompositionMode(int mode) {
 	this->qPainter->setCompositionMode((QPainter::CompositionMode)mode);
+}
+
+int QtPainter::GetRenderHints() {
+	return this->qPainter->renderHints();
+}
+
+void QtPainter::SetRenderHints(int hints) {
+	this->qPainter->setRenderHints((QPainter::RenderHints)hints);
 }

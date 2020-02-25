@@ -11,9 +11,9 @@ public:
 	virtual ~Painter() = 0;
 	Painter& operator=(const Painter& source);
 
-	virtual void SelectObject(const GObject& object, GObject *previous, Long *index);
+	virtual GObject* SelectObject(const GObject& object);
 	virtual GObject* CurrentObject(string identify);
-	virtual void Update(Long index);
+	virtual void Update();
 
 	virtual GObject* GetAt(Long index);
 	virtual Long GetCapacity() const;
