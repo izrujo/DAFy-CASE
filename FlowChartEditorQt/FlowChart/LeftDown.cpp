@@ -13,6 +13,8 @@
 #include "ScrollController.h"
 #include "Scrolls.h"
 
+#include "QtGObjectFactory.h"
+
 LeftDown::LeftDown(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	QPen borderLine, QColor borderColor, String contents)
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
@@ -72,21 +74,18 @@ void LeftDown::Accept(FlowChartVisitor *draw) {
 Shape* LeftDown::Clone() {
 	return new LeftDown(*this);
 }
-/*
-void LeftDown::DrawActiveShape(Painter *painter) {
-	painter->DrawLine(x, y, x + width, y);
-	painter->DrawLine(x + width, y, x + width, y + height - ARROW_SIZE);
 
-	POINT arrow[3];
-	arrow[0].x = x + width;
-	arrow[0].y = y + height;
-	arrow[1].x = x + width - ARROW_SIZE / 2;
-	arrow[1].y = y + height - ARROW_SIZE;
-	arrow[2].x = x + width + ARROW_SIZE / 2;
-	arrow[2].y = y + height - ARROW_SIZE;
+void LeftDown::DrawActiveShape(GObject *painter) {
+	painter->DrawLine(QPoint(this->x, this->y), QPoint(this->x + this->width, this->y));
+	painter->DrawLine(QPoint(this->x + this->width, this->y), 
+		QPoint(this->x + this->width, this->y + this->height - ARROW_SIZE));
+
+	QPoint arrow[3];
+	arrow[0] = QPoint(this->x + this->width, this->y + this->height);
+	arrow[1] = QPoint(this->x + this->width - ARROW_SIZE / 2, this->y + this->height - ARROW_SIZE);
+	arrow[2] = QPoint(this->x + this->width + ARROW_SIZE / 2, this->y + this->height - ARROW_SIZE);
 	painter->DrawPolygon(arrow, 3);
 }
-*/
 
 void LeftDown::GetRegion(QRegion *region) {
 	QRect rect;
@@ -219,29 +218,33 @@ int LeftDown::GetHitCode(const QPoint& point, const QRegion& region) {
 
 	return result;
 }
-/*
-void LeftDown::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
-	CRect rectSelect;
 
-	painter->ChangePlaneProperty(BS_SOLID, RGB(0, 0, 255));
+void LeftDown::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
+	QRect rectSelect;
+
+	QtGObjectFactory factory;
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
+	GObject *oldBrush = painter->SelectObject(*brush);
+	painter->Update();
 
 	GetSelectionMarkerRect(HIT_IN, &rectSelect);
 	Long positionX = scrollController->GetScroll(1)->GetPosition();
 	Long positionY = scrollController->GetScroll(0)->GetPosition();
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_OUT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
+
+	painter->SelectObject(*oldBrush);
+	painter->Update();
+	if (brush != NULL) {
+		delete brush;
+	}
 }
-*/
 
 void LeftDown::GetAttribute(Attribute *attribute) {
 	attribute->vertexIn = 'Y';

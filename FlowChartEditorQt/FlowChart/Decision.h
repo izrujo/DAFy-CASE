@@ -42,7 +42,7 @@ public:
 	virtual bool Identify(SHAPE identify);
 	virtual bool IsStyle(Long style);
 
-	//virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController);
+	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController);
 };
 
 inline bool Decision::Identify(SHAPE identify) {

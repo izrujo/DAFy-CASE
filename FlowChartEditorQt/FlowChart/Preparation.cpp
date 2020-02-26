@@ -175,8 +175,7 @@ bool Preparation::IsStyle(Long style) {
 	}
 	return ret;
 }
-/*
-void Preparation::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
+
+void Preparation::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
 	Shape::DrawSelectionMarkers(painter, scrollController);
 }
-*/

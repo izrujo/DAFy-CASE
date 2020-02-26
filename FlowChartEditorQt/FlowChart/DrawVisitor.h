@@ -1,24 +1,21 @@
-// DrawVisitor.h
-#include "FlowChartVisitor.h"
-#include "Painter.h"
-
 #ifndef _DRAWVISITOR_H
 #define _DRAWVISITOR_H
 
+#include "FlowChartVisitor.h"
+
+class GObject;
 class ScrollController;
 
 class DrawVisitor : public FlowChartVisitor {
 public:
-	DrawVisitor(Painter *painter = 0, ScrollController *scrollController = 0);
+	DrawVisitor(GObject *painter = 0, ScrollController *scrollController = 0);
 	virtual ~DrawVisitor();
 protected:
 	virtual void Visit(Terminal *element);
 	virtual void Visit(Preparation *element);
-	virtual void Visit(PunchedCard *element);
 	virtual void Visit(InputOutput *element);
 	virtual void Visit(Process *element);
 	virtual void Visit(Decision *element);
-	virtual void Visit(Document *element);
 	virtual void Visit(Arrow *element);
 	virtual void Visit(LeftDown *element);
 	virtual void Visit(RightDown *element);
@@ -33,7 +30,7 @@ protected:
 	virtual void Visit(A4Paper *a4Paper);
 	virtual void Visit(TutorialMark *tutorialMark);
 private:
-	Painter *painter;
+	GObject *painter;
 	ScrollController *scrollController;
 };
 

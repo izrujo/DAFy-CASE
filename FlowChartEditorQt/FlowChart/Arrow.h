@@ -25,7 +25,7 @@ public:
 	virtual bool operator ==(const Shape& other);
 	virtual bool operator !=(const Shape& other);
 
-	//virtual void DrawActiveShape(Painter *painter);
+	virtual void DrawActiveShape(GObject *painter);
 
 	virtual void Accept(FlowChartVisitor *draw);
 
@@ -44,7 +44,7 @@ public:
 
 	virtual bool Identify(SHAPE identify);
 
-	//virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController);
+	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController);
 	virtual void GetSelectionMarkerRect(int marker, QRect *rect);
 
 	void GetAttribute(Attribute *attribute);

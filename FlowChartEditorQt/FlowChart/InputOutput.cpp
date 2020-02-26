@@ -171,8 +171,7 @@ bool InputOutput::IsStyle(Long style) {
 	}
 	return ret;
 }
-/*
-void InputOutput::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
+
+void InputOutput::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
 	Shape::DrawSelectionMarkers(painter, scrollController);
 }
-*/

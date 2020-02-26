@@ -25,7 +25,7 @@ public:
 	virtual bool operator ==(const Shape& other);
 	virtual bool operator !=(const Shape& other);
 
-	//virtual void DrawActiveShape(Painter *painter);
+	virtual void DrawActiveShape(GObject *painter);
 
 	virtual void Accept(FlowChartVisitor *draw);
 
@@ -53,7 +53,7 @@ public:
 	virtual Long CenterOfGravityY() const;
 	virtual Long CenterOfGravityX() const;
 
-	//virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController);
+	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController);
 	void GetAttribute(Attribute *attribute);
 private:
 	Long height2;

@@ -14,6 +14,8 @@
 #include "ScrollController.h"
 #include "Scrolls.h"
 
+#include "QtGObjectFactory.h"
+
 Join::Join(Long x, Long y, Long width, Long height, Long height2, QColor backGroundColor,
 	QPen borderLine, QColor borderColor, String contents)
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
@@ -76,21 +78,16 @@ Shape* Join::Clone() {
 void Join::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
-/*
-void Join::DrawActiveShape(Painter *painter) {
-	POINT points[4];
-	points[0].x = x;
-	points[0].y = y;
-	points[1].x = x;
-	points[1].y = y + height2;
-	points[2].x = x + width;
-	points[2].y = y + height2;
-	points[3].x = x + width;
-	points[3].y = y + height;
+
+void Join::DrawActiveShape(GObject *painter) {
+	QPoint points[4];
+	points[0] = QPoint(this->x, this->y);
+	points[1] = QPoint(this->x, this->y + this->height2);
+	points[2] = QPoint(this->x + this->width, this->y + this->height2);
+	points[3] = QPoint(this->x + this->width, this->y + this->height);
 
 	painter->DrawPolyline(points, 4);
 }
-*/
 
 void Join::GetRegion(QRegion *region) {
 	QRect rect;
@@ -277,36 +274,38 @@ int Join::GetHitCode(const QPoint& point, const QRegion& region) {
 
 	return result;
 }
-/*
-void Join::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
-	CRect rectSelect;
 
-	painter->ChangePlaneProperty(BS_SOLID, RGB(0, 0, 255));
+void Join::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
+	QRect rectSelect;
 
+	QtGObjectFactory factory;
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
+	GObject *oldBrush = painter->SelectObject(*brush);
+	painter->Update();
+	
 	GetSelectionMarkerRect(HIT_TRUE, &rectSelect);
 	Long positionX = scrollController->GetScroll(1)->GetPosition();
 	Long positionY = scrollController->GetScroll(0)->GetPosition();
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_OUT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_FALSE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
+	
+	painter->SelectObject(*oldBrush);
+	painter->Update();
+	if (brush != NULL) {
+		delete brush;
+	}
 }
-*/
 
 void Join::GetAttribute(Attribute *attribute) {
 	attribute->vertexOut = 'Y';

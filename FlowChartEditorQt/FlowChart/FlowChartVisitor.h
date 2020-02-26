@@ -3,14 +3,10 @@
 #ifndef _FLOWCHARTVISITOR_H
 #define _FLOWCHARTVISITOR_H
 
-#include <afxwin.h>
-#include "String.h"
 class Terminal;
 class Preparation;
-class PunchedCard;
 class InputOutput;
 class Process;
-class Document;
 class Arrow;
 class LeftDown;
 class RightDown;
@@ -37,11 +33,9 @@ public:
 	virtual void Visit(Annotation *element) {};
 	virtual void Visit(Terminal *element) = 0;
 	virtual void Visit(Preparation *element) = 0;
-	virtual void Visit(PunchedCard *element) {};
 	virtual void Visit(InputOutput *element) = 0;
 	virtual void Visit(Process *element) = 0;
 	virtual void Visit(Decision *element) = 0;
-	virtual void Visit(Document *element) {};
 	virtual void Visit(Arrow *element) = 0;
 	virtual void Visit(LeftDown *element) = 0;
 	virtual void Visit(RightDown *element) = 0;

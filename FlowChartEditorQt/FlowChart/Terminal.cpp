@@ -190,8 +190,7 @@ bool Terminal::IsStyle(Long style) {
 	}
 	return ret;
 }
-/*
-void Terminal::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
+
+void Terminal::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
 	Shape::DrawSelectionMarkers(painter, scrollController);
 }
-*/

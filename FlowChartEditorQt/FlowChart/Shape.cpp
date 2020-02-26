@@ -25,6 +25,8 @@
 #include "RepeatFalse.h"
 #include "RightDownJoin.h"
 
+#include "QtGObjectFactory.h"
+
 //#include <qcursor.h>
 
 Attribute::Attribute() {
@@ -147,26 +149,26 @@ bool Attribute::operator != (const Attribute& other) {
 
 Shape::Shape()
 	: backGroundColor(QColor(255, 255, 255)),
-	borderLine(QPen(Qt::SolidLine)),
 	borderColor(QColor(0, 0, 0)),
 	contents() {
 	this->x = 0;
 	this->y = 0;
 	this->width = 0;
 	this->height = 0;
+	this->borderLine = Qt::SolidLine;
 	this->isSelected = false;
 }
 
 Shape::Shape(Long x, Long y, Long width, Long height, QColor backGroundColor,
-	QPen borderLine, QColor borderColor, String contents)
+	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: backGroundColor(backGroundColor),
-	borderLine(borderLine),
 	borderColor(borderColor),
 	contents(contents) {
 	this->x = x;
 	this->y = y;
 	this->width = width;
 	this->height = height;
+	this->borderLine = borderLine;
 	this->isSelected = false;
 }
 
@@ -174,13 +176,13 @@ Shape::~Shape() {}
 
 Shape::Shape(const Shape& source)
 	: backGroundColor(source.backGroundColor),
-	borderLine(source.borderLine),
 	borderColor(source.borderColor),
 	contents(source.contents) {
 	this->x = source.x;
 	this->y = source.y;
 	this->width = source.width;
 	this->height = source.height;
+	this->borderLine = source.borderLine;
 	this->isSelected = source.isSelected;
 }
 
@@ -329,27 +331,23 @@ void Shape::ReSize(Long width, Long height) {
 	this->height = height;
 }
 
-void Shape::Paint(QColor backGroundColor, QPen borderLine, QColor borderColor) {
+void Shape::Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor) {
 	this->backGroundColor = backGroundColor;
 	this->borderLine = borderLine;
 	this->borderColor = borderColor;
 }
 
-/*
-void Shape::DrawActiveShape(Painter *painter) {
-	POINT point[4];
-	point[0].x = x - LINETHICKNESS;
-	point[0].y = y - LINETHICKNESS;
-	point[1].x = x + width + LINETHICKNESS;
-	point[1].y = y - LINETHICKNESS;
-	point[2].x = x + width + LINETHICKNESS;
-	point[2].y = y + height + LINETHICKNESS;
-	point[3].x = x - LINETHICKNESS;
-	point[3].y = y + height + LINETHICKNESS;
 
-	painter->DrawPolygon(point, BOXVERTECIES);
+void Shape::DrawActiveShape(GObject *painter) {
+	QPoint points[BOXVERTECIES];
+	points[0] = QPoint(this->x - LINETHICKNESS, this->y - LINETHICKNESS);
+	points[1] = QPoint(this->x + this->width + LINETHICKNESS, this->y - LINETHICKNESS);
+	points[2] = QPoint(this->x + this->width + LINETHICKNESS, this->y + this->height + LINETHICKNESS);
+	points[3] = QPoint(this->x - LINETHICKNESS, this->y + this->height + LINETHICKNESS);
+
+	painter->DrawPolygon(points, BOXVERTECIES);
 }
-*/
+
 
 //////////////////////////////////////////////////////////////////////////
 // 선택 관련 : 2015-11-23
@@ -550,72 +548,64 @@ void Shape::Copy(Shape *object) {
 	this->isSelected = object->IsSelected();
 }
 
-/*
-void Shape::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController)
+
+void Shape::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController)
 {
 	QRect rectSelect;
 
-	painter->ChangePlaneProperty(BS_SOLID, RGB(0, 0, 255));
+	QtGObjectFactory factory;
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
+	GObject *oldBrush = painter->SelectObject(*brush);
+	painter->Update();
 
 	GetSelectionMarkerRect(HIT_TOPLEFT, &rectSelect);
 	Long positionX = scrollController->GetScroll(1)->GetPosition();
 	Long positionY = scrollController->GetScroll(0)->GetPosition();
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_TOPMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_TOPRIGHT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_BOTTOMLEFT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_BOTTOMMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_BOTTOMRIGHT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_RIGHTMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_LEFTMIDDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
+
+	painter->SelectObject(*oldBrush);
+	painter->Update();
+	if (brush != NULL) {
+		delete brush;
+	}
 }
-*/
 
 void Shape::MakeRectToPoint(QPoint point, QRect *rect) {
 	Long left = point.x() - BOXSCOPE;

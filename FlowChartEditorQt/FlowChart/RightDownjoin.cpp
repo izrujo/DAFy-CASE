@@ -13,6 +13,8 @@
 #include "ScrollController.h"
 #include "Scrolls.h"
 
+#include "QtGObjectFactory.h"
+
 RightDownJoin::RightDownJoin(Long x, Long y, Long width, Long height, Long width2, Long height2, 
 	QColor backGroundColor, QPen borderLine, QColor borderColor, String contents) 
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
@@ -77,22 +79,16 @@ bool RightDownJoin::operator !=(const Shape& other) {
 void RightDownJoin::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
-/*
-void RightDownJoin::DrawActiveShape(Painter *painter) {
-	POINT points[5];
-	points[0].x = x;
-	points[0].y = y;
-	points[1].x = x + width2;
-	points[1].y = y;
-	points[2].x = x + width2;
-	points[2].y = y + height + height2;
-	points[3].x = x + width;
-	points[3].y = y + height + height2;
-	points[4].x = x + width;
-	points[4].y = y + height;
+
+void RightDownJoin::DrawActiveShape(GObject *painter) {
+	QPoint points[5];
+	points[0] = QPoint(this->x, this->y);
+	points[1] = QPoint(this->x + this->width2, this->y);
+	points[2] = QPoint(this->x + this->width2, this->y + this->height + this->height2);
+	points[3] = QPoint(this->x + this->width, this->y + this->height + this->height2);
+	points[4] = QPoint(this->x + this->width, this->y + this->height);
 	painter->DrawPolyline(points, 5);
 }
-*/
 
 Shape* RightDownJoin::Clone() {
 	return new RightDownJoin(*this);
@@ -304,36 +300,38 @@ void RightDownJoin::GetSelectionMarkerAllRegion(QRegion *region) {
 	addRegion = QRegion(rect);
 	*region += addRegion;
 }
-/*
-void RightDownJoin::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
-	CRect rectSelect;
 
-	painter->ChangePlaneProperty(BS_SOLID, RGB(0, 0, 255));
+void RightDownJoin::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
+	QRect rectSelect;
+
+	QtGObjectFactory factory;
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
+	GObject *oldBrush = painter->SelectObject(*brush);
+	painter->Update();
 
 	GetSelectionMarkerRect(HIT_FALSE, &rectSelect);
 	Long positionX = scrollController->GetScroll(1)->GetPosition();
 	Long positionY = scrollController->GetScroll(0)->GetPosition();
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_HANDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_TRUE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
+
+	painter->SelectObject(*oldBrush);
+	painter->Update();
+	if (brush != NULL) {
+		delete brush;
+	}
 }
-*/
 
 void RightDownJoin::GetAttribute(Attribute *attribute) {
 	attribute->vertexFalse = 'Y';

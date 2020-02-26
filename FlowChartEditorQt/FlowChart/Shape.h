@@ -104,7 +104,7 @@ enum PenStyle { SOLID, DASH, DOT, DASHDOT, DASHDOTDOT, INSIEDFRAME };
 
 #define BOXVERTECIES 4 // Attribute 에서 사용
 
-class Painter;
+class GObject;
 class FlowChartVisitor;
 
 class Attribute {
@@ -177,7 +177,7 @@ class Shape {
 public:
 	Shape();
 	Shape(Long x, Long y, Long width, Long height,
-		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 
 	virtual ~Shape() = 0;
@@ -200,9 +200,9 @@ public:
 	virtual void ReSize(Long width, Long height);
 	void Rewrite(char(*text));
 
-	void Paint(QColor backGroundColor, QPen borderLine, QColor borderColor); //색깔 속성 변경
+	void Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor); //색깔 속성 변경
 
-	//virtual void DrawActiveShape(Painter *painter); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
+	virtual void DrawActiveShape(GObject *painter); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
 
 	// Visitor 패턴 적용
 	virtual void Accept(FlowChartVisitor *draw) = 0;
@@ -222,7 +222,7 @@ public:
 	Long GetWidth() const;
 	Long GetHeight() const;
 	QColor& GetBackGroundColor() const;
-	QPen& GetBorderLine() const;
+	Qt::PenStyle GetBorderLine() const;
 	QColor& GetBorderColor() const;
 
 	String& GetContents() const;
@@ -233,7 +233,6 @@ public:
 	Long GetBottom() const;
 
 	// 선택 관련 
-	// virtual bool IsIncluded( int x, int y );
 	virtual bool IsIncluded(QPoint point) { return false; };
 	virtual bool IsIncluded(const QRect& rect) { return false; };
 
@@ -261,7 +260,7 @@ public:
 	static void MakeRectToPoint(QPoint point, QRect *rect);
 
 protected:
-	//virtual void DrawSelectionMarkers(Painter* painter, ScrollController *scrollController); //painter, scroll 수정 후 고치기
+	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController); //painter, scroll 수정 후 고치기
 	virtual void GetSelectionMarkerRect(int marker, QRect *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
 
 public: //Block virtual 선언
@@ -300,7 +299,7 @@ protected:
 	Long width;
 	Long height;
 	QColor backGroundColor;
-	QPen borderLine;
+	Qt::PenStyle borderLine;
 	QColor borderColor;
 	String contents;
 
@@ -327,8 +326,8 @@ inline QColor& Shape::GetBackGroundColor() const {
 	return const_cast<QColor&>(this->backGroundColor);
 }
 
-inline QPen& Shape::GetBorderLine() const {
-	return const_cast<QPen&>(this->borderLine);
+inline Qt::PenStyle Shape::GetBorderLine() const {
+	return this->borderLine;
 }
 
 inline QColor& Shape::GetBorderColor() const {

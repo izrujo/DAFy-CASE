@@ -137,8 +137,7 @@ bool Process::IsStyle(Long style) {
 	}
 	return ret;
 }
-/*
-void Process::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
+
+void Process::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
 	Shape::DrawSelectionMarkers(painter, scrollController);
 }
-*/

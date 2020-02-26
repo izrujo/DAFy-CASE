@@ -13,6 +13,8 @@
 #include "ScrollController.h"
 #include "Scrolls.h"
 
+#include "QtGObjectFactory.h"
+
 RepeatTrue::RepeatTrue(Long x, Long y, Long width, Long height, Long width2, Long height2,
 	QColor backGroundColor, QPen borderLine, QColor borderColor, String contents)
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents)
@@ -79,36 +81,22 @@ bool RepeatTrue::operator !=(const Shape& other) {
 void RepeatTrue::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
-/*
-void RepeatTrue::DrawActiveShape(Painter *painter) {
-	POINT points[5];
 
-	points[0].x = x;
-	points[0].y = y;
-
-	points[1].x = x;
-	points[1].y = y + height2;
-
-	points[2].x = x + width2;
-	points[2].y = y + height2;
-
-	points[3].x = x + width2;
-	points[3].y = y + height;
-
-	points[4].x = x + width;
-	points[4].y = y + height;
+void RepeatTrue::DrawActiveShape(GObject *painter) {
+	QPoint points[5];
+	points[0] = QPoint(this->x, this->y);
+	points[1] = QPoint(this->x, this->y + this->height2);
+	points[2] = QPoint(this->x + this->width2, this->y + this->height2);
+	points[3] = QPoint(this->x + this->width2, this->y + this->height);
+	points[4] = QPoint(this->x + this->width, this->y + this->height);
 	painter->DrawPolyline(points, 5);
 
-	POINT arrow[3];
-	arrow[0].x = x + width - ARROW_SIZE;
-	arrow[0].y = y + height - ARROW_SIZE / 2;
-	arrow[1].x = x + width;
-	arrow[1].y = y + height;
-	arrow[2].x = x + width - ARROW_SIZE;
-	arrow[2].y = y + height + ARROW_SIZE / 2;
+	QPoint arrow[3];
+	arrow[0] = QPoint(this->x + this->width - ARROW_SIZE, this->y + this->height - ARROW_SIZE / 2);
+	arrow[1] = QPoint(this->x + this->width, this->y + this->height);
+	arrow[2] = QPoint(this->x + this->width - ARROW_SIZE, this->y + this->height + ARROW_SIZE / 2);
 	painter->DrawPolygon(arrow, 3);
 }
-*/
 
 Shape* RepeatTrue::Clone() {
 	return new RepeatTrue(*this);
@@ -320,36 +308,38 @@ int RepeatTrue::GetHitCode(const QPoint& point, const QRegion& region) {
 	}
 	return result;
 }
-/*
-void RepeatTrue::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
-	CRect rectSelect;
 
-	painter->ChangePlaneProperty(BS_SOLID, RGB(0, 0, 255));
+void RepeatTrue::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
+	QRect rectSelect;
+
+	QtGObjectFactory factory;
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
+	GObject *oldBrush = painter->SelectObject(*brush);
+	painter->Update();
 
 	GetSelectionMarkerRect(HIT_IN, &rectSelect);
 	Long positionX = scrollController->GetScroll(1)->GetPosition();
 	Long positionY = scrollController->GetScroll(0)->GetPosition();
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_HANDLE, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_OUT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
+
+	painter->SelectObject(*oldBrush);
+	painter->Update();
+	if (brush != NULL) {
+		delete brush;
+	}
 }
-*/
 
 void RepeatTrue::GetAttribute(Attribute *attribute) {
 	attribute->vertexIn = 'Y';

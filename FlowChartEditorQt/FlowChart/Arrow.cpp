@@ -13,6 +13,8 @@
 #include "ScrollController.h"
 #include "Scrolls.h"
 
+#include "QtGObjectFactory.h"
+
 Arrow::Arrow(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	QPen borderLine, QColor borderColor, String contents)
 	:Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
@@ -68,11 +70,12 @@ bool Arrow::operator !=(const Shape& other) {
 void Arrow::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
-/*
-void Arrow::DrawActiveShape(Painter *painter) {
-	painter->DrawLine(this->x, this->y, this->x + this->width, this->y + this->height);
+
+void Arrow::DrawActiveShape(GObject *painter) {
+	QPoint point1(this->x, this->y);
+	QPoint point2(this->x + this->width, this->y + this->height);
+	painter->DrawLine(point1, point2);
 }
-*/
 
 Shape* Arrow::Clone() {
 	return new Arrow(*this);
@@ -156,29 +159,32 @@ void Arrow::GetSelectionMarkerAllRegion(QRegion *region) {
 	*region += addRegion;
 }
 
-/*
-void Arrow::DrawSelectionMarkers(Painter* painter, ScrollController *scrollController) {
-	CRect rectSelect;
+void Arrow::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
+	QRect rectSelect;
 
-	painter->ChangePlaneProperty(BS_SOLID, RGB(0, 0, 255));
+	QtGObjectFactory factory;
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
+	GObject *oldBrush = painter->SelectObject(*brush);
+	painter->Update();
 
 	GetSelectionMarkerRect(HIT_IN, &rectSelect);
 	Long positionX = scrollController->GetScroll(1)->GetPosition();
 	Long positionY = scrollController->GetScroll(0)->GetPosition();
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
 
 	GetSelectionMarkerRect(HIT_OUT, &rectSelect);
-	rectSelect.left -= positionX;
-	rectSelect.top -= positionY;
-	rectSelect.right -= positionX;
-	rectSelect.bottom -= positionY;
-	painter->DrawRectangle(rectSelect.left, rectSelect.top, rectSelect.right, rectSelect.bottom);
+	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
+		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
+	painter->DrawRect(rectSelect);
+
+	painter->SelectObject(*oldBrush);
+	painter->Update();
+	if (brush != NULL) {
+		delete brush;
+	}
 }
-*/
 
 void Arrow::GetAttribute(Attribute *attribute) {
 	attribute->vertexIn = 'Y';
