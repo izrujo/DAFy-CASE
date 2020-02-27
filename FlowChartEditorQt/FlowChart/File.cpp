@@ -6,19 +6,21 @@
 #include "Shape.h"
 #include "Creator.h"
 #include "Tokenizer.h"
-#include <fstream>	//save  / load
 #include "Preparation.h"
 #include "VariableList.h"
 #include "Zoom.h"
 #include "Painter.h"
+
+#include <qfile.h>
+#include <qtextstream.h>
 
 File::File() {}
 
 File::~File() {}
 
 Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
-	ifstream file;
-	char line[513];
+	QFile file(fileName);
+	char (*line) = new char[513];
 
 	Long count = 0;
 
@@ -26,15 +28,20 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 
 	Creator creator;
 	Tokenizer tokenizer;
+	QString qContents;
 
-	(dynamic_cast<FlowChart *>(canvas->flowChart))->Clear();
-	file.open(fileName);
-	if (file.is_open()) {
-		file.getline(line, 512);
+	canvas->flowChart->Clear();
+	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
+	if (isOpen == true) {
+		QTextStream textStream(&file);
+		qContents = textStream.readLine();
+		line = const_cast<char*>(qContents.toLocal8Bit().constData());
 		canvas->zoom->Set(atoi(line));
 
-		file.getline(line, 512);
-		while (!file.eof()) {
+		qContents = textStream.readLine();
+		line = const_cast<char*>(qContents.toLocal8Bit().constData());
+		//file.getline(line, 512);
+		while (!textStream.atEnd()) {
 			tokenizer.Scan(line, '\t');
 			String contents(" ");
 			if (!(tokenizer.GetAt(7) == " ")) {
@@ -43,7 +50,7 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 			contents.Replace('\r', '\n');
 			shape = creator.Create(atoi(tokenizer.GetAt(0)), atoi(tokenizer.GetAt(1)), atoi(tokenizer.GetAt(2)), atoi(tokenizer.GetAt(3)),
 				atoi(tokenizer.GetAt(4)), atoi(tokenizer.GetAt(5)), atoi(tokenizer.GetAt(6)), contents);
-			(dynamic_cast<FlowChart *>(canvas->flowChart))->Attach(shape);
+			canvas->flowChart->Attach(shape);
 
 			//=====================intellisense========================
 			if (dynamic_cast<Preparation*>(shape)) {
@@ -56,15 +63,17 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 			//=========================================================
 
 			count++;
-			file.getline(line, 512);
+			qContents = textStream.readLine();
+			line = const_cast<char*>(qContents.toLocal8Bit().constData());
 		}
 		file.close();
 	}
+
 	return count;
 }
 
 Long File::Save(DrawingPaper *canvas, const char(*fileName)) {
-	ofstream file;
+	QFile file(fileName);
 	Long i = 0;
 	Long end;
 	Long count = 0;
@@ -72,19 +81,22 @@ Long File::Save(DrawingPaper *canvas, const char(*fileName)) {
 	Shape *shape;
 	Long rate;
 	// 3. 저장한다.
-	file.open(fileName, ios::trunc);
-	if (file.is_open()) {
+	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+	if (isOpen == true) {
+		QTextStream textStream(&file);
+
 		rate = canvas->zoom->GetRate();
-		file << rate << "\n";
-		end = (dynamic_cast<FlowChart *>(canvas->flowChart))->GetLength();
+		textStream << rate << "\n"; //개행문자 실험 요망
+		end = canvas->flowChart->GetLength();
 		while (i < end) {
-			shape = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(i);
+			shape = canvas->flowChart->GetAt(i);
 			shape->GetLine(line);
-			file << line;
+			textStream << line; //개행문자 ?
 			count++;
 			i++;
 		}
 		file.close();
 	}
+
 	return count;
 }
