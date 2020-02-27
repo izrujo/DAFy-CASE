@@ -23,6 +23,8 @@
 #include "StatusBar.h"
 #include "TutorialIntroForm.h"
 
+#include <qfontdialog.h>
+
 using namespace std;
 //FlowChartCommand
 FlowChartCommand::FlowChartCommand(FlowChartEditor *editor) {
@@ -264,7 +266,10 @@ FontSetCommand& FontSetCommand::operator =(const FontSetCommand& source) {
 void FontSetCommand::Execute() {
 	LOGFONT logFont = this->editor->font->GetFont();
 	COLORREF color;
-	CFontDialog fontDialog(&logFont);
+	
+	//QFontDialog 로 QFont 객체 얻어서 그것의 정보로 GObject 만들어서 Select - Update 하기
+	//따라서 FlowChartFont는 필요 없음.
+	QFontDialog fontDialog(this->editor);
 	int ret = fontDialog.DoModal();
 	if (ret == IDOK) {
 		//폰트 대화 상자에서 폰트 정보를 가져온다.

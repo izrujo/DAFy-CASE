@@ -173,7 +173,11 @@ inline QPoint Attribute::GetPointFalse() const {
 	return this->pointFalse;
 }
 
-class Shape {
+namespace FlowChartShape {
+	class Shape;
+}
+
+class FlowChartShape::Shape {
 public:
 	Shape();
 	Shape(Long x, Long y, Long width, Long height,

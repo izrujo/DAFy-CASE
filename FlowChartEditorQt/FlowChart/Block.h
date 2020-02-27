@@ -12,6 +12,8 @@
 #include "Shape.h"
 #include "Array.h"
 
+using FlowChartShape::Shape;
+
 class Block : public Shape {
 public:
 	Block(Long capacity = 30);

@@ -16,7 +16,7 @@
 #include "QtGObjectFactory.h"
 
 RightDownJoin::RightDownJoin(Long x, Long y, Long width, Long height, Long width2, Long height2, 
-	QColor backGroundColor, QPen borderLine, QColor borderColor, String contents) 
+	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents) 
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->width2 = width2;
 	this->height2 = height2;

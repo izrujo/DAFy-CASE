@@ -13,7 +13,7 @@
 class RepeatFalse : public Line {
 public:
 	RepeatFalse(Long x, Long y, Long width, Long height, Long width2 = REPEATFALSE_WIDTH, Long height2 = REPEATFALSE_HEIGHT,
-		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~RepeatFalse();
 	RepeatFalse(const RepeatFalse& source);

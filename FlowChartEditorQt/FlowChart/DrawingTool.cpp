@@ -24,6 +24,8 @@
 #include "Painter.h"
 #include "TutorialController.h"
 
+using FlowChartShape::Shape;
+
 DrawingTool* DrawingTool::instance = 0;
 
 DrawingTool::DrawingTool() {
@@ -43,8 +45,8 @@ void DrawingTool::Destroy() {
 	}
 }
 
-void DrawingTool::OnLButtonDown(DrawingPaper *canvas, UINT nFlags, CPoint point) {
-	(dynamic_cast<FlowChart*>(canvas->flowChart))->UnSelectAll();
+void DrawingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
+	canvas->flowChart->UnSelectAll();
 
 	Long positionX = 0;
 	Long positionY = 0;
@@ -53,11 +55,11 @@ void DrawingTool::OnLButtonDown(DrawingPaper *canvas, UINT nFlags, CPoint point)
 		positionY = canvas->scrollController->GetScroll(0)->GetPosition();
 	}
 
-	canvas->startX = point.x + positionX;
-	canvas->startY = point.y + positionY;
+	canvas->startX = point.x() + positionX;
+	canvas->startY = point.y() + positionY;
 
-	canvas->currentX = point.x + positionX;
-	canvas->currentY = point.y + positionY;
+	canvas->currentX = point.x() + positionX;
+	canvas->currentY = point.y() + positionY;
 
 	Shape *holdA4Paper = canvas->a4Paper->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
@@ -66,8 +68,8 @@ void DrawingTool::OnLButtonDown(DrawingPaper *canvas, UINT nFlags, CPoint point)
 	Long quotient;
 	Long remainder;
 
-	POINT startReal = { canvas->startX, canvas->startY };
-	POINT startVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(startReal);
+	QPoint startReal(canvas->startX, canvas->startY);
+	QPoint startVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(startReal);
 
 	quotient = startVirtual.x * 100 / canvas->zoom->GetRate();
 	remainder = startVirtual.x * 100 % canvas->zoom->GetRate();
@@ -81,8 +83,8 @@ void DrawingTool::OnLButtonDown(DrawingPaper *canvas, UINT nFlags, CPoint point)
 
 	startReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(startVirtual);
 
-	POINT currentReal = { canvas->currentX, canvas->currentY };
-	POINT currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
+	QPoint currentReal(canvas->currentX, canvas->currentY);
+	QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
 	quotient = currentVirtual.x * 100 / canvas->zoom->GetRate();
 	remainder = currentVirtual.x * 100 % canvas->zoom->GetRate();
@@ -106,7 +108,7 @@ void DrawingTool::OnLButtonDown(DrawingPaper *canvas, UINT nFlags, CPoint point)
 	canvas->templateSelected->Select(true);
 }
 
-void DrawingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point) {
+void DrawingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (canvas->scrollController != NULL) {
@@ -124,8 +126,8 @@ void DrawingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point) {
 	Long quotient;
 	Long remainder;
 
-	POINT currentReal = { canvas->currentX, canvas->currentY };
-	POINT currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
+	QPoint currentReal(canvas->currentX, canvas->currentY);
+	QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
 	quotient = currentVirtual.x * 100 / canvas->zoom->GetRate();
 	remainder = currentVirtual.x * 100 % canvas->zoom->GetRate();
@@ -148,25 +150,25 @@ void DrawingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point) {
 		canvas->templateSelected->ReSize(width, height);
 	}
 
-	canvas->Invalidate(true);
+	canvas->repaint();
 }
 
-void DrawingTool::OnLButtonUp(DrawingPaper *canvas, UINT nFlags, CPoint point) {
-	Long previousLength = dynamic_cast<FlowChart*>(canvas->flowChart)->GetLength();
+void DrawingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
+	Long previousLength = canvas->flowChart->GetLength();
 
-	canvas->indexOfSelected= (dynamic_cast<FlowChart*>(canvas->flowChart))->Attach(canvas->templateSelected->Clone());
+	canvas->indexOfSelected = canvas->flowChart->Attach(canvas->templateSelected->Clone());
 
 	Long currentLength = dynamic_cast<FlowChart*>(canvas->flowChart)->GetLength();
-	if (currentLength != previousLength && dynamic_cast<FlowChartEditor*>(canvas->GetParent())->toolTip != NULL) {
-		dynamic_cast<FlowChartEditor*>(canvas->GetParent())->toolTip->Destroy();
-		dynamic_cast<FlowChartEditor*>(canvas->GetParent())->toolTip = NULL;
-		TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(canvas->GetParent())->windows[2];
+	if (currentLength != previousLength && dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip != NULL) {
+		dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip->Destroy();
+		dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip = NULL;
+		TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->windows[2];
 		if (tutorialForm != NULL) {
 			tutorialForm->tutorialController->Update();
 		}
 	}
 
-	Long(*indexes) = new Long[dynamic_cast<FlowChart*>(canvas->flowChart)->GetLength()];
+	Long(*indexes) = new Long[canvas->flowChart->GetLength()];
 	indexes[0] = canvas->indexOfSelected;
 	canvas->memoryController->RememberAdd(indexes, 1);
 
@@ -176,7 +178,7 @@ void DrawingTool::OnLButtonUp(DrawingPaper *canvas, UINT nFlags, CPoint point) {
 	}
 	canvas->tool = SelectingTool::Instance();
 	canvas->mode = DrawingPaper::SELECT;
-	canvas->RedrawWindow();
+	canvas->repaint();
 
 	if (indexes != 0) {
 		delete[] indexes;

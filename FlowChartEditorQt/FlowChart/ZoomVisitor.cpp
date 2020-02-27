@@ -65,8 +65,8 @@ void ZoomVisitor::Visit(Terminal *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -109,8 +109,8 @@ void ZoomVisitor::Visit(Preparation *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -153,8 +153,8 @@ void ZoomVisitor::Visit(InputOutput *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -197,8 +197,8 @@ void ZoomVisitor::Visit(Process *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -241,8 +241,8 @@ void ZoomVisitor::Visit(Decision *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -285,8 +285,8 @@ void ZoomVisitor::Visit(Arrow *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -329,8 +329,8 @@ void ZoomVisitor::Visit(LeftDown *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -373,8 +373,8 @@ void ZoomVisitor::Visit(RightDown *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -424,8 +424,8 @@ void ZoomVisitor::Visit(Join *element) {
 
 	element->ReSize(width, height, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -480,8 +480,8 @@ void ZoomVisitor::Visit(RightDownJoin *element) {
 
 	element->ReSize(width, height, width2, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -536,8 +536,8 @@ void ZoomVisitor::Visit(RepeatTrue *element) {
 
 	element->ReSize(width, height, width2, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;
@@ -592,8 +592,8 @@ void ZoomVisitor::Visit(RepeatFalse *element) {
 
 	element->ReSize(width, height, width2, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = virtualPoint.x * rate / 100;
 	remainder = virtualPoint.x * rate % 100;

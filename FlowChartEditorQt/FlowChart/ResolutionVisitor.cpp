@@ -80,8 +80,8 @@ void ResolutionVisitor::Visit(Terminal *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -132,8 +132,8 @@ void ResolutionVisitor::Visit(Preparation *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -184,8 +184,8 @@ void ResolutionVisitor::Visit(InputOutput *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -236,8 +236,8 @@ void ResolutionVisitor::Visit(Process *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -288,8 +288,8 @@ void ResolutionVisitor::Visit(Decision *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -340,8 +340,8 @@ void ResolutionVisitor::Visit(Arrow *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -392,8 +392,8 @@ void ResolutionVisitor::Visit(LeftDown *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -444,8 +444,8 @@ void ResolutionVisitor::Visit(RightDown *element) {
 
 	element->ReSize(width, height);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -505,8 +505,8 @@ void ResolutionVisitor::Visit(Join *element) {
 
 	element->ReSize(width, height, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -573,8 +573,8 @@ void ResolutionVisitor::Visit(RightDownJoin *element) {
 
 	element->ReSize(width, height, width2, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -641,8 +641,8 @@ void ResolutionVisitor::Visit(RepeatTrue *element) {
 
 	element->ReSize(width, height, width2, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
@@ -709,8 +709,8 @@ void ResolutionVisitor::Visit(RepeatFalse *element) {
 
 	element->ReSize(width, height, width2, height2);
 
-	POINT realPoint = { centerX, centerY };
-	POINT virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPoint realPoint(centerX, centerY);
+	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
 	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
 	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;

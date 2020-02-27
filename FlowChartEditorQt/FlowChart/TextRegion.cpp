@@ -1,9 +1,10 @@
 #include "TextRegion.h"
 #include "Painter.h"
 #include "FlowChartVisitor.h"
+#include "QtGObjectFactory.h"
 
 TextRegion::TextRegion(Long x, Long y, Long width, Long height,
-	QColor backGroundColor, QPen borderLine, QColor borderColor, String contents)
+	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }
@@ -22,26 +23,24 @@ TextRegion& TextRegion::operator =(const TextRegion& source) {
 
 	return *this;
 }
-/*
-void TextRegion::Draw(CDC *dc) {
-	CFont font;
-	font.CreateFontA(-100, 0, 0, 0, FW_BOLD, FALSE, FALSE, 0, DEFAULT_CHARSET,
-		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-		DEFAULT_PITCH | FF_SWISS, "±¼¸²");
-	CFont *oldFont = dc->SelectObject(&font);
-	COLORREF oldColor = dc->SetTextColor(this->backGroundColor);
 
-	BOOL ret = dc->TextOut(this->x, this->y, CString(this->contents));
+void TextRegion::Draw(GObject *painter) {
+	QtGObjectFactory factory;
+	GObject *current = painter->CurrentObject("Font");
+	QString familyName = dynamic_cast<QFont*>(current)->family();
+	GObject *font = factory.MakeFont(familyName, 50, 70, false);
+	painter->SelectObject(*font);
+	painter->Update();
 
-	dc->SetTextColor(oldColor);
-	dc->SelectObject(oldFont);
+	painter->DrawText(this->x, this->y, QString::fromLocal8Bit(this->contents));
+
+	painter->SelectObject(*current);
+	painter->Update();
+	if (font != NULL) {
+		delete font;
+	}
 }
 
-void TextRegion::Draw(Painter *painter) {
-	RECT rect = { this->x, this->y, this->x + this->width, this->y + this->height };
-	painter->DrawText(50, this->contents, this->contents.GetLength(), &rect, NULL);
-}
-*/
 
 Shape* TextRegion::Clone() {
 	return new TextRegion(*this);

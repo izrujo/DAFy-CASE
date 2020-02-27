@@ -1,7 +1,6 @@
 #include "MovingTool.h"
 
 #include "DrawingPaper.h"
-#include "FlowChart.h"
 #include "Shape.h"
 #include "SelectingTool.h"
 #include "ScrollController.h"
@@ -14,6 +13,8 @@
 #include "Tutorials.h"
 #include "FlowChartEditor.h"
 #include "TutorialController.h"
+
+using FlowChartShape::Shape;
 
 MovingTool* MovingTool::instance = 0;
 
@@ -37,20 +38,20 @@ void MovingTool::Destroy() {
 MovingTool::~MovingTool() {
 }
 
-void MovingTool::OnLButtonDown(DrawingPaper *canvas, UINT nFlags, CPoint point) {
-	canvas->currentX = point.x;
-	canvas->currentY = point.y;
+void MovingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
+	canvas->currentX = point.x();
+	canvas->currentY = point.y();
 
 	Long count;
 	Long(*indexes);
-	dynamic_cast<FlowChart *>(canvas->flowChart)->GetSelecteds(&indexes, &count);
+	canvas->flowChart->GetSelecteds(&indexes, &count);
 	canvas->memoryController->RememberOther(indexes, count);
 	if (indexes != 0) {
 		delete[] indexes;
 	}
 }
 
-void MovingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point) {
+void MovingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	Long i;
 	Long count;
 	Long(*indexes);
@@ -60,23 +61,23 @@ void MovingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point) {
 	int cy;
 
 	if (canvas->mode == DrawingPaper::MOVING) {
-		cx = point.x - canvas->currentX;
-		cy = point.y - canvas->currentY;
+		cx = point.x() - canvas->currentX;
+		cy = point.y() - canvas->currentY;
 
-		dynamic_cast<FlowChart *>(canvas->flowChart)->GetSelecteds(&indexes, &count);
-		canvas->Invalidate(true);
+		canvas->flowChart->GetSelecteds(&indexes, &count);
+		canvas->repaint();
 
 		for (i = 0; i < count; i++) {
-			x = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(indexes[i])->GetX();
-			y = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(indexes[i])->GetY();
+			x = canvas->flowChart->GetAt(indexes[i])->GetX();
+			y = canvas->flowChart->GetAt(indexes[i])->GetY();
 
-			dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(indexes[i])->Move(x + cx, y + cy);
+			canvas->flowChart->GetAt(indexes[i])->Move(x + cx, y + cy);
 
 		}
-		canvas->Invalidate(true);
+		canvas->repaint();
 
-		canvas->currentX = point.x;
-		canvas->currentY = point.y;
+		canvas->currentX = point.x();
+		canvas->currentY = point.y();
 
 		if (indexes != 0) {
 			delete[] indexes;
@@ -84,12 +85,12 @@ void MovingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point) {
 	}
 }
 
-void MovingTool::OnLButtonUp(DrawingPaper *canvas, UINT nFlags, CPoint point) {
+void MovingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	canvas->mode = DrawingPaper::SELECT;
 	canvas->tool = SelectingTool::Instance();
-	canvas->RedrawWindow();
+	canvas->repaint();
 
-	FlowChartEditor *editor = static_cast<FlowChartEditor*>(canvas->GetParent());
+	FlowChartEditor *editor = (FlowChartEditor*)canvas->parentWidget();
 	TutorialForm *tutorialForm = static_cast<TutorialForm*>(editor->windows[2]);
 	if (tutorialForm != NULL) {
 		tutorialForm->tutorialController->Update();

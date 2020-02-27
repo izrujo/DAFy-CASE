@@ -2,7 +2,7 @@
 #include "FlowChartVisitor.h"
 
 A4Paper::A4Paper(Long x, Long y, Long width, Long height, QColor backGroundColor,
-	QPen borderLine, QColor borderColor, String contents)
+	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->isMarking = true;
 	this->leftMargin = 40;

@@ -6,7 +6,7 @@
 #ifndef _TOOL_H
 #define _TOOL_H
 
-#include <afxwin.h>
+#include <qpoint.h>
 
 class DrawingPaper;
 
@@ -22,11 +22,11 @@ public:
 
 	void MoveMake(DrawingPaper *canvas);
 	void SizeMake(DrawingPaper *canvas);
-	void IntervalMake(DrawingPaper *canvas);	
+	void IntervalMake(DrawingPaper *canvas);
 
-	virtual void OnLButtonDown( DrawingPaper *canvas, UINT nFlags, CPoint point ) = 0;
-	virtual void OnMouseMove( DrawingPaper *canvas, UINT nFlags, CPoint point ) = 0;
-	virtual void OnLButtonUp( DrawingPaper *canvas, UINT nFlags, CPoint point ) = 0;
+	virtual void OnLButtonDown(DrawingPaper *canvas, QPoint point) = 0;
+	virtual void OnMouseMove(DrawingPaper *canvas, QPoint point) = 0;
+	virtual void OnLButtonUp(DrawingPaper *canvas, QPoint point) = 0;
 
 protected:
 	Tool();

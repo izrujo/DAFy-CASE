@@ -17,7 +17,7 @@
 #include "QtGObjectFactory.h"
 
 Join::Join(Long x, Long y, Long width, Long height, Long height2, QColor backGroundColor,
-	QPen borderLine, QColor borderColor, String contents)
+	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->height2 = height2;
 }
@@ -26,7 +26,8 @@ Join::~Join() {
 
 }
 
-Join::Join(const Join& source) :Line(source) {
+Join::Join(const Join& source) 
+	: Line(source) {
 	this->height2 = source.height2;
 }
 

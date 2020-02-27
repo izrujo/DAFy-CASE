@@ -1,14 +1,13 @@
 #ifndef _TOOLFACTORY_H
 #define _TOOLFACTORY_H
 
-#include <afxwin.h>
+#include "Tool.h"
 
-class Tool;
 class DrawingPaper;
 
 class ToolFactory {
 public:
-	static Tool* Create(DrawingPaper *canvas, CPoint point);
+	static Tool* Create(DrawingPaper *canvas, QPoint point);
 
 protected:
 	ToolFactory();

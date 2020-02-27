@@ -17,34 +17,36 @@
 #include "ZoomVisitor.h"
 #include "CoordinateConverter.h"
 
+using FlowChartShape::Shape;
+
 ToolFactory::ToolFactory() {
 }
 
-Tool* ToolFactory::Create( DrawingPaper *canvas, CPoint point ){
+Tool* ToolFactory::Create(DrawingPaper *canvas, QPoint point) {
 	Tool *tool = 0;
 	Shape *shape;
 	FlowChartEditor* editor;
-	BOOL isControlPressed;
+	bool isControlPressed;
 
-	isControlPressed =((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
+	isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 
 	// DRAWING 모드 결정
-	editor = static_cast<FlowChartEditor*>(canvas->GetParent());				
-	if(static_cast<FlowChartTemplate*>(editor->windows[1])->shapeSelected != NULL){
+	editor = (FlowChartEditor*)canvas->parentWidget();
+	if (static_cast<FlowChartTemplate*>(editor->windows[1])->shapeSelected != NULL) {
 		canvas->templateSelected = static_cast<FlowChartTemplate *>(editor->windows[1])->shapeSelected->Clone();
-		canvas->templateSelected->Move(0,0);
+		canvas->templateSelected->Move(0, 0);
 		static_cast<FlowChartTemplate *>(editor->windows[1])->shapeSelected = NULL;
 
 		tool = DrawingTool::Instance();
 		canvas->mode = DrawingPaper::DRAWING;
 	}
-	else{
-		if( ! isControlPressed ){
+	else {
+		if (!isControlPressed) {
 			Long i = 0;
-			Long (*indexes);
+			Long(*indexes);
 			Long count;
 
-			(dynamic_cast<FlowChart *>(canvas->flowChart))->GetSelecteds(&indexes,&count);
+			canvas->flowChart->GetSelecteds(&indexes, &count);
 			Long positionX = 0;
 			Long positionY = 0;
 			if (canvas->scrollController != NULL) {
@@ -61,8 +63,8 @@ Tool* ToolFactory::Create( DrawingPaper *canvas, CPoint point ){
 			Long quotient;
 			Long remainder;
 
-			POINT currentReal = { point.x, point.y };
-			POINT currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
+			QPoint currentReal(point.x(), point.y());
+			QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
 			quotient = currentVirtual.x * 100 / canvas->zoom->GetRate();
 			remainder = currentVirtual.x * 100 % canvas->zoom->GetRate();
@@ -79,17 +81,17 @@ Tool* ToolFactory::Create( DrawingPaper *canvas, CPoint point ){
 			point.x = currentReal.x;
 			point.y = currentReal.y;
 
-			while ( i < count && tool == 0 )
+			while (i < count && tool == 0)
 			{
-				shape = (dynamic_cast<FlowChart *>(canvas->flowChart))->GetAt(indexes[i]);
-				canvas->hitCode = shape->GetHitCode(canvas->painter, point);
-			
-				if(canvas->hitCode == HIT_BODY){
+				shape = canvas->flowChart->GetAt(indexes[i]);
+				canvas->hitCode = shape->GetHitCode(point);
+
+				if (canvas->hitCode == HIT_BODY) {
 					tool = MovingTool::Instance();
 					canvas->mode = DrawingPaper::MOVING;
 				}
-			
-				if( !(canvas->hitCode == HIT_BODY || canvas->hitCode == HIT_NONE)){
+
+				if (!(canvas->hitCode == HIT_BODY || canvas->hitCode == HIT_NONE)) {
 					canvas->indexOfSelected = indexes[i];
 					tool = ResizingTool::Instance();
 					canvas->mode = DrawingPaper::SIZING;
@@ -97,17 +99,17 @@ Tool* ToolFactory::Create( DrawingPaper *canvas, CPoint point ){
 				i++;
 			}
 
-			if( indexes != 0 )
+			if (indexes != 0)
 			{
 				delete[] indexes;
 			}
 		}
 
-		if( tool == 0 ){
+		if (tool == 0) {
 			tool = SelectingTool::Instance();
 			canvas->mode = DrawingPaper::SELECT;
-		}		
+		}
 	}
-	canvas->RedrawWindow();
+	canvas->repaint();
 	return tool;
 }

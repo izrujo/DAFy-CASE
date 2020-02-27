@@ -104,7 +104,6 @@
     <ClCompile Include="FlowChart\FlowChart.cpp" />
     <ClCompile Include="FlowChart\FlowChartCommandFactory.cpp" />
     <ClCompile Include="FlowChart\FlowChartCommands.cpp" />
-    <ClCompile Include="FlowChart\FlowChartFont.cpp" />
     <ClCompile Include="FlowChart\FlowChartKeyActionFactory.cpp" />
     <ClCompile Include="FlowChart\FlowChartKeyActions.cpp" />
     <ClCompile Include="FlowChart\FlowChartTemplate.cpp" />
@@ -235,7 +234,6 @@
     <ClInclude Include="FlowChart\FlowChart.h" />
     <ClInclude Include="FlowChart\FlowChartCommandFactory.h" />
     <ClInclude Include="FlowChart\FlowChartCommands.h" />
-    <ClInclude Include="FlowChart\FlowChartFont.h" />
     <ClInclude Include="FlowChart\FlowChartKeyActionFactory.h" />
     <ClInclude Include="FlowChart\FlowChartKeyActions.h" />
     <ClInclude Include="FlowChart\FlowChartTemplate.h" />

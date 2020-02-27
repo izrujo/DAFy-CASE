@@ -1,10 +1,6 @@
 #ifndef _DRAWINGPAPER_H
 #define _DRAWINGPAPER_H
 
-#include <QtWidgets/QFrame>
-#include "Array.h"
-#include "Shape.h"
-
 // 팝업창
 #define IDM_AE_SEQUENCE 10001
 #define IDM_AE_SELECION 10002
@@ -12,6 +8,12 @@
 #define IDM_AE_MOVEMAKE 10004
 #define IDM_AE_SIZEMAKE 10005
 #define IDM_AE_INTERVALMAKE 1006
+
+#include <QtWidgets/QFrame>
+#include "Array.h"
+#include "Shape.h"
+
+//using namespace FlowChartShape;
 
 typedef unsigned long int DWORD;
 typedef signed long int Long;
@@ -28,6 +30,7 @@ class MemoryController;
 class VariableList;
 
 class Zoom;
+
 class DrawingPaper : public QFrame 
 {
 	Q_OBJECT
@@ -60,11 +63,11 @@ public:
 	//HCURSOR GetCursor(); //커서
 
 public:
-	Shape* templateSelected;
+	FlowChartShape::Shape *templateSelected;
 	Painter *painter;
 	
 	//19.09.16 private에서 public : 스크롤 처리 위함
-	Shape *flowChart; // 사용자들이 스텐실을 등록하기 위해서 패턴을 사용함
+	FlowChartShape::Shape *flowChart; // 사용자들이 스텐실을 등록하기 위해서 패턴을 사용함
 	ScrollController *scrollController;
 
 	/////////////////////////////////////////////////////
@@ -88,7 +91,7 @@ public:
 	VariableList *variableList;
 	Clipboard *clipboard;
 	Zoom *zoom;
-	Shape *a4Paper;
+	FlowChartShape::Shape *a4Paper;
 
 	HMENU hPopup; //팝업메뉴(우클릭)
 private:
@@ -112,7 +115,6 @@ private:
 	friend class ErasingTool;
 
 	friend class File;
-	//friend class Configuration;
 
 	friend class KeyFactory;
 	friend class DeleteKey;

@@ -16,7 +16,7 @@
 #include "QtGObjectFactory.h"
 
 Arrow::Arrow(Long x, Long y, Long width, Long height, QColor backGroundColor,
-	QPen borderLine, QColor borderColor, String contents)
+	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	:Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }
@@ -31,7 +31,7 @@ Arrow::Arrow(const Arrow& source) : Line(source) {
 
 Arrow& Arrow::operator =(const Arrow& source) {
 	Line::operator=(source);
-	
+
 	return *this;
 }
 
@@ -145,7 +145,7 @@ void Arrow::GetSelectionMarkerRect(int marker, QRect *rect) {
 void Arrow::GetSelectionMarkerAllRegion(QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
-	
+
 	Long x = this->x;
 	Long y = this->y;
 	rect.setCoords(x - 6, y - 6, x + 7, y + 7);

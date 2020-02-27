@@ -2,7 +2,6 @@
 #include "SelectingTool.h"
 
 #include "DrawingPaper.h"
-#include "FlowChart.h"
 #include "Shape.h"
 #include "Painter.h"
 #include "Line.h"
@@ -17,6 +16,8 @@
 #include "Tutorials.h"
 #include "FlowChartEditor.h"
 #include "TutorialController.h"
+
+using FlowChartShape::Shape;
 
 SelectingTool* SelectingTool::instance = 0;
 
@@ -37,29 +38,29 @@ void SelectingTool::Destroy() {
 	instance = 0;
 }
 
-void SelectingTool::OnLButtonDown(DrawingPaper *canvas, UINT nFlags, CPoint point) {
-	BOOL isControlPressed;
+void SelectingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
+	bool isControlPressed;
 	isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 	if (!isControlPressed) {
-		dynamic_cast<FlowChart *>(canvas->flowChart)->UnSelectAll();
+		canvas->flowChart->UnSelectAll();
 	}
 
-	canvas->startX = point.x;
-	canvas->startY = point.y;
+	canvas->startX = point.x();
+	canvas->startY = point.y();
 	canvas->currentX = canvas->startX;
 	canvas->currentY = canvas->startY;
 }
 
-void SelectingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point) {
-	BOOL isMouseLButtonPressed;
+void SelectingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
+	bool isMouseLButtonPressed;
 	isMouseLButtonPressed = ((::GetKeyState(VK_LBUTTON) & 0x8000) != 0);
 
 	if (isMouseLButtonPressed) { // 왼쪽 마우스 버튼이 눌려져있을때
 		canvas->DrawSelectingArea();
 	}
 
-	canvas->currentX = point.x;
-	canvas->currentY = point.y;
+	canvas->currentX = point.x();
+	canvas->currentY = point.y();
 
 	if (isMouseLButtonPressed) {
 		canvas->DrawSelectingArea();
@@ -67,8 +68,8 @@ void SelectingTool::OnMouseMove(DrawingPaper *canvas, UINT nFlags, CPoint point)
 
 }
 
-void SelectingTool::OnLButtonUp(DrawingPaper *canvas, UINT nFlags, CPoint point) {
-	CRgn region;
+void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
+	QRegion region;
 	Shape *shape;
 	Long i;
 	Long it;
@@ -93,35 +94,34 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, UINT nFlags, CPoint point)
 	holdA4Paper->Accept(zoomVisitor);
 	holdFlowChart->Accept(zoomVisitor);
 
-	index = dynamic_cast<FlowChart *>(holdFlowChart)->Find(canvas->painter, canvas->currentX, canvas->currentY);
+	index = holdFlowChart->Find(canvas->currentX, canvas->currentY);
 	if (canvas->startX == canvas->currentX && canvas->startY == canvas->currentY) {
 		if (index > -1) {
-			shape = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(index);
+			shape = canvas->flowChart->GetAt(index);
 			(shape->IsSelected()) ? (shape->Select(false)) : (shape->Select(true));
 		}
 	}
 	else {
-		CRect rect = CRect(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY);
+		QRect rect(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY);
 
 		// 경계에 걸친 기호들을 빼기위한 영역		
-		CRect top = CRect(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY + 1);
-		CRect bottom = CRect(canvas->startX, canvas->currentY - 1, canvas->currentX, canvas->currentY);
-		CRect left = CRect(canvas->startX, canvas->startY, canvas->startX + 1, canvas->currentY);
-		CRect right = CRect(canvas->currentX - 1, canvas->startY, canvas->currentX, canvas->currentY);
+		QRect top(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY + 1);
+		QRect bottom(canvas->startX, canvas->currentY - 1, canvas->currentX, canvas->currentY);
+		QRect left(canvas->startX, canvas->startY, canvas->startX + 1, canvas->currentY);
+		QRect right(canvas->currentX - 1, canvas->startY, canvas->currentX, canvas->currentY);
 
 		i = 0;
-		it = dynamic_cast<FlowChart *>(canvas->flowChart)->GetLength();
+		it = canvas->flowChart->GetLength();
 		for (i = 0; i < it; i++) {
-			shape = dynamic_cast<FlowChart *>(holdFlowChart)->GetAt(i);
-			shape->GetRegion(canvas->painter, &region);
-			if (region.RectInRegion(rect) && (region.RectInRegion(top) || region.RectInRegion(left) || region.RectInRegion(right) || region.RectInRegion(bottom)))
+			shape = holdFlowChart->GetAt(i);
+			shape->GetRegion(&region);
+			if (region.contains(rect) && (region.contains(top) || region.contains(left) || region.contains(right) || region.contains(bottom)))
 			{
-				dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(i)->Select(true);
+				canvas->flowChart->GetAt(i)->Select(true);
 			}
-			region.DeleteObject();
 		}
 
-		TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(canvas->GetParent())->windows[2];
+		TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->windows[2];
 		if (tutorialForm != NULL) {
 			tutorialForm->tutorialController->Update();
 		}
@@ -136,7 +136,7 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, UINT nFlags, CPoint point)
 
 	Long count;
 	Long(*indexes);
-	(dynamic_cast<FlowChart *>(canvas->flowChart))->GetSelecteds(&indexes, &count);
+	canvas->flowChart->GetSelecteds(&indexes, &count);
 
 	if (count > 0) {
 		canvas->mode = DrawingPaper::SELECT;
@@ -149,5 +149,5 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, UINT nFlags, CPoint point)
 		delete[] indexes;
 	}
 
-	canvas->RedrawWindow();
+	canvas->repaint();
 }

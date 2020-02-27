@@ -16,7 +16,7 @@
 #include "QtGObjectFactory.h"
 
 RepeatFalse::RepeatFalse(Long x, Long y, Long width, Long height, Long width2, Long height2,
-	QColor backGroundColor, QPen borderLine, QColor borderColor, String contents)
+	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->width2 = width2;
 	this->height2 = height2;
@@ -24,7 +24,8 @@ RepeatFalse::RepeatFalse(Long x, Long y, Long width, Long height, Long width2, L
 
 RepeatFalse::~RepeatFalse() {}
 
-RepeatFalse::RepeatFalse(const RepeatFalse& source) :Line(source) {
+RepeatFalse::RepeatFalse(const RepeatFalse& source) 
+	: Line(source) {
 	this->width2 = source.width2;
 	this->height2 = source.height2;
 }

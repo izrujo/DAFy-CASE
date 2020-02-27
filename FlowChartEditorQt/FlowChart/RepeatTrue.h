@@ -13,7 +13,7 @@
 class RepeatTrue : public Line {
 public:
 	RepeatTrue(Long x, Long y, Long width, Long height, Long width2 = REPEATTRUE_WIDTH, Long height2 = REPEATTRUE_HEIGHT,
-		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~RepeatTrue();
 	RepeatTrue(const RepeatTrue& source);

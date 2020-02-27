@@ -13,7 +13,7 @@
 class Process : public Symbol{
 public:
 	Process(Long x, Long y, Long width, Long height,
-		QColor backGroundColor = QColor(255, 255, 255), QPen borderLine = QPen(Qt::SolidLine),
+		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~Process();
 	Process(const Process& source);

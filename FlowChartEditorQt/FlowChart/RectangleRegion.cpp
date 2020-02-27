@@ -3,7 +3,7 @@
 #include "FlowChartVisitor.h"
 
 RectangleRegion::RectangleRegion(Long x, Long y, Long width, Long height, QColor backGroundColor,
-	QPen borderLine, QColor borderColor, String contents)
+	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	:Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }

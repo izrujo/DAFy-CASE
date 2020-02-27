@@ -95,9 +95,6 @@
     <ClCompile Include="FlowChart\FlowChartCommands.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\FlowChartFont.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\FlowChartKeyActionFactory.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -457,9 +454,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\FlowChartCommands.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\FlowChartFont.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\FlowChartKeyActionFactory.h">
