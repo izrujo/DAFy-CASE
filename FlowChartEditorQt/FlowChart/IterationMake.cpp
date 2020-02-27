@@ -90,7 +90,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	y = attribute.pointOut.y();
 	width = 0;
 	height = temp.GetAt(1)->GetY() - y;
-	shape = new Arrow(x, y, width, height, 20, Qt::DashLine, 20, String("TRUE"));
+	shape = new Arrow(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String("TRUE"));
 	shape->Select(true);
 	Long position = buffer.Insert(1, shape);
 
@@ -118,7 +118,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	bufferRange = buffer.GetRange();
 	width2 = bufferRange.left() - 20 - x;
 	height2 = y - bufferRange.bottom() + 40;
-	repeatTrue = new RepeatTrue(x, y, width, height, width2, height2, 20, Qt::DashLine, 20, String(" "));
+	repeatTrue = new RepeatTrue(x, y, width, height, width2, height2, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String(" "));
 	repeatTrue->Select(true);
 	buffer.Attach(repeatTrue);
 
@@ -131,7 +131,8 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	height2 = repeatTrue->GetY() + dynamic_cast<RepeatTrue *>(repeatTrue)->GetHeight2() - y + 35;
 	height = height2 + 20;
 
-	shape = new RepeatFalse(x, y, width, height, width2, height2, 20, Qt::DashLine, 20, String("FALSE"));
+	shape = new RepeatFalse(x, y, width, height, width2, height2, 
+		QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String("FALSE"));
 	shape->Select(true);
 	buffer.Attach(shape);
 
