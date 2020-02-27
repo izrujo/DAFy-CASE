@@ -31,23 +31,23 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	Long index = -1, index_ = -1;
 	Long i, j;
 	Attribute attribute, decisionAttribute, initAttribute;
-	RECT rect, rect2, bufferRange;
+	QRect rect, rect2, bufferRange;
 
-	FlowChart temp((dynamic_cast<FlowChart *>(canvas->flowChart))->GetCapacity());
-	FlowChart lefts((dynamic_cast<FlowChart *>(canvas->flowChart))->GetCapacity());
-	FlowChart rights((dynamic_cast<FlowChart *>(canvas->flowChart))->GetCapacity());
-	FlowChart buffer((dynamic_cast<FlowChart *>(canvas->flowChart))->GetCapacity());
+	FlowChart temp(canvas->flowChart->GetCapacity());
+	FlowChart lefts(canvas->flowChart->GetCapacity());
+	FlowChart rights(canvas->flowChart->GetCapacity());
+	FlowChart buffer(canvas->flowChart->GetCapacity());
 
-	dynamic_cast<FlowChart *>(canvas->flowChart)->GetSelecteds(&indexes, &length);
+	canvas->flowChart->GetSelecteds(&indexes, &length);
 	for (i = 0; i < length; i++) {
 		if (index == -1 || indexes[i] < index) { // 삽입할 위치를 찾는다.
 			index = indexes[i];
 		}
-		shape = (dynamic_cast<FlowChart *>(canvas->flowChart))->GetAt(indexes[i])->Clone();
+		shape = canvas->flowChart->GetAt(indexes[i])->Clone();
 		temp.Attach(shape); // 선택된 기호들을 임시에 전부 옮긴다.
 	}
 
-	dynamic_cast<FlowChart *>(canvas->flowChart)->EraseSelectedAll(); // 순서도에 선택된 모든 기호를 지운다.
+	canvas->flowChart->DetachSelectedAll(); // 순서도에 선택된 모든 기호를 지운다.
 
 	if (indexes != 0) {
 		delete[] indexes;
@@ -64,7 +64,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	}
 	top = temp.GetAt(index_)->Clone();
 	buffer.Attach(top); //buffer 배열의 0번째는 무조건 상단의 Decision이다.
-	temp.Erase(index_);
+	temp.Detach(index_);
 
 	// top에 LeftDown RightDown 기호가 있다면 지운다.
 	temp.Find(LEFTDOWN | RIGHTDOWN, &indexes, &length);
@@ -72,8 +72,8 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		attribute = initAttribute;
 		temp.GetAt(i - 1)->GetAttribute(&attribute);
 		Shape::MakeRectToPoint(attribute.pointIn, &rect);
-		if (top->IsIncluded(canvas->painter, rect)) {
-			temp.Erase(i - 1);
+		if (top->IsIncluded(rect)) {
+			temp.Detach(i - 1);
 		}
 	}
 
@@ -106,16 +106,16 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	i = tempLefts.GetLength() - 1;
 	if (i >= 0 && dynamic_cast<Arrow *>(tempLefts.GetAt(i))) {
 		index_ = lefts.Find(tempLefts.GetAt(i));
-		lefts.Erase(index_);
-		tempLefts.Erase(i);
+		lefts.Detach(index_);
+		tempLefts.Detach(i);
 		i--;
 	}
 
 	j = tempRights.GetLength() - 1;
 	if (j >= 0 && dynamic_cast<Arrow *>(tempRights.GetAt(j))) {
 		index_ = rights.Find(tempRights.GetAt(j));
-		rights.Erase(index_);
-		tempRights.Erase(j);
+		rights.Detach(index_);
+		tempRights.Detach(j);
 		j--;
 	}
 
@@ -124,10 +124,10 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		attribute = initAttribute;
 		tempLefts.GetAt(i)->GetAttribute(&attribute);
 		Shape::MakeRectToPoint(attribute.pointFalse, &rect);
-		if (top->IsIncluded(canvas->painter, rect)) {
+		if (top->IsIncluded(rect)) {
 			index_ = lefts.Find(tempLefts.GetAt(i));
-			lefts.Erase(index_);
-			tempLefts.Erase(i);
+			lefts.Detach(index_);
+			tempLefts.Detach(i);
 		}
 	}
 	else if (i >= 0 && dynamic_cast<Join *>(tempLefts.GetAt(i))) // Join 기호가 그려져 있다면 지운다.
@@ -136,10 +136,10 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		tempLefts.GetAt(i)->GetAttribute(&attribute);
 		Shape::MakeRectToPoint(attribute.pointTrue, &rect);
 		Shape::MakeRectToPoint(attribute.pointFalse, &rect2);
-		if (tempRights.GetAt(j)->IsIncluded(canvas->painter, rect) || tempRights.GetAt(j)->IsIncluded(canvas->painter, rect2)) {
+		if (tempRights.GetAt(j)->IsIncluded(rect) || tempRights.GetAt(j)->IsIncluded(rect2)) {
 			index_ = lefts.Find(tempLefts.GetAt(i));
-			lefts.Erase(index_);
-			tempLefts.Erase(i);
+			lefts.Detach(index_);
+			tempLefts.Detach(i);
 		}
 	}
 
@@ -147,10 +147,10 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		attribute = initAttribute;
 		tempRights.GetAt(j)->GetAttribute(&attribute);
 		Shape::MakeRectToPoint(attribute.pointFalse, &rect);
-		if (top->IsIncluded(canvas->painter, rect)) {
+		if (top->IsIncluded(rect)) {
 			index_ = rights.Find(tempRights.GetAt(j));
-			rights.Erase(index_);
-			tempRights.Erase(j);
+			rights.Detach(index_);
+			tempRights.Detach(j);
 		}
 	}
 	else if (j >= 0 && dynamic_cast<Join *>(tempRights.GetAt(j))) {
@@ -158,23 +158,23 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		tempRights.GetAt(j)->GetAttribute(&attribute);
 		Shape::MakeRectToPoint(attribute.pointTrue, &rect);
 		Shape::MakeRectToPoint(attribute.pointFalse, &rect2);
-		if (tempLefts.GetAt(i)->IsIncluded(canvas->painter, rect) || tempLefts.GetAt(i)->IsIncluded(canvas->painter, rect2)) {
+		if (tempLefts.GetAt(i)->IsIncluded(rect) || tempLefts.GetAt(i)->IsIncluded(rect2)) {
 			index_ = rights.Find(tempRights.GetAt(j));
-			rights.Erase(index_);
-			tempRights.Erase(j);
+			rights.Detach(index_);
+			tempRights.Detach(j);
 		}
 	}
 
 	// LeftDown을 그린다.	
 	top->GetAttribute(&decisionAttribute);
-	x = decisionAttribute.pointTrue.x;
-	y = decisionAttribute.pointTrue.y;
+	x = decisionAttribute.pointTrue.x();
+	y = decisionAttribute.pointTrue.y();
 
 	attribute = initAttribute;
 	tempLefts.GetAt(0)->GetAttribute(&attribute);
-	width = attribute.pointIn.x - decisionAttribute.pointTrue.x;
-	height = attribute.pointIn.y - decisionAttribute.pointTrue.y;
-	shape = new LeftDown(x, y, width, height, 20, DASH, 20, String("TRUE"));
+	width = attribute.pointIn.x() - decisionAttribute.pointTrue.x();
+	height = attribute.pointIn.y() - decisionAttribute.pointTrue.y();
+	shape = new LeftDown(x, y, width, height, 20, Qt::DashLine, 20, String("TRUE"));
 	shape->Select(true);
 	buffer.Attach(shape);
 
@@ -185,17 +185,17 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 
 	if (rights.GetLength() > 0) { // Join을 결정한다.
 		// rightDown을 그린다.
-		buffer.GetRange(&bufferRange);
+		bufferRange = buffer.GetRange();
 
-		x = decisionAttribute.pointFalse.x;
-		y = decisionAttribute.pointFalse.y;
+		x = decisionAttribute.pointFalse.x();
+		y = decisionAttribute.pointFalse.y();
 
 		attribute = initAttribute;
 		tempRights.GetAt(0)->GetAttribute(&attribute);
-		width = attribute.pointIn.x - decisionAttribute.pointFalse.x;
-		height = attribute.pointIn.y - decisionAttribute.pointFalse.y;
+		width = attribute.pointIn.x() - decisionAttribute.pointFalse.x();
+		height = attribute.pointIn.y() - decisionAttribute.pointFalse.y();
 
-		shape = new RightDown(x, y, width, height, 20, DASH, 20, String("FALSE"));
+		shape = new RightDown(x, y, width, height, 20, Qt::DashLine, 20, String("FALSE"));
 		shape->Select(true);
 		buffer.Attach(shape);
 
@@ -208,37 +208,37 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		attribute = initAttribute;
 		i = tempLefts.GetLength() - 1;
 		tempLefts.GetAt(i)->GetAttribute(&attribute);
-		x = attribute.pointOut.x;
-		y = attribute.pointOut.y;
+		x = attribute.pointOut.x();
+		y = attribute.pointOut.y();
 
 		attribute = initAttribute;
 		i = tempRights.GetLength() - 1;
 		tempRights.GetAt(i)->GetAttribute(&attribute);
-		width = attribute.pointOut.x - x;
-		height = attribute.pointOut.y - y;
+		width = attribute.pointOut.x() - x;
+		height = attribute.pointOut.y() - y;
 
 		(height >= 0) ? (height2 = height + 30) : (height2 = 30);
-		shape = new Join(x, y, width, height, height2, 20, DASH, 20, String(" "));
+		shape = new Join(x, y, width, height, height2, 20, Qt::DashLine, 20, String(" "));
 		shape->Select(true);
 		buffer.Attach(shape);
 	}
 	else {
 		//RightDownJoin을 결정한다.
-		buffer.GetRange(&bufferRange);
+		bufferRange = buffer.GetRange();
 
-		x = decisionAttribute.pointFalse.x;
-		y = decisionAttribute.pointFalse.y;
+		x = decisionAttribute.pointFalse.x();
+		y = decisionAttribute.pointFalse.y();
 
 		width2 = bufferRange.right - x + 30;
 
 		attribute = initAttribute;
 		i = tempLefts.GetLength() - 1;
 		//buffer.GetAt(i)->GetAttribute(&attribute);
-		width = attribute.pointOut.x - x;
-		height = attribute.pointOut.y - y;
+		width = attribute.pointOut.x() - x;
+		height = attribute.pointOut.y() - y;
 		height2 = 30;
 
-		shape = new RightDownJoin(x, y, width, height, width2, height2, 20, DASH, 20, String("FALSE"));
+		shape = new RightDownJoin(x, y, width, height, width2, height2, 20, Qt::DashLine, 20, String("FALSE"));
 		shape->Select(true);
 		buffer.Attach(shape);
 	}
@@ -247,12 +247,12 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	attribute = initAttribute;
 	i = buffer.GetLength() - 1;
 	buffer.GetAt(i)->GetAttribute(&attribute);
-	x = attribute.pointOut.x;
-	y = attribute.pointOut.y;
+	x = attribute.pointOut.x();
+	y = attribute.pointOut.y();
 
 	width = 0;
 	height = 30;
-	shape = new Arrow(x, y, width, height, 20, DASH, 20, String(" "));
+	shape = new Arrow(x, y, width, height, 20, Qt::DashLine, 20, String(" "));
 	shape->Select(true);
 	buffer.Attach(shape);
 
@@ -275,5 +275,5 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		delete[] positions;
 	}
 
-	canvas->RedrawWindow();
+	canvas->repaint();
 }

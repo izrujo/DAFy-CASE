@@ -20,7 +20,7 @@ void SizeMake::Create(DrawingPaper *canvas) {
 	Long count = 0;
 
 	// 1. 선택된 기호들을 찾는다.
-	Long it = dynamic_cast<FlowChart *>(canvas->flowChart)->GetLength();
+	Long it = canvas->flowChart->GetLength();
 
 	if (it > 0) {
 		indexes = new Shape*[it];
@@ -29,7 +29,7 @@ void SizeMake::Create(DrawingPaper *canvas) {
 
 	i = 0;
 	while (i < it) {
-		shape = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(i);
+		shape = canvas->flowChart->GetAt(i);
 		if (shape->IsSelected()) {
 			if (dynamic_cast<Symbol *>(shape)) {
 				indexes[j] = shape->Clone();
@@ -74,9 +74,9 @@ void SizeMake::Create(DrawingPaper *canvas) {
 	// 5. 순서도의 기호를 지우다.
 	i = it - 1;
 	while (i >= 0) {
-		shape = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(i);
+		shape = canvas->flowChart->GetAt(i);
 		if (shape->IsSelected()) {
-			dynamic_cast<FlowChart *>(canvas->flowChart)->Erase(i);
+			canvas->flowChart->Detach(i);
 		}
 		i--;
 	}
@@ -84,7 +84,7 @@ void SizeMake::Create(DrawingPaper *canvas) {
 	// 6. 선택된 도형을 순서도에 끼워넣는다.
 	i = 0;
 	while (i < count) {
-		dynamic_cast<FlowChart *>(canvas->flowChart)->Attach(indexes[i]);
+		canvas->flowChart->Attach(indexes[i]);
 		i++;
 	}
 

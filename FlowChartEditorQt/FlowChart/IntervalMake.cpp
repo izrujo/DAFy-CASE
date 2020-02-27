@@ -2,7 +2,6 @@
 
 #include "IntervalMake.h"
 #include "DrawingPaper.h"
-#include "FlowChart.h"
 #include "Shape.h"
 #include "Symbol.h"
 #include "MemoryController.h"
@@ -18,13 +17,13 @@ void IntervalMake::Create(DrawingPaper *canvas){
 	Shape *shape;
 	Long count = 0;
 
-	Long it = dynamic_cast<FlowChart *>(canvas->flowChart)->GetLength();
+	Long it = canvas->flowChart->GetLength();
 	Shape* (*indexes) = new Shape* [it];
 	Long(*positions) = new Long[it];
 
 	Long i = 0;	
 	while ( i < it ){
-		shape = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(i);
+		shape = canvas->flowChart->GetAt(i);
 		if( shape->IsSelected()){
 			//  선택된 기호들 중 연결 선을 제외한다.
 			if( dynamic_cast<Symbol *>(shape) ){
@@ -87,9 +86,9 @@ void IntervalMake::Create(DrawingPaper *canvas){
 	// 5. 순서도의 선택된 도형을 지운다.
 	i = it -1;
 	while ( i >= 0 ){
-		shape = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(i);
+		shape = canvas->flowChart->GetAt(i);
 		if( shape->IsSelected()){
-			dynamic_cast<FlowChart *>(canvas->flowChart)->Erase(i);
+			canvas->flowChart->Detach(i);
 		}
 		i--;
 	}
@@ -97,7 +96,7 @@ void IntervalMake::Create(DrawingPaper *canvas){
 	// 6. 순서도에 선택된 도형을 끼워 넣는다.
 	i = 0;
 	while ( i < count ){
-		dynamic_cast<FlowChart *>(canvas->flowChart)->Attach(indexes[i]);
+		canvas->flowChart->Attach(indexes[i]);
 		i++;
 	}
 

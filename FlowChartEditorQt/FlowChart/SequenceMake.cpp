@@ -31,13 +31,13 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 	Long i, j, k;
 	Long index = -1;
 
-	dynamic_cast<FlowChart *>(canvas->flowChart)->GetSelecteds(&indexes, &length);
+	canvas->flowChart->GetSelecteds(&indexes, &length);
 
 	FlowChart buffer(length);
 	FlowChart arrows(length);
 
 	for (i = 0; i < length; i++) {
-		shape = dynamic_cast<FlowChart *>(canvas->flowChart)->GetAt(indexes[i]);
+		shape = canvas->flowChart->GetAt(indexes[i]);
 		if (dynamic_cast<Symbol *>(shape)) {
 			buffer.Attach(shape->Clone());
 			if (index > indexes[i] || index == -1) {
@@ -53,19 +53,19 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 		delete[] indexes;
 	}
 
-	dynamic_cast<FlowChart *>(canvas->flowChart)->EraseSelectedAll();
+	canvas->flowChart->DetachSelectedAll();
 
 	buffer.AscendingSort();
 
 	Attribute attribute;
 	for (i = 0; i < buffer.GetLength() - 1; i++) {
 		buffer.GetAt(i)->GetAttribute(&attribute);
-		x = attribute.pointOut.x;
-		y = attribute.pointOut.y;
+		x = attribute.pointOut.x();
+		y = attribute.pointOut.y();
 		width = 0;
-		height = buffer.GetAt(i + 1)->GetY() - attribute.pointOut.y;
+		height = buffer.GetAt(i + 1)->GetY() - attribute.pointOut.y();
 		if (height > 0) {
-			arrow = new Arrow(x, y, width, height, 20, DASH, 20, String(" "));
+			arrow = new Arrow(x, y, width, height, 20, Qt::DashLine, 20, String(" "));
 			arrow->Select(true);
 			arrows.Attach(arrow);
 		}
@@ -78,12 +78,12 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 	k = 0;
 	while (i < buffer.GetLength() || j < arrows.GetLength()) {
 		if (i < buffer.GetLength()) {
-			dynamic_cast<FlowChart *>(canvas->flowChart)->Insert(index + k, buffer.GetAt(i)->Clone());
+			canvas->flowChart->Insert(index + k, buffer.GetAt(i)->Clone());
 			k++;
 			i++;
 		}
 		if (j < arrows.GetLength()) {
-			positions[j] = dynamic_cast<FlowChart *>(canvas->flowChart)->Insert(index + k, arrows.GetAt(j)->Clone());
+			positions[j] = canvas->flowChart->Insert(index + k, arrows.GetAt(j)->Clone());
 			count++;
 			k++;
 			j++;
@@ -95,5 +95,5 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 		delete[] positions;
 	}
 
-	canvas->RedrawWindow();
+	canvas->repaint();
 }
