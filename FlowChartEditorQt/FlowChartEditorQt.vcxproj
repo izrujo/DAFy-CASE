@@ -111,8 +111,6 @@
     <ClCompile Include="FlowChart\Font.cpp" />
     <ClCompile Include="FlowChart\GObject.cpp" />
     <ClCompile Include="FlowChart\GObjectFactory.cpp" />
-    <ClCompile Include="FlowChart\HScrollActionFactory.cpp" />
-    <ClCompile Include="FlowChart\HScrollActions.cpp" />
     <ClCompile Include="FlowChart\InputOutput.cpp" />
     <ClCompile Include="FlowChart\IntervalMake.cpp" />
     <ClCompile Include="FlowChart\IterationMake.cpp" />
@@ -146,8 +144,8 @@
     <ClCompile Include="FlowChart\RightDown.cpp" />
     <ClCompile Include="FlowChart\RightDownjoin.cpp" />
     <ClCompile Include="FlowChart\RightKey.cpp" />
+    <ClCompile Include="FlowChart\Scroll.cpp" />
     <ClCompile Include="FlowChart\ScrollController.cpp" />
-    <ClCompile Include="FlowChart\Scrolls.cpp" />
     <ClCompile Include="FlowChart\SelectingTool.cpp" />
     <ClCompile Include="FlowChart\SelectionMake.cpp" />
     <ClCompile Include="FlowChart\SequenceMake.cpp" />
@@ -172,8 +170,6 @@
     <ClCompile Include="FlowChart\Tutorials.cpp" />
     <ClCompile Include="FlowChart\UpKey.cpp" />
     <ClCompile Include="FlowChart\VariableList.cpp" />
-    <ClCompile Include="FlowChart\VScrollActionFactory.cpp" />
-    <ClCompile Include="FlowChart\VScrollActions.cpp" />
     <ClCompile Include="FlowChart\Zoom.cpp" />
     <ClCompile Include="FlowChart\ZoomVisitor.cpp" />
     <ClCompile Include="main.cpp" />
@@ -241,8 +237,6 @@
     <ClInclude Include="FlowChart\Font.h" />
     <ClInclude Include="FlowChart\GObject.h" />
     <ClInclude Include="FlowChart\GObjectFactory.h" />
-    <ClInclude Include="FlowChart\HScrollActionFactory.h" />
-    <ClInclude Include="FlowChart\HScrollActions.h" />
     <ClInclude Include="FlowChart\InputOutput.h" />
     <ClInclude Include="FlowChart\IntervalMake.h" />
     <ClInclude Include="FlowChart\IterationMake.h" />
@@ -276,8 +270,8 @@
     <ClInclude Include="FlowChart\RightDown.h" />
     <ClInclude Include="FlowChart\RightDownJoin.h" />
     <ClInclude Include="FlowChart\RightKey.h" />
+    <QtMoc Include="FlowChart\Scroll.h" />
     <ClInclude Include="FlowChart\ScrollController.h" />
-    <ClInclude Include="FlowChart\Scrolls.h" />
     <ClInclude Include="FlowChart\SelectingTool.h" />
     <ClInclude Include="FlowChart\SelectionMake.h" />
     <ClInclude Include="FlowChart\SequenceMake.h" />
@@ -303,8 +297,6 @@
     <ClInclude Include="FlowChart\Tutorials.h" />
     <ClInclude Include="FlowChart\UpKey.h" />
     <ClInclude Include="FlowChart\VariableList.h" />
-    <ClInclude Include="FlowChart\VScrollActionFactory.h" />
-    <ClInclude Include="FlowChart\VScrollActions.h" />
     <ClInclude Include="FlowChart\Zoom.h" />
     <ClInclude Include="FlowChart\ZoomVisitor.h" />
     <ClInclude Include="Notepad\Array.h" />

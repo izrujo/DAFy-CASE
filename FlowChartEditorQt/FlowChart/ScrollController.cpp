@@ -1,30 +1,47 @@
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 #include "DrawingPaper.h"
 #include "FlowChart.h"
 
 ScrollController::ScrollController(DrawingPaper *drawingPaper) {
 	this->drawingPaper = drawingPaper;
 
-	this->height = this->drawingPaper->a4Paper->GetY()*2 + this->drawingPaper->a4Paper->GetHeight();
-	this->width = this->drawingPaper->a4Paper->GetX()*2 + this->drawingPaper->a4Paper->GetWidth();
+	this->height = this->drawingPaper->a4Paper->GetY() * 2 + this->drawingPaper->a4Paper->GetHeight();
+	this->width = this->drawingPaper->a4Paper->GetX() * 2 + this->drawingPaper->a4Paper->GetWidth();
 
-	RECT rect;
-	this->drawingPaper->GetClientRect(&rect);
-	Long clientWidth = rect.right - rect.left;
-	Long clientHeight = rect.bottom - rect.top;
+	QRect rect = this->drawingPaper->frameRect();
+	Long clientWidth = rect.width();
+	Long clientHeight = rect.height();
 
-	Long maximum = this->height - clientHeight;
-	Long pageSize = clientHeight;
-	Long lineSize = 100;
-	Scroll *scroll = new VerticalScroll(0, maximum, pageSize, lineSize, 0);
-	this->scrolls.Store(this->scrolls.GetLength(), scroll);
+	Scroll *verticalScroll = new Scroll(Qt::Vertical, this->drawingPaper);
+	verticalScroll->SetFromConstructorFlag(true); //생성자에서 Scroll::Move 호출되면 안됨
+	//maximum : height - 화면크기
+	verticalScroll->setMaximum(this->height - clientHeight);
+	//minimum : 0
+	verticalScroll->setMinimum(0);
+	//pageStep : 화면 높이
+	verticalScroll->setPageStep(clientHeight);
+	//singleStep : 부제목 글씨 높이
+	verticalScroll->setSingleStep(100);
+	//value : 0
+	verticalScroll->setValue(0);
+	verticalScroll->SetFromConstructorFlag(false); //생성자에서 Scroll::Move 호출되면 안됨
+	this->scrolls.Store(this->scrolls.GetLength(), verticalScroll);
 
-	maximum = this->width - clientWidth;
-	pageSize = clientWidth;
-	lineSize = 150;
-	scroll = new HorizontalScroll(0, maximum, pageSize, lineSize, 0);
-	this->scrolls.Store(this->scrolls.GetLength(), scroll);
+	Scroll *horizontalScroll = new Scroll(Qt::Horizontal, this->drawingPaper);
+	horizontalScroll->SetFromConstructorFlag(true); //생성자에서 Scroll::Move 호출되면 안됨
+	//maximum : height - 화면크기
+	horizontalScroll->setMaximum(this->width - clientWidth);
+	//minimum : 0
+	horizontalScroll->setMinimum(0);
+	//pageStep : 화면 높이
+	horizontalScroll->setPageStep(clientWidth);
+	//singleStep : 부제목 글씨 높이
+	horizontalScroll->setSingleStep(150);
+	//value : 0
+	horizontalScroll->setValue(0);
+	horizontalScroll->SetFromConstructorFlag(false); //생성자에서 Scroll::Move 호출되면 안됨
+	this->scrolls.Store(this->scrolls.GetLength(), horizontalScroll);
 }
 
 ScrollController::ScrollController(const ScrollController& source)
@@ -32,12 +49,7 @@ ScrollController::ScrollController(const ScrollController& source)
 	Long i = 0;
 	while (i < 2) {
 		Scroll *scroll = this->scrolls.GetAt(i);
-		if (dynamic_cast<VerticalScroll*>(scroll)) {
-			scroll = new VerticalScroll(*(dynamic_cast<VerticalScroll*>(scroll)));
-		}
-		else if (dynamic_cast<HorizontalScroll*>(scroll)) {
-			scroll = new HorizontalScroll(*(dynamic_cast<HorizontalScroll*>(scroll)));
-		}
+		scroll = new Scroll(*scroll);
 		this->scrolls.Modify(i, scroll);
 		i++;
 	}
@@ -56,16 +68,17 @@ ScrollController::~ScrollController() {
 }
 
 ScrollController& ScrollController::operator=(const ScrollController& source) {
-	this->scrolls = source.scrolls;
 	Long i = 0;
 	while (i < 2) {
+		delete this->scrolls[i];
+		i++;
+	}
+
+	this->scrolls = source.scrolls;
+	i = 0;
+	while (i < 2) {
 		Scroll *scroll = this->scrolls.GetAt(i);
-		if (dynamic_cast<VerticalScroll*>(scroll)) {
-			scroll = new VerticalScroll(*(dynamic_cast<VerticalScroll*>(scroll)));
-		}
-		else if (dynamic_cast<HorizontalScroll*>(scroll)) {
-			scroll = new HorizontalScroll(*(dynamic_cast<HorizontalScroll*>(scroll)));
-		}
+		scroll = new Scroll(*scroll);
 		this->scrolls.Modify(i, scroll);
 		i++;
 	}
@@ -83,118 +96,85 @@ void ScrollController::Update() {
 	Long pageSize;
 	Long lineSize;
 	Long position;
-	SCROLLINFO scrollInfo;
-	RECT rect;
-	RECT clientRect;
-	this->drawingPaper->GetClientRect(&clientRect);
-	LONG style = ::GetWindowLong(this->drawingPaper->m_hWnd, GWL_STYLE);
+	QRect clientRect = this->drawingPaper->frameRect();
 
 	//=====================수직 스크롤 생성========================
 	//1. 전체 영역의 높이를 구하다.
-	this->height = this->drawingPaper->a4Paper->GetY()*2 + this->drawingPaper->a4Paper->GetHeight();
+	this->height = this->drawingPaper->a4Paper->GetY() * 2 + this->drawingPaper->a4Paper->GetHeight();
 	//2. 클라이언트 영역의 높이를 구하다.
-	Long clientHeight = clientRect.bottom - clientRect.top;
+	Long clientHeight = clientRect.height();
 	//3. 클라이언트 영역 높이가 전체 영역 높이보다 작으면 스크롤을 생성한다.
 	if (clientHeight < this->height) {
-		style = style | WS_VSCROLL;
-		minimum = this->scrolls.GetAt(0)->GetMinimum();
-		maximum = this->height; //여유공간 200
+		minimum = this->scrolls.GetAt(0)->minimum();
+		maximum = this->height;
 		pageSize = clientHeight;
 		lineSize = 100;
-		position = this->scrolls.GetAt(0)->GetPosition();
+		position = this->scrolls.GetAt(0)->value();
 		if (this->scrolls.GetAt(0) != NULL) {
 			this->scrolls.Delete(0);
 		}
-		Scroll *scroll = new VerticalScroll(minimum, maximum, pageSize, lineSize, position);
+		Scroll *scroll = new Scroll(Qt::Vertical, this->drawingPaper);
+		scroll->setMinimum(minimum);
+		scroll->setMaximum(maximum);
+		scroll->setPageStep(pageSize);
+		scroll->setSingleStep(lineSize);
+		scroll->setValue(position);
 		this->scrolls.Insert(0, scroll);
-		scrollInfo = scroll->GetScrollInfo();
 	}
 	else {
-		style = style & ~WS_VSCROLL;
 		if (this->scrolls.GetAt(0) != 0) {
 			this->scrolls.Delete(0);
-			Scroll *scroll = new VerticalScroll(0, 0, 0, 0, 0);
-			this->scrolls.Insert(0, scroll);
-			scrollInfo = scroll->GetScrollInfo();
 		}
 	}
-	this->drawingPaper->SetScrollInfo(SB_VERT, &scrollInfo, TRUE);
 
 	//=====================수평 스크롤 생성========================
 	//1. 전체 영역의 너비를 구하다.
-	this->width = this->drawingPaper->a4Paper->GetX()*2 + this->drawingPaper->a4Paper->GetWidth();
+	this->width = this->drawingPaper->a4Paper->GetX() * 2 + this->drawingPaper->a4Paper->GetWidth();
 	//2. 클라이언트 영역의 너비를 구하다.
-	Long clientWidth = clientRect.right - clientRect.left;
+	Long clientWidth = clientRect.width();
 	//3. 클라이언트 영역 너비가 전체 영역 너비보다 작으면 스크롤을 생성한다.
 	if (clientWidth < this->width) {
-		style = style | WS_HSCROLL;
-		minimum = this->scrolls.GetAt(1)->GetMinimum();
+		minimum = this->scrolls.GetAt(1)->minimum();
 		maximum = this->width;
 		pageSize = clientWidth;
 		lineSize = 150;
-		position = this->scrolls.GetAt(1)->GetPosition();
+		position = this->scrolls.GetAt(1)->value();
 		if (this->scrolls.GetAt(1) != NULL) {
 			this->scrolls.Delete(1);
 		}
-		Scroll *scroll = new HorizontalScroll(minimum, maximum, pageSize, lineSize, position);
+		Scroll *scroll = new Scroll(Qt::Horizontal, this->drawingPaper);
+		scroll->setMinimum(minimum);
+		scroll->setMaximum(maximum);
+		scroll->setPageStep(pageSize);
+		scroll->setSingleStep(lineSize);
+		scroll->setValue(position);
 		this->scrolls.Insert(1, scroll);
-		scrollInfo = scroll->GetScrollInfo();
 	}
 	else {
-		style = style & ~WS_HSCROLL;
 		if (this->scrolls.GetAt(1) != 0) {
 			this->scrolls.Delete(1);
-			Scroll *scroll = new HorizontalScroll(0, 0, 0, 0, 0);
-			this->scrolls.Insert(1, scroll);
-			scrollInfo = scroll->GetScrollInfo();
 		}
 	}
-	this->drawingPaper->SetScrollInfo(SB_HORZ, &scrollInfo, TRUE);
 
-	::SetWindowLong(this->drawingPaper->m_hWnd, GWL_STYLE, style);
-	this->drawingPaper->RedrawWindow();
+	this->drawingPaper->repaint();
 }
 
-Long ScrollController::Up() {
-	return this->scrolls.GetAt(0)->Down();
-}
+Long ScrollController::Rotate(QPoint delta) {
+	Scroll *verticalScroll = this->scrolls.GetAt(0);
+	Long value = verticalScroll->value();
+	Long singleStep = verticalScroll->singleStep();
+	value -= delta.ry() / 120 * singleStep;
 
-Long ScrollController::Down() {
-	return this->scrolls.GetAt(0)->Up();
-}
+	Long minimum = verticalScroll->minimum();
+	Long maximum = verticalScroll->maximum();
+	if (value < minimum) {
+		value = minimum;
+	}
+	else if (value > maximum) {
+		value = maximum;
+	}
 
-Long ScrollController::PageUp() {
-	return this->scrolls.GetAt(0)->PageDown();
-}
+	verticalScroll->setValue(value);
 
-Long ScrollController::PageDown() {
-	return this->scrolls.GetAt(0)->PageUp();
-}
-
-Long ScrollController::Left() {
-	return this->scrolls.GetAt(1)->Down();
-}
-
-Long ScrollController::Right() {
-	return this->scrolls.GetAt(1)->Up();
-}
-
-Long ScrollController::PageLeft() {
-	return this->scrolls.GetAt(1)->PageDown();
-}
-
-Long ScrollController::PageRight() {
-	return this->scrolls.GetAt(1)->PageUp();
-}
-
-Long ScrollController::MoveHorizontalScroll(Long position) {
-	return this->scrolls.GetAt(1)->Move(position);
-}
-
-Long ScrollController::MoveVerticalScroll(Long position) {
-	return this->scrolls.GetAt(0)->Move(position);
-}
-
-Long ScrollController::Rotate(short delta) {
-	return this->scrolls.GetAt(0)->Rotate(delta);
+	return value;
 }

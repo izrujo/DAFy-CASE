@@ -107,12 +107,6 @@
     <ClCompile Include="FlowChart\FlowChartVisitor.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\HScrollActionFactory.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\HScrollActions.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\InputOutput.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -194,9 +188,6 @@
     <ClCompile Include="FlowChart\ScrollController.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Scrolls.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\SelectingTool.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -267,12 +258,6 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\VariableList.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\VScrollActionFactory.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\VScrollActions.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\Zoom.cpp">
@@ -383,6 +368,9 @@
     <ClCompile Include="FlowChart\QtPainter.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\Scroll.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -468,12 +456,6 @@
     <ClInclude Include="FlowChart\FlowChartVisitor.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\HScrollActionFactory.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\HScrollActions.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\InputOutput.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -555,9 +537,6 @@
     <ClInclude Include="FlowChart\ScrollController.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Scrolls.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\SelectingTool.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -631,12 +610,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\VariableList.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\VScrollActionFactory.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\VScrollActions.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Zoom.h">
@@ -761,6 +734,9 @@
       <Filter>FlowChart</Filter>
     </QtMoc>
     <QtMoc Include="FlowChart\DrawingPaper.h">
+      <Filter>FlowChart</Filter>
+    </QtMoc>
+    <QtMoc Include="FlowChart\Scroll.h">
       <Filter>FlowChart</Filter>
     </QtMoc>
   </ItemGroup>

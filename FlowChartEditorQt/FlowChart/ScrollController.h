@@ -2,6 +2,7 @@
 #define _SCROLLCONTROLLER_H
 
 #include "../Notepad/Array.h"
+#include <qpoint.h>
 class DrawingPaper;
 class Scroll;
 
@@ -14,17 +15,7 @@ public:
 
 	void Update();
 	
-	Long Up();
-	Long Down();
-	Long PageUp();
-	Long PageDown();
-	Long Left();
-	Long Right();
-	Long PageLeft();
-	Long PageRight();
-	Long MoveVerticalScroll(Long position);
-	Long MoveHorizontalScroll(Long position);
-	Long Rotate(short delta);
+	Long Rotate(QPoint delta);
 
 	Scroll* GetScroll(Long index);
 	Long GetWidth() const;
