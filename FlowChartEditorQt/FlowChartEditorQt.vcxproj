@@ -82,7 +82,6 @@
   <ItemGroup>
     <ClCompile Include="FlowChartEditor.cpp" />
     <ClCompile Include="FlowChart\A4Paper.cpp" />
-    <ClCompile Include="FlowChart\AccessKey.cpp" />
     <ClCompile Include="FlowChart\Arrow.cpp" />
     <ClCompile Include="FlowChart\Block.cpp" />
     <ClCompile Include="FlowChart\Brush.cpp" />
@@ -90,13 +89,10 @@
     <ClCompile Include="FlowChart\CoordinateConverter.cpp" />
     <ClCompile Include="FlowChart\Creator.cpp" />
     <ClCompile Include="FlowChart\Decision.cpp" />
-    <ClCompile Include="FlowChart\DeleteKey.cpp" />
-    <ClCompile Include="FlowChart\DownKey.cpp" />
     <ClCompile Include="FlowChart\DrawingPaper.cpp" />
     <ClCompile Include="FlowChart\DrawingTool.cpp" />
     <ClCompile Include="FlowChart\DrawVisitor.cpp" />
     <ClCompile Include="FlowChart\EditorIntroForm.cpp" />
-    <ClCompile Include="FlowChart\EscapeKey.cpp" />
     <ClCompile Include="FlowChart\Executions.cpp" />
     <ClCompile Include="FlowChart\ExpressionFactory.cpp" />
     <ClCompile Include="FlowChart\Expressions.cpp" />
@@ -115,10 +111,8 @@
     <ClCompile Include="FlowChart\IntervalMake.cpp" />
     <ClCompile Include="FlowChart\IterationMake.cpp" />
     <ClCompile Include="FlowChart\Join.cpp" />
-    <ClCompile Include="FlowChart\KeyFactory.cpp" />
     <ClCompile Include="FlowChart\Label.cpp" />
     <ClCompile Include="FlowChart\LeftDown.cpp" />
-    <ClCompile Include="FlowChart\LeftKey.cpp" />
     <ClCompile Include="FlowChart\Line.cpp" />
     <ClCompile Include="FlowChart\Memory.cpp" />
     <ClCompile Include="FlowChart\MemoryController.cpp" />
@@ -143,7 +137,6 @@
     <ClCompile Include="FlowChart\ResolutionVisitor.cpp" />
     <ClCompile Include="FlowChart\RightDown.cpp" />
     <ClCompile Include="FlowChart\RightDownjoin.cpp" />
-    <ClCompile Include="FlowChart\RightKey.cpp" />
     <ClCompile Include="FlowChart\Scroll.cpp" />
     <ClCompile Include="FlowChart\ScrollController.cpp" />
     <ClCompile Include="FlowChart\SelectingTool.cpp" />
@@ -168,7 +161,6 @@
     <ClCompile Include="FlowChart\TutorialMark.cpp" />
     <ClCompile Include="FlowChart\TutorialMarkFactory.cpp" />
     <ClCompile Include="FlowChart\Tutorials.cpp" />
-    <ClCompile Include="FlowChart\UpKey.cpp" />
     <ClCompile Include="FlowChart\VariableList.cpp" />
     <ClCompile Include="FlowChart\Zoom.cpp" />
     <ClCompile Include="FlowChart\ZoomVisitor.cpp" />
@@ -213,7 +205,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlowChart\A4Paper.h" />
-    <ClInclude Include="FlowChart\AccessKey.h" />
     <ClInclude Include="FlowChart\Array.h" />
     <ClInclude Include="FlowChart\Arrow.h" />
     <ClInclude Include="FlowChart\Block.h" />
@@ -222,13 +213,10 @@
     <ClInclude Include="FlowChart\CoordinateConverter.h" />
     <ClInclude Include="FlowChart\Creator.h" />
     <ClInclude Include="FlowChart\Decision.h" />
-    <ClInclude Include="FlowChart\DeleteKey.h" />
-    <ClInclude Include="FlowChart\DownKey.h" />
     <QtMoc Include="FlowChart\DrawingPaper.h" />
     <ClInclude Include="FlowChart\DrawingTool.h" />
     <ClInclude Include="FlowChart\DrawVisitor.h" />
     <ClInclude Include="FlowChart\EditorIntroForm.h" />
-    <ClInclude Include="FlowChart\EscapeKey.h" />
     <ClInclude Include="FlowChart\Executions.h" />
     <ClInclude Include="FlowChart\ExpressionFactory.h" />
     <ClInclude Include="FlowChart\Expressions.h" />
@@ -238,7 +226,7 @@
     <ClInclude Include="FlowChart\FlowChartCommands.h" />
     <ClInclude Include="FlowChart\FlowChartKeyActionFactory.h" />
     <ClInclude Include="FlowChart\FlowChartKeyActions.h" />
-    <ClInclude Include="FlowChart\FlowChartTemplate.h" />
+    <QtMoc Include="FlowChart\FlowChartTemplate.h" />
     <ClInclude Include="FlowChart\FlowChartVisitor.h" />
     <ClInclude Include="FlowChart\Font.h" />
     <ClInclude Include="FlowChart\GObject.h" />
@@ -247,10 +235,8 @@
     <ClInclude Include="FlowChart\IntervalMake.h" />
     <ClInclude Include="FlowChart\IterationMake.h" />
     <ClInclude Include="FlowChart\Join.h" />
-    <ClInclude Include="FlowChart\KeyFactory.h" />
     <ClInclude Include="FlowChart\Label.h" />
     <ClInclude Include="FlowChart\LeftDown.h" />
-    <ClInclude Include="FlowChart\LeftKey.h" />
     <ClInclude Include="FlowChart\Line.h" />
     <ClInclude Include="FlowChart\Memory.h" />
     <ClInclude Include="FlowChart\MemoryController.h" />
@@ -275,7 +261,6 @@
     <ClInclude Include="FlowChart\ResolutionVisitor.h" />
     <ClInclude Include="FlowChart\RightDown.h" />
     <ClInclude Include="FlowChart\RightDownJoin.h" />
-    <ClInclude Include="FlowChart\RightKey.h" />
     <QtMoc Include="FlowChart\Scroll.h" />
     <ClInclude Include="FlowChart\ScrollController.h" />
     <ClInclude Include="FlowChart\SelectingTool.h" />
@@ -301,7 +286,6 @@
     <ClInclude Include="FlowChart\TutorialMark.h" />
     <ClInclude Include="FlowChart\TutorialMarkFactory.h" />
     <ClInclude Include="FlowChart\Tutorials.h" />
-    <ClInclude Include="FlowChart\UpKey.h" />
     <ClInclude Include="FlowChart\VariableList.h" />
     <ClInclude Include="FlowChart\Zoom.h" />
     <ClInclude Include="FlowChart\ZoomVisitor.h" />

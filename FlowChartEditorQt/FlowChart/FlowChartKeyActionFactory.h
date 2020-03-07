@@ -1,8 +1,6 @@
 #ifndef _FLOWCHARTKEYACTIONFACTORY_H
 #define _FLOWCHARTKEYACTIONFACTORY_H
 
-#include <afxwin.h>
-
 class FlowChartEditor;
 class FlowChartKeyAction;
 
@@ -13,7 +11,7 @@ public:
 	~FlowChartKeyActionFactory();
 	FlowChartKeyActionFactory& operator=(const FlowChartKeyActionFactory& source);
 
-	FlowChartKeyAction* Make(UINT nChar);
+	FlowChartKeyAction* Make(int modifiers, int key);
 private:
 	FlowChartEditor *editor;
 };

@@ -1,5 +1,5 @@
 #include "FlowChartKeyActions.h"
-#include "FlowChartEditor.h"
+#include "../FlowChartEditor.h"
 #include "FlowChartTemplate.h"
 #include "DrawingPaper.h"
 #include "Template.h"
@@ -34,6 +34,288 @@ FlowChartKeyAction& FlowChartKeyAction::operator=(const FlowChartKeyAction& sour
 	return *this;
 }
 
+//DeleteKeyAction
+DeleteKeyAction::DeleteKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+DeleteKeyAction::DeleteKeyAction(const DeleteKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+DeleteKeyAction::~DeleteKeyAction() {
+
+}
+
+DeleteKeyAction& DeleteKeyAction::operator=(const DeleteKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void DeleteKeyAction::OnKeyDown() {
+	Long it;
+	Shape *shape;
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+
+	Long count;
+	Long(*indexes);
+	canvas->flowChart->GetSelecteds(&indexes, &count);
+	canvas->memoryController->RememberRemove(indexes, count);
+
+	it = canvas->flowChart->GetLength() - 1;
+	while (it >= 0) {
+		shape = canvas->flowChart->GetAt(it);
+		if (shape->IsSelected()) {
+			canvas->flowChart->Detach(it);
+		}
+		it--;
+	}
+	if (canvas->flowChart->GetLength() < 1) {
+		canvas->mode = DrawingPaper::IDLE;
+	}
+
+	if (indexes != 0) {
+		delete[] indexes;
+	}
+}
+
+//EscapeKeyAction
+EscapeKeyAction::EscapeKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+EscapeKeyAction::EscapeKeyAction(const EscapeKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+EscapeKeyAction::~EscapeKeyAction() {
+
+}
+
+EscapeKeyAction& EscapeKeyAction::operator=(const EscapeKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void EscapeKeyAction::OnKeyDown() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	Long count;
+	Long(*indexes);
+
+	canvas->flowChart->GetSelecteds(&indexes, &count);
+	Long i;
+	for (i = 0; i < count; i++) {
+		Shape *shape = canvas->flowChart->GetAt(indexes[i]);
+		shape->Select(false);
+	}
+
+	FlowChartTemplate *flowChartTemplate = static_cast<FlowChartTemplate*>(this->editor->windows[1]);
+
+	if (flowChartTemplate->mode == FlowChartTemplate::DRAWON && canvas->mode != DrawingPaper::DRAWING) {
+		flowChartTemplate->mode = FlowChartTemplate::DRAWOFF;
+		Long i = dynamic_cast<Template*>(flowChartTemplate->flowChartTemplate)->GetLength() - 1;
+		while (i >= 7) { //numberBox만 없애기
+			dynamic_cast<Template*>(flowChartTemplate->flowChartTemplate)->Detach(i);
+			i--;
+		}
+		//editor->isUnModeMenuEnabled = FALSE;
+	}
+
+	if (canvas->mode == DrawingPaper::DRAWING) {
+		canvas->templateSelected = NULL;
+		flowChartTemplate->shapeSelected = NULL;
+	}
+
+	canvas->mode = DrawingPaper::IDLE;
+
+	canvas->repaint();
+	canvas->indexOfSelected = -1;
+
+	if (indexes != 0) {
+		delete[] indexes;
+	}
+}
+
+//LeftKeyAction
+LeftKeyAction::LeftKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+LeftKeyAction::LeftKeyAction(const LeftKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+LeftKeyAction::~LeftKeyAction() {
+
+}
+
+LeftKeyAction& LeftKeyAction::operator=(const LeftKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void LeftKeyAction::OnKeyDown() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	Long count;
+	Long(*indexes);
+
+	canvas->flowChart->GetSelecteds(&indexes, &count);
+	canvas->memoryController->RememberOther(indexes, count);
+
+	Long i;
+	for (i = 0; i < count; i++) {
+		Shape *shape = canvas->flowChart->GetAt(indexes[i]);
+		Long x = shape->GetX();
+		Long y = shape->GetY();
+
+		shape->Move(x - DISTANCE, y);
+	}
+	canvas->repaint();
+
+	if (indexes != 0) {
+		delete[] indexes;
+	}
+}
+
+//RightKeyAction
+RightKeyAction::RightKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+RightKeyAction::RightKeyAction(const RightKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+RightKeyAction::~RightKeyAction() {
+
+}
+
+RightKeyAction& RightKeyAction::operator=(const RightKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void RightKeyAction::OnKeyDown() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	Long count;
+	Long(*indexes);
+
+	canvas->flowChart->GetSelecteds(&indexes, &count);
+	canvas->memoryController->RememberOther(indexes, count);
+
+	Long i;
+	for (i = 0; i < count; i++) {
+		Shape *shape = canvas->flowChart->GetAt(indexes[i]);
+		Long x = shape->GetX();
+		Long y = shape->GetY();
+
+		shape->Move(x + DISTANCE, y);
+	}
+	canvas->repaint();
+	if (indexes != 0) {
+		delete[] indexes;
+	}
+}
+
+//UpKeyAction
+UpKeyAction::UpKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+UpKeyAction::UpKeyAction(const UpKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+UpKeyAction::~UpKeyAction() {
+
+}
+
+UpKeyAction& UpKeyAction::operator=(const UpKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void UpKeyAction::OnKeyDown() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	Long count;
+	Long(*indexes);
+
+	canvas->flowChart->GetSelecteds(&indexes, &count);
+	canvas->memoryController->RememberOther(indexes, count);
+	Long i;
+	for (i = 0; i < count; i++) {
+		Shape *shape = canvas->flowChart->GetAt(indexes[i]);
+		Long x = shape->GetX();
+		Long y = shape->GetY();
+
+		shape->Move(x, y - DISTANCE);
+	}
+	canvas->repaint();
+	if (indexes != 0) {
+		delete[] indexes;
+	}
+}
+
+//DownKeyAction
+DownKeyAction::DownKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+DownKeyAction::DownKeyAction(const DownKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+DownKeyAction::~DownKeyAction() {
+
+}
+
+DownKeyAction& DownKeyAction::operator=(const DownKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void DownKeyAction::OnKeyDown() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	Long count;
+	Long(*indexes);
+
+	canvas->flowChart->GetSelecteds(&indexes, &count);
+	canvas->memoryController->RememberOther(indexes, count);
+
+	Long i;
+	for (i = 0; i < count; i++) {
+		Shape *shape = canvas->flowChart->GetAt(indexes[i]);
+
+		Long x = shape->GetX();
+		Long y = shape->GetY();
+
+		shape->Move(x, y + DISTANCE);
+	}
+
+	canvas->repaint();
+	if (indexes != 0) {
+		delete[] indexes;
+	}
+}
+
 //CtrlDKeyAction
 CtrlDKeyAction::CtrlDKeyAction(FlowChartEditor *editor)
 	: FlowChartKeyAction(editor) {
@@ -55,7 +337,7 @@ CtrlDKeyAction& CtrlDKeyAction::operator=(const CtrlDKeyAction& source) {
 	return *this;
 }
 
-void CtrlDKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void CtrlDKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWOFF) {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWON;
 
@@ -99,7 +381,7 @@ OneKeyAction& OneKeyAction::operator=(const OneKeyAction& source) {
 	return *this;
 }
 
-void OneKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void OneKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -128,7 +410,7 @@ TwoKeyAction& TwoKeyAction::operator=(const TwoKeyAction& source) {
 	return *this;
 }
 
-void TwoKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void TwoKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -157,7 +439,7 @@ ThreeKeyAction& ThreeKeyAction::operator=(const ThreeKeyAction& source) {
 	return *this;
 }
 
-void ThreeKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void ThreeKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -187,7 +469,7 @@ FourKeyAction& FourKeyAction::operator=(const FourKeyAction& source) {
 	return *this;
 }
 
-void FourKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void FourKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -217,7 +499,7 @@ FiveKeyAction& FiveKeyAction::operator=(const FiveKeyAction& source) {
 	return *this;
 }
 
-void FiveKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void FiveKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -247,7 +529,7 @@ SixKeyAction& SixKeyAction::operator=(const SixKeyAction& source) {
 	return *this;
 }
 
-void SixKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void SixKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -277,7 +559,7 @@ SevenKeyAction& SevenKeyAction::operator=(const SevenKeyAction& source) {
 	return *this;
 }
 
-void SevenKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void SevenKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -307,7 +589,7 @@ CtrlPlusKeyAction& CtrlPlusKeyAction::operator=(const CtrlPlusKeyAction& source)
 	return *this;
 }
 
-void CtrlPlusKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void CtrlPlusKeyAction::OnKeyDown() {
 	Long oldRate = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->GetRate();
 	Long rate;
 	if (oldRate < 150) {
@@ -345,7 +627,7 @@ CtrlMinusKeyAction& CtrlMinusKeyAction::operator=(const CtrlMinusKeyAction& sour
 	return *this;
 }
 
-void CtrlMinusKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
+void CtrlMinusKeyAction::OnKeyDown() {
 	Long oldRate = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->GetRate();
 	Long rate;
 	if (oldRate > 40) {

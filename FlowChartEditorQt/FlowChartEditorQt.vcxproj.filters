@@ -35,9 +35,6 @@
     <ClCompile Include="FlowChart\A4Paper.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\AccessKey.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\Arrow.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -53,12 +50,6 @@
     <ClCompile Include="FlowChart\Decision.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\DeleteKey.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\DownKey.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\DrawingPaper.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -69,9 +60,6 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\EditorIntroForm.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\EscapeKey.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\Executions.cpp">
@@ -119,16 +107,10 @@
     <ClCompile Include="FlowChart\Join.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\KeyFactory.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\Label.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\LeftDown.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\LeftKey.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\Line.cpp">
@@ -180,9 +162,6 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\RightDownjoin.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\RightKey.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\ScrollController.cpp">
@@ -252,9 +231,6 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\Tutorials.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\UpKey.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\VariableList.cpp">
@@ -390,9 +366,6 @@
     <ClInclude Include="FlowChart\A4Paper.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\AccessKey.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\Arrow.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -408,12 +381,6 @@
     <ClInclude Include="FlowChart\Decision.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\DeleteKey.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\DownKey.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\DrawingTool.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -421,9 +388,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\EditorIntroForm.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\EscapeKey.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Executions.h">
@@ -453,9 +417,6 @@
     <ClInclude Include="FlowChart\FlowChartKeyActions.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\FlowChartTemplate.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\FlowChartVisitor.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -471,16 +432,10 @@
     <ClInclude Include="FlowChart\Join.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\KeyFactory.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\Label.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\LeftDown.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\LeftKey.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Line.h">
@@ -532,9 +487,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\RightDownJoin.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\RightKey.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\ScrollController.h">
@@ -607,9 +559,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Tutorials.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\UpKey.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\VariableList.h">
@@ -740,6 +689,9 @@
       <Filter>FlowChart</Filter>
     </QtMoc>
     <QtMoc Include="FlowChart\Scroll.h">
+      <Filter>FlowChart</Filter>
+    </QtMoc>
+    <QtMoc Include="FlowChart\FlowChartTemplate.h">
       <Filter>FlowChart</Filter>
     </QtMoc>
   </ItemGroup>

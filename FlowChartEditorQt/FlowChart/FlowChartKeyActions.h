@@ -1,7 +1,7 @@
 #ifndef _FLOWCHARTKEYACTIONS_H
 #define _FLOWCHARTKEYACTIONS_H
 
-#include <afxwin.h>
+#define DISTANCE 5
 class FlowChartEditor;
 
 class FlowChartKeyAction {
@@ -11,9 +11,75 @@ public:
 	virtual	~FlowChartKeyAction() = 0;
 	FlowChartKeyAction& operator=(const FlowChartKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) = 0;
+	virtual void OnKeyDown() = 0;
 protected:
 	FlowChartEditor *editor;
+};
+
+//DeleteKeyAction
+class DeleteKeyAction : public FlowChartKeyAction {
+public:
+	DeleteKeyAction(FlowChartEditor *editor = 0);
+	DeleteKeyAction(const DeleteKeyAction& source);
+	virtual	~DeleteKeyAction();
+	DeleteKeyAction& operator=(const DeleteKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//EscapeKeyAction
+class EscapeKeyAction : public FlowChartKeyAction {
+public:
+	EscapeKeyAction(FlowChartEditor *editor = 0);
+	EscapeKeyAction(const EscapeKeyAction& source);
+	virtual	~EscapeKeyAction();
+	EscapeKeyAction& operator=(const EscapeKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//LeftKeyAction
+class LeftKeyAction : public FlowChartKeyAction {
+public:
+	LeftKeyAction(FlowChartEditor *editor = 0);
+	LeftKeyAction(const LeftKeyAction& source);
+	virtual	~LeftKeyAction();
+	LeftKeyAction& operator=(const LeftKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//RightKeyAction
+class RightKeyAction : public FlowChartKeyAction {
+public:
+	RightKeyAction(FlowChartEditor *editor = 0);
+	RightKeyAction(const RightKeyAction& source);
+	virtual	~RightKeyAction();
+	RightKeyAction& operator=(const RightKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//UpKeyAction
+class UpKeyAction : public FlowChartKeyAction {
+public:
+	UpKeyAction(FlowChartEditor *editor = 0);
+	UpKeyAction(const UpKeyAction& source);
+	virtual	~UpKeyAction();
+	UpKeyAction& operator=(const UpKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//DownKeyAction
+class DownKeyAction : public FlowChartKeyAction {
+public:
+	DownKeyAction(FlowChartEditor *editor = 0);
+	DownKeyAction(const DownKeyAction& source);
+	virtual	~DownKeyAction();
+	DownKeyAction& operator=(const DownKeyAction& source);
+
+	virtual void OnKeyDown();
 };
 
 //CtrlDKeyAction
@@ -24,7 +90,7 @@ public:
 	virtual	~CtrlDKeyAction();
 	CtrlDKeyAction& operator=(const CtrlDKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //OneKeyAction
@@ -35,7 +101,7 @@ public:
 	virtual	~OneKeyAction();
 	OneKeyAction& operator=(const OneKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //TwoKeyAction
@@ -46,7 +112,7 @@ public:
 	virtual	~TwoKeyAction();
 	TwoKeyAction& operator=(const TwoKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //ThreeKeyAction
@@ -57,7 +123,7 @@ public:
 	virtual	~ThreeKeyAction();
 	ThreeKeyAction& operator=(const ThreeKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //FourKeyAction
@@ -68,7 +134,7 @@ public:
 	virtual	~FourKeyAction();
 	FourKeyAction& operator=(const FourKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //FiveKeyAction
@@ -79,7 +145,7 @@ public:
 	virtual	~FiveKeyAction();
 	FiveKeyAction& operator=(const FiveKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //SixKeyAction
@@ -90,7 +156,7 @@ public:
 	virtual	~SixKeyAction();
 	SixKeyAction& operator=(const SixKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //SevenKeyAction
@@ -101,7 +167,7 @@ public:
 	virtual	~SevenKeyAction();
 	SevenKeyAction& operator=(const SevenKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //CtrlPlusKeyAction
@@ -112,7 +178,7 @@ public:
 	virtual	~CtrlPlusKeyAction();
 	CtrlPlusKeyAction& operator=(const CtrlPlusKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 //CtrlMinusKeyAction
@@ -123,7 +189,7 @@ public:
 	virtual	~CtrlMinusKeyAction();
 	CtrlMinusKeyAction& operator=(const CtrlMinusKeyAction& source);
 
-	virtual void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	virtual void OnKeyDown();
 };
 
 #endif //_FLOWCHARTKEYACTIONS_H
