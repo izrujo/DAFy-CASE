@@ -2,6 +2,7 @@
 #define _FLOWCHARTEDITOR_H
 
 #include <QtWidgets/QFrame>
+#include <qstring.h>
 #include "ui_FlowChartEditor.h"
 #include "FlowChart/Array.h"
 
@@ -9,7 +10,6 @@
 
 class DrawingPaper;
 class FlowChartTemplate;
-class FlowChartFont;
 class StatusBar;
 class ToolTip;
 
@@ -26,7 +26,6 @@ public:
 	Array<QFrame*> windows;
 	//CMenu menu;
 	QString fileOpenPath;
-	FlowChartFont *font; //QFont로 해결 가능할 듯
 	//bool isUnModeMenuEnabled; //메뉴 컨트롤 관련
 	StatusBar *statusBar;
 	ToolTip *toolTip;

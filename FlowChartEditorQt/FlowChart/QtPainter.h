@@ -94,8 +94,9 @@ public:
 
 	virtual int GetRenderHints();
 	virtual void SetRenderHints(int hints);
-private:
+public:
 	QPixmap *qPixmap;
+private:
 	QPainter *qPainter;
 };
 

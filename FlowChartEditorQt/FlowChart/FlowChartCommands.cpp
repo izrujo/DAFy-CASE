@@ -1,29 +1,34 @@
 #include "FlowChartCommands.h"
-#include "FlowChartEditor.h"
+#include "../FlowChartEditor.h"
 #include "DrawingPaper.h"
-#include <afxdlgs.h>
 #include "Memory.h"
 #include "MemoryController.h"
-#include "FlowChartFont.h"
 #include "PreviewForm.h"
 #include "A4Paper.h"
 #include "FlowChart.h"
 #include "Painter.h"
 #include "DrawVisitor.h"
-#include <atlimage.h>
 #include "FlowChartTemplate.h"
 #include "NumberBox.h"
 #include "Template.h"
-#include "resource.h"
 #include "Clipboard.h"
 #include "Zoom.h"
 #include "Tool.h"
 #include "TutorialForm.h"
-#include <fstream>
 #include "StatusBar.h"
 #include "TutorialIntroForm.h"
 
+#include "QtGObjectFactory.h"
+#include "GObject.h"
+#include "QtPainter.h"
+
+#include <qfiledialog.h>
+#include <qtextstream.h>
 #include <qfontdialog.h>
+#include <qstring.h>
+#include <qpixmap.h>
+#include <QtPrintSupport/QPageSetupDialog>
+#include <QtPrintSupport/qprinter.h>
 
 using namespace std;
 //FlowChartCommand
@@ -65,25 +70,27 @@ SaveCommand& SaveCommand::operator =(const SaveCommand& source) {
 }
 
 void SaveCommand::Execute() {
-	if (this->editor->fileOpenPath.IsEmpty()) {
-		CString fileName;
-		CString fileName_;
+	if (this->editor->fileOpenPath.isEmpty()) {
+		QString fileName = this->editor->windowTitle();
+		QString fileName_;
+		sscanf(fileName.toLocal8Bit().data(), "%s - FlowChart", fileName_);
 
-		this->editor->GetWindowText(fileName);
-		sscanf(fileName, "%s - FlowChart", fileName_);
+		fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
+			QObject::tr("Save File"),
+			fileName_,
+			QObject::tr("Text files (*.txt)"));
 
-		static char BASED_CODE szFilter[] = "txt Files (*.txt)|*.txt||";
-		CFileDialog dlg(FALSE, "*.txt", fileName_, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
+		QFile file(fileName);
+		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+		if (isOpen == true) {
+			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
 
-		if (dlg.DoModal() == IDOK) {
-			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(dlg.GetPathName());
-
-			fileName_ = dlg.GetFileTitle() + " - FlowChart";
-			this->editor->SetWindowText(fileName_);
+			fileName_ = fileName + " - FlowChart";
+			this->editor->setWindowTitle(fileName_);
 		}
 	}
 	else {
-		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(this->editor->fileOpenPath);
+		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(this->editor->fileOpenPath.toLocal8Bit().data());
 	}
 }
 
@@ -108,20 +115,22 @@ SaveAsCommand& SaveAsCommand::operator =(const SaveAsCommand& source) {
 }
 
 void SaveAsCommand::Execute() {
-	CString fileName;
-	CString fileName_;
+	QString fileName = this->editor->windowTitle();
+	QString fileName_;
+	sscanf(fileName.toLocal8Bit().data(), "%s - FlowChart", fileName_);
 
-	this->editor->GetWindowText(fileName);
-	sscanf(fileName, "%s - FlowChart", fileName_);
+	fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
+		QObject::tr("Save File"),
+		fileName_,
+		QObject::tr("Text files (*.txt)"));
 
-	static char BASED_CODE szFilter[] = "txt Files (*.txt)|*.txt||";
-	CFileDialog dlg(FALSE, "*.txt", fileName_, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+	if (isOpen == true) {
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
 
-	if (dlg.DoModal() == IDOK) {
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(dlg.GetPathName());
-
-		fileName_ = dlg.GetFileTitle() + " - FlowChart";
-		this->editor->SetWindowText(fileName_);
+		fileName_ = fileName + " - FlowChart";
+		this->editor->setWindowTitle(fileName_);
 	}
 }
 
@@ -146,18 +155,19 @@ OpenCommand& OpenCommand::operator =(const OpenCommand& source) {
 }
 
 void OpenCommand::Execute() {
-	CString fileName;
+	QString fileName = QFileDialog::getOpenFileName((QWidget*)this->editor,
+		QObject::tr("Load"), "",
+		QObject::tr("(*.txt);;All Files (*)"));
 
-	static char BASED_CODE szFilter[] = "txt Files (*.txt)|*.txt||";
-	CFileDialog dlg(TRUE, "*.txt", "*.txt", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
-
-	if (dlg.DoModal() == IDOK) {
-		this->editor->fileOpenPath = dlg.GetPathName();
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(this->editor->fileOpenPath);
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
+	if (isOpen == true) {
+		this->editor->fileOpenPath = fileName;
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(this->editor->fileOpenPath.toLocal8Bit().data());
 		fileName = this->editor->fileOpenPath + " - FlowChart";
-		this->editor->SetWindowText(fileName);
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->SetFocus();
-		this->editor->RedrawWindow();
+		this->editor->setWindowTitle(fileName);
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->SetFocus(); //focus message 찾아서
+		this->editor->repaint();
 	}
 }
 
@@ -184,7 +194,7 @@ NewCommand& NewCommand::operator =(const NewCommand& source) {
 void NewCommand::Execute() {
 	(static_cast<DrawingPaper *>(this->editor->windows[0]))->New();
 	(static_cast<DrawingPaper *>(this->editor->windows[0]))->SetFocus();
-	this->editor->RedrawWindow();
+	this->editor->repaint();
 }
 
 //UndoCommand
@@ -211,7 +221,7 @@ void UndoCommand::Execute() {
 	if (static_cast<DrawingPaper*>(this->editor->windows[0])->memoryController->GetUndoMemory()->GetLength() > 0) {
 		static_cast<DrawingPaper*>(this->editor->windows[0])->memoryController->RememberUndo();
 		static_cast<DrawingPaper*>(this->editor->windows[0])->memoryController->Undo();
-		this->editor->windows[0]->RedrawWindow();
+		this->editor->windows[0]->repaint();
 	}
 }
 
@@ -239,7 +249,7 @@ void RedoCommand::Execute() {
 	if (static_cast<DrawingPaper*>(this->editor->windows[0])->memoryController->GetRedoMemory()->GetLength() > 0) {
 		static_cast<DrawingPaper*>(this->editor->windows[0])->memoryController->RememberRedo();
 		static_cast<DrawingPaper*>(this->editor->windows[0])->memoryController->Redo();
-		this->editor->windows[0]->RedrawWindow();
+		this->editor->windows[0]->repaint();
 	}
 }
 
@@ -266,21 +276,22 @@ FontSetCommand& FontSetCommand::operator =(const FontSetCommand& source) {
 void FontSetCommand::Execute() {
 	LOGFONT logFont = this->editor->font->GetFont();
 	COLORREF color;
-	
+
 	//QFontDialog 로 QFont 객체 얻어서 그것의 정보로 GObject 만들어서 Select - Update 하기
 	//따라서 FlowChartFont는 필요 없음.
-	QFontDialog fontDialog(this->editor);
-	int ret = fontDialog.DoModal();
-	if (ret == IDOK) {
-		//폰트 대화 상자에서 폰트 정보를 가져온다.
-		fontDialog.GetCurrentFont(&logFont);
-		color = fontDialog.GetColor();
-		if (this->editor->font != NULL) {
-			delete this->editor->font;
-		}
-		this->editor->font = new FlowChartFont(this->editor, logFont, color);
 
-		this->editor->windows[0]->Invalidate();
+	//취소 눌렀을 때 설정할 원래 폰트
+	GObject *oldFont = static_cast<DrawingPaper*>(this->editor->windows[0])->painter->CurrentObject("Font");
+
+	bool ok;
+	QFont userfont = QFontDialog::getFont(&ok, *(QFont*)oldFont, this->editor);
+
+	if (ok == true) {
+		QtGObjectFactory factory;
+		GObject *font = factory.MakeFont(userfont.family(), userfont.pointSize(), userfont.weight(), userfont.italic());
+		static_cast<DrawingPaper*>(this->editor->windows[0])->painter->SelectObject(*font);
+		static_cast<DrawingPaper*>(this->editor->windows[0])->painter->Update();
+		this->editor->windows[0]->repaint();
 	}
 }
 
@@ -333,44 +344,55 @@ SaveAsImageCommand& SaveAsImageCommand::operator =(const SaveAsImageCommand& sou
 }
 
 void SaveAsImageCommand::Execute() {
-	CString fileName;
-	CString fileName_;
+	QString fileName = this->editor->windowTitle();
+	QString fileName_;
+	sscanf(fileName.toLocal8Bit().data(), "%s - FlowChart", fileName_);
 
-	this->editor->GetWindowText(fileName);
-	sscanf(fileName, "%s - FlowChart", fileName_);
+	fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
+		QObject::tr("Save File"),
+		fileName_,
+		QObject::tr("Image files (*.jpg)"));
 
-	static char BASED_CODE szFilter[] = "jpeg Files (*.jpg)|*.jpg||";
-	CFileDialog dlg(FALSE, "*.jpg", fileName_, OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
-
-	if (dlg.DoModal() == IDOK && dlg.GetPathName().GetLength() > 0) {
-		FlowChart flowChart_(*(static_cast<FlowChart *>
-			(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart)));
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+	if (isOpen == true && fileName.length() > 0) {
+		Shape *flowChart = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Clone();
 		Shape *paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper->Clone();
 
-		flowChart_.UnSelectAll();
+		flowChart->UnSelectAll();
 
-		Painter painter(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->GetDC(), paper->GetWidth(), paper->GetHeight(), RGB(255, 255, 255), TRANSPARENT);
-		DrawVisitor drawVisitor(&painter);
+		GObject *painter = new QtPainter(paper->GetWidth(), paper->GetHeight());
+		DrawVisitor drawVisitor(painter);
 
-		HFONT hFont = this->editor->font->Create();
-		painter.ChangeFont(hFont, this->editor->font->GetColor());
+		GObject *font = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->painter->CurrentObject("Font");
+		painter->SelectObject(*(font->Clone()));
+		painter->Update();
 
-		Long x, y;
-		for (Long i = 0; i < flowChart_.GetLength(); i++) {
-			x = flowChart_.GetAt(i)->GetX();
-			y = flowChart_.GetAt(i)->GetY();
-			flowChart_.GetAt(i)->Move(x - paper->GetX(), y - paper->GetY());
+		Long x;
+		Long y;
+		Long i;
+		for (i = 0; i < flowChart->GetLength(); i++) {
+			x = flowChart->GetAt(i)->GetX();
+			y = flowChart->GetAt(i)->GetY();
+			flowChart->GetAt(i)->Move(x - paper->GetX(), y - paper->GetY());
 		}
 
-		flowChart_.Accept(&drawVisitor);
+		flowChart->Accept(&drawVisitor);
 
-		CImage TempImageObj;
-		TempImageObj.Attach(painter.GetCurrentBitmap());
-		TempImageObj.Save(dlg.GetPathName());
-		TempImageObj.Destroy();
+		dynamic_cast<QtPainter*>(painter)->qPixmap->save(fileName, "png");
 
-		fileName_ = dlg.GetFileTitle() + " - FlowChart";
-		this->editor->SetWindowText(fileName_);
+		fileName_ = fileName + " - FlowChart";
+		this->editor->setWindowTitle(fileName_);
+
+		if (flowChart != NULL) {
+			delete flowChart;
+		}
+		if (paper != NULL) {
+			delete paper;
+		}
+		if (painter != NULL) {
+			delete painter;
+		}
 	}
 }
 
@@ -398,22 +420,22 @@ void DrawingModeCommand::Execute() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWOFF) {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWON;
 
-		Shape *one = new NumberBox(15, 85, 15, 15, RGB(230, 230, 230), DOT, 10, String("1"));
-		Shape *two = new NumberBox(15, 155, 15, 15, RGB(230, 230, 230), DOT, 10, String("2"));
-		Shape *three = new NumberBox(15, 225, 15, 15, RGB(230, 230, 230), DOT, 10, String("3"));
-		Shape *four = new NumberBox(15, 295, 15, 15, RGB(230, 230, 230), DOT, 10, String("4"));
-		Shape *five = new NumberBox(15, 365, 15, 15, RGB(230, 230, 230), DOT, 10, String("5"));
-		Shape *six = new NumberBox(15, 435, 15, 15, RGB(230, 230, 230), DOT, 10, String("6"));
-		Shape *seven = new NumberBox(15, 505, 15, 15, RGB(230, 230, 230), DOT, 10, String("7"));
-		dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->Register(one);
-		dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->Register(two);
-		dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->Register(three);
-		dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->Register(four);
-		dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->Register(five);
-		dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->Register(six);
-		dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->Register(seven);
+		Shape *one = new NumberBox(15, 85, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("1"));
+		Shape *two = new NumberBox(15, 155, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("2"));
+		Shape *three = new NumberBox(15, 225, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("3"));
+		Shape *four = new NumberBox(15, 295, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("4"));
+		Shape *five = new NumberBox(15, 365, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("5"));
+		Shape *six = new NumberBox(15, 435, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("6"));
+		Shape *seven = new NumberBox(15, 505, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("7"));
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(one);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(two);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(three);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(four);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(five);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(six);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(seven);
 
-		this->editor->isUnModeMenuEnabled = TRUE; //모드가 설정되었으므로 모드 해제 메뉴를 활성화하고 모드 설정 모드를 비활성화한다.
+		//this->editor->isUnModeMenuEnabled = TRUE; //모드가 설정되었으므로 모드 해제 메뉴를 활성화하고 모드 설정 모드를 비활성화한다.
 	}
 }
 
@@ -440,12 +462,12 @@ DrawingUnModeCommand& DrawingUnModeCommand::operator =(const DrawingUnModeComman
 void DrawingUnModeCommand::Execute() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWOFF;
-		Long i = dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetLength() - 1;
+		Long i = dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetLength() - 1;
 		while (i >= 7) { //numberBox만 없애기
-			dynamic_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->UnRegister(i);
+			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Detach(i);
 			i--;
 		}
-		this->editor->isUnModeMenuEnabled = FALSE; //모드가 해제되었으므로 모드 해제 메뉴를 비활성화하고 모드 설정 메뉴를 활성화한다.
+		//this->editor->isUnModeMenuEnabled = FALSE; //모드가 해제되었으므로 모드 해제 메뉴를 비활성화하고 모드 설정 메뉴를 활성화한다.
 	}
 }
 
@@ -547,18 +569,18 @@ void DeleteCommand::Execute() {
 
 	Long count;
 	Long(*indexes);
-	dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart)->GetSelecteds(&indexes, &count);
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->GetSelecteds(&indexes, &count);
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->memoryController->RememberRemove(indexes, count);
 
-	it = dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart)->GetLength() - 1;
+	it = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->GetLength() - 1;
 	while (it >= 0) {
-		shape = dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart)->GetAt(it);
+		shape = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->GetAt(it);
 		if (shape->IsSelected()) {
-			dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart)->Erase(it);
+			dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Detach(it);
 		}
 		it--;
 	}
-	if (dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart)->GetLength() < 1) {
+	if (dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->GetLength() < 1) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::IDLE;
 	}
 
@@ -588,8 +610,8 @@ SelectAllCommand& SelectAllCommand::operator =(const SelectAllCommand& source) {
 }
 
 void SelectAllCommand::Execute() {
-	(dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart))->SelectAll();
-	if (dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart)->GetLength() > 0) {
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->SelectAll();
+	if (dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->GetLength() > 0) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::SELECT;
 	}
 }
@@ -617,7 +639,7 @@ StartCommand& StartCommand::operator =(const StartCommand& source) {
 void StartCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
-		static_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetAt(0);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(0);
 }
 
 //PreparationCommand
@@ -643,7 +665,7 @@ PreparationCommand& PreparationCommand::operator =(const PreparationCommand& sou
 void PreparationCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
-		static_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetAt(1);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(1);
 }
 
 //InputCommand
@@ -669,7 +691,7 @@ InputCommand& InputCommand::operator =(const InputCommand& source) {
 void InputCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
-		static_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetAt(2);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(2);
 }
 
 //ProcessCommand
@@ -695,7 +717,7 @@ ProcessCommand& ProcessCommand::operator =(const ProcessCommand& source) {
 void ProcessCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
-		static_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetAt(3);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(3);
 }
 
 //DecisionCommand
@@ -721,7 +743,7 @@ DecisionCommand& DecisionCommand::operator =(const DecisionCommand& source) {
 void DecisionCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
-		static_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetAt(4);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(4);
 }
 
 //OutputCommand
@@ -747,7 +769,7 @@ OutputCommand& OutputCommand::operator =(const OutputCommand& source) {
 void OutputCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
-		static_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetAt(5);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(5);
 }
 
 //StopCommand
@@ -773,7 +795,7 @@ StopCommand& StopCommand::operator =(const StopCommand& source) {
 void StopCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
-		static_cast<Template*>(dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate)->GetAt(6);
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(6);
 }
 
 //PageSetCommand
@@ -797,24 +819,27 @@ PageSetCommand& PageSetCommand::operator =(const PageSetCommand& source) {
 }
 
 void PageSetCommand::Execute() {
-	CPageSetupDialog dlg(PSD_MARGINS | PSD_INHUNDREDTHSOFMILLIMETERS | PSD_DISABLEPAPER, this->editor);
+	//페이지 방향 설정 못하게 막는 방법 찾기
+	QPageSetupDialog dlg(this->editor);
+	QPrinter *printer = dlg.printer();
 	Shape *a4Paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper;
-	dlg.m_psd.rtMargin.left = dynamic_cast<A4Paper*>(a4Paper)->GetLeftMargin() * 210 / 1653 * 100;
-	dlg.m_psd.rtMargin.top = dynamic_cast<A4Paper*>(a4Paper)->GetTopMargin() * 297 / 2338 * 100;
-	dlg.m_psd.rtMargin.right = dynamic_cast<A4Paper*>(a4Paper)->GetRightMargin() * 210 / 1653 * 100;
-	dlg.m_psd.rtMargin.bottom = dynamic_cast<A4Paper*>(a4Paper)->GetBottomMargin() * 297 / 2338 * 100;
-	int message = dlg.DoModal();
-	if (message == IDOK) {
-		CRect marginRect;
-		dlg.GetMargins(marginRect, NULL);
-
+	Long left = dynamic_cast<A4Paper*>(a4Paper)->GetLeftMargin() * 210 / 1653 * 100;
+	Long top = dynamic_cast<A4Paper*>(a4Paper)->GetTopMargin() * 297 / 2338 * 100;
+	Long right = dynamic_cast<A4Paper*>(a4Paper)->GetRightMargin() * 210 / 1653 * 100;
+	Long bottom = dynamic_cast<A4Paper*>(a4Paper)->GetBottomMargin() * 297 / 2338 * 100;
+	printer->setPageMargins(QMarginsF(left, top, right, bottom), QPageLayout::Millimeter);
+	int dialogCode = dlg.exec();
+	if (dialogCode == QDialog::Accepted) {
+		//printer = dlg.printer(); //was passsed 라고 언급되어있음.
+		QRectF marginRect = printer->pageRect(QPrinter::Millimeter);
+		
 		Long paperWidth = a4Paper->GetWidth();
 		Long paperHeight = a4Paper->GetHeight();
 
-		Long leftMargin = marginRect.left / 100 * paperWidth / 210;
-		Long rightMargin = marginRect.right / 100 * paperWidth / 210;
-		Long topMargin = marginRect.top / 100 * paperHeight / 297;
-		Long bottomMargin = marginRect.bottom / 100 * paperHeight / 297;
+		Long leftMargin = marginRect.left() / 100 * paperWidth / 210;
+		Long rightMargin = marginRect.right() / 100 * paperWidth / 210;
+		Long topMargin = marginRect.top() / 100 * paperHeight / 297;
+		Long bottomMargin = marginRect.bottom() / 100 * paperHeight / 297;
 
 		dynamic_cast<A4Paper*>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 	}
@@ -847,7 +872,7 @@ void PositionCommand::Execute() {
 
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
-	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->RedrawWindow();
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
 //SizeCommand
@@ -877,7 +902,7 @@ void SizeCommand::Execute() {
 
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
-	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->RedrawWindow();
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
 //IntervalCommand
@@ -907,7 +932,7 @@ void IntervalCommand::Execute() {
 
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
-	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->RedrawWindow();
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
 //SequenceCommand
@@ -937,7 +962,7 @@ void SequenceCommand::Execute() {
 
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
-	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->RedrawWindow();
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
 //IterationCommand
@@ -967,7 +992,7 @@ void IterationCommand::Execute() {
 
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
-	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->RedrawWindow();
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
 //SelectionCommand
@@ -997,7 +1022,7 @@ void SelectionCommand::Execute() {
 
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
-	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->RedrawWindow();
+	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
 //TutorialCommand

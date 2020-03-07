@@ -371,6 +371,9 @@
     <ClCompile Include="FlowChart\Scroll.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">

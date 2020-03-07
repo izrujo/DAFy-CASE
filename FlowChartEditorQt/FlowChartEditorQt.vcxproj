@@ -195,6 +195,12 @@
     <ClCompile Include="Notepad\Scanner.cpp" />
     <ClCompile Include="Notepad\Selector.cpp" />
     <ClCompile Include="Notepad\Subject.cpp" />
+    <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="FlowChartEditor.h" />

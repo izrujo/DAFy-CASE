@@ -13,8 +13,6 @@
 #include "Array.h"
 #include "Shape.h"
 
-//using namespace FlowChartShape;
-
 typedef unsigned long int DWORD;
 typedef signed long int Long;
 

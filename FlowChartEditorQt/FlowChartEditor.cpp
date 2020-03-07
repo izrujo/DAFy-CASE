@@ -5,7 +5,6 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 {
 	ui.setupUi(this);
 
-	this->font = NULL;
 	this->statusBar = NULL;
 	this->toolTip = NULL;
 
