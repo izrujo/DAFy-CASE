@@ -1,91 +1,46 @@
 #include "EditorIntroForm.h"
-#include "resource.h"
-#include <afxwin.h>
+#include "GObject.h"
+#include "QtPainter.h"
+#include "QtGObjectFactory.h"
 
-BEGIN_MESSAGE_MAP(EditorIntroForm, CFrameWnd)
-	ON_WM_CREATE()
-	ON_WM_CLOSE()
-	ON_WM_PAINT()
-END_MESSAGE_MAP()
+#include <qpainter.h>
+#include <qimage.h>
 
-EditorIntroForm::EditorIntroForm() {
+EditorIntroForm::EditorIntroForm(QWidget *parent = Q_NULLPTR) {
 
 }
 
-int EditorIntroForm::OnCreate(LPCREATESTRUCT lpCreateStruct) {
-	CFrameWnd::OnCreate(lpCreateStruct);
+EditorIntroForm::~EditorIntroForm() {
 
-	return 0;
 }
 
-void EditorIntroForm::OnClose() {
-	CFrameWnd::OnClose();
-}
+void EditorIntroForm::paintEvent(QPaintEvent *event) {
+	QPainter dc(this);
 
-void EditorIntroForm::OnPaint() {
-	CPaintDC dc(this);
+	QRect rect = this->frameRect();
+	GObject *painter = new QtPainter(rect.width(), rect.height());
 
-	CDC memDC;
-	memDC.CreateCompatibleDC(&dc);
-	BITMAP bitmapInfo;
-	CBitmap bitmap;
-	CBitmap *oldBitmap;
+	QImage image("icon ver.3.bmp");
 
-	bitmap.LoadBitmapA(IDB_BITMAP1);
+	QRect rect(270, 80, 330, 140);
+	
+	painter->DrawImage(rect, "icon ver.3.bmp", rect, Qt::AutoColor);
 
-	bitmap.GetBitmap(&bitmapInfo);
-	oldBitmap = memDC.SelectObject(&bitmap);
+	QtGObjectFactory factory;
+	GObject *font = factory.MakeFont("Malgun Gothic", 14, 70, false);
+	painter->SelectObject(*font);
+	painter->Update();
+	
+	QRect rect2(100, 150, 500, 200);
+	painter->DrawText(rect2, Qt::AlignCenter, "FlowChartEditor");
 
-	CRect rect(270, 80, 330, 140);
-	dc.TransparentBlt(rect.left, rect.top, rect.Width(), rect.Height(),
-		&memDC, 0, 0, bitmapInfo.bmWidth, bitmapInfo.bmHeight, RGB(255, 255, 255));
+	QRect rect3(100, 200, 500, 250);
+	painter->DrawText(rect3, Qt::AlignCenter, "ver 0.05");
 
-	memDC.SelectObject(oldBitmap);
+	QRect rect4(100, 300, 500, 350);
+	painter->DrawText(rect4, Qt::AlignCenter, "NaACoaching.com");
 
-	memDC.DeleteDC();
-
-	CFont *font;
-	LOGFONT logFont;
-
-	font = dc.GetCurrentFont();
-	font->GetLogFont(&logFont);
-	strcpy_s(logFont.lfFaceName, _T("¸¼Àº °íµñ"));
-	////////////////////////////////////////
-
-	logFont.lfHeight = -14;
-	logFont.lfWidth = -7;
-#if 0
-	font->CreateFontIndirectA(&logFont);
-	CFont *oldFont = (CFont*)dc.SelectObject(font);
-#endif
-	CRect rect2(10, 10, 120, 120);
-	//dc.DrawText("³ª¾Æ ÄÚÄª", rect2, DT_LEFT);
-#if 0
-	dc.SelectObject(oldFont);
-	//////////////////////////////////////
-	logFont.lfHeight = -36;
-	logFont.lfWidth = -18;
-	logFont.lfWeight = 700;
-	font->CreateFontIndirectA(&logFont);
-	oldFont = (CFont*)dc.SelectObject(font);
-#endif
-	CRect rect3(100, 150, 500, 200);
-	dc.DrawText("FlowChartEditor", rect3, DT_CENTER);
-#if 0
-	dc.SelectObject(oldFont);
-	/////////////////////////////////////
-	logFont.lfHeight = -24;
-	logFont.lfWidth = -12;
-	logFont.lfWeight = 400;
-	font->CreateFontIndirectA(&logFont);
-	oldFont = (CFont*)dc.SelectObject(font);
-#endif
-	CRect rect4(100, 200, 500, 250);
-	dc.DrawText("ver 0.05", rect4, DT_CENTER);
-	CRect rect5(100, 300, 500, 350);
-	dc.DrawText("NaACoaching.com", rect5, DT_CENTER);
-#if 0
-	dc.SelectObject(oldFont);
-	font->DeleteObject();
-#endif
+	if (painter != NULL) {
+		delete painter;
+	}
 }

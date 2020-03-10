@@ -13,6 +13,7 @@
 typedef signed long int Long;
 
 class FlowChartVisitor;
+class Painter;
 
 class FlowChart : public Block {
 public:
@@ -20,7 +21,6 @@ public:
 	FlowChart(const FlowChart& source);
 	virtual ~FlowChart();
 	FlowChart& operator=(const FlowChart& source);
-
 
 	virtual void DrawActiveShape(Painter *painter);
 	virtual void Accept(FlowChartVisitor *draw);

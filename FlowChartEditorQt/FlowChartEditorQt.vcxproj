@@ -156,7 +156,6 @@
     <ClCompile Include="FlowChart\ToolFactory.cpp" />
     <ClCompile Include="FlowChart\ToolTip.cpp" />
     <ClCompile Include="FlowChart\TutorialController.cpp" />
-    <ClCompile Include="FlowChart\TutorialForm.cpp" />
     <ClCompile Include="FlowChart\TutorialIntroForm.cpp" />
     <ClCompile Include="FlowChart\TutorialMark.cpp" />
     <ClCompile Include="FlowChart\TutorialMarkFactory.cpp" />
@@ -246,7 +245,7 @@
     <ClInclude Include="FlowChart\Painter.h" />
     <ClInclude Include="FlowChart\Pen.h" />
     <ClInclude Include="FlowChart\Preparation.h" />
-    <ClInclude Include="FlowChart\PreviewForm.h" />
+    <QtMoc Include="FlowChart\PreviewForm.h" />
     <ClInclude Include="FlowChart\Process.h" />
     <ClInclude Include="FlowChart\QtBrush.h" />
     <ClInclude Include="FlowChart\QtFont.h" />
@@ -281,8 +280,7 @@
     <ClInclude Include="FlowChart\ToolFactory.h" />
     <ClInclude Include="FlowChart\ToolTip.h" />
     <ClInclude Include="FlowChart\TutorialController.h" />
-    <ClInclude Include="FlowChart\TutorialForm.h" />
-    <ClInclude Include="FlowChart\TutorialIntroForm.h" />
+    <QtMoc Include="FlowChart\TutorialIntroForm.h" />
     <ClInclude Include="FlowChart\TutorialMark.h" />
     <ClInclude Include="FlowChart\TutorialMarkFactory.h" />
     <ClInclude Include="FlowChart\Tutorials.h" />

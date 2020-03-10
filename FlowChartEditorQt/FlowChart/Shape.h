@@ -174,203 +174,200 @@ inline QPoint Attribute::GetPointFalse() const {
 }
 
 namespace FlowChartShape {
-	class Shape;
+	class Shape {
+	public:
+		Shape();
+		Shape(Long x, Long y, Long width, Long height,
+			QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
+			QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
+
+		virtual ~Shape() = 0;
+
+		Shape(const Shape& source);
+		Shape& operator=(const Shape& source);
+
+		virtual bool IsEqual(const Shape& other);
+		virtual bool IsNotEqual(const Shape& other);
+
+		Long IsUpperThan(const Shape& other);
+		Long IsDownThan(const Shape& other);
+		Long IsFrontThan(const Shape& other);
+		Long IsRearThan(const Shape& other);
+
+		virtual bool operator ==(const Shape& other);
+		virtual bool operator !=(const Shape& other);
+
+		void Move(Long x, Long y);
+		virtual void ReSize(Long width, Long height);
+		void Rewrite(char(*text));
+
+		void Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor); //색깔 속성 변경
+
+		virtual void DrawActiveShape(GObject *painter); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
+
+		// Visitor 패턴 적용
+		virtual void Accept(FlowChartVisitor *draw) = 0;
+		// Prototype 패턴 적용
+		virtual Shape* Clone() = 0;
+
+		//마우스 드래그로 여러 도형 한번에 선택시 사용
+		virtual void GetRegion(QRegion *region) = 0;
+		virtual void GetRegion(Long thickness, QRegion *region) = 0;
+
+		virtual void GetSelectionMarkerAllRegion(QRegion *region);
+
+		virtual void GetAttribute(Attribute *Attribute) {};
+
+		Long GetX() const;
+		Long GetY() const;
+		Long GetWidth() const;
+		Long GetHeight() const;
+		QColor& GetBackGroundColor() const;
+		Qt::PenStyle GetBorderLine() const;
+		QColor& GetBorderColor() const;
+
+		String& GetContents() const;
+
+		Long GetLeft() const;
+		Long GetTop() const;
+		Long GetRight() const;
+		Long GetBottom() const;
+
+		// 선택 관련 
+		virtual bool IsIncluded(QPoint point) { return false; };
+		virtual bool IsIncluded(const QRect& rect) { return false; };
+
+		virtual void Select(bool selected);
+		virtual bool IsSelected() const;
+
+		virtual int GetHitCode(QPoint point);
+		virtual int GetHitCode(const QPoint& point, const QRegion& region);
+
+		virtual QCursor GetCursor(int hit) const; //QCursor class 존재
+
+		virtual void Copy(Shape *object);
+
+		virtual void GetLine(char(*line)) {};
+
+		virtual Long CenterOfGravityY() const;
+		virtual Long CenterOfGravityX() const;
+
+		virtual bool Identify(SHAPE identify) { return false; };
+		virtual bool IsStyle(Long style);
+
+		int GetSymbolID(); //190903 DrawingPaper.LButtonDown에서 Creator.Create 사용하기 위함
+		int GetLineID(); //191227 Interpreter pattern 적용 중
+	public:
+		static void MakeRectToPoint(QPoint point, QRect *rect);
+
+	protected:
+		virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController); //painter, scroll 수정 후 고치기
+		virtual void GetSelectionMarkerRect(int marker, QRect *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
+
+	public: //Block virtual 선언
+		virtual Long Attach(Shape *shape);
+		virtual Long Insert(Long index, Shape *shape);
+		virtual Long Detach(Long index);
+		virtual Long Detach(SHAPE identify);
+		virtual bool DetachSelectedAll();
+		virtual Shape* GetAt(Long index);
+
+		virtual Long Find(Shape* shape);
+		virtual Long Find(QPoint point);
+		virtual Long Find(Long x, Long y);
+		virtual Long Find(QRect rect);
+		virtual Long Find(SHAPE identify);
+		virtual Long Find(Long fromIndex, SHAPE identify);
+		virtual void Find(Long styles, Long* (*indexes), Long *count);
+
+		virtual void Swap(Long toIndex, Long fromIndex);
+		virtual void Swap(Long toIndex, Shape *shape);
+		virtual void Clear();
+
+		virtual void SelectAll();
+		virtual void UnSelectAll();
+		virtual void GetSelecteds(Long* (*indexes), Long *count);
+		virtual Long CountSelecteds();
+		virtual void AscendingSort();
+		virtual void DescendingSort();
+
+		virtual Long GetCapacity() const;
+		virtual Long GetLength() const;
+		virtual Long GetCurrent() const;
+	protected:
+		Long x;
+		Long y;
+		Long width;
+		Long height;
+		QColor backGroundColor;
+		Qt::PenStyle borderLine;
+		QColor borderColor;
+		String contents;
+
+		bool isSelected;
+	};
+
+	inline Long Shape::GetX() const {
+		return this->x;
+	}
+
+	inline Long Shape::GetY() const {
+		return this->y;
+	}
+
+	inline Long Shape::GetWidth() const {
+		return this->width;
+	}
+
+	inline Long Shape::GetHeight() const {
+		return this->height;
+	}
+
+	inline QColor& Shape::GetBackGroundColor() const {
+		return const_cast<QColor&>(this->backGroundColor);
+	}
+
+	inline Qt::PenStyle Shape::GetBorderLine() const {
+		return this->borderLine;
+	}
+
+	inline QColor& Shape::GetBorderColor() const {
+		return const_cast<QColor&>(this->borderColor);
+	}
+
+	inline String& Shape::GetContents() const {
+		return const_cast<String&>(this->contents);
+	}
+
+	inline Long Shape::GetLeft() const {
+		return this->x;
+	}
+	inline Long Shape::GetTop() const {
+		return this->y;
+	}
+
+	inline Long Shape::GetRight() const {
+		return (this->x + this->width);
+	}
+
+	inline Long Shape::GetBottom() const {
+		return (this->y + this->height);
+	}
+
+	inline bool Shape::IsSelected() const {
+		return this->isSelected;
+	}
+
+	inline Long Shape::CenterOfGravityY() const {
+		return this->y + this->height / 2;
+	}
+
+	inline Long Shape::CenterOfGravityX() const {
+		return this->x + this->width / 2;
+	}
+
+	inline bool Shape::IsStyle(Long style) {
+		return (style == ALL) ? (true) : (false);
+	}
 }
-
-class FlowChartShape::Shape {
-public:
-	Shape();
-	Shape(Long x, Long y, Long width, Long height,
-		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
-		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
-
-	virtual ~Shape() = 0;
-
-	Shape(const Shape& source);
-	Shape& operator=(const Shape& source);
-
-	virtual bool IsEqual(const Shape& other);
-	virtual bool IsNotEqual(const Shape& other);
-
-	Long IsUpperThan(const Shape& other);
-	Long IsDownThan(const Shape& other);
-	Long IsFrontThan(const Shape& other);
-	Long IsRearThan(const Shape& other);
-
-	virtual bool operator ==(const Shape& other);
-	virtual bool operator !=(const Shape& other);
-
-	void Move(Long x, Long y);
-	virtual void ReSize(Long width, Long height);
-	void Rewrite(char(*text));
-
-	void Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor); //색깔 속성 변경
-
-	virtual void DrawActiveShape(GObject *painter); // 여러 도형 선택시는 이동만 필요함으로 선택박스를 그리지 않는다.
-
-	// Visitor 패턴 적용
-	virtual void Accept(FlowChartVisitor *draw) = 0;
-	// Prototype 패턴 적용
-	virtual Shape* Clone() = 0;
-
-	//마우스 드래그로 여러 도형 한번에 선택시 사용
-	virtual void GetRegion(QRegion *region) = 0;
-	virtual void GetRegion(Long thickness, QRegion *region) = 0;
-
-	virtual void GetSelectionMarkerAllRegion(QRegion *region);
-
-	virtual void GetAttribute(Attribute *Attribute) {};
-	
-	Long GetX() const;
-	Long GetY() const;
-	Long GetWidth() const;
-	Long GetHeight() const;
-	QColor& GetBackGroundColor() const;
-	Qt::PenStyle GetBorderLine() const;
-	QColor& GetBorderColor() const;
-
-	String& GetContents() const;
-
-	Long GetLeft() const;
-	Long GetTop() const;
-	Long GetRight() const;
-	Long GetBottom() const;
-
-	// 선택 관련 
-	virtual bool IsIncluded(QPoint point) { return false; };
-	virtual bool IsIncluded(const QRect& rect) { return false; };
-
-	virtual void Select(bool selected);
-	virtual bool IsSelected() const;
-
-	virtual int GetHitCode(QPoint point);
-	virtual int GetHitCode(const QPoint& point, const QRegion& region);
-
-	virtual QCursor GetCursor(int hit) const; //QCursor class 존재
-
-	virtual void Copy(Shape *object);
-
-	virtual void GetLine(char(*line)) {};
-
-	virtual Long CenterOfGravityY() const;
-	virtual Long CenterOfGravityX() const;
-
-	virtual bool Identify(SHAPE identify) { return false; };
-	virtual bool IsStyle(Long style);
-
-	int GetSymbolID(); //190903 DrawingPaper.LButtonDown에서 Creator.Create 사용하기 위함
-	int GetLineID(); //191227 Interpreter pattern 적용 중
-public:
-	static void MakeRectToPoint(QPoint point, QRect *rect);
-
-protected:
-	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController); //painter, scroll 수정 후 고치기
-	virtual void GetSelectionMarkerRect(int marker, QRect *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
-
-public: //Block virtual 선언
-	virtual Long Attach(Shape *shape);
-	virtual Long Insert(Long index, Shape *shape);
-	virtual Long Detach(Long index);
-	virtual Long Detach(SHAPE identify);
-	virtual bool DetachSelectedAll();
-	virtual Shape* GetAt(Long index);
-
-	virtual Long Find(Shape* shape);
-	virtual Long Find(QPoint point);
-	virtual Long Find(Long x, Long y);
-	virtual Long Find(QRect rect);
-	virtual Long Find(SHAPE identify);
-	virtual Long Find(Long fromIndex, SHAPE identify);
-	virtual void Find(Long styles, Long* (*indexes), Long *count);
-
-	virtual void Swap(Long toIndex, Long fromIndex);
-	virtual void Swap(Long toIndex, Shape *shape);
-	virtual void Clear();
-
-	virtual void SelectAll();
-	virtual void UnSelectAll();
-	virtual void GetSelecteds(Long* (*indexes), Long *count);
-	virtual Long CountSelecteds();
-	virtual void AscendingSort();
-	virtual void DescendingSort();
-
-	virtual Long GetCapacity() const;
-	virtual Long GetLength() const;
-	virtual Long GetCurrent() const;
-protected:
-	Long x;
-	Long y;
-	Long width;
-	Long height;
-	QColor backGroundColor;
-	Qt::PenStyle borderLine;
-	QColor borderColor;
-	String contents;
-
-	bool isSelected;
-};
-
-inline Long Shape::GetX() const {
-	return this->x;
-}
-
-inline Long Shape::GetY() const {
-	return this->y;
-}
-
-inline Long Shape::GetWidth() const {
-	return this->width;
-}
-
-inline Long Shape::GetHeight() const {
-	return this->height;
-}
-
-inline QColor& Shape::GetBackGroundColor() const {
-	return const_cast<QColor&>(this->backGroundColor);
-}
-
-inline Qt::PenStyle Shape::GetBorderLine() const {
-	return this->borderLine;
-}
-
-inline QColor& Shape::GetBorderColor() const {
-	return const_cast<QColor&>(this->borderColor);
-}
-
-inline String& Shape::GetContents() const {
-	return const_cast<String&>(this->contents);
-}
-
-inline Long Shape::GetLeft() const {
-	return this->x;
-}
-inline Long Shape::GetTop() const {
-	return this->y;
-}
-
-inline Long Shape::GetRight() const {
-	return (this->x + this->width);
-}
-
-inline Long Shape::GetBottom() const {
-	return (this->y + this->height);
-}
-
-inline bool Shape::IsSelected() const {
-	return this->isSelected;
-}
-
-inline Long Shape::CenterOfGravityY() const {
-	return this->y + this->height / 2;
-}
-
-inline Long Shape::CenterOfGravityX() const {
-	return this->x + this->width / 2;
-}
-
-inline bool Shape::IsStyle(Long style) {
-	return (style == ALL) ? (true) : (false);
-}
-
 #endif // _SHAPE_H

@@ -1,7 +1,7 @@
 #ifndef _TUTORIALFORM_H
 #define _TUTORIALFORM_H
 
-#include <afxwin.h>
+#include <QtWidgets/QFrame>
 #include "Array.h"
 
 class Template;
@@ -13,23 +13,23 @@ class Tutorial;
 class TutorialMark;
 class TutorialController;
 
-class TutorialForm : public CFrameWnd {
+class TutorialForm : public QFrame
+{
+	Q_OBJECT
+
 public:
-	TutorialForm();
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnClose();
+	TutorialForm(QWidget *parent = Q_NULLPTR);
+	~TutorialForm();
 protected:
-	afx_msg void OnPaint();
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg BOOL OnEraseBkgnd(CDC *pDC);
-	afx_msg void OnKillFocus(CWnd* pNewWnd);
-	afx_msg void OnSetFocus(CWnd* pOldWnd);
-	DECLARE_MESSAGE_MAP()
+	void paintEvent(QPaintEvent *event);
+	void mouseReleaseEvent(QMouseEvent *event);
+	//afx_msg BOOL OnEraseBkgnd(CDC *pDC);
+	void focusOutEvent(QFocusEvent *event);
+	void focusInEvent(QFocusEvent *event);
 public:
 	Template *lists;
 	Painter *painter;
 	FlowChart *sample;
-	FlowChartFont *font;
 	Tutorial *main;
 	TutorialMark *current;
 	Tutorial *lastConcrete;

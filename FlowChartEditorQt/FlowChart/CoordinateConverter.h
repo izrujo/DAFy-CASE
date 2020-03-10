@@ -4,7 +4,8 @@
 #include <qpoint.h>
 
 typedef signed long int Long;
-class Shape;
+#include "Shape.h"
+using namespace FlowChartShape;
 
 class CoordinateConverter {
 public:

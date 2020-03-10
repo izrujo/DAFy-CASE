@@ -83,24 +83,24 @@ void ResolutionVisitor::Visit(Terminal *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -135,24 +135,24 @@ void ResolutionVisitor::Visit(Preparation *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -187,24 +187,24 @@ void ResolutionVisitor::Visit(InputOutput *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -239,24 +239,24 @@ void ResolutionVisitor::Visit(Process *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -291,24 +291,24 @@ void ResolutionVisitor::Visit(Decision *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -343,24 +343,24 @@ void ResolutionVisitor::Visit(Arrow *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -395,24 +395,24 @@ void ResolutionVisitor::Visit(LeftDown *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -447,24 +447,24 @@ void ResolutionVisitor::Visit(RightDown *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -508,24 +508,24 @@ void ResolutionVisitor::Visit(Join *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	(height < 0) ? (y = realPoint.y - (height2 - height) / 2 - height) : (y = realPoint.y - height2 / 2);
+	x = realPoint.x() - width / 2;
+	(height < 0) ? (y = realPoint.y() - (height2 - height) / 2 - height) : (y = realPoint.y() - height2 / 2);
 
 	element->Move(x, y);
 }
@@ -576,24 +576,24 @@ void ResolutionVisitor::Visit(RightDownJoin *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x + (width2 - width) / 2 - width2;
-	y = realPoint.y - (height + height2) / 2;
+	x = realPoint.x() + (width2 - width) / 2 - width2;
+	y = realPoint.y() - (height + height2) / 2;
 
 	element->Move(x, y);
 }
@@ -644,24 +644,24 @@ void ResolutionVisitor::Visit(RepeatTrue *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width2 / 2;
-	y = realPoint.y - height / 2 - height2;
+	x = realPoint.x() - width2 / 2;
+	y = realPoint.y() - height / 2 - height2;
 
 	element->Move(x, y);
 }
@@ -712,24 +712,24 @@ void ResolutionVisitor::Visit(RepeatFalse *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = this->mmWidth * virtualPoint.x / this->pixelWidth;
-	remainder = this->mmWidth * virtualPoint.x % this->pixelWidth;
+	quotient = this->mmWidth * virtualPoint.x() / this->pixelWidth;
+	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
-	virtualPoint.x = quotient;
-	inch = virtualPoint.x / 25.4;
-	virtualPoint.x = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setX(quotient);
+	inch = virtualPoint.x() / 25.4;
+	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
-	quotient = this->mmHeight * virtualPoint.y / this->pixelHeight;
-	remainder = this->mmHeight * virtualPoint.y % this->pixelHeight;
+	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;
+	remainder = this->mmHeight * virtualPoint.y() % this->pixelHeight;
 	if (remainder >= this->pixelHeight / 2) quotient++;
-	virtualPoint.y = quotient;
-	inch = virtualPoint.y / 25.4;
-	virtualPoint.y = static_cast<Long>(round(inch * this->dpi));
+	virtualPoint.setY(quotient);
+	inch = virtualPoint.y() / 25.4;
+	virtualPoint.setY(static_cast<Long>(round(inch * this->dpi)));
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x + (width2 - width) / 2 - width2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() + (width2 - width) / 2 - width2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }

@@ -3,7 +3,7 @@
 
 #include "Shape.h"
 
-using FlowChartShape::Shape;
+using namespace FlowChartShape;
 
 class NumberBox : public Shape {
 public:

@@ -12,7 +12,7 @@
 #include "Shape.h"
 #include "Array.h"
 
-using FlowChartShape::Shape;
+using namespace FlowChartShape;
 
 class Block : public Shape {
 public:

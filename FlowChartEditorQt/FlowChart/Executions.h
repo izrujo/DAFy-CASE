@@ -2,7 +2,9 @@
 #define _EXECUTIONS_H
 
 #include "Array.h"
-class Shape;
+#include "Shape.h"
+
+using namespace FlowChartShape;
 
 class Execution {
 public:

@@ -26,16 +26,13 @@ public:
 public:
 	FlowChartShape::Shape *shapeSelected;
 	Painter *painter;
-	LONG mode;
+	int mode;
 	FlowChartShape::Shape *flowChartTemplate;
 	FlowChartShape::Shape *oldShapeSelected;
 protected:
-	//afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	//afx_msg void OnDestroy();
-	//afx_msg void OnPaint();
-	//afx_msg void OnLButtonDown(UINT nFlags, CPoint point); // 마우스 왼쪽 버튼 다운
-	//afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	//DECLARE_MESSAGE_MAP()          //윈32에서 ON_COMMAND ON_NOTIFY 같은것을 정의
+	void paintEvent(QPaintEvent *event);
+	void mousePressEvent(QMouseEvent *event);
+	void mouseMoveEvent(QMouseEvent *event); //tracking 설정이 디폴트면 마우스 아무거나 눌렀을 때만 호출됨.
 };
 
 #endif // _FLOWCHARTTEMPLATE_H

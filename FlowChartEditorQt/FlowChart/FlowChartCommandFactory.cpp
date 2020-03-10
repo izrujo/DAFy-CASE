@@ -46,7 +46,7 @@ FlowChartCommand* FlowChartCommandFactory::Make(int uID) {
 		command = new FontSetCommand(this->editor);
 		break;
 	case IDM_FILE_PRINT:
-		command = new PreviewCommand(this->editor);
+		//command = new PreviewCommand(this->editor);
 		break;
 	case IDM_FILE_SAVEASIMAGE:
 		command = new SaveAsImageCommand(this->editor);
@@ -115,7 +115,7 @@ FlowChartCommand* FlowChartCommandFactory::Make(int uID) {
 		command = new SelectionCommand(this->editor);
 		break;
 	case IDM_HELP_TUTORIAL:
-		command = new TutorialCommand(this->editor);
+		//command = new TutorialCommand(this->editor);
 		break;
 	default:
 		break;

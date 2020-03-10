@@ -345,7 +345,7 @@ public:
 
 	virtual void Execute();
 };
-
+/*
 //TutorialCommand
 class TutorialCommand : public FlowChartCommand {
 public:
@@ -356,5 +356,6 @@ public:
 
 	virtual void Execute();
 };
+*/
 
 #endif //_FLOWCHARTCOMMANDS_H

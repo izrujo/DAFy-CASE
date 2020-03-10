@@ -1,5 +1,4 @@
 #include "CoordinateConverter.h"
-#include "Shape.h"
 
 CoordinateConverter::CoordinateConverter() {
 	this->zeroPoint = QPoint(0, 0);

@@ -17,7 +17,7 @@
 #include "Label.h"
 #include "../Notepad/CharacterMetrics.h"
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 #include "NumberBox.h"
 #include "A4Paper.h"
 #include "TextRegion.h"
@@ -44,8 +44,8 @@ void DrawVisitor::Visit(Terminal *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -88,8 +88,8 @@ void DrawVisitor::Visit(Preparation *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -141,8 +141,8 @@ void DrawVisitor::Visit(InputOutput *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -192,8 +192,8 @@ void DrawVisitor::Visit(Process *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -237,8 +237,8 @@ void DrawVisitor::Visit(Decision *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -289,8 +289,8 @@ void DrawVisitor::Visit(Arrow *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -345,8 +345,8 @@ void DrawVisitor::Visit(LeftDown *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -402,8 +402,8 @@ void DrawVisitor::Visit(RightDown *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -458,8 +458,8 @@ void DrawVisitor::Visit(Join *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -498,8 +498,8 @@ void DrawVisitor::Visit(RightDownJoin *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -543,8 +543,8 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -604,8 +604,8 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = element->GetX() - positionX;
@@ -704,8 +704,8 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
 	Long x = a4Paper->GetX() - positionX;

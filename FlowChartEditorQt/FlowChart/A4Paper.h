@@ -4,7 +4,7 @@
 
 #include "Shape.h"
 
-using FlowChartShape::Shape;
+using namespace FlowChartShape;
 
 class A4Paper : public Shape {
 public:

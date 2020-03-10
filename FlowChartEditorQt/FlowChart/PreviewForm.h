@@ -1,30 +1,30 @@
 #ifndef _PREVIEWFORM_H
 #define _PREVIEWFORM_H
 
-#include <afxwin.h>
-#include <afxext.h>
-class FlowChartEditor;
-class Shape;
-class Painter;
-class FlowChartFont;
+#include <QtWidgets/QFrame>
+#include "Shape.h"
 
-class PreviewForm : public CFrameWnd {
+class FlowChartEditor;
+class GObject;
+
+class PreviewForm : public QFrame 
+{
+	Q_OBJECT
+
 public:
-	PreviewForm(FlowChartEditor *editor=0, Shape *flowChart = 0);
-	virtual int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	PreviewForm(QWidget *parent = Q_NULLPTR, FlowChartShape::Shape *flowChart = 0);
+	
 protected:
-	afx_msg void OnPaint();
-	afx_msg void OnClose();
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnCommandRange(UINT uID);
-	DECLARE_MESSAGE_MAP()
+	void closeEvent(QCloseEvent *event);
+	void paintEvent(QPaintEvent *event);
+	//void mousePressEvent(QMouseEvent *event);
+	//afx_msg void OnCommandRange(UINT uID);
 public:
 	FlowChartEditor *editor;
-	Shape *flowChart;
-	Shape *a4Paper;
-	Painter *painter;
-	FlowChartFont *font;
-	CToolBar toolBar;
+	FlowChartShape::Shape *flowChart;
+	FlowChartShape::Shape *a4Paper;
+	GObject *painter;
+	//CToolBar toolBar;
 };
 
 #endif //_PREVIEWFORM_H

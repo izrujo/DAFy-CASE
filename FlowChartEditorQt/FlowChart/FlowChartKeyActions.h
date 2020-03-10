@@ -192,4 +192,70 @@ public:
 	virtual void OnKeyDown();
 };
 
+//CtrlAKeyAction
+class CtrlAKeyAction : public FlowChartKeyAction {
+public:
+	CtrlAKeyAction(FlowChartEditor *editor = 0);
+	CtrlAKeyAction(const CtrlAKeyAction& source);
+	virtual	~CtrlAKeyAction();
+	CtrlAKeyAction& operator=(const CtrlAKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//CtrlCKeyAction
+class CtrlCKeyAction : public FlowChartKeyAction {
+public:
+	CtrlCKeyAction(FlowChartEditor *editor = 0);
+	CtrlCKeyAction(const CtrlCKeyAction& source);
+	virtual	~CtrlCKeyAction();
+	CtrlCKeyAction& operator=(const CtrlCKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//CtrlVKeyAction
+class CtrlVKeyAction : public FlowChartKeyAction {
+public:
+	CtrlVKeyAction(FlowChartEditor *editor = 0);
+	CtrlVKeyAction(const CtrlVKeyAction& source);
+	virtual	~CtrlVKeyAction();
+	CtrlVKeyAction& operator=(const CtrlVKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//CtrlXKeyAction
+class CtrlXKeyAction : public FlowChartKeyAction {
+public:
+	CtrlXKeyAction(FlowChartEditor *editor = 0);
+	CtrlXKeyAction(const CtrlXKeyAction& source);
+	virtual	~CtrlXKeyAction();
+	CtrlXKeyAction& operator=(const CtrlXKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//CtrlZKeyAction
+class CtrlZKeyAction : public FlowChartKeyAction {
+public:
+	CtrlZKeyAction(FlowChartEditor *editor = 0);
+	CtrlZKeyAction(const CtrlZKeyAction& source);
+	virtual	~CtrlZKeyAction();
+	CtrlZKeyAction& operator=(const CtrlZKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//CtrlYKeyAction
+class CtrlYKeyAction : public FlowChartKeyAction {
+public:
+	CtrlYKeyAction(FlowChartEditor *editor = 0);
+	CtrlYKeyAction(const CtrlYKeyAction& source);
+	virtual	~CtrlYKeyAction();
+	CtrlYKeyAction& operator=(const CtrlYKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
 #endif //_FLOWCHARTKEYACTIONS_H

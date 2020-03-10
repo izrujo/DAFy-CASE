@@ -1,16 +1,14 @@
 #ifndef _EDITORINTROFORM_H
 #define _EDITORINTROFORM_H
 
-#include <afxwin.h>
+#include <QtWidgets/QFrame>
 
-class EditorIntroForm : public CFrameWnd {
+class EditorIntroForm : public QFrame {
 public:
-	EditorIntroForm();
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	EditorIntroForm(QWidget *parent = Q_NULLPTR);
+	~EditorIntroForm();
 protected:
-	afx_msg void OnClose();
-	afx_msg void OnPaint();
-	DECLARE_MESSAGE_MAP()
+	void paintEvent(QPaintEvent *event);
 };
 
 #endif //_EDITORINTROFORM_H

@@ -1,13 +1,42 @@
 #include "DrawingPaper.h"
-#include "FlowChartEditor.h"
+#include "../FlowChartEditor.h"
 #include "FlowChart.h"
 #include "Clipboard.h"
 #include "MemoryController.h"
 #include "VariableList.h"
 #include "Zoom.h"
 #include "A4Paper.h"
+#include "QtPainter.h"
+#include "DrawingTool.h"
+#include "MovingTool.h"
+#include "ResizingTool.h"
+#include "SelectingTool.h"
+#include "DrawVisitor.h"
+#include "ZoomVisitor.h"
+#include "Label.h"
+#include "Preparation.h"
+//#include "TutorialForm.h"
+#include "ToolFactory.h"
+#include "../Notepad/Note.h"
+#include "TutorialController.h"
+#include "FlowChartTemplate.h"
+#include "ScrollController.h"
+#include "Scroll.h"
+#include "QtGObjectFactory.h"
+#include "GObject.h"
+#include "FlowChartKeyActionFactory.h"
+#include "FlowChartKeyActions.h"
+#include "CoordinateConverter.h"
+#include "Decision.h"
+#include "Tutorials.h"
+#include "File.h"
 
+#include <qscrollbar.h>
 #include <qpainter.h>
+#include <qevent.h>
+#include <qmenu.h>
+#include <qmessagebox.h>
+#include <qfiledialog.h>
 
 DrawingPaper::DrawingPaper(QWidget *parent = Q_NULLPTR) {
 	this->templateSelected = NULL;
@@ -40,13 +69,13 @@ DrawingPaper::DrawingPaper(QWidget *parent = Q_NULLPTR) {
 
 	this->zoom = NULL;
 
-	//this->hPopup = NULL;
+	this->popup = NULL;
 
 	QRect frameRect = this->frameRect();
 
 	this->flowChart = new FlowChart;
 
-	//this->painter = new Painter(this); //트리플 버퍼링 유지하자.
+	this->painter = new QtPainter(frameRect.width(), frameRect.height()); //트리플 버퍼링 유지하자.
 
 	//this->SetFocus();
 
@@ -58,8 +87,10 @@ DrawingPaper::DrawingPaper(QWidget *parent = Q_NULLPTR) {
 
 	this->zoom = new Zoom(100);
 
-	this->a4Paper = new A4Paper(444, 615, 1653, 2338, RGB(255, 255, 255));
+	this->a4Paper = new A4Paper(444, 615, 1653, 2338);
 	this->zoom->Set(40);
+
+	connect(this, &QWidget::customContextMenuRequested, this, &DrawingPaper::OnContextMenu);
 }
 
 DrawingPaper::~DrawingPaper() {
@@ -71,10 +102,11 @@ DrawingPaper::~DrawingPaper() {
 		delete this->painter;
 		this->painter = NULL;
 	}
-	/*
+	
 	if (Label::Instance() != NULL) {
 		Label::Destroy();
 	}
+	
 	if (DrawingTool::Instance() != NULL) {
 		DrawingTool::Destroy();
 	}
@@ -87,26 +119,6 @@ DrawingPaper::~DrawingPaper() {
 	if (SelectingTool::Instance() != NULL) {
 		SelectingTool::Destroy();
 	}
-
-	if (DeleteKey::Instance() != NULL) {
-		DeleteKey::Destroy();
-	}
-	if (UpKey::Instance() != NULL) {
-		UpKey::Destroy();
-	}
-	if (DownKey::Instance() != NULL) {
-		DownKey::Destroy();
-	}
-	if (LeftKey::Instance() != NULL) {
-		LeftKey::Destroy();
-	}
-	if (RightKey::Instance() != NULL) {
-		RightKey::Destroy();
-	}
-	if (EscapeKey::Instance() != NULL) {
-		EscapeKey::Destroy();
-	}
-	*/
 
 	if (this->clipboard != NULL) {
 		delete this->clipboard;
@@ -137,35 +149,29 @@ DrawingPaper::~DrawingPaper() {
 	}
 }
 
-/*
-void DrawingPaper::OnDestroy() {
-	CWnd::OnDestroy();
-}
-*/
-
 void DrawingPaper::paintEvent(QPaintEvent *event) {
-	CPaintDC dc(this);
-	CRect rect;
-	GetClientRect(&rect);
+	QPainter painter(this);
+	QRect rect = frameRect();
 
-	this->painter->Resize(this); // canvas size 변경
-	FlowChartEditor *editor = (FlowChartEditor*)this->GetParent();
-	HFONT hFont = editor->font->Create();
-	this->painter->ChangeFont(hFont, editor->font->GetColor());
-	this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(0, 0, 0));
+	FlowChartEditor *editor = (FlowChartEditor*)this->parent();
+
+	//그리기 전 기본 설정 : 필요 없을 것 같음.
+	//HFONT hFont = editor->font->Create();
+	//this->painter->ChangeFont(hFont, editor->font->GetColor());
+	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(0, 0, 0));
 	//this->painter->EraseBackground((float)0, (float)0, (float)rect.Width(), (float)rect.Height());
-	POINT points[5] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {0, 0} };
-	this->painter->FillBackground(points, 5, RGB(235, 235, 235));
+	//POINT points[5] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {0, 0} };
+	//this->painter->FillBackground(points, 5, RGB(235, 235, 235));
 
 	//Visitor 패턴 적용	
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter, this->scrollController);
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
-	Shape *cloneA4 = this->a4Paper->Clone();
+	FlowChartShape::Shape *cloneA4 = this->a4Paper->Clone();
 	cloneA4->Accept(zoomVisitor);
 	cloneA4->Accept(drawVisitor);
 
-	this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
-	Shape *cloneFlowChart = this->flowChart->Clone();
+	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
+	FlowChartShape::Shape *cloneFlowChart = this->flowChart->Clone();
 	cloneFlowChart->Accept(zoomVisitor);
 	cloneFlowChart->Accept(drawVisitor);
 
@@ -174,7 +180,7 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 		this->templateSelected->Accept(drawVisitor);
 	}
 
-	this->painter->Render(&dc, 0, 0, rect.Width(), rect.Height());
+	this->painter->Render(&painter, 0, 0);
 
 	if (cloneFlowChart != NULL) {
 		delete cloneFlowChart;
@@ -191,6 +197,7 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 		delete zoomVisitor;
 	}
 
+	/* Status Bar
 	String mode;
 	switch (this->mode) {
 	case IDLE:
@@ -212,10 +219,11 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 		this->ModifyStyle(0, WS_CLIPSIBLINGS);
 		editor->toolTip->SetWindowPos(&CWnd::wndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	}
+	*/
 }
 
-void DrawingPaper::OnLButtonDown(UINT nFlags, CPoint point) {
-	this->SetFocus();
+void DrawingPaper::mousePressEvent(QMouseEvent *event) {
+	this->setFocus();
 
 	if (this->label != NULL)
 	{
@@ -223,7 +231,7 @@ void DrawingPaper::OnLButtonDown(UINT nFlags, CPoint point) {
 		string content = this->label->note->GetContent();
 		String contents(content);
 
-		Shape *shape = static_cast<FlowChart*>(this->flowChart)->GetAt(this->indexOfSelected);
+		FlowChartShape::Shape *shape = this->flowChart->GetAt(this->indexOfSelected);
 
 		shape->Rewrite(contents);
 		//=====================intellisense========================
@@ -238,56 +246,75 @@ void DrawingPaper::OnLButtonDown(UINT nFlags, CPoint point) {
 
 		this->label->Destroy();
 		this->label = NULL;
-
-		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->GetParent());
+		/*
+		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 		TutorialForm *tutorialForm = (TutorialForm*)editor->windows[2];
 		if (tutorialForm != NULL) {
 			tutorialForm->tutorialController->Update();
 		}
+		*/
 	}
+
+	QPoint point = event->pos();
 	this->tool = ToolFactory::Create(this, point);
 
 	if (this->tool != NULL) {
-		this->tool->OnLButtonDown(this, nFlags, point);
-		this->SetCapture();
+		this->tool->OnLButtonDown(this, point);
+		//this->SetCapture();
 	}
-	CWnd::OnLButtonDown(nFlags, point);
+
+	this->setMouseTracking(false);
 }
 
-void DrawingPaper::OnMouseMove(UINT nFlags, CPoint point) {
-	if (this->tool != NULL) {
-		this->tool->OnMouseMove(this, nFlags, point);
-	}
-	CString x;
-	x.Format("X : %d", point.x);
-	dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(2, String((LPCTSTR)x));
-	CString y;
-	y.Format("Y : %d", point.y);
-	dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(3, String((LPCTSTR)y));
-	dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Print();
-
-	//템플릿 창 기호에 마우스 올릴 때 효과가 마우스가 떠나도 지속되는 오류 때문에 넣음.
-	FlowChartTemplate *templateWnd = static_cast<FlowChartTemplate*>(static_cast<FlowChartEditor*>(this->GetParent())->windows[1]);
-	COLORREF selectedColor = RGB(235, 235, 235);
-	Shape *shape;
-	Long i = 0;
-	while (i < static_cast<Template *>(templateWnd->flowChartTemplate)->GetLength()) {
-		shape = static_cast<Template*>(templateWnd->flowChartTemplate)->GetAt(i);
-		if (shape->GetBackGroundColor() == selectedColor && templateWnd->oldShapeSelected != NULL) {
-			shape->Paint(templateWnd->oldShapeSelected->GetBackGroundColor(), shape->GetBorderLine(), shape->GetBorderColor());
+void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
+	if (this->hasMouseTracking() == false) { //마우스가 암거나 눌렸을 때
+		QPoint point = event->pos();
+		if (this->tool != NULL) {
+			this->tool->OnMouseMove(this, point);
 		}
-		i++;
 	}
-	templateWnd->Invalidate();
+	else { //마우스가 암것도 안누르고 그냥 있는 상태일 때
+		//OnSetCursor 부분
+		QCursor cursor = this->GetCursor(event->pos());
+		//if (cursor.shape() != Qt::ArrowCursor) {
+		this->setCursor(cursor);
+		//}
+		//else {
+		//	QFrame::mouseMoveEvent(event);
+		//}
 
-	CWnd::OnMouseMove(nFlags, point);
+		/* Status Bar
+		CString x;
+		x.Format("X : %d", point.x);
+		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(2, String((LPCTSTR)x));
+		CString y;
+		y.Format("Y : %d", point.y);
+		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(3, String((LPCTSTR)y));
+		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Print();
+		*/
+
+		//템플릿 창 기호에 마우스 올릴 때 효과가 마우스가 떠나도 지속되는 오류 때문에 넣음.
+		FlowChartTemplate *templateWnd = static_cast<FlowChartTemplate*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[1]);
+		QColor selectedColor(235, 235, 235);
+		FlowChartShape::Shape *shape;
+		Long i = 0;
+		while (i < templateWnd->flowChartTemplate->GetLength()) {
+			shape = templateWnd->flowChartTemplate->GetAt(i);
+			if (shape->GetBackGroundColor() == selectedColor && templateWnd->oldShapeSelected != NULL) {
+				shape->Paint(templateWnd->oldShapeSelected->GetBackGroundColor(), shape->GetBorderLine(), shape->GetBorderColor());
+			}
+			i++;
+		}
+		templateWnd->repaint();
+	}
 }
 
-void DrawingPaper::OnLButtonUp(UINT nFlags, CPoint point) {
-	dynamic_cast<FlowChart*>(this->flowChart)->AscendingSort();
+void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
+	this->flowChart->AscendingSort();
 
+	QPoint point = event->pos();
 	if (this->tool != NULL) {
-		this->tool->OnLButtonUp(this, nFlags, point);
+		this->tool->OnLButtonUp(this, point);
 		ReleaseCapture();
 	}
 	if (this->scrollController != NULL) {
@@ -296,43 +323,42 @@ void DrawingPaper::OnLButtonUp(UINT nFlags, CPoint point) {
 
 	this->memoryController->Quadrate();
 
-	CWnd::OnLButtonUp(nFlags, point);
+	this->setMouseTracking(true);
 }
 
-void DrawingPaper::OnLButtonDblClk(UINT nFlags, CPoint point) {
+void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 	// 상태 패턴 : 텍스트 조작자 Manipulator
-	Shape *shape;
+	FlowChartShape::Shape *shape;
 	Long left, top, right, bottom, halfHeight;
 
-	CDC *dc = this->GetDC();
-	RECT rect;
-	this->GetClientRect(&rect);
+	QRect rect = this->frameRect();
+	QPoint point = event->pos();
 	Long positionX;
 	Long positionY;
 	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->GetPosition();
-		positionY = this->scrollController->GetScroll(0)->GetPosition();
+		positionX = this->scrollController->GetScroll(1)->value();
+		positionY = this->scrollController->GetScroll(0)->value();
 	}
-	point.x += positionX;
-	point.y += positionY;
-	Shape *holdA4Paper = this->a4Paper->Clone();
-	Shape *holdFlowChart = this->flowChart->Clone();
+	point.setX(point.x() + positionX);
+	point.setY(point.y() + positionY);
+	FlowChartShape::Shape *holdA4Paper = this->a4Paper->Clone();
+	FlowChartShape::Shape *holdFlowChart = this->flowChart->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
 	holdA4Paper->Accept(zoomVisitor);
 	holdFlowChart->Accept(zoomVisitor);
 
-	this->indexOfSelected = static_cast<FlowChart*>(holdFlowChart)->Find(dc, point);
+	this->indexOfSelected = holdFlowChart->Find(point);
 
-	shape = static_cast<FlowChart*>(holdFlowChart)->GetAt(this->indexOfSelected);
+	shape = holdFlowChart->GetAt(this->indexOfSelected);
 
 	if (this->indexOfSelected != -1 &&
-		((point.x > shape->GetX() + 5 && point.x < shape->GetX() + shape->GetWidth() - 5) ||
-		(point.y > shape->GetY() + 5 && point.y < shape->GetY() + shape->GetHeight() - 5))) {
+		((point.x() > shape->GetX() + 5 && point.x() < shape->GetX() + shape->GetWidth() - 5) ||
+		(point.y() > shape->GetY() + 5 && point.y() < shape->GetY() + shape->GetHeight() - 5))) {
 
-		this->SendMessage(WM_KILLFOCUS, 0, 0);
+		this->clearFocus();
 
-		COLORREF color = shape->GetBackGroundColor();
-		this->label = Label::Instance(&(shape->GetContents()), color);
+		QColor color = shape->GetBackGroundColor();
+		this->label = Label::Instance(&(shape->GetContents()), color.rgb());
 
 		halfHeight = shape->GetHeight() / 2;
 		left = shape->GetX() + halfHeight - positionX;
@@ -341,43 +367,52 @@ void DrawingPaper::OnLButtonDblClk(UINT nFlags, CPoint point) {
 		bottom = shape->GetY() + shape->GetHeight() - 1 - positionY;
 
 		this->label->Open(left, top, right - left, bottom - top, &(shape->GetContents()));
-		this->label->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, CRect(left, top, right, bottom), this, -1);
+		this->label->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, CRect(left, top, right, bottom), (CWnd*)this, -1);
 
-		Long(*indexes) = new Long[dynamic_cast<FlowChart*>(this->flowChart)->GetLength()];
+		Long(*indexes) = new Long[this->flowChart->GetLength()];
 		indexes[0] = this->indexOfSelected;
 		this->memoryController->RememberOther(indexes, 1);
 
-		shape = static_cast<FlowChart*>(this->flowChart)->GetAt(this->indexOfSelected);
+		shape = this->flowChart->GetAt(this->indexOfSelected);
 		shape->Rewrite(String(""));
 		this->label->SetFocus();
 
 		if (indexes != 0) {
 			delete[] indexes;
 		}
-
-		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->GetParent());
+		/*
+		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 		TutorialForm *tutorialForm = static_cast<TutorialForm*>(editor->windows[2]);
 		if (tutorialForm != NULL) {
-			tutorialForm->MoveWindow(1230, 70, 660, 940, TRUE);
+			tutorialForm->move(1230, 70);
+			tutorialForm->resize(660, 940);
+			tutorialForm->repaint();
 		}
+		*/
 	}
 }
 
-void DrawingPaper::OnSize(UINT nType, int cx, int cy) {
+void DrawingPaper::resizeEvent(QResizeEvent *event) {
+	QRect frameRect = this->frameRect();
+	if (this->painter != NULL) {
+		delete this->painter;
+		this->painter = new QtPainter(frameRect.width(), frameRect.height());
+	}
+
 	if (this->scrollController == NULL) {
 		this->scrollController = new ScrollController(this);
 
-		Long position = this->scrollController->MoveVerticalScroll(1311);
-		Long previousPosition = this->SetScrollPos(SB_VERT, position, TRUE);
+		this->scrollController->GetScroll(0)->setValue(1311);
+		//Long previousPosition = this->SetScrollPos(SB_VERT, position, TRUE);
 		//position = this->GetScrollPos(SB_VERT);
-		this->scrollController->MoveVerticalScroll(position);
-		this->ScrollWindow(0, previousPosition - position);
+		//this->scrollController->MoveVerticalScroll(position);
+		//this->ScrollWindow(0, previousPosition - position);
 
-		position = this->scrollController->MoveHorizontalScroll(427);
-		previousPosition = this->SetScrollPos(SB_HORZ, position, TRUE);
+		this->scrollController->GetScroll(1)->setValue(427);
+		//previousPosition = this->SetScrollPos(SB_HORZ, position, TRUE);
 		//position = this->GetScrollPos(SB_HORZ);
-		this->scrollController->MoveHorizontalScroll(position);
-		this->ScrollWindow(previousPosition - position, 0);
+		//this->scrollController->MoveHorizontalScroll(position);
+		//this->ScrollWindow(previousPosition - position, 0);
 
 		this->scrollController->Update();
 	}
@@ -385,287 +420,252 @@ void DrawingPaper::OnSize(UINT nType, int cx, int cy) {
 		this->scrollController->Update();
 	}
 
-	CRect rect;
-	GetClientRect(&rect);
-	this->InvalidateRect(rect, TRUE);
+	this->repaint();
 }
 
-void DrawingPaper::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar) {
-	VScrollActionFactory vScrollActionFactory(this);
-
-	VScrollAction *vScrollAction = vScrollActionFactory.Make(nSBCode);
-	if (vScrollAction != NULL) {
-		vScrollAction->OnVScroll(nSBCode, nPos, pScrollBar);
-		delete vScrollAction;
-	}
-	this->Invalidate();
-}
-
-void DrawingPaper::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar *pScrollBar) {
-	HScrollActionFactory hScrollFactory(this);
-	HScrollAction *hScrollAction = hScrollFactory.Make(nSBCode);
-	if (hScrollAction != NULL) {
-		hScrollAction->OnHScroll(nSBCode, nPos, pScrollBar);
-		delete hScrollAction;
-	}
-	this->Invalidate();
-}
-
-BOOL DrawingPaper::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt) {
-
-	LONG style = this->GetStyle();
-
-	SHORT isCtrl = GetKeyState(VK_CONTROL) & 0X8000;
-
-	if (isCtrl && (style & WS_VSCROLL) != 0) { //zoom
+void DrawingPaper::wheelEvent(QWheelEvent *event) {
+	QPoint delta = event->angleDelta();
+	if (event->modifiers() == Qt::Key_Control && this->scrollController->GetScroll(0) != NULL) { //zoom
 		Long oldRate = this->zoom->GetRate();
 		Long rate;
-		CString rateStatus;
-		if (zDelta > 0 && oldRate < 150) {
+		//CString rateStatus;
+		if (delta.y() > 0 && oldRate < 150) {
 			rate = oldRate + 10;
 			this->zoom->Set(rate);
+			/*
 			rateStatus.Format("%d", rate);
 			rateStatus += "%";
 			dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(4, String((LPCTSTR)rateStatus));
+			*/
 		}
-		else if (zDelta < 0 && oldRate > 40) {
+		else if (delta.y() < 0 && oldRate > 40) {
 			rate = oldRate - 10;
 			this->zoom->Set(rate);
+			/*
 			rateStatus.Format("%d", rate);
 			rateStatus += "%";
 			dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(4, String((LPCTSTR)rateStatus));
+			*/
 		}
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Print();
+		//dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Print();
 		this->scrollController->Update();
 	}
-	else if ((style & WS_VSCROLL) != 0) {
-		Long position = this->scrollController->Rotate(zDelta);
-		Long previousPosition = this->SetScrollPos(SB_VERT, position, TRUE);
-		position = this->GetScrollPos(SB_VERT);
-		this->scrollController->MoveVerticalScroll(position);
-		this->ScrollWindow(0, previousPosition - position);
-		this->scrollController->Update();
+	else {
+		Long value = this->scrollController->Rotate(delta);
+		this->repaint();
 	}
-	return TRUE;
 }
 
-void DrawingPaper::DrawTemporaryObject(Shape *entity) {
-	// 사용안함
-	CDC *dc = this->GetDC();
-	RECT rect = { entity->GetX(), entity->GetY(), entity->GetX() + entity->GetWidth(), entity->GetY() + entity->GetHeight() };
+void DrawingPaper::keyPressEvent(QKeyEvent *event) {
+	//CDC *pDC = CWnd::GetDC();
 
-	//this->painter->Resize(this); // canvas size 변경
-	this->painter->Resize(this, rect.left, rect.top, rect.right, rect.bottom);
-	this->painter->SetBkMode(TRANSPARENT);
+	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+	FlowChartKeyActionFactory keyActionFactory(editor);
+	FlowChartKeyAction *keyAction = keyActionFactory.Make(event->modifiers(), event->key());
+	if (keyAction != 0) {
+		keyAction->OnKeyDown();
+		delete keyAction;
+	}
+	//CDC *dc = editor->GetDC();
+	//editor->ReleaseDC(dc);
+	editor->windows[1]->repaint(); //왜?
 
-	this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(166, 166, 166));
-	this->painter->EraseBackground((float)rect.left, (float)rect.top, (float)rect.right, (float)rect.bottom);
-
-	//entity->Draw(this->painter);
-	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
-	entity->Accept(visitor);
-
-	this->painter->Render(dc, rect.left, rect.top, rect.right, rect.bottom);
+	this->repaint();
 }
 
-void DrawingPaper::DrawTemporaryObjects(Long(*indexes), Long count) {
-	// 사용안함	
-	CRgn region;
-	//DrawObjects(indexes, count);
-	GetObjectsRgn(indexes, count, &region);
-	this->InvalidateRgn(&region, true);
-	//this->InvalidateRgn(this->drawingRegion, true);		
-	region.DeleteObject();
+void DrawingPaper::focusOutEvent(QFocusEvent *event) {
+	QFrame::focusOutEvent(event);
 }
 
-void DrawingPaper::DrawObjects(Long(*indexes), Long count) {
-	CDC *dc = this->GetDC();
-	CFont font;
-	CPen pen;
-	CBrush brush;
-
-	CFont *oldFont;
-	CPen *oldPen;
-	CBrush *oldBrush;
-
-	pen.CreatePen(PS_SOLID, 2, RGB(166, 166, 166));
-	oldPen = dc->SelectObject(&pen);
-
-	brush.CreateSolidBrush(RGB(0, 0, 255));
-	oldBrush = dc->SelectObject(&brush);
-
-	font.CreateFont(FONT_HEIGHT, 0, 0, 0, 0, FALSE, FALSE, 0, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH | FF_SWISS, "System");
-	oldFont = dc->SelectObject(&font);
-
-	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
-
-	Shape *shape;
-	for (Long i = 0; i < count; i++) {
-		shape = dynamic_cast<FlowChart *>(this->flowChart)->GetAt(indexes[i]);
-		shape->Accept(visitor);
-	}
-
-	dc->SelectObject(oldPen);
-	dc->SelectObject(oldBrush);
-	dc->SelectObject(oldFont);
-
-	DeleteObject(pen);
-	DeleteObject(brush);
-	DeleteObject(font);
-
-	this->ReleaseDC(dc);
+void DrawingPaper::focusInEvent(QFocusEvent *event) {
+	QFrame::focusInEvent(event);
 }
 
-void DrawingPaper::GetObjectsRgn(Long(*indexes), Long count, CRgn *region) {
-	CRgn shapeRegion;
-	CRgn textRegion;
-	CRgn selectionMarksRegion;
-	Long left, top, right, bottom;
-	Shape *shape;
+void DrawingPaper::OnContextMenu(const QPoint& pos) {
+	//HMENU hPopup;
+	this->popup = new QMenu(this);
 
-	if (count > 0) {
-		shape = dynamic_cast<FlowChart *>(this->flowChart)->GetAt(indexes[0]);
-		shape->GetRegion(this->painter, 10, region);
-		shape->GetSelectionMarkerAllRegion(&selectionMarksRegion);
-		region->CombineRgn(region, &selectionMarksRegion, RGN_OR);
+	QAction *moveMake = this->popup->addAction(QString::fromLocal8Bit("기호 위치 같게"), this, &DrawingPaper::OnMoveMakeMenuClick);
+	//connect(moveMake, &QAction::triggered, this, &DrawingPaper::OnMoveMakeMenuClick);
+	QAction *sizeMake = this->popup->addAction(QString::fromLocal8Bit("기호 크기 같게"), this, &DrawingPaper::OnSizeMakeMenuClick);
+	QAction *intervalMake = this->popup->addAction(QString::fromLocal8Bit("기호 간격 같게"), this, &DrawingPaper::OnIntervalMakeMenuClick);
+	QAction *sequence = this->popup->addAction(QString::fromLocal8Bit("순차구조"), this, &DrawingPaper::OnSequenceMenuClick);
+	QAction *iteration = this->popup->addAction(QString::fromLocal8Bit("반복구조"), this, &DrawingPaper::OnIterationMenuClick);
+	QAction *selection = this->popup->addAction(QString::fromLocal8Bit("선택구조"), this, &DrawingPaper::OnSelectionMenuClick);
 
-		//shape->GetFormattingArea(&left, &top, &right, &bottom);
-		left = shape->GetX();
-		top = shape->GetY();
-		right = left + shape->GetWidth();
-		bottom = top + shape->GetHeight();
+	moveMake->setEnabled(false);
+	sizeMake->setEnabled(false);
+	intervalMake->setEnabled(false);
+	sequence->setEnabled(false);
+	iteration->setEnabled(false);
+	selection->setEnabled(false);
 
-		textRegion.CreateRectRgn(left, top - 10, right, bottom + 10);
-		region->CombineRgn(region, &textRegion, RGN_OR);
 
-		textRegion.DeleteObject();
-		selectionMarksRegion.DeleteObject();
+	Long(*indexes);
+	Long count;
+	FlowChartShape::Shape *shape;
+	this->flowChart->GetSelecteds(&indexes, &count);
+
+	if (count > 1) {
+		moveMake->setEnabled(true);
+		sizeMake->setEnabled(true);
+		intervalMake->setEnabled(true);
+		sequence->setEnabled(true);
+
+		shape = this->flowChart->GetAt(indexes[0]);
+		if (dynamic_cast<Decision *>(shape)) {
+			iteration->setEnabled(true);
+			//19.09.16 판단기호 왼쪽에 처리할 내용이 없으면 선택 기호 메뉴 활성화X
+			Long leftCount = 0;
+			Long i = 1;
+			while (i < count) {
+				FlowChartShape::Shape *left = this->flowChart->GetAt(indexes[i]);
+				if (left->CenterOfGravityX() < shape->CenterOfGravityX()) {
+					leftCount++;
+				}
+				i++;
+			}
+			if (leftCount > 0) {
+				selection->setEnabled(true);
+			}
+		}
+	}
+	/*
+	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
+	TutorialForm *tutorialForm = static_cast<TutorialForm*>(editor->windows[2]);
+	if (tutorialForm != NULL) {
+		if (dynamic_cast<ContextMenuTutorial*>(tutorialForm->lastConcrete)) { //직전에 수행한 튜토리얼이 콘텍스트메뉴일 경우에만 다음걸 수행한다. 아니면 이 이벤트에서 시나리오 진행 안함.
+			tutorialForm->tutorialController->Update();
+		}
+	}
+	*/
+
+	if (indexes != 0)
+	{
+		delete[] indexes;
 	}
 
-	for (Long i = 1; i < count; i++) {
-		shape = dynamic_cast<FlowChart *>(this->flowChart)->GetAt(indexes[i]);
-		shape->GetRegion(this->painter, 10, &shapeRegion);
-		shape->GetSelectionMarkerAllRegion(&selectionMarksRegion);
-		shapeRegion.CombineRgn(&shapeRegion, &selectionMarksRegion, RGN_OR);
+	this->popup->popup(pos);
+	//::TrackPopupMenu(hPopup, TPM_LEFTALIGN, pos.x, pos.y, 0, pWnd->operator HWND(), NULL);
 
-		//shape->GetFormattingArea(&left, &top, &right, &bottom);
-		left = shape->GetX();
-		top = shape->GetY();
-		right = left + shape->GetWidth();
-		bottom = top + shape->GetHeight();
-
-		textRegion.CreateRectRgn(left, top - 10, right, bottom + 10);
-		shapeRegion.CombineRgn(&shapeRegion, &textRegion, RGN_OR);
-
-		region->CombineRgn(region, &shapeRegion, RGN_OR);
-
-		shapeRegion.DeleteObject();
-		textRegion.DeleteObject();
-		selectionMarksRegion.DeleteObject();
+	if (this->popup != NULL) {
+		delete this->popup;
+		this->popup = NULL;
 	}
+	//BOOL ret = ::DestroyMenu(hPopup);
+	//if (ret == TRUE) this->hPopup = NULL;
+
 }
 
 void DrawingPaper::DrawSelectingArea() {
-	CDC *dc = this->GetDC();
-	CPen pen;
-	CPen *oldPen;
+	QPainter dc(this);
 
-	dc->SetROP2(R2_NOTXORPEN);
+	QRect rect = this->frameRect();
+	QtPainter painter(rect.width(), rect.height());
 
-	pen.CreatePen(PS_DOT, 1, RGB(166, 166, 166));
+	painter.SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
 
-	oldPen = dc->SelectObject(&pen);
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(166, 166, 166)), 1, Qt::DotLine);
+	painter.SelectObject(*pen);
+	painter.Update();
 
-	dc->Rectangle(this->startX, this->startY, this->currentX, this->currentY);
+	QRect rect(this->startX, this->startY, this->currentX, this->currentY);
+	painter.DrawRect(rect);
 
-	dc->SelectObject(oldPen);
-	this->ReleaseDC(dc);
+	painter.Render(&dc, 0, 0);
 
-	DeleteObject(pen);
+	//painter.SelectObject(*oldPen);
+	//painter.Update();
+	//this->ReleaseDC(dc);
+
 }
 
-void DrawingPaper::DrawActiveShape(Shape *entity) {
-	CRect rect;
-	CPen pen;
-	CPen *oldPen;
-	CBrush *oldBrush;
+void DrawingPaper::DrawActiveShape(FlowChartShape::Shape *entity) {
+	//원래 dc생성해서 바로 그림(속성 Painter 사용 안함)
+	QPainter dc(this);
 
-	CDC *dc = this->GetDC();
-	GetClientRect(&rect);
-	int oldmode = dc->SetBkMode(TRANSPARENT);
+	QRect rect = this->frameRect();
+	QtPainter painter(rect.width(), rect.height());
+	QRect rect = this->frameRect();
+	int bgMode = painter.GetBackgroundMode();
+	painter.SetBackgroundMode(Qt::TransparentMode);
 
-	dc->SetROP2(R2_NOTXORPEN);
-	//pen.CreatePen(PS_DOT,1,RGB(59,219,22));
-	pen.CreatePen(PS_DOT, 1, RGB(0, 0, 255));
-	oldPen = dc->SelectObject(&pen);
+	painter.SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 255)), 1, Qt::DotLine);
+	painter.SelectObject(*pen);
+	GObject *brush = factory.MakeBrush(QColor(255, 255, 255));
+	painter.SelectObject(*brush);
+	painter.Update();
 
-	oldBrush = dc->SelectObject((CBrush*)dc->SelectStockObject(NULL_BRUSH));
+	entity->DrawActiveShape(&painter);
 
-	entity->DrawActiveShape(dc);
-
-	dc->SelectObject(oldPen);
-	dc->SelectObject(oldBrush);
-
-	dc->SetBkMode(oldmode);
-	this->ReleaseDC(dc);
-
-	DeleteObject(pen);
+	painter.Render(&dc, 0, 0);
 }
 
-void DrawingPaper::DrawActiveShape2(Shape *entity) {
-	LONG oldMode;
-	LineProperty oldLineProperty(this->painter->GetLineStyle(), this->painter->GetLineWidth(), this->painter->GetLineCapStyle(),
-		this->painter->GetLineJoinType(), this->painter->GetLineColor());
+void DrawingPaper::DrawActiveShape2(FlowChartShape::Shape *entity) {
+	int oldMode = this->painter->GetBackgroundMode();
+	this->painter->SetBackgroundMode(Qt::TransparentMode);
 
-	PlaneProperty oldPlaneProperty(this->painter->GetPlaneStyle(), this->painter->GetPlanColor());
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 255)), 1, Qt::DashLine);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255)); //BS_NULL style
+	GObject *oldBrush = this->painter->SelectObject(*brush);
+	this->painter->Update();
 
-	oldMode = this->painter->SetBkMode(TRANSPARENT);
-	//this->painter->ChangeLineProperty(PS_DOT,1,PS_ENDCAP_SQUARE,PS_JOIN_MITER,RGB(0,0,255));
-	this->painter->ChangeLineProperty(PS_DASH, 1, PS_ENDCAP_SQUARE, PS_JOIN_MITER, RGB(0, 0, 255));
-	this->painter->ChangePlaneProperty(BS_NULL, RGB(0, 0, 255));
+	entity->DrawActiveShape(this->painter);
 
-	entity->DrawActiveShape(painter);
-
-	this->painter->ChangeLineProperty(oldLineProperty.GetStyle(), oldLineProperty.GetWidth(),
-		oldLineProperty.GetCapStyle(), oldLineProperty.GetJoinType(), oldLineProperty.GetColor());
-	this->painter->ChangePlaneProperty(oldPlaneProperty.GetStyle(), oldPlaneProperty.GetColor());
-	this->painter->SetBkMode(oldMode);
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldBrush);
+	this->painter->Update();
+	if (pen != NULL) {
+		delete pen;
+	}
+	if (brush != NULL) {
+		delete brush;
+	}
+	this->painter->SetBackgroundMode(oldMode);
 }
 
-void DrawingPaper::DrawSelectionMark(POINT(*points), Long count) {
-	CDC *dc = this->GetDC();
-	CRect rect;
-	GetClientRect(&rect);
-	CPen pen;
-	CPen *oldPen;
-	CBrush *oldBrush;
+void DrawingPaper::DrawSelectionMark(QPoint(*points), Long count) {
+	//원래 dc 생성해서 바로 그림(속성 Painter 사용 안함)
+	QPainter dc(this);
+	QRect rect = this->frameRect();
 
-	int oldmode = dc->SetBkMode(TRANSPARENT);
+	QtPainter painter(rect.width(), rect.height());
 
-	dc->SetROP2(R2_NOTXORPEN);
-	pen.CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
-	oldPen = dc->SelectObject(&pen);
+	painter.SetBackgroundMode(Qt::TransparentMode);
+	painter.SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
 
-	oldBrush = dc->SelectObject((CBrush*)dc->SelectStockObject(NULL_BRUSH));
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 255)), 1);
+	painter.SelectObject(*pen);
+	GObject *brush = factory.MakeBrush(QColor(255, 255, 255)); // NULL_BRUSH
+	painter.SelectObject(*brush);
 
-	POINT selectionMarkPoints[BOXVERTECIES];
+	QPoint selectionMarkPoints[BOXVERTECIES];
 	Long i = 0;
 	while (i < count) {
-		selectionMarkPoints[0].x = points[i].x - BOXLENGTH;
-		selectionMarkPoints[1].x = points[i].x + BOXLENGTH;
-		selectionMarkPoints[2].x = points[i].x + BOXLENGTH;
-		selectionMarkPoints[3].x = points[i].x - BOXLENGTH;
+		selectionMarkPoints[0].setX(points[i].x() - BOXLENGTH);
+		selectionMarkPoints[1].setX(points[i].x() + BOXLENGTH);
+		selectionMarkPoints[2].setX(points[i].x() + BOXLENGTH);
+		selectionMarkPoints[3].setX(points[i].x() - BOXLENGTH);
 
-		selectionMarkPoints[0].y = points[i].y - BOXLENGTH;
-		selectionMarkPoints[1].y = points[i].y - BOXLENGTH;
-		selectionMarkPoints[2].y = points[i].y + BOXLENGTH;
-		selectionMarkPoints[3].y = points[i].y + BOXLENGTH;
+		selectionMarkPoints[0].setY(points[i].y() - BOXLENGTH);
+		selectionMarkPoints[1].setY(points[i].y() - BOXLENGTH);
+		selectionMarkPoints[2].setY(points[i].y() + BOXLENGTH);
+		selectionMarkPoints[3].setY(points[i].y() + BOXLENGTH);
 
-		dc->Polygon(selectionMarkPoints, BOXVERTECIES);
+		painter.DrawPolygon(selectionMarkPoints, BOXVERTECIES);
 		i++;
 	}
 
+	painter.Render(&dc, 0, 0);
+
+	/* 어차피 dc격인 QPainter의 설정은 변경하지 않았고
+	임시로 사용한 QtPainter는 없어질 것이기 때문에 따로 처리 안해도 됨.
 	dc->SelectObject(oldPen);
 	dc->SelectObject(oldBrush);
 
@@ -673,208 +673,117 @@ void DrawingPaper::DrawSelectionMark(POINT(*points), Long count) {
 	this->ReleaseDC(dc);
 
 	pen.DeleteObject();
+	*/
 }
 
-void DrawingPaper::DrawSelectionMark2(POINT(*points), Long count) {
-	LONG oldMode;
+void DrawingPaper::DrawSelectionMark2(QPoint(*points), Long count) {
+	//속성 Painter 사용 버전
+	int oldMode = this->painter->GetBackgroundMode();
+	this->painter->SetBackgroundMode(Qt::OpaqueMode);
 
-	LineProperty oldLineProperty(this->painter->GetLineStyle(), this->painter->GetLineWidth(), this->painter->GetLineCapStyle(),
-		this->painter->GetLineJoinType(), this->painter->GetLineColor());
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 255)), 1);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255)); //BS_NULL
+	GObject *oldBrush = this->painter->SelectObject(*brush);
+	this->painter->Update();
 
-	PlaneProperty oldPlaneProperty(this->painter->GetPlaneStyle(), this->painter->GetPlanColor());
-
-	oldMode = this->painter->SetBkMode(OPAQUE);
-
-	this->painter->ChangeLineProperty(PS_SOLID, 1, PS_ENDCAP_SQUARE, PS_JOIN_MITER, RGB(0, 0, 255));
-	this->painter->ChangePlaneProperty(BS_NULL, RGB(0, 0, 255));
-
-	POINT selectionMarkPoints[BOXVERTECIES];
+	QPoint selectionMarkPoints[BOXVERTECIES];
 	Long i = 0;
 	while (i < count) {
-		selectionMarkPoints[0].x = points[i].x - BOXLENGTH;
-		selectionMarkPoints[1].x = points[i].x + BOXLENGTH;
-		selectionMarkPoints[2].x = points[i].x + BOXLENGTH;
-		selectionMarkPoints[3].x = points[i].x - BOXLENGTH;
+		selectionMarkPoints[0].setX(points[i].x() - BOXLENGTH);
+		selectionMarkPoints[1].setX(points[i].x() + BOXLENGTH);
+		selectionMarkPoints[2].setX(points[i].x() + BOXLENGTH);
+		selectionMarkPoints[3].setX(points[i].x() - BOXLENGTH);
 
-		selectionMarkPoints[0].y = points[i].y - BOXLENGTH;
-		selectionMarkPoints[1].y = points[i].y - BOXLENGTH;
-		selectionMarkPoints[2].y = points[i].y + BOXLENGTH;
-		selectionMarkPoints[3].y = points[i].y + BOXLENGTH;
+		selectionMarkPoints[0].setY(points[i].y() - BOXLENGTH);
+		selectionMarkPoints[1].setY(points[i].y() - BOXLENGTH);
+		selectionMarkPoints[2].setY(points[i].y() + BOXLENGTH);
+		selectionMarkPoints[3].setY(points[i].y() + BOXLENGTH);
 
 		this->painter->DrawPolygon(selectionMarkPoints, BOXVERTECIES);
 		i++;
 	}
 
-	this->painter->ChangeLineProperty(oldLineProperty.GetStyle(), oldLineProperty.GetWidth(), oldLineProperty.GetCapStyle(),
-		oldLineProperty.GetJoinType(), oldLineProperty.GetColor());
-	this->painter->ChangePlaneProperty(oldPlaneProperty.GetStyle(), oldPlaneProperty.GetColor());
-	this->painter->SetBkMode(oldMode);
-}
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldBrush);
+	this->painter->Update();
+	this->painter->SetBackgroundMode(oldMode);
 
-void DrawingPaper::FillSelectionMark(POINT point) {
-	CDC *dc = this->GetDC();
-	CRect rect;
-	GetClientRect(&rect);
-	CPen pen;
-	CPen *oldPen;
-	CBrush brush;
-	CBrush *oldBrush;
-
-	int oldmode = dc->SetBkMode(OPAQUE);
-	dc->SetROP2(R2_NOTXORPEN);
-
-	//pen.CreatePen(PS_SOLID, 1, RGB(59,219,22));
-	pen.CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
-	oldPen = dc->SelectObject(&pen);
-
-	//brush.CreateSolidBrush(RGB(59,219,22));
-	brush.CreateSolidBrush(RGB(0, 0, 255));
-	oldBrush = dc->SelectObject(&brush);
-
-	CRect selectionMark;
-	selectionMark.left = point.x + 1 - MARKLENGTH;
-	selectionMark.top = point.y + 1 - MARKLENGTH;
-	selectionMark.right = point.x + MARKLENGTH;
-	selectionMark.bottom = point.y + MARKLENGTH;
-	//dc->FillRect(&selectionMark, &brush);
-	dc->Rectangle(selectionMark);
-
-	dc->SelectObject(oldPen);
-	dc->SelectObject(oldBrush);
-	dc->SetBkMode(oldmode);
-
-	pen.DeleteObject();
-	brush.DeleteObject();
-	this->ReleaseDC(dc);
-}
-
-void DrawingPaper::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	CWnd::OnKeyDown(nChar, nRepCnt, nFlags);
-	CDC *pDC = CWnd::GetDC();
-	AccessKey *accessKey;
-	accessKey = KeyFactory::Create(this, nChar, nRepCnt, nFlags);
-	if (accessKey != NULL) {
-		accessKey->OnKeyDown(this, nChar, nRepCnt, nFlags);
+	if (pen != NULL) {
+		delete pen;
 	}
-
-	FlowChartEditor *editor = (FlowChartEditor*)this->GetParent();
-	FlowChartKeyActionFactory keyActionFactory(editor);
-	FlowChartKeyAction *keyAction = keyActionFactory.Make(nChar);
-
-	if (keyAction != 0) {
-		keyAction->OnKeyDown(nChar, nRepCnt, nFlags);
-		delete keyAction;
+	if (brush != NULL) {
+		delete brush;
 	}
-	CDC *dc = editor->GetDC();
-	editor->ReleaseDC(dc);
-	editor->windows[1]->Invalidate();
-
-	this->RedrawWindow();
 }
 
-void DrawingPaper::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	CWnd::OnChar(nChar, nRepCnt, nFlags);
+void DrawingPaper::FillSelectionMark(QPoint point) {
+	//dc에 바로 그림
+	QPainter dc(this);
+	QRect rect = this->frameRect();
+	QtPainter painter(rect.width(), rect.height());
 
-	switch (nChar) {
-	case 1: // SELECT ALL ( Ctrl + a )
-		(dynamic_cast<FlowChart *>(this->flowChart))->SelectAll();
-		if (dynamic_cast<FlowChart *>(this->flowChart)->GetLength() > 0) {
-			this->mode = SELECT;
-		}
-		break;
-	case 3: // COPY ( Ctrl + c )
-		this->clipboard->Copy(this); break;
-	case 22: // PASETE (Ctrl + v )
-		this->clipboard->Paste(this); break;
-	case 24: // CUT ( Ctrl + x )
-		this->clipboard->Cut(this); break;
-	case 26: // UNDO ( Ctrl + z )
-		if (this->memoryController->GetUndoMemory()->GetLength() > 0) {
-			this->memoryController->RememberUndo();
-			this->memoryController->Undo();
-			dynamic_cast<FlowChart*>(this->flowChart)->AscendingSort();
-			this->memoryController->Quadrate();
-		}
-		break;
-	case 25: // REDO ( Ctrl + y )
-		if (this->memoryController->GetRedoMemory()->GetLength() > 0) {
-			this->memoryController->RememberRedo();
-			this->memoryController->Redo();
-			dynamic_cast<FlowChart*>(this->flowChart)->AscendingSort();
-			this->memoryController->Quadrate();
-		}
-		break;
-	}
+	painter.SetBackgroundMode(Qt::OpaqueMode);
+	painter.SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
 
-	this->RedrawWindow();
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 255)), 1);
+	painter.SelectObject(*pen);
+	GObject *brush = factory.MakeBrush(QColor(0, 0, 255));
+	painter.SelectObject(*brush);
+	painter.Update();
+
+	QRect selectionMark;
+	selectionMark.setCoords(point.x() + 1 - MARKLENGTH, point.y() + 1 - MARKLENGTH,
+		point.x() + MARKLENGTH, point.y() + MARKLENGTH);
+	painter.DrawRect(selectionMark);
+
+	painter.Render(&dc, 0, 0);
 }
 
-void DrawingPaper::OnKillFocus(CWnd* pNewWnd) {
-	CWnd::OnKillFocus(pNewWnd);
-}
-
-void DrawingPaper::OnSetFocus(CWnd* pOldWnd) {
-	CWnd::OnSetFocus(pOldWnd);
-}
-
-BOOL DrawingPaper::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) {
-
-	BOOL res = TRUE;
-	HCURSOR cursor = GetCursor();
-	if (cursor)
-		::SetCursor(cursor);
-	else
-		res = CWnd::OnSetCursor(pWnd, nHitTest, message);
-	return res;
-}
-
-HCURSOR DrawingPaper::GetCursor() {
-	HCURSOR result = NULL;
+QCursor DrawingPaper::GetCursor(QPoint point) {
+	QCursor result;
 	Long i = 0;
 	Long end;
-	Shape *shape;
+	FlowChartShape::Shape *shape;
 
 	if (this->mode == SELECT) {
+		Long positionX = this->scrollController->GetScroll(1)->value();
+		Long positionY = this->scrollController->GetScroll(0)->value();
+		point.setX(point.x() + positionX);
+		point.setY(point.y() + positionY);
 
-		const MSG* msg = GetCurrentMessage();
-		CPoint point(msg->pt);
-		ScreenToClient(&point);
-
-		Long positionX = this->scrollController->GetScroll(1)->GetPosition();
-		Long positionY = this->scrollController->GetScroll(0)->GetPosition();
-		point.x += positionX;
-		point.y += positionY;
-
-		Shape *holdA4Paper = this->a4Paper->Clone();
+		FlowChartShape::Shape *holdA4Paper = this->a4Paper->Clone();
 		FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
 		holdA4Paper->Accept(zoomVisitor);
 
 		Long quotient;
 		Long remainder;
 
-		POINT currentReal = { point.x, point.y };
-		POINT currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
+		QPoint currentReal(point.x(), point.y());
+		QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
-		quotient = currentVirtual.x * 100 / this->zoom->GetRate();
-		remainder = currentVirtual.x * 100 % this->zoom->GetRate();
+		quotient = currentVirtual.x() * 100 / this->zoom->GetRate();
+		remainder = currentVirtual.x() * 100 % this->zoom->GetRate();
 		if (remainder >= 50) quotient++;
-		currentVirtual.x = quotient;
+		currentVirtual.setX(quotient);
 
-		quotient = currentVirtual.y * 100 / this->zoom->GetRate();
-		remainder = currentVirtual.y * 100 % this->zoom->GetRate();
+		quotient = currentVirtual.y() * 100 / this->zoom->GetRate();
+		remainder = currentVirtual.y() * 100 % this->zoom->GetRate();
 		if (remainder >= 50) quotient++;
-		currentVirtual.y = quotient;
+		currentVirtual.setY(quotient);
 
 		currentReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(currentVirtual);
 
-		point.x = currentReal.x;
-		point.y = currentReal.y;
+		point.setX(currentReal.x());
+		point.setY(currentReal.y());
 
-		end = (dynamic_cast<FlowChart *>(this->flowChart))->GetLength();
+		end = this->flowChart->GetLength();
 		while (i < end) {
-			shape = (dynamic_cast<FlowChart *>(this->flowChart))->GetAt(i);
+			shape = this->flowChart->GetAt(i);
 			if (shape->IsSelected()) {
-				int hitCode = shape->GetHitCode(this->painter, point);
+				int hitCode = shape->GetHitCode(point);
 				if (hitCode != HIT_NONE && hitCode != HIT_BODY) {
 					result = shape->GetCursor(hitCode);
 				}
@@ -883,26 +792,26 @@ HCURSOR DrawingPaper::GetCursor() {
 		}
 	}
 	else if (this->mode == DRAWING) {
-		result = LoadCursor(NULL, IDC_CROSS);
+		result.setShape(Qt::CrossCursor);
 	}
-
 
 	return result;
 }
 
-void DrawingPaper::OnSequnceMenuClick() {
+void DrawingPaper::OnSequenceMenuClick() {
 	float rate = this->zoom->GetRate();
 
 	this->tool->SequenceMake(this);
 
 	this->zoom->Set(rate);
 
-	this->RedrawWindow();
-
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->GetParent())->windows[2];
+	this->repaint();
+	/*
+	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
 	if (tutorialForm != NULL) {
 		tutorialForm->tutorialController->Update();
 	}
+	*/
 }
 
 void DrawingPaper::OnIterationMenuClick() {
@@ -912,12 +821,13 @@ void DrawingPaper::OnIterationMenuClick() {
 
 	this->zoom->Set(rate);
 
-	this->RedrawWindow();
-
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->GetParent())->windows[2];
+	this->repaint();
+	/*
+	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
 	if (tutorialForm != NULL) {
 		tutorialForm->tutorialController->Update();
 	}
+	*/
 }
 
 void DrawingPaper::OnSelectionMenuClick() {
@@ -927,12 +837,13 @@ void DrawingPaper::OnSelectionMenuClick() {
 
 	this->zoom->Set(rate);
 
-	this->RedrawWindow();
-
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->GetParent())->windows[2];
+	this->repaint();
+	/*
+	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
 	if (tutorialForm != NULL) {
 		tutorialForm->tutorialController->Update();
 	}
+	*/
 }
 
 void DrawingPaper::OnMoveMakeMenuClick() {
@@ -942,12 +853,13 @@ void DrawingPaper::OnMoveMakeMenuClick() {
 
 	this->zoom->Set(rate);
 
-	this->RedrawWindow();
-
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->GetParent())->windows[2];
+	this->repaint();
+	/*
+	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
 	if (tutorialForm != NULL) {
 		tutorialForm->tutorialController->Update();
 	}
+	*/
 }
 
 void DrawingPaper::OnSizeMakeMenuClick() {
@@ -957,7 +869,7 @@ void DrawingPaper::OnSizeMakeMenuClick() {
 
 	this->zoom->Set(rate);
 
-	this->RedrawWindow();
+	this->repaint();
 }
 
 void DrawingPaper::OnIntervalMakeMenuClick() {
@@ -967,103 +879,48 @@ void DrawingPaper::OnIntervalMakeMenuClick() {
 
 	this->zoom->Set(rate);
 
-	this->RedrawWindow();
-
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->GetParent())->windows[2];
+	this->repaint();
+	/*
+	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
 	if (tutorialForm != NULL) {
 		tutorialForm->tutorialController->Update();
 	}
-}
-
-void DrawingPaper::OnContextMenu(CWnd* pWnd, CPoint pos) {
-	//HMENU hPopup;
-	this->hPopup = ::CreatePopupMenu();
-
-	::AppendMenu(hPopup, MF_STRING, IDM_AE_MOVEMAKE, "기호 위치 같게");
-	::AppendMenu(hPopup, MF_STRING, IDM_AE_SIZEMAKE, "기호 크기 같게");
-	::AppendMenu(hPopup, MF_STRING, IDM_AE_INTERVALMAKE, "기호 간격 같게");
-
-	::AppendMenu(hPopup, MF_STRING, IDM_AE_SEQUENCE, "순차구조");
-	::AppendMenu(hPopup, MF_STRING, IDM_AE_ITERATION, "반복구조");
-	::AppendMenu(hPopup, MF_STRING, IDM_AE_SELECION, "선택구조");
-
-	::EnableMenuItem(hPopup, IDM_AE_MOVEMAKE, MF_BYCOMMAND | MF_GRAYED);
-	::EnableMenuItem(hPopup, IDM_AE_SIZEMAKE, MF_BYCOMMAND | MF_GRAYED);
-	::EnableMenuItem(hPopup, IDM_AE_INTERVALMAKE, MF_BYCOMMAND | MF_GRAYED);
-
-	::EnableMenuItem(hPopup, IDM_AE_SEQUENCE, MF_BYCOMMAND | MF_GRAYED);
-	::EnableMenuItem(hPopup, IDM_AE_ITERATION, MF_BYCOMMAND | MF_GRAYED);
-	::EnableMenuItem(hPopup, IDM_AE_SELECION, MF_BYCOMMAND | MF_GRAYED);
-
-	Long(*indexes);
-	Long count;
-	Shape *shape;
-	(dynamic_cast<FlowChart *>(this->flowChart))->GetSelecteds(&indexes, &count);
-
-	if (count > 1) {
-		::EnableMenuItem(hPopup, IDM_AE_MOVEMAKE, MF_BYCOMMAND | MF_ENABLED);
-		::EnableMenuItem(hPopup, IDM_AE_SIZEMAKE, MF_BYCOMMAND | MF_ENABLED);
-		::EnableMenuItem(hPopup, IDM_AE_INTERVALMAKE, MF_BYCOMMAND | MF_ENABLED);
-
-		::EnableMenuItem(hPopup, IDM_AE_SEQUENCE, MF_BYCOMMAND | MF_ENABLED);
-
-		shape = (dynamic_cast<FlowChart *>(this->flowChart))->GetAt(indexes[0]);
-		if (dynamic_cast<Decision *>(shape)) {
-			::EnableMenuItem(hPopup, IDM_AE_ITERATION, MF_BYCOMMAND | MF_ENABLED);
-			//19.09.16 판단기호 왼쪽에 처리할 내용이 없으면 선택 기호 메뉴 활성화X
-			Long leftCount = 0;
-			Long i = 1;
-			while (i < count) {
-				Shape *left = (dynamic_cast<FlowChart *>(this->flowChart))->GetAt(indexes[i]);
-				if (left->CenterOfGravityX() < shape->CenterOfGravityX()) {
-					leftCount++;
-				}
-				i++;
-			}
-			if (leftCount > 0) {
-				::EnableMenuItem(hPopup, IDM_AE_SELECION, MF_BYCOMMAND | MF_ENABLED);
-			}
-		}
-	}
-
-	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->GetParent());
-	TutorialForm *tutorialForm = static_cast<TutorialForm*>(editor->windows[2]);
-	if (tutorialForm != NULL) {
-		if (dynamic_cast<ContextMenuTutorial*>(tutorialForm->lastConcrete)) { //직전에 수행한 튜토리얼이 콘텍스트메뉴일 경우에만 다음걸 수행한다. 아니면 이 이벤트에서 시나리오 진행 안함.
-			tutorialForm->tutorialController->Update();
-		}
-	}
-
-	if (indexes != 0)
-	{
-		delete[] indexes;
-	}
-
-	::TrackPopupMenu(hPopup, TPM_LEFTALIGN, pos.x, pos.y, 0, pWnd->operator HWND(), NULL);
-	BOOL ret = ::DestroyMenu(hPopup);
-	if (ret == TRUE) this->hPopup = NULL;
+	*/
 }
 
 void DrawingPaper::New() {
-	CString fileName;
+	QString fileName;
 
-	FlowChartEditor *editor = static_cast<FlowChartEditor *>(this->GetParent());
-	int mId = MessageBox("변경내용을 저장하시겠습니까?", "새로만들기", MB_ICONQUESTION | MB_YESNOCANCEL);
-	if (mId == IDYES) {
-		static char BASED_CODE szFilter[] = "txt Files (*.txt)|*.txt||";
-		CFileDialog dlg(FALSE, "*.txt", "*.txt", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
-		if (dlg.DoModal() == IDOK) {
-			editor->fileOpenPath = dlg.GetPathName();
-			Save(editor->fileOpenPath);
+	FlowChartEditor *editor = static_cast<FlowChartEditor *>(this->parentWidget());
+
+	QMessageBox messageBox(QMessageBox::Question, QString::fromLocal8Bit("새로 만들기"),
+		QString::fromLocal8Bit("변경 내용을 저장하시겠습니까?"),
+		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
+	int ret = messageBox.exec();
+	if (ret == QMessageBox::Yes) {
+		//static char BASED_CODE szFilter[] = "txt Files (*.txt)|*.txt||";
+		//CFileDialog dlg(FALSE, "*.txt", "*.txt", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
+		//if (dlg.DoModal() == IDOK) {
+
+		fileName = QFileDialog::getSaveFileName((QWidget*)editor,
+			QObject::tr("Save File"),
+			NULL,
+			QObject::tr("Text files (*.txt)"));
+
+		QFile file(fileName);
+		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+		if (isOpen == true) {
+			editor->fileOpenPath = fileName;
+			this->Save(editor->fileOpenPath.toLocal8Bit().data());
 		}
-		(dynamic_cast<FlowChart *>(this->flowChart))->Clear();
-		editor->SetWindowText("제목없음 - FlowChart");
+		this->flowChart->Clear();
+		editor->setWindowTitle(QString::fromLocal8Bit("제목없음 - FlowChart"));
 		this->mode = IDLE;
 		this->indexOfSelected = -1;
 	}
-	else if (mId == IDNO) {
-		(dynamic_cast<FlowChart *>(this->flowChart))->Clear();
-		editor->SetWindowText("제목없음 - FlowChart");
+	else if (ret == QMessageBox::No) {
+		this->flowChart->Clear();
+		editor->setWindowTitle(QString::fromLocal8Bit("제목없음 - FlowChart"));
 		this->mode = IDLE;
 		this->indexOfSelected = -1;
 	}

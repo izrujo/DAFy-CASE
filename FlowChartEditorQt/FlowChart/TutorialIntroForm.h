@@ -1,28 +1,27 @@
 #ifndef _TUTORIALINTROFORM_H
 #define _TUTORIALINTROFORM_H
 
-#include <afxwin.h>
+#include <QtWidgets/QFrame>
 
 class TextRegion;
-class Painter;
-class FlowChartFont;
+class GObject;
 
-class TutorialIntroForm : public CFrameWnd {
+class TutorialIntroForm : public QFrame
+{
+	Q_OBJECT
+
 public:
-	TutorialIntroForm();
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnClose();
+	TutorialIntroForm(QWidget *parent = Q_NULLPTR);
 protected:
-	afx_msg void OnPaint();
-	afx_msg BOOL OnEraseBkgnd(CDC *pDC);
-	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
-	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	DECLARE_MESSAGE_MAP()
+	void closeEvent(QCloseEvent *event);
+	void paintEvent(QPaintEvent *event);
+	//BOOL OnEraseBkgnd(CDC *pDC);
+	void mouseReleaseEvent(QMouseEvent *event);
+	//void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
 public:
 	TextRegion *message;
 	TextRegion *guide;
-	Painter *painter;
-	FlowChartFont *font;
+	GObject *painter;
 };
 
 #endif //_TUTORIALFORM_H

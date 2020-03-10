@@ -3,6 +3,7 @@
 
 #include "FlowChartVisitor.h"
 class CoordinateConverter;
+typedef signed long int Long;
 
 class ResolutionVisitor : public FlowChartVisitor {
 public:

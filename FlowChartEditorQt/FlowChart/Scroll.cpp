@@ -19,7 +19,7 @@ Scroll::Scroll(const Scroll& source)
 
 Scroll::~Scroll()
 {
-	QObject::disconnect(this, &QScrollBar::valueChanged, this, &Scroll::Move);
+	//QObject::disconnect(this, &QScrollBar::valueChanged, this, &Scroll::Move);
 }
 
 void Scroll::Move(Long value) {

@@ -13,7 +13,28 @@ public:
 
 	virtual void SetObject(QPainter *qPainter);
 
+	virtual QString& GetFamily() const;
+	virtual int GetPointSize() const;
+	virtual int GetWeight() const;
+	virtual bool GetIsItalic() const;
+
 	virtual GObject* Clone();
 };
+
+inline QString& QtFont::GetFamily() const {
+	return this->family();
+}
+
+inline int QtFont::GetPointSize() const {
+	return this->pointSize();
+}
+
+inline int QtFont::GetWeight() const {
+	return this->weight();
+}
+
+inline bool QtFont::GetIsItalic() const {
+	return this->italic();
+}
 
 #endif //_QTFONT_H

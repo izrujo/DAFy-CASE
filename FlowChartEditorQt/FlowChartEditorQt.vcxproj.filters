@@ -59,9 +59,6 @@
     <ClCompile Include="FlowChart\DrawVisitor.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\EditorIntroForm.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\Executions.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -134,9 +131,6 @@
     <ClCompile Include="FlowChart\Preparation.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\PreviewForm.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\Process.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -185,9 +179,6 @@
     <ClCompile Include="FlowChart\SizeMake.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\StatusBar.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\String.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -212,16 +203,7 @@
     <ClCompile Include="FlowChart\ToolFactory.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\ToolTip.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\TutorialController.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\TutorialForm.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\TutorialIntroForm.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\TutorialMark.cpp">
@@ -350,6 +332,21 @@
     <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\PreviewForm.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\StatusBar.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\ToolTip.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\TutorialIntroForm.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\EditorIntroForm.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -385,9 +382,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\DrawVisitor.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\EditorIntroForm.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Executions.h">
@@ -459,9 +453,6 @@
     <ClInclude Include="FlowChart\Preparation.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\PreviewForm.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\Process.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -513,9 +504,6 @@
     <ClInclude Include="FlowChart\Stack.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\StatusBar.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\String.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -540,16 +528,7 @@
     <ClInclude Include="FlowChart\ToolFactory.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\ToolTip.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\TutorialController.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\TutorialForm.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\TutorialIntroForm.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\TutorialMark.h">
@@ -675,6 +654,15 @@
     <ClInclude Include="FlowChart\QtPainter.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
+    <ClInclude Include="FlowChart\StatusBar.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\ToolTip.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\EditorIntroForm.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="FlowChartEditor.ui">
@@ -692,6 +680,12 @@
       <Filter>FlowChart</Filter>
     </QtMoc>
     <QtMoc Include="FlowChart\FlowChartTemplate.h">
+      <Filter>FlowChart</Filter>
+    </QtMoc>
+    <QtMoc Include="FlowChart\PreviewForm.h">
+      <Filter>FlowChart</Filter>
+    </QtMoc>
+    <QtMoc Include="FlowChart\TutorialIntroForm.h">
       <Filter>FlowChart</Filter>
     </QtMoc>
   </ItemGroup>

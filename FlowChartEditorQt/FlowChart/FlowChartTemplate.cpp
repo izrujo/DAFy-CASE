@@ -10,7 +10,7 @@
 #include "Terminal.h"
 #include "Shape.h"
 //////////////////////////////////////////////////////////////
-#include "FlowChartEditor.h"
+#include "../FlowChartEditor.h"
 #include "DrawingPaper.h"
 
 #include "Array.h"
@@ -20,10 +20,8 @@
 #include "Line.h"
 
 #include "Decision.h"
-#include "Document.h"
 #include "Preparation.h"
 #include "Process.h"
-#include "PunchedCard.h"
 #include "Terminal.h"
 #include "InputOutput.h"
 
@@ -37,31 +35,55 @@
 
 #include "Painter.h"
 #include "DrawVisitor.h"
+#include "QtPainter.h"
 
-#include "FlowChartFont.h"
-#include "StatusBar.h"
-#include "ToolTip.h"
-#include "TutorialForm.h"
+//#include "StatusBar.h"
+//#include "ToolTip.h"
+//#include "TutorialForm.h"
 #include "Tutorials.h"
 #include "TutorialController.h"
 
+#include "QtGObjectFactory.h"
 
-// 메세지 맵
-BEGIN_MESSAGE_MAP(FlowChartTemplate, CWnd)
-	ON_WM_CREATE()
-	ON_WM_PAINT()
-	ON_WM_DESTROY()
-	ON_WM_LBUTTONDOWN()
-	ON_WM_MOUSEMOVE()
-END_MESSAGE_MAP()
+#include <qpainter.h>
+#include <qevent.h>
 
-FlowChartTemplate::FlowChartTemplate() {
+FlowChartTemplate::FlowChartTemplate(QWidget *parent = Q_NULLPTR) {
 	this->shapeSelected = NULL;
-	this->flowChartTemplate = NULL;
-	this->painter = NULL;
 	this->mode = DRAWOFF;
-	this->font = NULL;
 	this->oldShapeSelected = NULL;
+
+	this->flowChartTemplate = new Template;
+	FlowChartShape::Shape *template1 = new Terminal(25, 90, 150, 50, QColor(255, 153, 153), 
+		Qt::SolidLine, QColor(0, 0, 0), String("START"));
+	FlowChartShape::Shape *template2 = new Preparation(25, 160, 150, 50, QColor(153, 153, 255), 
+		Qt::SolidLine, QColor(0, 0, 0), String("Preparation"));
+	FlowChartShape::Shape *template3 = new InputOutput(25, 230, 150, 50, QColor(255, 255, 153), 
+		Qt::SolidLine, QColor(0, 0, 0), String("READ "));
+	FlowChartShape::Shape *template4 = new Process(25, 300, 150, 50, QColor(153, 255, 153), 
+		Qt::SolidLine, QColor(0, 0, 0), String("Process"));
+	FlowChartShape::Shape *template5 = new Decision(25, 370, 150, 50, QColor(255, 153, 255), 
+		Qt::SolidLine, QColor(0, 0, 0), String("Decision"));
+	FlowChartShape::Shape *template6 = new InputOutput(25, 440, 150, 50, QColor(255, 255, 153), 
+		Qt::SolidLine, QColor(0, 0, 0), String("PRINT "));
+	FlowChartShape::Shape *template7 = new Terminal(25, 510, 150, 50, QColor(255, 153, 153), 
+		Qt::SolidLine, QColor(0, 0, 0), String("STOP"));
+
+	this->flowChartTemplate->Attach(template1);
+	this->flowChartTemplate->Attach(template2);
+	this->flowChartTemplate->Attach(template3);
+	this->flowChartTemplate->Attach(template4);
+	this->flowChartTemplate->Attach(template5);
+	this->flowChartTemplate->Attach(template6);
+	this->flowChartTemplate->Attach(template7);
+
+	QRect rect = this->frameRect();
+	this->painter = new QtPainter(rect.width(), rect.height());
+
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[0]);
+	GObject *font = canvas->painter->CurrentObject("Font");
+	this->painter->SelectObject(*font);
+	this->painter->Update();
 }
 
 FlowChartTemplate::~FlowChartTemplate() {
@@ -76,110 +98,75 @@ FlowChartTemplate::~FlowChartTemplate() {
 	}
 }
 
-int FlowChartTemplate::OnCreate(LPCREATESTRUCT lpCreateStruct) {
-	CWnd::OnCreate(lpCreateStruct);
+void FlowChartTemplate::paintEvent(QPaintEvent *event) {
+	QPainter dc(this);
 
-	this->flowChartTemplate = new Template;
-	Shape *template1 = new Terminal(25, 90, 150, 50, RGB(255, 153, 153), DOT, 20, String("START"));
-	Shape *template2 = new Preparation(25, 160, 150, 50, RGB(153, 153, 255), DOT, 20, String("Preparation"));
-	Shape *template3 = new InputOutput(25, 230, 150, 50, RGB(255, 255, 153), DOT, 20, String("READ "));
-	Shape *template4 = new Process(25, 300, 150, 50, RGB(153, 255, 153), DOT, 20, String("Process"));
-	Shape *template5 = new Decision(25, 370, 150, 50, RGB(255, 153, 255), DOT, 20, String("Decision"));
-	Shape *template6 = new InputOutput(25, 440, 150, 50, RGB(255, 255, 153), DOT, 20, String("PRINT "));
-	Shape *template7 = new Terminal(25, 510, 150, 50, RGB(255, 153, 153), DOT, 20, String("STOP"));
+	int oldMode = this->painter->GetBackgroundMode();
+	this->painter->SetBackgroundMode(Qt::TransparentMode);
+	this->painter->SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
 
-	dynamic_cast<Template*>(this->flowChartTemplate)->Register(template1);
-	dynamic_cast<Template*>(this->flowChartTemplate)->Register(template2);
-	dynamic_cast<Template*>(this->flowChartTemplate)->Register(template3);
-	dynamic_cast<Template*>(this->flowChartTemplate)->Register(template4);
-	dynamic_cast<Template*>(this->flowChartTemplate)->Register(template5);
-	dynamic_cast<Template*>(this->flowChartTemplate)->Register(template6);
-	dynamic_cast<Template*>(this->flowChartTemplate)->Register(template7);
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 2);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	this->painter->Update();
 
-	CRect rect;
-	GetClientRect(&rect);
-	this->painter = new Painter(this->GetDC(), rect.Width(), rect.Height(), RGB(255, 255, 255), TRANSPARENT);
-	this->font = new FlowChartFont((FlowChartEditor*)this->GetParent());
-	HFONT hFont = this->font->Create();
-	this->painter->ChangeFont(hFont, this->font->GetColor());
+	QRect rect = this->frameRect();
 
-	return 0;
-}
-
-void FlowChartTemplate::OnDestroy() {
-	CWnd::OnDestroy();
-}
-
-void FlowChartTemplate::OnPaint() {
-	CPaintDC dc(this);
-	CPen pen;
-	CPen *oldPen;
-
-	int oldmode = dc.SetBkMode(TRANSPARENT);
-	dc.SetROP2(R2_NOTXORPEN);
-
-	pen.CreatePen(PS_SOLID, 2, RGB(0, 0, 0));
-	oldPen = dc.SelectObject(&pen);
-
-	CRect rect;
-	this->GetClientRect(&rect);
-
-	this->painter->Resize(this); // canvas size 변경
-	this->painter->EraseBackground((float)0, (float)0, (float)rect.Width(), (float)rect.Height());
-	this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(0, 0, 0));
-	POINT points[5] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {0, 0} };
+	this->painter->Resize(rect.width(), rect.height()); // canvas size 변경
 
 	//=======창 제목========
-	FlowChartEditor *editor = (FlowChartEditor*)this->GetParent();
-	CRect rect2 = rect;
+	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+	//QRect rect2 = rect;
 
-	POINT backPoints[7] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect2.top + 40}, {rect2.right - 40, rect2.top + 40},
-	{rect2.right - 40, rect2.top + 13}, {rect2.left, rect2.top + 13}, {0, 0} };
-	CRgn region;
-	region.CreatePolygonRgn(backPoints, 7, ALTERNATE);
-	this->painter->FillRegion(region, RGB(235, 235, 235));
+	//POINT backPoints[7] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect2.top + 40}, {rect2.right - 40, rect2.top + 40},
+	//{rect2.right - 40, rect2.top + 13}, {rect2.left, rect2.top + 13}, {0, 0} };
+	//CRgn region;
+	//region.CreatePolygonRgn(backPoints, 7, ALTERNATE);
+	//this->painter->FillRegion(region, RGB(235, 235, 235));
 
-	this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
-	this->painter->DrawLine(rect2.left, rect2.top + 10, rect2.right - 50, rect2.top + 10);
-	this->painter->DrawLine(rect2.left, rect2.top + 13, rect2.right - 40, rect2.top + 13);
-	this->painter->DrawLine(rect2.right - 40, rect2.top + 13, rect2.right - 40, rect2.top + 40);
-	this->painter->DrawLine(rect2.left, rect2.top + 40, rect2.right, rect2.top + 40);
+	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
+	//this->painter->DrawLine(rect2.left, rect2.top + 10, rect2.right - 50, rect2.top + 10);
+	//this->painter->DrawLine(rect2.left, rect2.top + 13, rect2.right - 40, rect2.top + 13);
+	//this->painter->DrawLine(rect2.right - 40, rect2.top + 13, rect2.right - 40, rect2.top + 40);
+	//this->painter->DrawLine(rect2.left, rect2.top + 40, rect2.right, rect2.top + 40);
 
-	rect2.top += 15;
+	//rect2.top += 15;
 
-	this->painter->DrawTextA(-20, " Template", -1, &rect2, DT_LEFT | DT_TOP);
+	//this->painter->DrawTextA(-20, " Template", -1, &rect2, DT_LEFT | DT_TOP);
 	//======================
 	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
 	this->flowChartTemplate->Accept(visitor);
-	this->painter->Render(&dc, 0, 0, rect.Width(), rect.Height());
+	this->painter->Render(&dc, 0, 0);
 
-	dc.SelectObject(oldPen);
-	dc.SetBkMode(oldmode);
-	oldPen->DeleteObject();
+	this->painter->SelectObject(*oldPen);
+	this->painter->Update();
+	if (pen != NULL) {
+		delete pen;
+	}
 
-	BOOL ret;
+	/*
+	bool ret;
 	if (editor->toolTip != NULL) {
 		this->ModifyStyle(0, WS_CLIPSIBLINGS);
 		ret = editor->toolTip->SetWindowPos(&CWnd::wndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
 	}
+	*/
 }
 
-void FlowChartTemplate::OnLButtonDown(UINT nFlags, CPoint point) {
+void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 	FlowChartEditor* editor;
 
-	editor = static_cast<FlowChartEditor*>(this->GetParent());
+	editor = static_cast<FlowChartEditor*>(this->parentWidget());
 
 	Long index = -1;
 
-	CDC *dc = this->GetDC();
-
-	index = static_cast<Template *>(this->flowChartTemplate)->Find(dc, point);
+	index = this->flowChartTemplate->Find(event->pos());
 
 	if (index != -1) {
 		static_cast<DrawingPaper*>(editor->windows[0])->mode = DrawingPaper::DRAWING;
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(1, String("DRAWING"));
+		editor->statusBar->Modify(1, String("DRAWING"));
 
-		this->shapeSelected = static_cast<Template*>(this->flowChartTemplate)->GetAt(index);
+		this->shapeSelected = this->flowChartTemplate->GetAt(index);
 
 		String style;
 		switch (this->shapeSelected->GetSymbolID()) {
@@ -205,33 +192,29 @@ void FlowChartTemplate::OnLButtonDown(UINT nFlags, CPoint point) {
 	else {
 		this->shapeSelected = NULL;
 	}
-
-	this->ReleaseDC(dc);
 }
 
-void FlowChartTemplate::OnMouseMove(UINT nFlags, CPoint point) {
+void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 	Long index = -1;
 
-	CDC *dc = this->GetDC();
-
 	COLORREF selectedColor = RGB(235, 235, 235);
-	Shape *shape;
+	FlowChartShape::Shape *shape;
 	Long i = 0;
-	while (i < static_cast<Template *>(this->flowChartTemplate)->GetLength()) {
-		shape = static_cast<Template*>(this->flowChartTemplate)->GetAt(i);
+	while (i < this->flowChartTemplate->GetLength()) {
+		shape = this->flowChartTemplate->GetAt(i);
 		if (shape->GetBackGroundColor() == selectedColor && this->oldShapeSelected != NULL) {
 			shape->Paint(this->oldShapeSelected->GetBackGroundColor(), shape->GetBorderLine(), shape->GetBorderColor());
 		}
 		i++;
 	}
 
-	index = static_cast<Template *>(this->flowChartTemplate)->Find(dc, point);
+	index = this->flowChartTemplate->Find(event->pos());
 
 	if (index != -1) {
-		shape = static_cast<Template*>(this->flowChartTemplate)->GetAt(index);
+		shape = this->flowChartTemplate->GetAt(index);
 		this->oldShapeSelected = shape->Clone();
 		shape->Paint(selectedColor, shape->GetBorderLine(), shape->GetBorderColor());
 	}
 
-	this->Invalidate();
+	this->repaint();
 }

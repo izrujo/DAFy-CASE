@@ -36,8 +36,6 @@ protected:
 	void resizeEvent(QResizeEvent *event);
 	/* 해당하는 함수 찾기
 	BOOL PreTranslateMessage(MSG *pMsg);
-	afx_msg void OnClose();
-	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnDropFiles(HDROP hDropInfo);
 	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
 	afx_msg void OnCommandRange(UINT uID);

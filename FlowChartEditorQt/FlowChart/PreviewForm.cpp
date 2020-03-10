@@ -4,8 +4,7 @@
 #include "Zoom.h"
 #include "drawVisitor.h"
 #include "Painter.h"
-#include "FlowChartEditor.h"
-#include "FlowChartFont.h"
+#include "../FlowChartEditor.h"
 #include "FlowChart.h"
 #include "DrawingPaper.h"
 #include "RightDownJoin.h"
@@ -14,32 +13,17 @@
 #include "Join.h"
 #include "A4Paper.h"
 #include "ResolutionVisitor.h"
-#include "resource.h"
-#include <afxcmn.h>
+#include "QtPainter.h"
+#include "QtGObjectFactory.h"
 
-BEGIN_MESSAGE_MAP(PreviewForm, CFrameWnd)
-	ON_WM_CREATE()
-	ON_WM_PAINT()
-	ON_WM_CLOSE()
-	ON_WM_LBUTTONDOWN()
-	ON_COMMAND_RANGE(IDT_BUTTON_PRINT, IDT_BUTTON_EXIT, OnCommandRange)
-END_MESSAGE_MAP()
+#include <qpainter.h>
 
-PreviewForm::PreviewForm(FlowChartEditor *editor, Shape *flowChart) {
+PreviewForm::PreviewForm(QWidget *parent = Q_NULLPTR, FlowChartShape::Shape *flowChart) {
 	this->editor = editor;
 	this->flowChart = flowChart;
-	this->a4Paper = NULL;
-	this->painter = NULL;
-	this->font = NULL;
-}
 
-int PreviewForm::OnCreate(LPCREATESTRUCT lpCreateStruct) {
-	CFrameWnd::OnCreate(lpCreateStruct);
-
-	CRect rect;
-	GetClientRect(&rect);
-
-	this->painter = new Painter(this->GetDC(), rect.Width(), rect.Height(), RGB(255, 255, 255), TRANSPARENT);
+	QRect rect = this->frameRect();
+	this->painter = new QtPainter(rect.width(), rect.height());
 
 	Zoom zoom;
 	zoom.Set(300);
@@ -50,13 +34,11 @@ int PreviewForm::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	this->a4Paper->Accept(zoomVisitor);
 	this->flowChart->Accept(zoomVisitor);
 
-	this->toolBar.CreateEx(this);
-	this->toolBar.LoadToolBar(IDR_TOOLBAR1);
-
-	return 0;
+	//this->toolBar.CreateEx(this);
+	//this->toolBar.LoadToolBar(IDR_TOOLBAR1);
 }
 
-void PreviewForm::OnClose() {
+void PreviewForm::closeEvent(QCloseEvent *event) {
 	if (this->flowChart != NULL) {
 		delete this->flowChart;
 	}
@@ -69,35 +51,36 @@ void PreviewForm::OnClose() {
 	if (this->a4Paper != NULL) {
 		delete this->a4Paper;
 	}
-
-	if (this->font != NULL) {
-		delete this->font;
-	}
-
-	CFrameWnd::OnClose();
 }
 
-void PreviewForm::OnPaint() {
-	CPaintDC dc(this);
-	CRect rect;
-	this->GetClientRect(rect);
+void PreviewForm::paintEvent(QPaintEvent *event) {
+	QPainter dc(this);
+	QRect rect = this->frameRect();
 
-	this->painter->Resize(this);
-	POINT points[5] = { {rect.left, rect.top}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {rect.left, rect.top} };
-	this->painter->FillBackground(points, 5, RGB(235, 235, 235));
-	this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(0, 0, 0));
+	this->flowChart->UnSelectAll();
+	
+	//this->painter->Resize(this);
+	//POINT points[5] = { {rect.left, rect.top}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {rect.left, rect.top} };
+	//this->painter->FillBackground(points, 5, RGB(235, 235, 235));
+	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(0, 0, 0));
 
-	dynamic_cast<FlowChart*>(this->flowChart)->UnSelectAll();
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 2);
+	GObject *oldPen = this->painter->SelectObject(*pen);
 
 	//폰트 설정
-	LOGFONT logFont = this->editor->font->GetFont();
-	logFont.lfHeight = -6;
-	logFont.lfWidth = -6;
-	strcpy(logFont.lfFaceName, _T("Terminal"));
-	COLORREF color = this->editor->font->GetColor();
-	this->font = new FlowChartFont(this->editor, logFont, color);
-	HFONT hFont = this->font->Create();
-	this->painter->ChangeFont(hFont, this->font->GetColor());
+	GObject *font = factory.MakeFont("Terminal", 6, 40, false);
+	GObject *oldFont = this->painter->SelectObject(*font);
+	//LOGFONT logFont = this->editor->font->GetFont();
+	//logFont.lfHeight = -6;
+	//logFont.lfWidth = -6;
+	//strcpy(logFont.lfFaceName, _T("Terminal"));
+	//COLORREF color = this->editor->font->GetColor();
+	//this->font = new FlowChartFont(this->editor, logFont, color);
+	//HFONT hFont = this->font->Create();
+	//this->painter->ChangeFont(hFont, this->font->GetColor());
+	
+	this->painter->Update();
 
 	//Visitor 패턴 적용	
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter);
@@ -105,29 +88,36 @@ void PreviewForm::OnPaint() {
 	zoom.Set(10);
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(&zoom);
 
-	Shape *cloneA4 = this->a4Paper->Clone();
+	FlowChartShape::Shape *cloneA4 = this->a4Paper->Clone();
 	cloneA4->Accept(zoomVisitor);
 	cloneA4->Move(cloneA4->GetX() - 670, cloneA4->GetY() - 1347);
 	dynamic_cast<A4Paper*>(cloneA4)->SetIsMarking(false);
 	cloneA4->Accept(drawVisitor);
 
-	Shape *cloneFlowChart = this->flowChart->Clone();
+	FlowChartShape::Shape *cloneFlowChart = this->flowChart->Clone();
 	cloneFlowChart->Accept(zoomVisitor);
 
-	Shape *shape;
+	FlowChartShape::Shape *shape;
 	Long i = 0;
-	while (i < dynamic_cast<FlowChart*>(cloneFlowChart)->GetLength()) {
-		shape = dynamic_cast<FlowChart*>(cloneFlowChart)->GetAt(i);
+	while (i < cloneFlowChart->GetLength()) {
+		shape = cloneFlowChart->GetAt(i);
 		shape->Move(shape->GetX() - 670, shape->GetY() - 1347);
 		i++;
 	}
-
 	cloneFlowChart->Accept(drawVisitor);
 
-	this->painter->Render(&dc, 0, 0, rect.Width(), rect.Height());
+	this->painter->Render(&dc, 0, 0);
 
-	hFont = this->editor->font->Create();
-	this->painter->ChangeFont(hFont, this->font->GetColor());
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldFont);
+	this->painter->Update();
+
+	if (pen != NULL) {
+		delete pen;
+	}
+	if (font != NULL) {
+		delete font;
+	}
 
 	if (cloneFlowChart != NULL) {
 		delete cloneFlowChart;
@@ -145,12 +135,15 @@ void PreviewForm::OnPaint() {
 	}
 }
 
+/* 이거는 인쇄시 좌표 찾기 위해 임시 구현한 부분
 void PreviewForm::OnLButtonDown(UINT nFlags, CPoint point) {
 	CString message;
 	message.Format("%d, %d", point.x, point.y);
 	AfxMessageBox(message);
 }
+*/
 
+/*
 void PreviewForm::OnCommandRange(UINT uID) {
 	if (uID == IDT_BUTTON_PRINT) {
 		CPrintDialog printDialog(FALSE, PD_ALLPAGES | PD_USEDEVMODECOPIES | PD_NOPAGENUMS | PD_HIDEPRINTTOFILE | PD_NOSELECTION,
@@ -215,3 +208,4 @@ void PreviewForm::OnCommandRange(UINT uID) {
 		this->OnClose();
 	}
 }
+*/

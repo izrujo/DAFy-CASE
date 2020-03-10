@@ -1,7 +1,7 @@
 #include "DrawingTool.h"
 
 #include "DrawingPaper.h"
-#include "FlowChartEditor.h"
+#include "../FlowChartEditor.h"
 #include "FlowChartTemplate.h"
 
 #include "FlowChart.h"
@@ -9,7 +9,7 @@
 #include "SelectingTool.h"
 
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 
 #include "MemoryController.h"
 
@@ -51,8 +51,8 @@ void DrawingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (canvas->scrollController != NULL) {
-		positionX = canvas->scrollController->GetScroll(1)->GetPosition();
-		positionY = canvas->scrollController->GetScroll(0)->GetPosition();
+		positionX = canvas->scrollController->GetScroll(1)->value();
+		positionY = canvas->scrollController->GetScroll(0)->value();
 	}
 
 	canvas->startX = point.x() + positionX;
@@ -71,38 +71,38 @@ void DrawingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 	QPoint startReal(canvas->startX, canvas->startY);
 	QPoint startVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(startReal);
 
-	quotient = startVirtual.x * 100 / canvas->zoom->GetRate();
-	remainder = startVirtual.x * 100 % canvas->zoom->GetRate();
+	quotient = startVirtual.x() * 100 / canvas->zoom->GetRate();
+	remainder = startVirtual.x() * 100 % canvas->zoom->GetRate();
 	if (remainder >= 50) quotient++;
-	startVirtual.x = quotient;
+	startVirtual.setX(quotient);
 
-	quotient = startVirtual.y * 100 / canvas->zoom->GetRate();
-	remainder = startVirtual.y * 100 % canvas->zoom->GetRate();
+	quotient = startVirtual.y() * 100 / canvas->zoom->GetRate();
+	remainder = startVirtual.y() * 100 % canvas->zoom->GetRate();
 	if (remainder >= 50) quotient++;
-	startVirtual.y = quotient;
+	startVirtual.setY(quotient);
 
 	startReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(startVirtual);
 
 	QPoint currentReal(canvas->currentX, canvas->currentY);
 	QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
-	quotient = currentVirtual.x * 100 / canvas->zoom->GetRate();
-	remainder = currentVirtual.x * 100 % canvas->zoom->GetRate();
+	quotient = currentVirtual.x() * 100 / canvas->zoom->GetRate();
+	remainder = currentVirtual.x() * 100 % canvas->zoom->GetRate();
 	if (remainder >= 50) quotient++;
-	currentVirtual.x = quotient;
+	currentVirtual.setX(quotient);
 
-	quotient = currentVirtual.y * 100 / canvas->zoom->GetRate();
-	remainder = currentVirtual.y * 100 % canvas->zoom->GetRate();
+	quotient = currentVirtual.y() * 100 / canvas->zoom->GetRate();
+	remainder = currentVirtual.y() * 100 % canvas->zoom->GetRate();
 	if (remainder >= 50) quotient++;
-	currentVirtual.y = quotient;
+	currentVirtual.setY(quotient);
 
 	currentReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(currentVirtual);
 
-	canvas->startX = startReal.x;
-	canvas->startY = startReal.y;
+	canvas->startX = startReal.x();
+	canvas->startY = startReal.y();
 
-	canvas->currentX = currentReal.x;
-	canvas->currentY = currentReal.y;
+	canvas->currentX = currentReal.x();
+	canvas->currentY = currentReal.y();
 
 	canvas->templateSelected->Move(canvas->startX, canvas->startY);
 	canvas->templateSelected->Select(true);
@@ -112,12 +112,12 @@ void DrawingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (canvas->scrollController != NULL) {
-		positionX = canvas->scrollController->GetScroll(1)->GetPosition();
-		positionY = canvas->scrollController->GetScroll(0)->GetPosition();
+		positionX = canvas->scrollController->GetScroll(1)->value();
+		positionY = canvas->scrollController->GetScroll(0)->value();
 	}
 
-	canvas->currentX = point.x + positionX;
-	canvas->currentY = point.y + positionY;
+	canvas->currentX = point.x() + positionX;
+	canvas->currentY = point.y() + positionY;
 
 	Shape *holdA4Paper = canvas->a4Paper->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
@@ -129,20 +129,20 @@ void DrawingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	QPoint currentReal(canvas->currentX, canvas->currentY);
 	QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
-	quotient = currentVirtual.x * 100 / canvas->zoom->GetRate();
-	remainder = currentVirtual.x * 100 % canvas->zoom->GetRate();
+	quotient = currentVirtual.x() * 100 / canvas->zoom->GetRate();
+	remainder = currentVirtual.x() * 100 % canvas->zoom->GetRate();
 	if (remainder >= 50) quotient++;
-	currentVirtual.x = quotient;
+	currentVirtual.setX(quotient);
 
-	quotient = currentVirtual.y * 100 / canvas->zoom->GetRate();
-	remainder = currentVirtual.y * 100 % canvas->zoom->GetRate();
+	quotient = currentVirtual.y() * 100 / canvas->zoom->GetRate();
+	remainder = currentVirtual.y() * 100 % canvas->zoom->GetRate();
 	if (remainder >= 50) quotient++;
-	currentVirtual.y = quotient;
+	currentVirtual.setY(quotient);
 
 	currentReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(currentVirtual);
 
-	canvas->currentX = currentReal.x;
-	canvas->currentY = currentReal.y;
+	canvas->currentX = currentReal.x();
+	canvas->currentY = currentReal.y();
 
 	Long width = canvas->currentX - canvas->startX;
 	Long height = canvas->currentY - canvas->startY;
@@ -157,7 +157,7 @@ void DrawingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	Long previousLength = canvas->flowChart->GetLength();
 
 	canvas->indexOfSelected = canvas->flowChart->Attach(canvas->templateSelected->Clone());
-
+	/*
 	Long currentLength = dynamic_cast<FlowChart*>(canvas->flowChart)->GetLength();
 	if (currentLength != previousLength && dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip != NULL) {
 		dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip->Destroy();
@@ -167,6 +167,7 @@ void DrawingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 			tutorialForm->tutorialController->Update();
 		}
 	}
+	*/
 
 	Long(*indexes) = new Long[canvas->flowChart->GetLength()];
 	indexes[0] = canvas->indexOfSelected;

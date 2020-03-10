@@ -8,7 +8,7 @@ class DrawingPaper;
 
 typedef signed long int Long;
 
-class Clipboard{
+class Clipboard {
 public:
 	Clipboard();
 	~Clipboard();
@@ -24,4 +24,5 @@ private:
 inline Long Clipboard::GetLength() const {
 	return this->buffer->GetLength();
 }
+
 #endif // _CLIPBOARD_H

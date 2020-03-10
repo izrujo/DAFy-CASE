@@ -3,7 +3,7 @@
 #include "DrawingPaper.h"
 #include "Memory.h"
 #include "MemoryController.h"
-#include "PreviewForm.h"
+//#include "PreviewForm.h"
 #include "A4Paper.h"
 #include "FlowChart.h"
 #include "Painter.h"
@@ -14,9 +14,13 @@
 #include "Clipboard.h"
 #include "Zoom.h"
 #include "Tool.h"
-#include "TutorialForm.h"
-#include "StatusBar.h"
-#include "TutorialIntroForm.h"
+#include "Shape.h"
+
+using namespace FlowChartShape;
+
+//#include "TutorialForm.h"
+//#include "StatusBar.h"
+//#include "TutorialIntroForm.h"
 
 #include "QtGObjectFactory.h"
 #include "GObject.h"
@@ -166,7 +170,7 @@ void OpenCommand::Execute() {
 		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(this->editor->fileOpenPath.toLocal8Bit().data());
 		fileName = this->editor->fileOpenPath + " - FlowChart";
 		this->editor->setWindowTitle(fileName);
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->SetFocus(); //focus message 찾아서
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->setFocus(); //focus message 찾아서
 		this->editor->repaint();
 	}
 }
@@ -193,7 +197,7 @@ NewCommand& NewCommand::operator =(const NewCommand& source) {
 
 void NewCommand::Execute() {
 	(static_cast<DrawingPaper *>(this->editor->windows[0]))->New();
-	(static_cast<DrawingPaper *>(this->editor->windows[0]))->SetFocus();
+	(static_cast<DrawingPaper *>(this->editor->windows[0]))->setFocus();
 	this->editor->repaint();
 }
 
@@ -274,9 +278,6 @@ FontSetCommand& FontSetCommand::operator =(const FontSetCommand& source) {
 }
 
 void FontSetCommand::Execute() {
-	LOGFONT logFont = this->editor->font->GetFont();
-	COLORREF color;
-
 	//QFontDialog 로 QFont 객체 얻어서 그것의 정보로 GObject 만들어서 Select - Update 하기
 	//따라서 FlowChartFont는 필요 없음.
 
@@ -1025,6 +1026,7 @@ void SelectionCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
+/*
 //TutorialCommand
 TutorialCommand::TutorialCommand(FlowChartEditor *editor)
 	: FlowChartCommand(editor) {
@@ -1055,3 +1057,4 @@ void TutorialCommand::Execute() {
 	intro->Create(NULL, NULL, WS_POPUP | WS_VISIBLE | WS_CHILD,
 		CRect(rect.left, rect.top, rect.Width(), rect.Height()), this->editor, NULL, WS_EX_LAYERED | WS_EX_CLIENTEDGE, NULL);
 }
+*/
