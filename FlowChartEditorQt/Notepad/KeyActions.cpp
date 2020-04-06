@@ -1,43 +1,43 @@
 #include "KeyActions.h"
 #include "KeyActionFactory.h"
-#include "NotepadForm.h"
+#include "Notepad.h"
 #include "Glyph.h"
 #include "Composite.h"
 #include "CharacterMetrics.h"
 #include "Character.h"
 #include "Note.h"
-#include "Row.h"
+#include "Line.h"
 #include "Editor.h"
 #include "Selector.h"
 #include "Highlight.h"
 #include <string>
 
 //KeyAction
-KeyAction::KeyAction(NotepadForm *notepadForm) {
-	this->notepadForm = notepadForm;
+KeyAction::KeyAction(Notepad *notepad) {
+	this->notepad = notepad;
 }
 
 KeyAction::KeyAction(const KeyAction& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 }
 
 KeyAction::~KeyAction() {
 }
 
 KeyAction& KeyAction::operator =(const KeyAction& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 
 	return *this;
 }
 
 //LeftKeyAction
-LeftKeyAction::LeftKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+LeftKeyAction::LeftKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 
 }
 
 LeftKeyAction::LeftKeyAction(const LeftKeyAction& source)
-	: KeyAction(notepadForm) {
+	: KeyAction(notepad) {
 
 }
 
@@ -45,19 +45,19 @@ LeftKeyAction::~LeftKeyAction() {
 
 }
 
-void LeftKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	if (this->notepadForm->current->GetCurrent() > 0) {
-		this->notepadForm->current->Previous();
+void LeftKeyAction::OnKeyDown() {
+	if (this->notepad->current->GetCurrent() > 0) {
+		this->notepad->current->Previous();
 	}
-	else if (this->notepadForm->note->GetCurrent() > 0) {
-		Long index = this->notepadForm->note->Previous();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		this->notepadForm->current->Last();
+	else if (this->notepad->note->GetCurrent() > 0) {
+		Long index = this->notepad->note->Previous();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		this->notepad->current->Last();
 	}
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -67,32 +67,32 @@ LeftKeyAction& LeftKeyAction::operator = (const LeftKeyAction& source) {
 }
 
 //RightKeyAction
-RightKeyAction::RightKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+RightKeyAction::RightKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 }
 
 RightKeyAction::RightKeyAction(const RightKeyAction& source)
-	: KeyAction(notepadForm) {
+	: KeyAction(notepad) {
 }
 
 RightKeyAction::~RightKeyAction() {
 }
 
-void RightKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	if (this->notepadForm->current->GetCurrent() < this->notepadForm
+void RightKeyAction::OnKeyDown() {
+	if (this->notepad->current->GetCurrent() < this->notepad
 		->current->GetLength()) {
-		this->notepadForm->current->Next();
+		this->notepad->current->Next();
 	}
-	else if (this->notepadForm->note->GetCurrent() < this->notepadForm
+	else if (this->notepad->note->GetCurrent() < this->notepad
 		->note->GetLength() - 1) {
-		Long index = this->notepadForm->note->Next();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		this->notepadForm->current->First();
+		Long index = this->notepad->note->Next();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		this->notepad->current->First();
 	}
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -102,8 +102,8 @@ RightKeyAction& RightKeyAction::operator=(const RightKeyAction& source) {
 }
 
 //UpKeyAction
-UpKeyAction::UpKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+UpKeyAction::UpKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 
 }
 
@@ -116,18 +116,18 @@ UpKeyAction::~UpKeyAction() {
 
 }
 
-void UpKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	if (this->notepadForm->note->GetCurrent() > 0) {
-		Long x = this->notepadForm->characterMetrics->GetX(this->notepadForm->current);
-		Long index = this->notepadForm->note->Previous();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		Long column = this->notepadForm->characterMetrics->GetColumn(this->notepadForm->current, x);
-		this->notepadForm->current->Move(column);
+void UpKeyAction::OnKeyDown() {
+	if (this->notepad->note->GetCurrent() > 0) {
+		Long x = this->notepad->characterMetrics->GetX(this->notepad->current);
+		Long index = this->notepad->note->Previous();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		Long column = this->notepad->characterMetrics->GetColumn(this->notepad->current, x);
+		this->notepad->current->Move(column);
 	}
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -137,13 +137,13 @@ UpKeyAction& UpKeyAction::operator = (const UpKeyAction& source) {
 }
 
 //DownKeyAction
-DownKeyAction::DownKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+DownKeyAction::DownKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 
 }
 
 DownKeyAction::DownKeyAction(const DownKeyAction& source)
-	: KeyAction(notepadForm) {
+	: KeyAction(notepad) {
 
 }
 
@@ -151,18 +151,18 @@ DownKeyAction::~DownKeyAction() {
 
 }
 
-void DownKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	if (this->notepadForm->note->GetCurrent() < this->notepadForm->note->GetLength() - 1) {
-		Long x = this->notepadForm->characterMetrics->GetX(this->notepadForm->current);
-		Long index = this->notepadForm->note->Next();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		Long column = this->notepadForm->characterMetrics->GetColumn(this->notepadForm->current, x);
-		this->notepadForm->current->Move(column);
+void DownKeyAction::OnKeyDown() {
+	if (this->notepad->note->GetCurrent() < this->notepad->note->GetLength() - 1) {
+		Long x = this->notepad->characterMetrics->GetX(this->notepad->current);
+		Long index = this->notepad->note->Next();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		Long column = this->notepad->characterMetrics->GetColumn(this->notepad->current, x);
+		this->notepad->current->Move(column);
 	}
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -173,8 +173,8 @@ DownKeyAction& DownKeyAction::operator=(const DownKeyAction& source) {
 }
 
 //HomeKeyAction
-HomeKeyAction::HomeKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+HomeKeyAction::HomeKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 HomeKeyAction::HomeKeyAction(const HomeKeyAction& source)
@@ -184,12 +184,12 @@ HomeKeyAction::HomeKeyAction(const HomeKeyAction& source)
 HomeKeyAction::~HomeKeyAction() {
 }
 
-void HomeKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	this->notepadForm->current->First();
+void HomeKeyAction::OnKeyDown() {
+	this->notepad->current->First();
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -200,8 +200,8 @@ HomeKeyAction& HomeKeyAction::operator =(const HomeKeyAction& source) {
 }
 
 //EndKeyAction
-EndKeyAction::EndKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+EndKeyAction::EndKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 EndKeyAction::EndKeyAction(const EndKeyAction& source)
@@ -211,12 +211,12 @@ EndKeyAction::EndKeyAction(const EndKeyAction& source)
 EndKeyAction::~EndKeyAction() {
 }
 
-void EndKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	this->notepadForm->current->Last();
+void EndKeyAction::OnKeyDown() {
+	this->notepad->current->Last();
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -227,8 +227,8 @@ EndKeyAction& EndKeyAction::operator =(const EndKeyAction& source) {
 }
 
 //CtrlLeftKeyAction
-CtrlLeftKeyAction::CtrlLeftKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlLeftKeyAction::CtrlLeftKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlLeftKeyAction::CtrlLeftKeyAction(const CtrlLeftKeyAction& source)
@@ -238,13 +238,13 @@ CtrlLeftKeyAction::CtrlLeftKeyAction(const CtrlLeftKeyAction& source)
 CtrlLeftKeyAction::~CtrlLeftKeyAction() {
 }
 
-void CtrlLeftKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long index = this->notepadForm->note->MovePreviousWord();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
+void CtrlLeftKeyAction::OnKeyDown() {
+	Long index = this->notepad->note->MovePreviousWord();
+	this->notepad->current = this->notepad->note->GetAt(index);
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -255,8 +255,8 @@ CtrlLeftKeyAction& CtrlLeftKeyAction::operator =(const CtrlLeftKeyAction& source
 }
 
 //CtrlRightKeyAction
-CtrlRightKeyAction::CtrlRightKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlRightKeyAction::CtrlRightKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlRightKeyAction::CtrlRightKeyAction(const CtrlRightKeyAction& source)
@@ -266,13 +266,13 @@ CtrlRightKeyAction::CtrlRightKeyAction(const CtrlRightKeyAction& source)
 CtrlRightKeyAction::~CtrlRightKeyAction() {
 }
 
-void CtrlRightKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long index = this->notepadForm->note->MoveNextWord();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
+void CtrlRightKeyAction::OnKeyDown() {
+	Long index = this->notepad->note->MoveNextWord();
+	this->notepad->current = this->notepad->note->GetAt(index);
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -283,8 +283,8 @@ CtrlRightKeyAction& CtrlRightKeyAction::operator =(const CtrlRightKeyAction& sou
 }
 
 //CtrlHomeKeyAction
-CtrlHomeKeyAction::CtrlHomeKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlHomeKeyAction::CtrlHomeKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlHomeKeyAction::CtrlHomeKeyAction(const CtrlHomeKeyAction& source)
@@ -294,14 +294,14 @@ CtrlHomeKeyAction::CtrlHomeKeyAction(const CtrlHomeKeyAction& source)
 CtrlHomeKeyAction::~CtrlHomeKeyAction() {
 }
 
-void CtrlHomeKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long index = this->notepadForm->note->First();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
-	this->notepadForm->current->First();
+void CtrlHomeKeyAction::OnKeyDown() {
+	Long index = this->notepad->note->First();
+	this->notepad->current = this->notepad->note->GetAt(index);
+	this->notepad->current->First();
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -312,8 +312,8 @@ CtrlHomeKeyAction& CtrlHomeKeyAction::operator =(const CtrlHomeKeyAction& source
 }
 
 //CtrlEndKeyAction
-CtrlEndKeyAction::CtrlEndKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlEndKeyAction::CtrlEndKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlEndKeyAction::CtrlEndKeyAction(const CtrlEndKeyAction& source)
@@ -323,14 +323,14 @@ CtrlEndKeyAction::CtrlEndKeyAction(const CtrlEndKeyAction& source)
 CtrlEndKeyAction::~CtrlEndKeyAction() {
 }
 
-void CtrlEndKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long index = this->notepadForm->note->Last();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
-	this->notepadForm->current->Last();
+void CtrlEndKeyAction::OnKeyDown() {
+	Long index = this->notepad->note->Last();
+	this->notepad->current = this->notepad->note->GetAt(index);
+	this->notepad->current->Last();
 
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -341,8 +341,8 @@ CtrlEndKeyAction& CtrlEndKeyAction::operator =(const CtrlEndKeyAction& source) {
 }
 
 //DeleteKeyAction
-DeleteKeyAction::DeleteKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+DeleteKeyAction::DeleteKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 DeleteKeyAction::DeleteKeyAction(const DeleteKeyAction& source)
@@ -352,23 +352,23 @@ DeleteKeyAction::DeleteKeyAction(const DeleteKeyAction& source)
 DeleteKeyAction::~DeleteKeyAction() {
 }
 
-void DeleteKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (this->notepadForm->highlight == NULL) {
-		Long column = this->notepadForm->current->GetCurrent();
-		Long lineLength = this->notepadForm->current->GetLength();
+void DeleteKeyAction::OnKeyDown() {
+	if (this->notepad->highlight == NULL) {
+		Long column = this->notepad->current->GetCurrent();
+		Long lineLength = this->notepad->current->GetLength();
 		if (column < lineLength) {
-			this->notepadForm->current->Remove(column);
+			this->notepad->current->Remove(column);
 		}
-		Long row = this->notepadForm->note->GetCurrent();
-		Long noteLength = this->notepadForm->note->GetLength();
+		Long row = this->notepad->note->GetCurrent();
+		Long noteLength = this->notepad->note->GetLength();
 		if (column >= lineLength && row < noteLength - 1) {
-			Glyph* other = this->notepadForm->note->GetAt(row + 1);
-			this->notepadForm->current->Combine(other);
-			this->notepadForm->note->Remove(row + 1);
+			Glyph* other = this->notepad->note->GetAt(row + 1);
+			this->notepad->current->Combine(other);
+			this->notepad->note->Remove(row + 1);
 		}
 	}
 	else {
-		this->notepadForm->editor->Delete();
+		this->notepad->editor->Delete();
 	}
 }
 
@@ -379,8 +379,8 @@ DeleteKeyAction& DeleteKeyAction::operator =(const DeleteKeyAction& source) {
 }
 
 //BackSpaceKeyAction
-BackSpaceKeyAction::BackSpaceKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+BackSpaceKeyAction::BackSpaceKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 BackSpaceKeyAction::BackSpaceKeyAction(const BackSpaceKeyAction& source)
@@ -390,25 +390,25 @@ BackSpaceKeyAction::BackSpaceKeyAction(const BackSpaceKeyAction& source)
 BackSpaceKeyAction::~BackSpaceKeyAction() {
 }
 
-void BackSpaceKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (this->notepadForm->highlight == NULL) {
-		if (this->notepadForm->GetIsComposing() == FALSE) {
-			Long lineCurrent = this->notepadForm->current->GetCurrent();
-			Long noteCurrent = this->notepadForm->note->GetCurrent();
+void BackSpaceKeyAction::OnKeyDown() {
+	if (this->notepad->highlight == NULL) {
+		if (this->notepad->GetIsComposing() == false) {
+			Long lineCurrent = this->notepad->current->GetCurrent();
+			Long noteCurrent = this->notepad->note->GetCurrent();
 			if (lineCurrent > 0) {
-				this->notepadForm->current->Remove(lineCurrent - 1);
+				this->notepad->current->Remove(lineCurrent - 1);
 			}
 			else if (lineCurrent <= 0 && noteCurrent > 0) {
-				Glyph *previousLine = this->notepadForm->note->GetAt(noteCurrent - 1);
+				Glyph *previousLine = this->notepad->note->GetAt(noteCurrent - 1);
 				Long index = previousLine->GetLength();
-				this->notepadForm->current = previousLine->Combine(this->notepadForm->current);
-				this->notepadForm->note->Remove(noteCurrent);
-				this->notepadForm->current->Move(index);
+				this->notepad->current = previousLine->Combine(this->notepad->current);
+				this->notepad->note->Remove(noteCurrent);
+				this->notepad->current->Move(index);
 			}
 		}
 	}
 	else {
-		this->notepadForm->editor->Delete();
+		this->notepad->editor->Delete();
 	}
 }
 
@@ -419,13 +419,13 @@ BackSpaceKeyAction& BackSpaceKeyAction::operator =(const BackSpaceKeyAction& sou
 }
 
 //ShiftLeftKeyAction
-ShiftLeftKeyAction::ShiftLeftKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+ShiftLeftKeyAction::ShiftLeftKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 
 }
 
 ShiftLeftKeyAction::ShiftLeftKeyAction(const ShiftLeftKeyAction& source)
-	: KeyAction(notepadForm) {
+	: KeyAction(notepad) {
 
 }
 
@@ -433,30 +433,30 @@ ShiftLeftKeyAction::~ShiftLeftKeyAction() {
 
 }
 
-void ShiftLeftKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftLeftKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 	if (lineCurrent > 0) {
-		Long endColumn = this->notepadForm->current->Previous();
+		Long endColumn = this->notepad->current->Previous();
 		Long startColumn = lineCurrent;
-		Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-		Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-		Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-		Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+		Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+		Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+		Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+		Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 		if (noteStartPosition < noteEndPosition || (noteStartPosition == noteEndPosition && lineStartPosition < lineEndPosition)) {
 			startColumn = endColumn;
 		}
-		this->notepadForm->editor->selector->Left(noteCurrent, startColumn, endColumn);
+		this->notepad->editor->selector->Left(noteCurrent, startColumn, endColumn);
 	}
 	else if (noteCurrent > 0) {
-		Long index = this->notepadForm->note->Previous();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		Long endColumn = this->notepadForm->current->Last();
-		this->notepadForm->editor->selector->Left(index, endColumn, endColumn);
+		Long index = this->notepad->note->Previous();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		Long endColumn = this->notepad->current->Last();
+		this->notepad->editor->selector->Left(index, endColumn, endColumn);
 	}
 }
 
@@ -466,44 +466,44 @@ ShiftLeftKeyAction& ShiftLeftKeyAction::operator = (const ShiftLeftKeyAction& so
 }
 
 //ShiftRightKeyAction
-ShiftRightKeyAction::ShiftRightKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+ShiftRightKeyAction::ShiftRightKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 }
 
 ShiftRightKeyAction::ShiftRightKeyAction(const ShiftRightKeyAction& source)
-	: KeyAction(notepadForm) {
+	: KeyAction(notepad) {
 }
 
 ShiftRightKeyAction::~ShiftRightKeyAction() {
 }
 
-void ShiftRightKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftRightKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 
-	if (lineCurrent < this->notepadForm->current->GetLength()) {
-		Long endColumn = this->notepadForm->current->Next();
+	if (lineCurrent < this->notepad->current->GetLength()) {
+		Long endColumn = this->notepad->current->Next();
 
 		Long startColumn = lineCurrent;
-		Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-		Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-		Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-		Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+		Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+		Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+		Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+		Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 		if (noteStartPosition > noteEndPosition || (noteStartPosition == noteEndPosition && lineStartPosition > lineEndPosition)) {
 			startColumn = endColumn;
 		}
-		this->notepadForm->editor->selector->Right(noteCurrent, startColumn, endColumn);
+		this->notepad->editor->selector->Right(noteCurrent, startColumn, endColumn);
 	}
-	else if (noteCurrent < this->notepadForm->note->GetLength() - 1) {
-		Long index = this->notepadForm->note->Next();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		Long endColumn = this->notepadForm->current->First();
+	else if (noteCurrent < this->notepad->note->GetLength() - 1) {
+		Long index = this->notepad->note->Next();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		Long endColumn = this->notepad->current->First();
 
-		this->notepadForm->editor->selector->Right(index, endColumn, endColumn);
+		this->notepad->editor->selector->Right(index, endColumn, endColumn);
 	}
 }
 
@@ -513,8 +513,8 @@ ShiftRightKeyAction& ShiftRightKeyAction::operator=(const ShiftRightKeyAction& s
 }
 
 //ShiftUpKeyAction
-ShiftUpKeyAction::ShiftUpKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+ShiftUpKeyAction::ShiftUpKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 
 }
 
@@ -527,22 +527,22 @@ ShiftUpKeyAction::~ShiftUpKeyAction() {
 
 }
 
-void ShiftUpKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
+void ShiftUpKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
 	if (noteCurrent > 0) {
-		if (this->notepadForm->highlight == NULL) {
-			this->notepadForm->highlight = new Highlight;
-			this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+		if (this->notepad->highlight == NULL) {
+			this->notepad->highlight = new Highlight;
+			this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 		}
 
-		Long x = this->notepadForm->characterMetrics->GetX(this->notepadForm->current);
-		Long index = this->notepadForm->note->Previous();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		Long column = this->notepadForm->characterMetrics->GetColumn(this->notepadForm->current, x);
-		this->notepadForm->current->Move(column);
+		Long x = this->notepad->characterMetrics->GetX(this->notepad->current);
+		Long index = this->notepad->note->Previous();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		Long column = this->notepad->characterMetrics->GetColumn(this->notepad->current, x);
+		this->notepad->current->Move(column);
 
-		this->notepadForm->editor->UpSelect(noteCurrent, lineCurrent, index, column);
+		this->notepad->editor->UpSelect(noteCurrent, lineCurrent, index, column);
 	}
 }
 
@@ -552,13 +552,13 @@ ShiftUpKeyAction& ShiftUpKeyAction::operator = (const ShiftUpKeyAction& source) 
 }
 
 //ShiftDownKeyAction
-ShiftDownKeyAction::ShiftDownKeyAction(NotepadForm *notepadForm)
-	:KeyAction(notepadForm) {
+ShiftDownKeyAction::ShiftDownKeyAction(Notepad *notepad)
+	:KeyAction(notepad) {
 
 }
 
 ShiftDownKeyAction::ShiftDownKeyAction(const ShiftDownKeyAction& source)
-	: KeyAction(notepadForm) {
+	: KeyAction(notepad) {
 
 }
 
@@ -566,22 +566,22 @@ ShiftDownKeyAction::~ShiftDownKeyAction() {
 
 }
 
-void ShiftDownKeyAction::OnKeyDown(UINT nChar, UINT nRepeatCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (noteCurrent < this->notepadForm->note->GetLength() - 1) {
-		if (this->notepadForm->highlight == NULL) {
-			this->notepadForm->highlight = new Highlight;
-			this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftDownKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (noteCurrent < this->notepad->note->GetLength() - 1) {
+		if (this->notepad->highlight == NULL) {
+			this->notepad->highlight = new Highlight;
+			this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 		}
 
-		Long x = this->notepadForm->characterMetrics->GetX(this->notepadForm->current);
-		Long index = this->notepadForm->note->Next();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		Long column = this->notepadForm->characterMetrics->GetColumn(this->notepadForm->current, x);
-		this->notepadForm->current->Move(column);
+		Long x = this->notepad->characterMetrics->GetX(this->notepad->current);
+		Long index = this->notepad->note->Next();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		Long column = this->notepad->characterMetrics->GetColumn(this->notepad->current, x);
+		this->notepad->current->Move(column);
 
-		this->notepadForm->editor->DownSelect(noteCurrent, lineCurrent, index, column);
+		this->notepad->editor->DownSelect(noteCurrent, lineCurrent, index, column);
 	}
 }
 
@@ -591,8 +591,8 @@ ShiftDownKeyAction& ShiftDownKeyAction::operator=(const ShiftDownKeyAction& sour
 }
 
 //ShiftHomeKeyAction
-ShiftHomeKeyAction::ShiftHomeKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+ShiftHomeKeyAction::ShiftHomeKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 ShiftHomeKeyAction::ShiftHomeKeyAction(const ShiftHomeKeyAction& source)
@@ -602,20 +602,20 @@ ShiftHomeKeyAction::ShiftHomeKeyAction(const ShiftHomeKeyAction& source)
 ShiftHomeKeyAction::~ShiftHomeKeyAction() {
 }
 
-void ShiftHomeKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftHomeKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 
-	Long endColumn = this->notepadForm->current->First();
+	Long endColumn = this->notepad->current->First();
 
-	Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-	Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-	Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-	Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+	Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+	Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+	Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+	Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 	Long startColumn = lineEndPosition;
 	if (noteStartPosition == noteEndPosition && lineStartPosition < lineEndPosition) {
 		startColumn = lineStartPosition;
@@ -623,7 +623,7 @@ void ShiftHomeKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	else if (noteStartPosition < noteEndPosition) {
 		startColumn = 0;
 	}
-	this->notepadForm->editor->selector->Left(noteCurrent, startColumn, endColumn);
+	this->notepad->editor->selector->Left(noteCurrent, startColumn, endColumn);
 }
 
 ShiftHomeKeyAction& ShiftHomeKeyAction::operator =(const ShiftHomeKeyAction& source) {
@@ -633,8 +633,8 @@ ShiftHomeKeyAction& ShiftHomeKeyAction::operator =(const ShiftHomeKeyAction& sou
 }
 
 //ShiftEndKeyAction
-ShiftEndKeyAction::ShiftEndKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+ShiftEndKeyAction::ShiftEndKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 ShiftEndKeyAction::ShiftEndKeyAction(const ShiftEndKeyAction& source)
@@ -644,28 +644,28 @@ ShiftEndKeyAction::ShiftEndKeyAction(const ShiftEndKeyAction& source)
 ShiftEndKeyAction::~ShiftEndKeyAction() {
 }
 
-void ShiftEndKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftEndKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 
-	Long endColumn = this->notepadForm->current->Last();
+	Long endColumn = this->notepad->current->Last();
 
-	Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-	Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-	Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-	Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+	Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+	Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+	Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+	Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 	Long startColumn = lineEndPosition;
 	if (noteStartPosition == noteEndPosition && lineStartPosition > lineEndPosition) {
 		startColumn = lineStartPosition;
 	}
 	else if (noteStartPosition > noteEndPosition) {
-		startColumn = this->notepadForm->current->GetLength();
+		startColumn = this->notepad->current->GetLength();
 	}
-	this->notepadForm->editor->selector->Right(noteCurrent, startColumn, endColumn);
+	this->notepad->editor->selector->Right(noteCurrent, startColumn, endColumn);
 }
 
 ShiftEndKeyAction& ShiftEndKeyAction::operator =(const ShiftEndKeyAction& source) {
@@ -675,8 +675,8 @@ ShiftEndKeyAction& ShiftEndKeyAction::operator =(const ShiftEndKeyAction& source
 }
 
 //ShiftCtrlLeftKeyAction
-ShiftCtrlLeftKeyAction::ShiftCtrlLeftKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+ShiftCtrlLeftKeyAction::ShiftCtrlLeftKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 ShiftCtrlLeftKeyAction::ShiftCtrlLeftKeyAction(const ShiftCtrlLeftKeyAction& source)
@@ -686,23 +686,23 @@ ShiftCtrlLeftKeyAction::ShiftCtrlLeftKeyAction(const ShiftCtrlLeftKeyAction& sou
 ShiftCtrlLeftKeyAction::~ShiftCtrlLeftKeyAction() {
 }
 
-void ShiftCtrlLeftKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftCtrlLeftKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 
-	Long index = this->notepadForm->note->MovePreviousWord();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
+	Long index = this->notepad->note->MovePreviousWord();
+	this->notepad->current = this->notepad->note->GetAt(index);
 
-	Long endColumn = this->notepadForm->current->GetCurrent();
+	Long endColumn = this->notepad->current->GetCurrent();
 	Long startColumn = lineCurrent;
-	Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-	Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-	Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-	Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+	Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+	Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+	Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+	Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 	if (noteCurrent > index || noteStartPosition < noteEndPosition || (noteStartPosition == noteEndPosition && lineStartPosition < lineEndPosition)) {
 		if (noteStartPosition == index && endColumn < lineStartPosition) {
 			startColumn = lineStartPosition;
@@ -711,7 +711,7 @@ void ShiftCtrlLeftKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 			startColumn = endColumn;
 		}
 	}
-	this->notepadForm->editor->selector->Left(index, startColumn, endColumn);
+	this->notepad->editor->selector->Left(index, startColumn, endColumn);
 }
 
 ShiftCtrlLeftKeyAction& ShiftCtrlLeftKeyAction::operator =(const ShiftCtrlLeftKeyAction& source) {
@@ -721,8 +721,8 @@ ShiftCtrlLeftKeyAction& ShiftCtrlLeftKeyAction::operator =(const ShiftCtrlLeftKe
 }
 
 //ShiftCtrlRightKeyAction
-ShiftCtrlRightKeyAction::ShiftCtrlRightKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+ShiftCtrlRightKeyAction::ShiftCtrlRightKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 ShiftCtrlRightKeyAction::ShiftCtrlRightKeyAction(const ShiftCtrlRightKeyAction& source)
@@ -732,23 +732,23 @@ ShiftCtrlRightKeyAction::ShiftCtrlRightKeyAction(const ShiftCtrlRightKeyAction& 
 ShiftCtrlRightKeyAction::~ShiftCtrlRightKeyAction() {
 }
 
-void ShiftCtrlRightKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftCtrlRightKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 
-	Long index = this->notepadForm->note->MoveNextWord();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
+	Long index = this->notepad->note->MoveNextWord();
+	this->notepad->current = this->notepad->note->GetAt(index);
 
-	Long endColumn = this->notepadForm->current->GetCurrent();
+	Long endColumn = this->notepad->current->GetCurrent();
 	Long startColumn = lineCurrent;
-	Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-	Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-	Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-	Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+	Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+	Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+	Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+	Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 	if (noteCurrent < index || noteStartPosition > noteEndPosition || (noteStartPosition == noteEndPosition && lineStartPosition > lineEndPosition)) {
 		if (noteStartPosition == index && endColumn > lineStartPosition) {
 			startColumn = lineStartPosition;
@@ -757,7 +757,7 @@ void ShiftCtrlRightKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
 			startColumn = endColumn;
 		}
 	}
-	this->notepadForm->editor->selector->Right(index, startColumn, endColumn);
+	this->notepad->editor->selector->Right(index, startColumn, endColumn);
 }
 
 ShiftCtrlRightKeyAction& ShiftCtrlRightKeyAction::operator =(const ShiftCtrlRightKeyAction& source) {
@@ -767,8 +767,8 @@ ShiftCtrlRightKeyAction& ShiftCtrlRightKeyAction::operator =(const ShiftCtrlRigh
 }
 
 //ShiftCtrlHomeKeyAction
-ShiftCtrlHomeKeyAction::ShiftCtrlHomeKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+ShiftCtrlHomeKeyAction::ShiftCtrlHomeKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 ShiftCtrlHomeKeyAction::ShiftCtrlHomeKeyAction(const ShiftCtrlHomeKeyAction& source)
@@ -778,19 +778,19 @@ ShiftCtrlHomeKeyAction::ShiftCtrlHomeKeyAction(const ShiftCtrlHomeKeyAction& sou
 ShiftCtrlHomeKeyAction::~ShiftCtrlHomeKeyAction() {
 }
 
-void ShiftCtrlHomeKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftCtrlHomeKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 
-	Long index = this->notepadForm->note->First();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
-	Long column = this->notepadForm->current->First();
+	Long index = this->notepad->note->First();
+	this->notepad->current = this->notepad->note->GetAt(index);
+	Long column = this->notepad->current->First();
 
-	this->notepadForm->editor->UpSelect(noteCurrent, lineCurrent, index, column);
+	this->notepad->editor->UpSelect(noteCurrent, lineCurrent, index, column);
 }
 
 ShiftCtrlHomeKeyAction& ShiftCtrlHomeKeyAction::operator =(const ShiftCtrlHomeKeyAction& source) {
@@ -800,8 +800,8 @@ ShiftCtrlHomeKeyAction& ShiftCtrlHomeKeyAction::operator =(const ShiftCtrlHomeKe
 }
 
 //ShiftCtrlEndKeyAction
-ShiftCtrlEndKeyAction::ShiftCtrlEndKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+ShiftCtrlEndKeyAction::ShiftCtrlEndKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 ShiftCtrlEndKeyAction::ShiftCtrlEndKeyAction(const ShiftCtrlEndKeyAction& source)
@@ -811,19 +811,19 @@ ShiftCtrlEndKeyAction::ShiftCtrlEndKeyAction(const ShiftCtrlEndKeyAction& source
 ShiftCtrlEndKeyAction::~ShiftCtrlEndKeyAction() {
 }
 
-void ShiftCtrlEndKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	Long noteCurrent = this->notepadForm->note->GetCurrent();
-	Long lineCurrent = this->notepadForm->current->GetCurrent();
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
+void ShiftCtrlEndKeyAction::OnKeyDown() {
+	Long noteCurrent = this->notepad->note->GetCurrent();
+	Long lineCurrent = this->notepad->current->GetCurrent();
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad, noteCurrent, lineCurrent, noteCurrent, lineCurrent);
 	}
 
-	Long index = this->notepadForm->note->Last();
-	this->notepadForm->current = this->notepadForm->note->GetAt(index);
-	Long column = this->notepadForm->current->Last();
+	Long index = this->notepad->note->Last();
+	this->notepad->current = this->notepad->note->GetAt(index);
+	Long column = this->notepad->current->Last();
 
-	this->notepadForm->editor->DownSelect(noteCurrent, lineCurrent, index, column);
+	this->notepad->editor->DownSelect(noteCurrent, lineCurrent, index, column);
 }
 
 ShiftCtrlEndKeyAction& ShiftCtrlEndKeyAction::operator =(const ShiftCtrlEndKeyAction& source) {
@@ -833,8 +833,8 @@ ShiftCtrlEndKeyAction& ShiftCtrlEndKeyAction::operator =(const ShiftCtrlEndKeyAc
 }
 
 //CtrlAKeyAction
-CtrlAKeyAction::CtrlAKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlAKeyAction::CtrlAKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlAKeyAction::CtrlAKeyAction(const CtrlAKeyAction& source)
@@ -844,21 +844,21 @@ CtrlAKeyAction::CtrlAKeyAction(const CtrlAKeyAction& source)
 CtrlAKeyAction::~CtrlAKeyAction() {
 }
 
-void CtrlAKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	if (this->notepadForm->highlight == NULL) {
-		this->notepadForm->highlight = new Highlight;
-		this->notepadForm->editor->selector = new Selector(this->notepadForm);
+void CtrlAKeyAction::OnKeyDown() {
+	if (this->notepad->highlight == NULL) {
+		this->notepad->highlight = new Highlight;
+		this->notepad->editor->selector = new Selector(this->notepad);
 
-		Long index = this->notepadForm->note->Last();
-		this->notepadForm->current = this->notepadForm->note->GetAt(index);
-		this->notepadForm->current->Last();
+		Long index = this->notepad->note->Last();
+		this->notepad->current = this->notepad->note->GetAt(index);
+		this->notepad->current->Last();
 
 		Long i = 0;
 		while (i <= index) {
-			Glyph *line = this->notepadForm->note->GetAt(i);
+			Glyph *line = this->notepad->note->GetAt(i);
 			Long startColumn = 0;
 			Long endColumn = line->GetLength();
-			this->notepadForm->editor->selector->Right(i, startColumn, endColumn);
+			this->notepad->editor->selector->Right(i, startColumn, endColumn);
 			i++;
 		}
 	}
@@ -871,8 +871,8 @@ CtrlAKeyAction& CtrlAKeyAction::operator =(const CtrlAKeyAction& source) {
 }
 
 //CtrlCKeyAction
-CtrlCKeyAction::CtrlCKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlCKeyAction::CtrlCKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlCKeyAction::CtrlCKeyAction(const CtrlCKeyAction& source)
@@ -882,8 +882,8 @@ CtrlCKeyAction::CtrlCKeyAction(const CtrlCKeyAction& source)
 CtrlCKeyAction::~CtrlCKeyAction() {
 }
 
-void CtrlCKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	this->notepadForm->editor->Copy();
+void CtrlCKeyAction::OnKeyDown() {
+	this->notepad->editor->Copy();
 }
 
 CtrlCKeyAction& CtrlCKeyAction::operator =(const CtrlCKeyAction& source) {
@@ -893,8 +893,8 @@ CtrlCKeyAction& CtrlCKeyAction::operator =(const CtrlCKeyAction& source) {
 }
 
 //CtrlVKeyAction
-CtrlVKeyAction::CtrlVKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlVKeyAction::CtrlVKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlVKeyAction::CtrlVKeyAction(const CtrlVKeyAction& source)
@@ -904,11 +904,11 @@ CtrlVKeyAction::CtrlVKeyAction(const CtrlVKeyAction& source)
 CtrlVKeyAction::~CtrlVKeyAction() {
 }
 
-void CtrlVKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	this->notepadForm->editor->Paste();
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+void CtrlVKeyAction::OnKeyDown() {
+	this->notepad->editor->Paste();
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
@@ -919,8 +919,8 @@ CtrlVKeyAction& CtrlVKeyAction::operator =(const CtrlVKeyAction& source) {
 }
 
 //CtrlXKeyAction
-CtrlXKeyAction::CtrlXKeyAction(NotepadForm *notepadForm)
-	: KeyAction(notepadForm) {
+CtrlXKeyAction::CtrlXKeyAction(Notepad *notepad)
+	: KeyAction(notepad) {
 }
 
 CtrlXKeyAction::CtrlXKeyAction(const CtrlXKeyAction& source)
@@ -930,10 +930,10 @@ CtrlXKeyAction::CtrlXKeyAction(const CtrlXKeyAction& source)
 CtrlXKeyAction::~CtrlXKeyAction() {
 }
 
-void CtrlXKeyAction::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	this->notepadForm->editor->Copy();
+void CtrlXKeyAction::OnKeyDown() {
+	this->notepad->editor->Copy();
 
-	this->notepadForm->editor->Delete();
+	this->notepad->editor->Delete();
 }
 
 CtrlXKeyAction& CtrlXKeyAction::operator =(const CtrlXKeyAction& source) {

@@ -2,16 +2,16 @@
 #define _COMMAND_H
 
 typedef signed long int Long;
-class NotepadForm;
+class Notepad;
 class Command {
 public:
-	Command(NotepadForm *notepadForm = 0);
+	Command(Notepad *notepad = 0);
 	Command(const Command& source);
 	virtual ~Command() = 0;
 	virtual void Execute() = 0;
 	Command& operator =(const Command& source);
 protected:
-	NotepadForm *notepadForm;
+	Notepad *notepad;
 };
 
 #endif //_COMMAND_H

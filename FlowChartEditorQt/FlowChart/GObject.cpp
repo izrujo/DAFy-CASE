@@ -48,3 +48,51 @@ Long GObject::GetCapacity() const {
 Long GObject::GetLength() const {
 	return -1;
 }
+
+//Qt Concrete GObject virtual declarations
+//QtPen
+QBrush& GObject::GetBrush() {
+	return QBrush(); //return empty QString instance
+}
+
+float GObject::GetWidth() {
+	return -1;
+}
+
+int GObject::GetPenStyle() {
+	return -1;
+}
+
+int GObject::GetPenCapStyle() {
+	return -1;
+}
+
+int GObject::GetPenJoinStyle() {
+	return -1;
+}
+
+//QtBrush
+QColor& GObject::GetColor() {
+	return QColor(); //return empty QString instance
+}
+
+int GObject::GetStyle() {
+	return -1;
+}
+
+//QtFont
+QString& GObject::GetFamily() {
+	return QString();  //return empty QString instance
+}
+
+int GObject::GetPointSize() {
+	return -1;
+}
+
+int GObject::GetWeight() {
+	return -1;
+}
+
+bool GObject::GetItalic() {
+	return false;
+}

@@ -17,7 +17,7 @@ protected:
 	void paintEvent(QPaintEvent *event);
 	//BOOL OnEraseBkgnd(CDC *pDC);
 	void mouseReleaseEvent(QMouseEvent *event);
-	//void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+	void keyPressEvent(QKeyEvent *event);
 public:
 	TextRegion *message;
 	TextRegion *guide;

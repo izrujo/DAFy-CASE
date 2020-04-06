@@ -1,17 +1,17 @@
 #ifndef KEYACTIONFACTORY_H
 #define KEYACTIONFACTORY_H
 
-#include <afxwin.h>
-
 class KeyAction;
-class NotepadForm;
+class Notepad;
+class QKeyEvent;
+
 class KeyActionFactory {
 public:
-	KeyActionFactory(NotepadForm *notepadForm = 0);
+	KeyActionFactory(Notepad *notepad = 0);
 	~KeyActionFactory();
-	KeyAction* Make(UINT nChar);
+	KeyAction* Make(int key);
 private:
-	NotepadForm *notepadForm;
+	Notepad *notepad;
 };
 
 #endif // !KEYACTIONFACTORY_H

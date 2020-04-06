@@ -1,37 +1,39 @@
 #include "CharacterMetrics.h"
-#include "NotepadForm.h"
+#include "Notepad.h"
 #include "Glyph.h"
 #include "Character.h"
-#include "Font.h"
+#include "GObject.h"
 
-CharacterMetrics::CharacterMetrics(NotepadForm *notepadForm) {
-	this->notepadForm = notepadForm;
-	CDC *dc = this->notepadForm->GetDC();
-	CString buffer;
-	CSize size;
-	CFont *oldFont; 
-	CFont font;
-	this->notepadForm->font->Create(font);
-	oldFont = dc->SelectObject(&font);
+#include <qfont.h>
+
+CharacterMetrics::CharacterMetrics(Notepad *notepad) {
+	this->notepad = notepad;
+
+	GObject *font = this->notepad->painter->CurrentObject("Font");
+	//QFontMetrics metrics(QFont(font->GetFamily(), font->GetPointSize(), font->GetWeight(), font->GetItalic())); //=>Qt 5.14.2 에서 안되는 코드 ???
+	QString family = font->GetFamily();
+	Long pointSize = font->GetPointSize();
+	Long weight = font->GetWeight();
+	bool italic = font->GetItalic();
+	QFont metricsFont(family, pointSize, weight, italic); 
+	QFontMetrics metrics(metricsFont);
+	QChar buffer;
 
 	Long i = 1;
 	while (i < 128) {
-		buffer.Format("%c", i);
-		size = dc->GetTextExtent(buffer);
-		this->widths[i] = size.cx;
+		buffer = i;
+		this->widths[i] = metrics.horizontalAdvance(buffer);
 		i++;
 	}
 	this->widths[9] = this->widths[32] * 8; //Tab 처리
 	this->widths[0] = this->widths[32];
-	size = dc->GetTextExtent("가");
-	this->widths[i] = size.cx;
-	TEXTMETRICA textmetrica = { 0, };
-	dc->GetTextMetrics(&textmetrica);
-	this->height = textmetrica.tmHeight;
-	dc->SelectObject(oldFont);
+	this->widths[i] = metrics.horizontalAdvance('가'); //한글
+	this->height = metrics.height(); //28
+	this->descent= metrics.descent(); //5 : 
 }
+
 CharacterMetrics::CharacterMetrics(const CharacterMetrics& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 
 	Long i = 0;
 	while (i < 129) {
@@ -40,10 +42,26 @@ CharacterMetrics::CharacterMetrics(const CharacterMetrics& source) {
 	}
 
 	this->height = source.height;
+	this->descent = source.descent;
 }
 
 CharacterMetrics::~CharacterMetrics() {
 
+}
+
+CharacterMetrics& CharacterMetrics::operator =(const CharacterMetrics& source) {
+	this->notepad = source.notepad;
+
+	Long i = 0;
+	while (i < 129) {
+		this->widths[i] = source.widths[i];
+		i++;
+	}
+
+	this->height = source.height;
+	this->descent = source.descent;
+
+	return *this;
 }
 
 Long CharacterMetrics::GetX(Glyph *line) {
@@ -125,20 +143,6 @@ Long CharacterMetrics::GetX(const string& buffer) {
 
 Long CharacterMetrics::GetY(Long index) {
 	return this->height * (index);
-}
-
-CharacterMetrics& CharacterMetrics::operator =(const CharacterMetrics& source) {
-	this->notepadForm = source.notepadForm;
-
-	Long i = 0;
-	while (i < 129) {
-		this->widths[i] = source.widths[i];
-		i++;
-	}
-
-	this->height = source.height;
-
-	return *this;
 }
 
 Long CharacterMetrics::GetColumn(Glyph *line, Long x) {

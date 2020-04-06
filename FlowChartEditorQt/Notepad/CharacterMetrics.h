@@ -5,12 +5,12 @@
 
 using namespace std;
 typedef signed long int Long;
-class NotepadForm;
+class Notepad;
 class Glyph;
 
 class CharacterMetrics {
 public:
-	CharacterMetrics(NotepadForm *notepadForm = 0);
+	CharacterMetrics(Notepad *notepad = 0);
 	CharacterMetrics(const CharacterMetrics& source);
 	~CharacterMetrics();
 	Long GetX(Glyph *line);
@@ -25,10 +25,12 @@ public:
 	Long GetWidth(Long index) const;
 	Long GetDoubleByteWidth() const;
 	Long GetHeight() const;
+	Long GetDescent() const;
 private:
-	NotepadForm *notepadForm;
+	Notepad *notepad;
 	Long widths[129];
 	Long height;
+	Long descent;
 };
 
 inline Long CharacterMetrics::GetWidth(Long index) const {
@@ -41,6 +43,10 @@ inline Long CharacterMetrics::GetDoubleByteWidth() const {
 
 inline Long CharacterMetrics::GetHeight() const {
 	return this->height;
+}
+
+inline Long CharacterMetrics::GetDescent() const {
+	return this->descent;
 }
 
 #endif // !CHARACTERMETRICS_H

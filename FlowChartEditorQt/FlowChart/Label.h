@@ -7,7 +7,7 @@
 #ifndef _LABEL_H
 #define _LABEL_H
 
-#include "../Notepad/NotepadForm.h"
+#include "../Notepad/Notepad.h"
 
 typedef signed long int Long;
 typedef unsigned long int ULong;
@@ -18,10 +18,10 @@ class Caret;
 class Shape;
 class SizeController;
 
-class Label : public NotepadForm {
+class Label : public Notepad {
 public:
 	static Label* Instance();
-	static Label* Instance(String *text, COLORREF color);
+	static Label* Instance(String *text);
 	static void Destroy();
 	void Open(Long x, Long y, Long width, Long height, String* text);
 

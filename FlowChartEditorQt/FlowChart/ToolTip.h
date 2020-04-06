@@ -2,15 +2,17 @@
 #define _TOOLTIP_H
 
 #include "../Notepad/NotepadForm.h"
+#include <qcolor.h>
+#include <QtWidgets/QFrame>
 
 class SizeController;
 
 class ToolTip : public NotepadForm {
 public:
 	static ToolTip* Instance();
-	static ToolTip* Instance(char *text, COLORREF color);
+	static ToolTip* Instance(char(*text), QColor color);
 	static void Destroy();
-	void Open(Long x, Long y, Long width, Long height, char* text);
+	void Open(Long x, Long y, Long width, Long height);
 
 	Long GetX() const;
 	Long GetY() const;
@@ -19,9 +21,9 @@ public:
 
 protected:
 	ToolTip();
-	ToolTip(char *text, COLORREF color);
+	ToolTip(char(*text), QColor color);
 	~ToolTip();
-	
+
 private:
 	// 위치와 크기
 	Long x;
@@ -29,16 +31,14 @@ private:
 	Long width;
 	Long height;
 
-	COLORREF color;
+	QColor color;
 private:
 	static ToolTip *instance;
 
 protected:
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnPaint();
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-
-	DECLARE_MESSAGE_MAP()          //윈32에서 ON_COMMAND ON_NOTIFY 같은것을 정의
+	//afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	void paintEvent(QPaintEvent *event);
+	//afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 };
 
 inline Long ToolTip::GetX() const {

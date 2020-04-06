@@ -37,6 +37,7 @@
 #include <qmenu.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
+#include <qtextedit.h>
 
 DrawingPaper::DrawingPaper(QWidget *parent = Q_NULLPTR) {
 	this->templateSelected = NULL;
@@ -228,7 +229,7 @@ void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 	if (this->label != NULL)
 	{
 		//19.09.03 Label의 (편집된)내용을 기호 안의 실제 데이터로 넣는 처리==================
-		string content = this->label->note->GetContent();
+		string content = this->label->toPlainText().toLocal8Bit().constData();
 		String contents(content);
 
 		FlowChartShape::Shape *shape = this->flowChart->GetAt(this->indexOfSelected);
@@ -244,8 +245,10 @@ void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 		}
 		//=========================================================
 
-		this->label->Destroy();
-		this->label = NULL;
+		if (this->label != NULL) {
+			delete this->label;
+			this->label = NULL;
+		}
 		/*
 		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 		TutorialForm *tutorialForm = (TutorialForm*)editor->windows[2];
@@ -358,7 +361,7 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 		this->clearFocus();
 
 		QColor color = shape->GetBackGroundColor();
-		this->label = Label::Instance(&(shape->GetContents()), color.rgb());
+		this->label = new QTextEdit(this);
 
 		halfHeight = shape->GetHeight() / 2;
 		left = shape->GetX() + halfHeight - positionX;
@@ -366,8 +369,13 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 		right = shape->GetX() + shape->GetWidth() - halfHeight + 5 - positionX;
 		bottom = shape->GetY() + shape->GetHeight() - 1 - positionY;
 
-		this->label->Open(left, top, right - left, bottom - top, &(shape->GetContents()));
-		this->label->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, CRect(left, top, right, bottom), (CWnd*)this, -1);
+		this->label->move(left, top);
+		this->label->resize(right - left, bottom - top);
+		//this->label->Open(left, top, right - left, bottom - top, &(shape->GetContents()));
+		this->label->setWordWrapMode(QTextOption::NoWrap);
+		this->label->setPlainText(QString::fromLocal8Bit(shape->GetContents()));
+		this->label->show();
+		//this->label->Create(NULL, NULL, WS_CHILD | WS_VISIBLE, CRect(left, top, right, bottom), (CWnd*)this, -1);
 
 		Long(*indexes) = new Long[this->flowChart->GetLength()];
 		indexes[0] = this->indexOfSelected;
@@ -375,7 +383,7 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 
 		shape = this->flowChart->GetAt(this->indexOfSelected);
 		shape->Rewrite(String(""));
-		this->label->SetFocus();
+		this->label->setFocus();
 
 		if (indexes != 0) {
 			delete[] indexes;

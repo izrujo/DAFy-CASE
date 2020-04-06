@@ -11,7 +11,7 @@
 #pragma warning (disable : 4996)
 
 Terminal::Terminal(Long x, Long y, Long width, Long height,
-	QColor backGroundColor, QPen borderLine, QColor borderColor, String contents)
+	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 }
 

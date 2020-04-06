@@ -145,7 +145,6 @@
     <ClCompile Include="FlowChart\Shape.cpp" />
     <ClCompile Include="FlowChart\SizeController.cpp" />
     <ClCompile Include="FlowChart\SizeMake.cpp" />
-    <ClCompile Include="FlowChart\StatusBar.cpp" />
     <ClCompile Include="FlowChart\String.cpp" />
     <ClCompile Include="FlowChart\Symbol.cpp" />
     <ClCompile Include="FlowChart\Template.cpp" />
@@ -154,8 +153,8 @@
     <ClCompile Include="FlowChart\Tokenizer.cpp" />
     <ClCompile Include="FlowChart\Tool.cpp" />
     <ClCompile Include="FlowChart\ToolFactory.cpp" />
-    <ClCompile Include="FlowChart\ToolTip.cpp" />
     <ClCompile Include="FlowChart\TutorialController.cpp" />
+    <ClCompile Include="FlowChart\TutorialForm.cpp" />
     <ClCompile Include="FlowChart\TutorialIntroForm.cpp" />
     <ClCompile Include="FlowChart\TutorialMark.cpp" />
     <ClCompile Include="FlowChart\TutorialMarkFactory.cpp" />
@@ -172,17 +171,17 @@
     <ClCompile Include="Notepad\CommandFactory.cpp" />
     <ClCompile Include="Notepad\Composite.cpp" />
     <ClCompile Include="Notepad\Editor.cpp" />
-    <ClCompile Include="Notepad\Font.cpp" />
     <ClCompile Include="Notepad\FontCommand.cpp" />
     <ClCompile Include="Notepad\Glyph.cpp" />
     <ClCompile Include="Notepad\GlyphFactory.cpp" />
     <ClCompile Include="Notepad\Highlight.cpp" />
     <ClCompile Include="Notepad\KeyActionFactory.cpp" />
     <ClCompile Include="Notepad\KeyActions.cpp" />
+    <ClCompile Include="Notepad\Line.cpp" />
+    <ClCompile Include="Notepad\main.cpp" />
     <ClCompile Include="Notepad\Note.cpp" />
-    <ClCompile Include="Notepad\NotepadForm.cpp" />
+    <ClCompile Include="Notepad\Notepad.cpp" />
     <ClCompile Include="Notepad\Observer.cpp" />
-    <ClCompile Include="Notepad\Row.cpp" />
     <ClCompile Include="Notepad\Scanner.cpp" />
     <ClCompile Include="Notepad\Selector.cpp" />
     <ClCompile Include="Notepad\Subject.cpp" />
@@ -198,9 +197,11 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="FlowChartEditor.ui" />
+    <QtUic Include="Notepad\Notepad.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc" />
+    <QtRcc Include="Notepad\Notepad.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlowChart\A4Paper.h" />
@@ -269,7 +270,6 @@
     <ClInclude Include="FlowChart\SizeController.h" />
     <ClInclude Include="FlowChart\SizeMake.h" />
     <ClInclude Include="FlowChart\Stack.h" />
-    <ClInclude Include="FlowChart\StatusBar.h" />
     <ClInclude Include="FlowChart\String.h" />
     <ClInclude Include="FlowChart\Symbol.h" />
     <ClInclude Include="FlowChart\Template.h" />
@@ -278,9 +278,9 @@
     <ClInclude Include="FlowChart\Tokenizer.h" />
     <ClInclude Include="FlowChart\Tool.h" />
     <ClInclude Include="FlowChart\ToolFactory.h" />
-    <ClInclude Include="FlowChart\ToolTip.h" />
     <ClInclude Include="FlowChart\TutorialController.h" />
     <QtMoc Include="FlowChart\TutorialIntroForm.h" />
+    <QtMoc Include="FlowChart\TutorialForm.h" />
     <ClInclude Include="FlowChart\TutorialMark.h" />
     <ClInclude Include="FlowChart\TutorialMarkFactory.h" />
     <ClInclude Include="FlowChart\Tutorials.h" />
@@ -288,7 +288,7 @@
     <ClInclude Include="FlowChart\Zoom.h" />
     <ClInclude Include="FlowChart\ZoomVisitor.h" />
     <ClInclude Include="Notepad\Array.h" />
-    <ClInclude Include="Notepad\Caret.h" />
+    <QtMoc Include="Notepad\Caret.h" />
     <ClInclude Include="Notepad\CaretController.h" />
     <ClInclude Include="Notepad\Character.h" />
     <ClInclude Include="Notepad\CharacterMetrics.h" />
@@ -296,17 +296,16 @@
     <ClInclude Include="Notepad\CommandFactory.h" />
     <ClInclude Include="Notepad\Composite.h" />
     <ClInclude Include="Notepad\Editor.h" />
-    <ClInclude Include="Notepad\Font.h" />
     <ClInclude Include="Notepad\FontCommand.h" />
     <ClInclude Include="Notepad\Glyph.h" />
     <ClInclude Include="Notepad\GlyphFactory.h" />
     <ClInclude Include="Notepad\Highlight.h" />
     <ClInclude Include="Notepad\KeyActionFactory.h" />
     <ClInclude Include="Notepad\KeyActions.h" />
+    <ClInclude Include="Notepad\Line.h" />
     <ClInclude Include="Notepad\Note.h" />
-    <ClInclude Include="Notepad\NotepadForm.h" />
+    <QtMoc Include="Notepad\Notepad.h" />
     <ClInclude Include="Notepad\Observer.h" />
-    <ClInclude Include="Notepad\Row.h" />
     <ClInclude Include="Notepad\Scanner.h" />
     <ClInclude Include="Notepad\Selector.h" />
     <ClInclude Include="Notepad\Subject.h" />

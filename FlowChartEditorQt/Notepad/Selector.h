@@ -3,11 +3,11 @@
 
 typedef signed long int Long;
 
-class NotepadForm;
+class Notepad;
 
 class Selector {
 public:
-	Selector(NotepadForm *notepadForm = 0, Long noteStartPosition = 0, Long lineStartPosition = 0, Long noteEndPosition = 0, Long lineEndPosition = 0);
+	Selector(Notepad *notepad = 0, Long noteStartPosition = 0, Long lineStartPosition = 0, Long noteEndPosition = 0, Long lineEndPosition = 0);
 	Selector(const Selector& source);
 	~Selector();
 	Selector& operator=(const Selector& source);
@@ -20,7 +20,7 @@ public:
 	Long GetNoteEndPosition() const;
 	Long GetLineEndPosition() const;
 private:
-	NotepadForm *notepadForm;
+	Notepad *notepad;
 	Long noteStartPosition;
 	Long lineStartPosition;
 	Long noteEndPosition;

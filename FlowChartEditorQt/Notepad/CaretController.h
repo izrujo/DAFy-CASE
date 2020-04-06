@@ -4,19 +4,26 @@
 #include "Observer.h"
 
 typedef signed long int Long;
-class NotepadForm;
+class Notepad;
 class Caret;
 
 class CaretController : public Observer {
 public:
-	CaretController(NotepadForm *notepadForm = 0);
+	CaretController(Notepad *notepad = 0);
 	CaretController(const CaretController& source);
 	virtual ~CaretController();
-	virtual void Update();
 	CaretController& operator =(const CaretController& source);
+	
+	virtual void Update();
+
+	Caret* GetCaret() const;
 private:
-	NotepadForm *notepadForm;
+	Notepad *notepad;
 	Caret *caret;
 };
+
+inline Caret* CaretController::GetCaret() const {
+	return this->caret;
+}
 
 #endif //_CARETCONTROLLER_H

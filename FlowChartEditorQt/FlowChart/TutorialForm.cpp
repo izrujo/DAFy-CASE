@@ -1,67 +1,48 @@
 #include "TutorialForm.h"
-#include "Painter.h"
-#include "FlowChartEditor.h"
+#include "GObject.h"
+#include "../FlowChartEditor.h"
 #include "TextRegion.h"
-#include "Template.h"
 #include "Tutorials.h"
 #include "TutorialMarkFactory.h"
-#include "RectangleRegion.h"
-#include "FlowChart.h"
 #include "DrawingPaper.h"
 #include "FlowChartVisitor.h"
 #include "DrawVisitor.h"
 #include "File.h"
 #include "ZoomVisitor.h"
 #include "Zoom.h"
-#include "FlowChartFont.h"
 #include "Line.h"
 #include "ToolTip.h"
 #include "NumberBox.h"
 #include "TutorialMark.h"
 #include "TutorialController.h"
+#include "QtPainter.h"
+#include "Template.h"
+#include "FlowChart.h"
+#include "QtGObjectFactory.h"
 
-BEGIN_MESSAGE_MAP(TutorialForm, CFrameWnd)
-	ON_WM_CREATE()
-	ON_WM_PAINT()
-	ON_WM_CLOSE()
-	ON_WM_LBUTTONUP()
-	ON_WM_ERASEBKGND()
-	ON_WM_KILLFOCUS()
-	ON_WM_SETFOCUS()
-END_MESSAGE_MAP()
+#include <qpainter.h>
+#include <qevent.h>
 
-TutorialForm::TutorialForm() {
-	this->lists = NULL;
-	this->painter = NULL;
-	this->sample = NULL;
-	this->font = NULL;
-	this->main = NULL;
-	this->current = NULL;
-	this->lastConcrete = NULL;
-	this->tutorialController = NULL;
-}
+TutorialForm::TutorialForm(QWidget *parent) {
 
-int TutorialForm::OnCreate(LPCREATESTRUCT lpCreateStruct) {
-	CFrameWnd::OnCreate(lpCreateStruct);
+	//투명화
+	//int ret = ::SetLayeredWindowAttributes(this->m_hWnd, RGB(0, 0, 0), 90, LWA_ALPHA);
+	//this->ModifyStyleEx(WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED);
 
-	int ret = ::SetLayeredWindowAttributes(this->m_hWnd, RGB(0, 0, 0), 90, LWA_ALPHA);
-	this->ModifyStyleEx(WS_EX_CLIENTEDGE, 0, SWP_FRAMECHANGED);
-
-	CRect rect;
-	FlowChartEditor *editor = (FlowChartEditor*)this->GetParent();
-	editor->GetWindowRect(rect);
-	this->painter = new Painter(this->GetDC(), rect.Width(), rect.Height(), RGB(0, 0, 0), TRANSPARENT);
+	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+	QRect rect = editor->frameRect();
+	this->painter = new QtPainter(rect.width(), rect.height());
 
 	this->lists = new Template(1);
 
 	TextRegion *textRegion;
-	textRegion = new TextRegion(560, 880, 100, 50, RGB(255, 255, 255), DOT, RGB(52, 52, 52), String("종료"));
-	this->lists->Register(textRegion);
+	textRegion = new TextRegion(560, 880, 100, 50, QColor(255, 255, 255), Qt::DotLine, QColor(52, 52, 52), String("종료"));
+	this->lists->Attach(textRegion);
 
 	File file;
 	file.Load(static_cast<DrawingPaper*>(editor->windows[0]), "sample.txt");
-	this->sample = new FlowChart(*(dynamic_cast<FlowChart*>((static_cast<DrawingPaper*>(editor->windows[0]))->flowChart)));
-	dynamic_cast<FlowChart*>((static_cast<DrawingPaper*>(editor->windows[0]))->flowChart)->Clear();
+	this->sample = new FlowChart(*dynamic_cast<FlowChart*>((static_cast<DrawingPaper*>(editor->windows[0]))->flowChart));
+	static_cast<DrawingPaper*>(editor->windows[0])->flowChart->Clear();
 
 	//튜토리얼 구성
 	this->main = new MainTutorial(17);
@@ -288,19 +269,21 @@ int TutorialForm::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	this->main->Add(first);
 
 	//미리 그리기
-	editor->GetWindowRect(&rect);
-	this->MoveWindow(1230, 70, 660, 940, TRUE);
-	this->GetWindowRect(&rect);
+	//editor->GetWindowRect(&rect);
+	this->move(1230, 70);
+	this->resize(660, 940);
+	this->repaint();
+	rect = this->frameRect();
 
 	Zoom zoom(40);
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(&zoom);
 
 
 	this->sample->Accept(zoomVisitor);
-	Shape *shape;
+	FlowChartShape::Shape *shape;
 	Long i = 0;
-	while (i < dynamic_cast<FlowChart*>(this->sample)->GetLength()) {
-		shape = dynamic_cast<FlowChart*>(this->sample)->GetAt(i);
+	while (i < this->sample->GetLength()) {
+		shape = this->sample->GetAt(i);
 		shape->Move(shape->GetX() - 181, shape->GetY() - 246);
 		i++;
 	}
@@ -320,14 +303,12 @@ int TutorialForm::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 		delete this->lastConcrete;
 	}
 	this->lastConcrete = this->main->Top()->TakeOut();
-	this->Invalidate();
+	this->repaint();
 
 	this->tutorialController = new TutorialController(this);
-
-	return 0;
 }
 
-void TutorialForm::OnClose() {
+void TutorialForm::closeEvent(QCloseEvent *event) {
 	if (this->lists != NULL) {
 		delete this->lists;
 	}
@@ -340,9 +321,9 @@ void TutorialForm::OnClose() {
 	if (this->main != NULL) {
 		delete this->main;
 	}
-	if (dynamic_cast<FlowChartEditor*>(this->GetParent())->toolTip != NULL) {
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->toolTip->Destroy();
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->toolTip = NULL;
+	if (dynamic_cast<FlowChartEditor*>(this->parentWidget())->toolTip != NULL) {
+		dynamic_cast<FlowChartEditor*>(this->parentWidget())->toolTip->Destroy();
+		dynamic_cast<FlowChartEditor*>(this->parentWidget())->toolTip = NULL;
 	}
 	if (this->lastConcrete != NULL) {
 		delete this->lastConcrete;
@@ -350,32 +331,26 @@ void TutorialForm::OnClose() {
 	if (this->tutorialController != NULL) {
 		delete this->tutorialController;
 	}
-	if (dynamic_cast<FlowChartEditor*>(this->GetParent())->windows[2] != NULL) {
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->windows[2] = NULL;
+	if (dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2] != NULL) {
+		dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2] = NULL;
 	}
-
-
-	CFrameWnd::OnClose();
 }
 
-void TutorialForm::OnPaint() {
-	CPaintDC dc(this);
-	CRect rect;
-	this->GetWindowRect(rect);
-	this->painter->Resize(this, RGB(0, 0, 0));
+void TutorialForm::paintEvent(QPaintEvent *event) {
+	QPainter dc(this);
+	QRect rect = this->frameRect();
+	//this->painter->Resize(this, RGB(0, 0, 0));
 
-	FlowChartEditor *editor = (FlowChartEditor*)this->GetParent();
+	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 
-	LOGFONT logFont = editor->font->GetFont();
-	logFont.lfHeight = -18;
-	COLORREF color = RGB(0, 0, 0);
-	if (this->font != NULL) {
-		delete this->font;
-	}
-	this->font = new FlowChartFont(editor, logFont, color);
-	HFONT hFont = this->font->Create();
-	this->painter->ChangeFont(hFont, this->font->GetColor());
-	this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(editor->windows[0]);
+	GObject *originFont = canvas->painter->CurrentObject("Font");
+	QtGObjectFactory factory;
+	GObject *font = factory.MakeFont(originFont->GetFamily(), 18, originFont->GetWeight(), false);
+	GObject *oldFont = this->painter->SelectObject(*font);
+	GObject *pen = factory.MakePen(QBrush(QColor(102, 102, 102)), 2);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	this->painter->Update();
 
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter);
 	this->sample->Accept(drawVisitor);
@@ -384,29 +359,27 @@ void TutorialForm::OnPaint() {
 		this->current->Accept(drawVisitor);
 	}
 
-	logFont = editor->font->GetFont();
-	logFont.lfHeight = -30;
-	color = RGB(255, 255, 255);
-	if (this->font != NULL) {
-		delete this->font;
-	}
-	this->font = new FlowChartFont(editor, logFont, color);
-	hFont = this->font->Create();
-	this->painter->ChangeFont(hFont, this->font->GetColor());
+	font = factory.MakeFont(originFont->GetFamily(), 30, originFont->GetWeight(), false);
+	this->painter->SelectObject(*font);
+	pen = factory.MakePen(QBrush(QColor(255, 255, 255)), 2);
+	this->painter->SelectObject(*pen);
 
 	dynamic_cast<TextRegion*>(this->lists->GetAt(0))->Draw(this->painter);
 
-	this->painter->Render(&dc, 0, 0, rect.Width(), rect.Height());
+	this->painter->Render(&dc, 0, 0);
 
 	if (drawVisitor != NULL) {
 		delete drawVisitor;
 	}
+
+	this->painter->SelectObject(*oldFont);
+	this->painter->SelectObject(*oldPen);
+	this->painter->Update();
 }
 
-void TutorialForm::OnLButtonUp(UINT nFlags, CPoint point) {
-	CDC *dc = this->GetDC();
-	Long selectedIndex = this->lists->Find(dc, point);
-	FlowChartEditor *editor = (FlowChartEditor*)this->GetParent();
+void TutorialForm::mouseReleaseEvent(QMouseEvent *event) {
+	Long selectedIndex = this->lists->Find(event->pos());
+	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 
 	if (selectedIndex != -1) {
 		TextRegion *textRegion = (TextRegion*)this->lists->GetAt(selectedIndex);
@@ -414,27 +387,31 @@ void TutorialForm::OnLButtonUp(UINT nFlags, CPoint point) {
 			if (editor->toolTip != NULL) {
 				editor->toolTip->Destroy();
 			}
-			this->OnClose();
+			this->close();
 		}
 	}
 }
-
+/*
 BOOL TutorialForm::OnEraseBkgnd(CDC *pDC) {
 	return FALSE;
 }
+*/
 
-void TutorialForm::OnKillFocus(CWnd* pNewWnd) {
-	CRect rect;
-	this->GetWindowRect(rect);
+void TutorialForm::focusOutEvent(QFocusEvent *event) {
+	QRect rect = this->frameRect();
 	Long width = 40;
 
-	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->GetParent());
+	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(editor->windows[0]);
 	if (canvas->label == NULL) {
-		this->MoveWindow(rect.right - width, rect.top, width, width, TRUE);
+		this->move(rect.right - width, rect.top);
+		this->resize(width, width);
+		this->repaint();
 	}
 }
 
-void TutorialForm::OnSetFocus(CWnd* pOldWnd) {
-	this->MoveWindow(1230, 70, 660, 940, TRUE);
+void TutorialForm::focusInEvent(QFocusEvent *event) {
+	this->move(1230, 70);
+	this->resize(660, 940);
+	this->repaint();
 }

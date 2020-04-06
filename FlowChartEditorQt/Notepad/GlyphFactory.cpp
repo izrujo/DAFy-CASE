@@ -1,7 +1,7 @@
 #include "GlyphFactory.h"
 #include "Glyph.h"
 #include "Note.h"
-#include "Row.h"
+#include "Line.h"
 #include "Character.h"
 
 GlyphFactory::GlyphFactory() {
@@ -16,7 +16,7 @@ Glyph* GlyphFactory::Make(const char(*content)) {
 		glyph = new Note;
 	}
 	else if (content[0] == '\r' && content[1] == '\n') {
-		glyph = new Row;
+		glyph = new Line;
 	}
 	else if (!(content[0] & 0x80)) {
 		glyph = new SingleByteCharacter(content[0]);

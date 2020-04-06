@@ -18,8 +18,8 @@ public:
 
 	virtual Shape* Clone();
 
-	virtual void GetRegion(Painter *painter, QRegion *region) {};
-	virtual void GetRegion(Painter *painter, Long thickness, QRegion *region) {};
+	virtual void GetRegion(QRegion *region) {};
+	virtual void GetRegion(Long thickness, QRegion *region) {};
 };
 
 #endif //_TUTORIALMARK_H

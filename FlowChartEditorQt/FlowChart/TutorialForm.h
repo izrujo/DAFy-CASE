@@ -3,14 +3,12 @@
 
 #include <QtWidgets/QFrame>
 #include "Array.h"
+#include "Shape.h"
+using namespace FlowChartShape;
 
-class Template;
-class Painter;
-class FlowChart;
-class FlowChartFont;
+class GObject;
 class TextRegion;
 class Tutorial;
-class TutorialMark;
 class TutorialController;
 
 class TutorialForm : public QFrame
@@ -19,19 +17,19 @@ class TutorialForm : public QFrame
 
 public:
 	TutorialForm(QWidget *parent = Q_NULLPTR);
-	~TutorialForm();
 protected:
+	void closeEvent(QCloseEvent *event);
 	void paintEvent(QPaintEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
 	//afx_msg BOOL OnEraseBkgnd(CDC *pDC);
 	void focusOutEvent(QFocusEvent *event);
 	void focusInEvent(QFocusEvent *event);
 public:
-	Template *lists;
-	Painter *painter;
-	FlowChart *sample;
+	FlowChartShape::Shape *lists;
+	GObject *painter;
+	FlowChartShape::Shape *sample;
 	Tutorial *main;
-	TutorialMark *current;
+	FlowChartShape::Shape *current;
 	Tutorial *lastConcrete;
 	TutorialController *tutorialController;
 };

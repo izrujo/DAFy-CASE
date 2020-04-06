@@ -1,6 +1,6 @@
 #include "TutorialController.h"
 #include "TutorialForm.h"
-#include "FlowChartEditor.h"
+#include "../FlowChartEditor.h"
 #include "Tutorials.h"
 #include "TutorialMarkFactory.h"
 #include "Expressions.h"
@@ -25,7 +25,7 @@ TutorialController& TutorialController::operator=(const TutorialController& sour
 }
 
 void TutorialController::Update() {
-	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->tutorialForm->GetParent());
+	FlowChartEditor *editor = (FlowChartEditor*)this->tutorialForm->parentWidget();
 	ExpressionFactory expFactory(editor);
 	ScenarioCheckExpression *expression = expFactory.Make(this->tutorialForm->lastConcrete);
 	bool ret = expression->Evaluate();
@@ -44,8 +44,8 @@ void TutorialController::Update() {
 			}
 			TutorialMarkFactory factory(this->tutorialForm->sample);
 			this->tutorialForm->current = factory.Make(this->tutorialForm->main->GetLength());
-			this->tutorialForm->Invalidate();
-			this->tutorialForm->SetFocus();
+			this->tutorialForm->repaint();
+			this->tutorialForm->setFocus();
 		}
 
 		if (this->tutorialForm->main->Top()->GetLength() < 1) {
@@ -56,7 +56,7 @@ void TutorialController::Update() {
 		}
 
 		if (this->tutorialForm->main->GetLength() < 1) {
-			this->tutorialForm->OnClose();
+			this->tutorialForm->close();
 		}
 	}
 }

@@ -1,18 +1,23 @@
 #include "CaretController.h"
 #include "Caret.h"
 #include "CharacterMetrics.h"
-#include "NotepadForm.h"
+#include "Notepad.h"
 #include "Glyph.h"
 #include "Observer.h"
+#include "GObject.h"
+#include "QtPainter.h"
 
-CaretController::CaretController(NotepadForm *notepadForm) {
-	this->notepadForm = notepadForm;
+#include <qpainter.h>
+#include <qmenubar.h>
+
+CaretController::CaretController(Notepad *notepad) {
+	this->notepad = notepad;
 	this->caret = 0;
-	this->notepadForm->AttachObserver(this);
+	this->notepad->AttachObserver(this);
 }
 
 CaretController::CaretController(const CaretController& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 	this->caret = new Caret(*source.caret);
 }
 
@@ -20,35 +25,39 @@ CaretController::~CaretController() {
 	if (this->caret != 0) {
 		delete this->caret;
 	}
-	this->notepadForm->DetachObserver(this);
+	this->notepad->DetachObserver(this);
+}
+
+CaretController& CaretController::operator =(const CaretController& source) {
+	this->notepad = source.notepad;
+	this->caret = new Caret(*source.caret);
+
+	return *this;
 }
 
 void CaretController::Update() {
 	if (this->caret == 0) {
-		this->caret = new Caret(this->notepadForm);
+		this->caret = new Caret(this->notepad);
 	}
-	Long height = this->notepadForm->characterMetrics->GetHeight();
-	BOOL isComposing = this->notepadForm->GetIsComposing();
 	Long x;
-	if (isComposing == TRUE) {
-		this->caret->Create(this->notepadForm->characterMetrics->GetDoubleByteWidth(), height);
-		x = this->notepadForm->characterMetrics->GetX(this->notepadForm->current, this->notepadForm->current->GetCurrent() - 1);
+	Long y;
+	Long width;
+	Long height = this->notepad->characterMetrics->GetHeight();
+	bool isComposing = this->notepad->GetIsComposing();
+	if (isComposing == true) {
+		width = this->notepad->characterMetrics->GetDoubleByteWidth();
+		x = this->notepad->characterMetrics->GetX(this->notepad->current, this->notepad->current->GetCurrent() - 1);
 
 	}
 	else {
-		this->caret->Create(2, height);
-		x = this->notepadForm->characterMetrics->GetX(this->notepadForm->current, this->notepadForm->current->GetCurrent()); //??
+		width = 2;
+		x = this->notepad->characterMetrics->GetX(this->notepad->current, this->notepad->current->GetCurrent()); //??
 	}
+	Long index = this->notepad->note->GetCurrent();
+	y = this->notepad->menuBar->y() + this->notepad->menuBar->height() + this->notepad->characterMetrics->GetY(index);
 
-	Long index = this->notepadForm->note->GetCurrent();
-	Long y = this->notepadForm->characterMetrics->GetY(index);
-	this->caret->Move(x, y);
-	this->caret->Show(true);
-}
-
-CaretController& CaretController::operator =(const CaretController& source) {
-	this->notepadForm = source.notepadForm;
-	this->caret = new Caret(*source.caret);
-
-	return *this;
+	QRect rect(x, y, width, height);
+	this->caret->Hide();
+	this->caret->Set(rect);
+	this->caret->Show();
 }

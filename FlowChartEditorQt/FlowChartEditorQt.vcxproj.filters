@@ -18,11 +18,14 @@
     <Filter Include="Generated Files">
       <UniqueIdentifier>{99d6e2d5-0d6e-4115-9651-9ffc027c6446}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Notepad">
-      <UniqueIdentifier>{ebce8874-848f-4fa6-92a8-4b3ad4e21647}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FlowChart">
       <UniqueIdentifier>{2abe3443-8019-4a30-bcbc-f09c5b593561}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad">
+      <UniqueIdentifier>{3022ed08-a037-46bd-aefb-3501a859e738}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic Objects">
+      <UniqueIdentifier>{22ea1544-72a8-4268-8f65-56da8c3d86e9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,9 +105,6 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\Join.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Label.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\LeftDown.cpp">
@@ -224,6 +224,63 @@
     <ClCompile Include="FlowChart\ZoomVisitor.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\Block.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Scroll.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\PreviewForm.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\TutorialIntroForm.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\EditorIntroForm.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\TutorialForm.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Label.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Brush.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Font.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\GObject.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\GObjectFactory.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Painter.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Pen.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\QtBrush.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\QtFont.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\QtGObjectFactory.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\QtPainter.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\QtPen.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
     <ClCompile Include="Notepad\Caret.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
@@ -248,9 +305,6 @@
     <ClCompile Include="Notepad\Editor.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
-    <ClCompile Include="Notepad\Font.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
     <ClCompile Include="Notepad\FontCommand.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
@@ -269,16 +323,19 @@
     <ClCompile Include="Notepad\KeyActions.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
+    <ClCompile Include="Notepad\Line.cpp">
+      <Filter>Notepad</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\main.cpp">
+      <Filter>Notepad</Filter>
+    </ClCompile>
     <ClCompile Include="Notepad\Note.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
-    <ClCompile Include="Notepad\NotepadForm.cpp">
+    <ClCompile Include="Notepad\Notepad.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
     <ClCompile Include="Notepad\Observer.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Row.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
     <ClCompile Include="Notepad\Scanner.cpp">
@@ -290,67 +347,13 @@
     <ClCompile Include="Notepad\Subject.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Block.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\GObject.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Pen.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtPen.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Brush.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Font.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtBrush.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtFont.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\GObjectFactory.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtGObjectFactory.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Painter.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtPainter.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Scroll.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\PreviewForm.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\StatusBar.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\ToolTip.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\TutorialIntroForm.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\EditorIntroForm.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
       <Filter>Resource Files</Filter>
+    </QtRcc>
+    <QtRcc Include="Notepad\Notepad.qrc">
+      <Filter>Notepad</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
@@ -424,9 +427,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Join.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Label.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\LeftDown.h">
@@ -549,10 +549,49 @@
     <ClInclude Include="FlowChart\ZoomVisitor.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Array.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChart\Block.h">
+      <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Caret.h">
+    <ClInclude Include="FlowChart\EditorIntroForm.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Label.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Brush.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Font.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\GObject.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\GObjectFactory.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Painter.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Pen.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\QtBrush.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\QtFont.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\QtGObjectFactory.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\QtPainter.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\QtPen.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Notepad\Array.h">
       <Filter>Notepad</Filter>
     </ClInclude>
     <ClInclude Include="Notepad\CaretController.h">
@@ -576,9 +615,6 @@
     <ClInclude Include="Notepad\Editor.h">
       <Filter>Notepad</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Font.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
     <ClInclude Include="Notepad\FontCommand.h">
       <Filter>Notepad</Filter>
     </ClInclude>
@@ -597,16 +633,13 @@
     <ClInclude Include="Notepad\KeyActions.h">
       <Filter>Notepad</Filter>
     </ClInclude>
+    <ClInclude Include="Notepad\Line.h">
+      <Filter>Notepad</Filter>
+    </ClInclude>
     <ClInclude Include="Notepad\Note.h">
       <Filter>Notepad</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\NotepadForm.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
     <ClInclude Include="Notepad\Observer.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
-    <ClInclude Include="Notepad\Row.h">
       <Filter>Notepad</Filter>
     </ClInclude>
     <ClInclude Include="Notepad\Scanner.h">
@@ -618,55 +651,13 @@
     <ClInclude Include="Notepad\Subject.h">
       <Filter>Notepad</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Block.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\GObject.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Pen.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtPen.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Brush.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtBrush.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Font.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\GObjectFactory.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtFont.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtGObjectFactory.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Painter.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtPainter.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\StatusBar.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\ToolTip.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\EditorIntroForm.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="FlowChartEditor.ui">
       <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Notepad\Notepad.ui">
+      <Filter>Notepad</Filter>
     </QtUic>
   </ItemGroup>
   <ItemGroup>
@@ -687,6 +678,15 @@
     </QtMoc>
     <QtMoc Include="FlowChart\TutorialIntroForm.h">
       <Filter>FlowChart</Filter>
+    </QtMoc>
+    <QtMoc Include="FlowChart\TutorialForm.h">
+      <Filter>FlowChart</Filter>
+    </QtMoc>
+    <QtMoc Include="Notepad\Caret.h">
+      <Filter>Notepad</Filter>
+    </QtMoc>
+    <QtMoc Include="Notepad\Notepad.h">
+      <Filter>Notepad</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

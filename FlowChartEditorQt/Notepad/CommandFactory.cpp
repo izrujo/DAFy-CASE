@@ -1,31 +1,30 @@
 #include "CommandFactory.h"
 #include "Command.h"
 #include "FontCommand.h"
-#include "NotepadForm.h"
-#include "resource.h"
+#include "Notepad.h"
 
-CommandFactory::CommandFactory(NotepadForm *notepadForm) {
-	this->notepadForm = notepadForm;
+CommandFactory::CommandFactory(Notepad *notepad) {
+	this->notepad = notepad;
 }
 
 CommandFactory::CommandFactory(const CommandFactory& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 }
 
 CommandFactory::~CommandFactory() {
 }
 
-Command* CommandFactory::Make(int uID) {
+Command* CommandFactory::Make(QString text) {
 	Command *command = 0;
-	if (uID == IDM_FORMAT_FONT) {
-		command = new FontCommand(this->notepadForm);
+	if (text == "FontSet") {
+		command = new FontCommand(this->notepad);
 	}
 
 	return command;
 }
 
 CommandFactory& CommandFactory::operator =(const CommandFactory& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 
 	return *this;
 }

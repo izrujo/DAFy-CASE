@@ -1,10 +1,9 @@
 #include "TutorialMarkFactory.h"
 #include "TutorialForm.h"
 #include "FlowChart.h"
-#include "Shape.h"
 #include "TutorialMark.h"
 
-TutorialMarkFactory::TutorialMarkFactory(FlowChart *sample) {
+TutorialMarkFactory::TutorialMarkFactory(Shape *sample) {
 	this->sample = sample;
 }
 
@@ -37,9 +36,8 @@ TutorialMark* TutorialMarkFactory::Make(Long length) {
 			temp.Attach(this->sample->GetAt(i)->Clone());
 			i++;
 		}
-		CRect rect;
-		temp.GetRange(rect);
-		tutorialMark = new TutorialMark(rect.left, rect.top, rect.Width(), rect.Height());
+		QRect rect = temp.GetRange();
+		tutorialMark = new TutorialMark(rect.left(), rect.top(), rect.width(), rect.height());
 	}
 	else if (length == 8) {
 		current = this->sample->GetAt(17);
@@ -56,9 +54,8 @@ TutorialMark* TutorialMarkFactory::Make(Long length) {
 			temp.Attach(this->sample->GetAt(i)->Clone());
 			i++;
 		}
-		CRect rect;
-		temp.GetRange(rect);
-		tutorialMark = new TutorialMark(rect.left, rect.top, rect.Width(), rect.Height());
+		QRect rect = temp.GetRange();
+		tutorialMark = new TutorialMark(rect.left(), rect.top(), rect.width(), rect.height());
 	}
 	else if (length == 5) {
 		current = this->sample->GetAt(21);
@@ -75,9 +72,8 @@ TutorialMark* TutorialMarkFactory::Make(Long length) {
 			temp.Attach(this->sample->GetAt(i)->Clone());
 			i++;
 		}
-		CRect rect;
-		temp.GetRange(rect);
-		tutorialMark = new TutorialMark(rect.left, rect.top, rect.Width(), rect.Height());
+		QRect rect = temp.GetRange();
+		tutorialMark = new TutorialMark(rect.left(), rect.top(), rect.width(), rect.height());
 	}
 	else if (length == 2) {
 		FlowChart temp(21);
@@ -86,9 +82,8 @@ TutorialMark* TutorialMarkFactory::Make(Long length) {
 			temp.Attach(this->sample->GetAt(i)->Clone());
 			i++;
 		}
-		CRect rect;
-		temp.GetRange(rect);
-		tutorialMark = new TutorialMark(rect.left, rect.top, rect.Width(), rect.Height());
+		QRect rect = temp.GetRange();
+		tutorialMark = new TutorialMark(rect.left(), rect.top(), rect.width(), rect.height());
 	}
 	else if (length == 1) {
 		current = this->sample->GetAt(26);

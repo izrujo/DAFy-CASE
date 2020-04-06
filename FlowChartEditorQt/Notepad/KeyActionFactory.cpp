@@ -1,103 +1,105 @@
 #include "KeyActionFactory.h"
 #include "KeyActions.h"
-#include <WinUser.h>
-#include "NotepadForm.h"
+#include "Notepad.h"
+#include <windows.h>
 
-KeyActionFactory::KeyActionFactory(NotepadForm *notepadForm) {
-	this->notepadForm = notepadForm;
+#include <qevent.h>
+
+KeyActionFactory::KeyActionFactory(Notepad *notepad) {
+	this->notepad = notepad;
 }
 
 KeyActionFactory::~KeyActionFactory() {
 
 }
 
-KeyAction* KeyActionFactory::Make(UINT nChar) {
+KeyAction* KeyActionFactory::Make(int key) {
 	KeyAction* keyAction = 0;
-
+	
 	SHORT isCtrl = GetKeyState(VK_CONTROL) & 0X8000;
 	SHORT isShift = GetKeyState(VK_SHIFT) & 0X8000;
 
 	//Shift + Ctrl + KEY
-	if (isShift && isCtrl && nChar == VK_LEFT) {
-		keyAction = new ShiftCtrlLeftKeyAction(this->notepadForm);
+	if (isShift && isCtrl && key == Qt::Key_Left) {
+		keyAction = new ShiftCtrlLeftKeyAction(this->notepad);
 	}
-	else if (isShift && isCtrl && nChar == VK_RIGHT) {
-		keyAction = new ShiftCtrlRightKeyAction(this->notepadForm);
+	else if (isShift && isCtrl && key == Qt::Key_Right) {
+		keyAction = new ShiftCtrlRightKeyAction(this->notepad);
 	}
-	else if (isShift && isCtrl && nChar == VK_HOME) {
-		keyAction = new ShiftCtrlHomeKeyAction(this->notepadForm);
+	else if (isShift && isCtrl && key == Qt::Key_Home) {
+		keyAction = new ShiftCtrlHomeKeyAction(this->notepad);
 	}
-	else if (isShift && isCtrl && nChar == VK_END) {
-		keyAction = new ShiftCtrlEndKeyAction(this->notepadForm);
+	else if (isShift && isCtrl && key == Qt::Key_End) {
+		keyAction = new ShiftCtrlEndKeyAction(this->notepad);
 	}
 	//Shift + KEY
-	else if (isShift && nChar == VK_LEFT) {
-		keyAction = new ShiftLeftKeyAction(this->notepadForm);
+	else if (isShift && key == Qt::Key_Left) {
+		keyAction = new ShiftLeftKeyAction(this->notepad);
 	}
-	else if (isShift && nChar == VK_RIGHT) {
-		keyAction = new ShiftRightKeyAction(this->notepadForm);
+	else if (isShift && key == Qt::Key_Right) {
+		keyAction = new ShiftRightKeyAction(this->notepad);
 	}
-	else if (isShift && nChar == VK_UP) {
-		keyAction = new ShiftUpKeyAction(this->notepadForm);
+	else if (isShift && key == Qt::Key_Up) {
+		keyAction = new ShiftUpKeyAction(this->notepad);
 	}
-	else if (isShift && nChar == VK_DOWN) {
-		keyAction = new ShiftDownKeyAction(this->notepadForm);
+	else if (isShift && key == Qt::Key_Down) {
+		keyAction = new ShiftDownKeyAction(this->notepad);
 	}
-	else if (isShift && nChar == VK_HOME) {
-		keyAction = new ShiftHomeKeyAction(this->notepadForm);
+	else if (isShift && key == Qt::Key_Home) {
+		keyAction = new ShiftHomeKeyAction(this->notepad);
 	}
-	else if (isShift && nChar == VK_END) {
-		keyAction = new ShiftEndKeyAction(this->notepadForm);
+	else if (isShift && key == Qt::Key_End) {
+		keyAction = new ShiftEndKeyAction(this->notepad);
 	}
 	//Ctrl + KEY
-	else if (isCtrl && nChar == VK_LEFT) {
-		keyAction = new CtrlLeftKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_Left) {
+		keyAction = new CtrlLeftKeyAction(this->notepad);
 	}
-	else if (isCtrl && nChar == VK_RIGHT) {
-		keyAction = new CtrlRightKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_Right) {
+		keyAction = new CtrlRightKeyAction(this->notepad);
 	}
-	else if (isCtrl && nChar == VK_HOME) {
-		keyAction = new CtrlHomeKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_Home) {
+		keyAction = new CtrlHomeKeyAction(this->notepad);
 	}
-	else if (isCtrl && nChar == VK_END) {
-		keyAction = new CtrlEndKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_End) {
+		keyAction = new CtrlEndKeyAction(this->notepad);
 	}
-	else if (isCtrl && nChar == 0x41) {
-		keyAction = new CtrlAKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_A) {
+		keyAction = new CtrlAKeyAction(this->notepad);
 	}
-	else if (isCtrl && nChar == 0x43) {
-		keyAction = new CtrlCKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_C) {
+		keyAction = new CtrlCKeyAction(this->notepad);
 	}
-	else if (isCtrl && nChar == 0x56) {
-		keyAction = new CtrlVKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_V) {
+		keyAction = new CtrlVKeyAction(this->notepad);
 	}
-	else if (isCtrl && nChar == 0x58) {
-		keyAction = new CtrlXKeyAction(this->notepadForm);
+	else if (isCtrl && key == Qt::Key_X) {
+		keyAction = new CtrlXKeyAction(this->notepad);
 	}
 	//KEY
-	else if (nChar == VK_LEFT) {
-		keyAction = new LeftKeyAction(this->notepadForm);
+	else if (key == Qt::Key_Left) {
+		keyAction = new LeftKeyAction(this->notepad);
 	}
-	else if (nChar == VK_RIGHT) {
-		keyAction = new RightKeyAction(this->notepadForm);
+	else if (key == Qt::Key_Right) {
+		keyAction = new RightKeyAction(this->notepad);
 	}
-	else if (nChar == VK_UP) {
-		keyAction = new UpKeyAction(this->notepadForm);
+	else if (key == Qt::Key_Up) {
+		keyAction = new UpKeyAction(this->notepad);
 	}
-	else if (nChar == VK_DOWN) {
-		keyAction = new DownKeyAction(this->notepadForm);
+	else if (key == Qt::Key_Down) {
+		keyAction = new DownKeyAction(this->notepad);
 	}
-	else if (nChar == VK_HOME) {
-		keyAction = new HomeKeyAction(this->notepadForm);
+	else if (key == Qt::Key_Home) {
+		keyAction = new HomeKeyAction(this->notepad);
 	}
-	else if (nChar == VK_END) {
-		keyAction = new EndKeyAction(this->notepadForm);
+	else if (key == Qt::Key_End) {
+		keyAction = new EndKeyAction(this->notepad);
 	}
-	else if (nChar == VK_DELETE) {
-		keyAction = new DeleteKeyAction(this->notepadForm);
+	else if (key == Qt::Key_Delete) {
+		keyAction = new DeleteKeyAction(this->notepad);
 	}
-	else if (nChar == VK_BACK) {
-		keyAction = new BackSpaceKeyAction(this->notepadForm);
+	else if (key == Qt::Key_Backspace) {
+		keyAction = new BackSpaceKeyAction(this->notepad);
 	}
 
 	return keyAction;

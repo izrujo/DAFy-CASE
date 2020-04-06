@@ -111,6 +111,22 @@ public:
 
 	virtual int GetRenderHints() { return -1; };
 	virtual void SetRenderHints(int hint) {};
+
+	//Qt Concrete GObject virtual definitions
+	//QtPen
+	virtual QBrush& GetBrush();
+	virtual float GetWidth();
+	virtual int GetPenStyle();
+	virtual int GetPenCapStyle();
+	virtual int GetPenJoinStyle();
+	//QtBrush
+	virtual QColor& GetColor();
+	virtual int GetStyle();
+	//QtFont
+	virtual QString& GetFamily();
+	virtual int GetPointSize();
+	virtual int GetWeight();
+	virtual bool GetItalic();
 };
 
 #endif //_GOBJECT_H

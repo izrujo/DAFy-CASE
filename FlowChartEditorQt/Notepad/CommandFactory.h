@@ -1,18 +1,19 @@
 #ifndef _COMMANDFACTORY_H
 #define _COMMANDFACTORY_H
 
-class NotepadForm;
+class Notepad;
 class Command;
+#include <qstring.h>
 
 class CommandFactory {
 public:
-	CommandFactory(NotepadForm *notepadForm = 0);
+	CommandFactory(Notepad *notepad = 0);
 	CommandFactory(const CommandFactory& source);
 	~CommandFactory();
-	Command* Make(int uID);
+	Command* Make(QString text);
 	CommandFactory& operator =(const CommandFactory& source);
 private:
-	NotepadForm *notepadForm;
+	Notepad *notepad;
 };
 
 #endif //_COMMANDFACTORY_H

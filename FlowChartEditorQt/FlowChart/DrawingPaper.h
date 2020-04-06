@@ -29,6 +29,7 @@ class VariableList;
 
 class Zoom;
 class QMenu;
+class QTextEdit;
 
 class DrawingPaper : public QFrame
 {
@@ -77,7 +78,7 @@ public:
 
 	int mode; //2019.09.20 MemoryController에서 Undo 연산을 위해 옮김. 서로 속성을 가지면 혹시 private에서도 되려나?
 
-	Label *label;
+	QTextEdit *label;
 	Tool *tool;
 
 	MemoryController *memoryController;

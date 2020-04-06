@@ -3,34 +3,39 @@
 #ifndef _CARET_H
 #define _CARET_H
 
+#include <qobject.h>
+#include <qtimer.h>
+#include <qrect.h>
+#include <qpainter.h>
+
 typedef signed long int Long;
 
-class NotepadForm;
-class Caret {
+class QWidget;
+
+class Caret : public QObject
+{
+	Q_OBJECT
+
 public:
-	Caret(NotepadForm *notepadForm = 0);
+	Caret(QWidget *parent = Q_NULLPTR);
 	Caret(const Caret& source);
 	~Caret();
-	void Create(Long width, Long height);
-	void Move(Long x, Long y);
-	void Show(bool isShow = true);
 	Caret& operator=(const Caret& source);
-	Long GetX() const;
-	Long GetY() const;
+
+	void Show();
+	void Hide();
+	void Set(QRect rect);
+	void Paint(QPainter& painter);
+
+public slots:
+	void onTimer();
 
 private:
-	NotepadForm *notepadForm;
-	Long x;
-	Long y;
-
+	QWidget *parent;
+	bool isVisible;
+	bool isBlink;
+	QRect rect;
+	QTimer timer;
 };
 
 #endif // !_CARET_H
-
-inline Long Caret::GetX() const {
-	return this->x;
-}
-
-inline Long Caret::GetY() const {
-	return this->y;
-}

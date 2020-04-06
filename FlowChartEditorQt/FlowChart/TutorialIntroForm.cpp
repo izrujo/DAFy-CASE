@@ -9,9 +9,9 @@
 #include "QtPainter.h"
 #include "QtGObjectFactory.h"
 
-#include <qfont.h>
+#include <qpainter.h>
 
-TutorialIntroForm::TutorialIntroForm(QWidget *parent = Q_NULLPTR) {
+TutorialIntroForm::TutorialIntroForm(QWidget *parent) {
 	this->message = NULL;
 	this->painter = NULL;
 	this->guide = NULL;
@@ -27,23 +27,24 @@ TutorialIntroForm::TutorialIntroForm(QWidget *parent = Q_NULLPTR) {
 	this->message = new TextRegion(600, 400, 1200, 100, QColor(255, 255, 255), Qt::SolidLine, QColor(52, 52, 52), String("똑같이 따라해서 만드세요."));
 	this->guide = new TextRegion(780, 550, 600, 100, QColor(235, 235, 235), Qt::SolidLine, QColor(52, 52, 52), String("Press any key to start..."));
 
-	//LOGFONT logFont = editor->font->GetFont();
-	//logFont.lfHeight = -72;
-	//this->font = new FlowChartFont(editor, logFont, this->message->GetBackGroundColor());
-	//HFONT hFont = this->font->Create();
-	//this->painter->ChangeFont(hFont, this->font->GetColor()); logFont.lfHeight = -72;
 	QtGObjectFactory factory;
 	GObject *originFont = canvas->painter->CurrentObject("Font");
-	//GObject *font = factory.MakePen)
-	this->painter->SelectObject(*originFont); //이러면 안됨 수정 요망.
+
+	GObject *font = factory.MakeFont(originFont->GetFamily(), 72, 70, false);
+	this->painter->SelectObject(*font);
+	GObject *pen = factory.MakePen(QBrush(this->message->GetBackGroundColor()), 1); 
+	//Qt에서는 글씨 색깔이 QPen의 색으로 결정? 이렇게 하면 되는지 확인 필요
+	this->painter->SelectObject(*pen);
 	this->painter->Update();
 
 	this->message->Draw(this->painter);
 
-	//logFont.lfHeight = -40;
-	//this->font = new FlowChartFont(editor, logFont, this->guide->GetBackGroundColor());
-	//hFont = this->font->Create();
-	//this->painter->ChangeFont(hFont, this->font->GetColor());
+	GObject *font = factory.MakeFont(originFont->GetFamily(), 40, 70, false);
+	this->painter->SelectObject(*font);
+	GObject *pen = factory.MakePen(QBrush(this->guide->GetBackGroundColor()), 1); 
+	this->painter->SelectObject(*pen);
+	this->painter->Update();
+
 	this->guide->Draw(this->painter);
 }
 
@@ -59,14 +60,10 @@ void TutorialIntroForm::closeEvent(QCloseEvent *event) {
 	}
 }
 
-void TutorialIntroForm::OnPaint() {
-	CPaintDC dc(this);
-	CRect rect;
-	this->GetWindowRect(rect);
+void TutorialIntroForm::paintEvent(QPaintEvent *event) {
+	QPainter dc(this);
 
-	FlowChartEditor *editor = (FlowChartEditor*)this->GetParent();
-
-	this->painter->Render(&dc, 0, 0, rect.Width(), rect.Height());
+	this->painter->Render(&dc, 0, 0);
 }
 
 /*
@@ -80,11 +77,13 @@ void TutorialIntroForm::mouseReleaseEvent(QMouseEvent *event) {
 	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 	QRect rect = editor->frameRect();
 
-	TutorialForm *tutorialForm = new TutorialForm;
+	TutorialForm *tutorialForm = new TutorialForm(editor);
 	editor->windows.Modify(2, tutorialForm);
-	tutorialForm->Create(NULL, NULL, WS_POPUP | WS_VISIBLE | WS_CHILD,
-		CRect(rect.left, rect.top, rect.Width(), rect.Height()), editor, NULL, WS_EX_LAYERED | WS_EX_CLIENTEDGE, NULL);
-
+	//tutorialForm->Create(NULL, NULL, WS_POPUP | WS_VISIBLE | WS_CHILD,
+		//CRect(rect.left, rect.top, rect.Width(), rect.Height()), editor, NULL, WS_EX_LAYERED | WS_EX_CLIENTEDGE, NULL);
+	tutorialForm->setWindowState(tutorialForm->windowState() ^ Qt::WindowFullScreen);
+	tutorialForm->show();
+	/*
 	Long rate = 100;
 	dynamic_cast<DrawingPaper*>(editor->windows[0])->zoom->Set(rate);
 	CString rateStatus;
@@ -93,21 +92,23 @@ void TutorialIntroForm::mouseReleaseEvent(QMouseEvent *event) {
 	editor->statusBar->Modify(4, String((LPCTSTR)rateStatus));
 
 	dynamic_cast<DrawingPaper*>(editor->windows[0])->Invalidate();
+	*/
 
 
 	this->close();
 }
-/*
-void TutorialIntroForm::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
-	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->GetParent());
-	CRect rect;
-	editor->GetWindowRect(&rect);
 
-	TutorialForm *tutorialForm = new TutorialForm;
+void TutorialIntroForm::keyPressEvent(QKeyEvent *event) {
+	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
+	QRect rect = editor->frameRect();
+
+	TutorialForm *tutorialForm = new TutorialForm(editor);
 	editor->windows.Modify(2, tutorialForm);
-	tutorialForm->Create(NULL, NULL, WS_POPUP | WS_VISIBLE | WS_CHILD,
-		CRect(rect.left, rect.top, rect.Width(), rect.Height()), editor, NULL, WS_EX_LAYERED | WS_EX_CLIENTEDGE, NULL);
-
+	//tutorialForm->Create(NULL, NULL, WS_POPUP | WS_VISIBLE | WS_CHILD,
+		//CRect(rect.left, rect.top, rect.Width(), rect.Height()), editor, NULL, WS_EX_LAYERED | WS_EX_CLIENTEDGE, NULL);
+	tutorialForm->setWindowState(tutorialForm->windowState() ^ Qt::WindowFullScreen);
+	tutorialForm->show();
+	/*
 	Long rate = 100;
 	dynamic_cast<DrawingPaper*>(editor->windows[0])->zoom->Set(rate);
 	CString rateStatus;
@@ -116,7 +117,7 @@ void TutorialIntroForm::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags) {
 	editor->statusBar->Modify(4, String((LPCTSTR)rateStatus));
 
 	dynamic_cast<DrawingPaper*>(editor->windows[0])->Invalidate();
+	*/
 
-	this->OnClose();
+	this->close();
 }
-*/

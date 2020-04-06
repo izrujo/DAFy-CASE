@@ -1,19 +1,19 @@
 #include "Command.h"
-#include "NotepadForm.h"
+#include "Notepad.h"
 
-Command::Command(NotepadForm *notepadForm) {
-	this->notepadForm = notepadForm;
+Command::Command(Notepad *notepad) {
+	this->notepad = notepad;
 }
 
 Command::Command(const Command& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 }
 
 Command::~Command() {
 }
 
 Command& Command::operator =(const Command& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 
 	return *this;
 }

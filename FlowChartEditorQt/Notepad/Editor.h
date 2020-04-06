@@ -2,12 +2,12 @@
 #define _EDITOR_H
 
 typedef signed long int Long;
-class NotepadForm;
+class Notepad;
 class Selector;
 
 class Editor {
 public:
-	Editor(NotepadForm *notepadForm = 0);
+	Editor(Notepad *notepad = 0);
 	Editor(const Editor& source);
 	~Editor();
 
@@ -19,7 +19,7 @@ public:
 
 	Editor& operator=(const Editor& source);
 private:
-	NotepadForm *notepadForm;
+	Notepad *notepad;
 public:
 	Selector *selector;
 };

@@ -1,18 +1,21 @@
 #include "Editor.h"
-#include "NotepadForm.h"
+#include "Notepad.h"
 #include "Glyph.h"
 #include "GlyphFactory.h"
 #include "Highlight.h"
 #include "Selector.h"
 #include "Scanner.h"
 
-Editor::Editor(NotepadForm *notepadForm) {
-	this->notepadForm = notepadForm;
+#include <qclipboard.h>
+#include <qmimedata.h>
+
+Editor::Editor(Notepad *notepad) {
+	this->notepad = notepad;
 	this->selector = 0;
 }
 
 Editor::Editor(const Editor& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 	this->selector = source.selector;
 }
 
@@ -25,12 +28,12 @@ Editor::~Editor() {
 void Editor::UpSelect(Long noteCurrent, Long lineCurrent, Long row, Long column) {
 	Long i = noteCurrent;
 	while (i >= row) {
-		Glyph *line = this->notepadForm->note->GetAt(i);
+		Glyph *line = this->notepad->note->GetAt(i);
 		Long startColumn;
-		Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-		Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-		Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-		Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+		Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+		Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+		Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+		Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 		if (noteStartPosition >= noteEndPosition &&
 			(noteStartPosition != noteEndPosition || lineStartPosition >= lineEndPosition)) {
 			if (i == noteCurrent) {
@@ -78,12 +81,12 @@ void Editor::UpSelect(Long noteCurrent, Long lineCurrent, Long row, Long column)
 void Editor::DownSelect(Long noteCurrent, Long lineCurrent, Long row, Long column) {
 	Long i = noteCurrent;
 	while (i <= row) {
-		Glyph *line = this->notepadForm->note->GetAt(i);
+		Glyph *line = this->notepad->note->GetAt(i);
 		Long startColumn;
-		Long noteStartPosition = this->notepadForm->editor->selector->GetNoteStartPosition();
-		Long noteEndPosition = this->notepadForm->editor->selector->GetNoteEndPosition();
-		Long lineStartPosition = this->notepadForm->editor->selector->GetLineStartPosition();
-		Long lineEndPosition = this->notepadForm->editor->selector->GetLineEndPosition();
+		Long noteStartPosition = this->notepad->editor->selector->GetNoteStartPosition();
+		Long noteEndPosition = this->notepad->editor->selector->GetNoteEndPosition();
+		Long lineStartPosition = this->notepad->editor->selector->GetLineStartPosition();
+		Long lineEndPosition = this->notepad->editor->selector->GetLineEndPosition();
 		if (noteStartPosition <= noteEndPosition &&
 			(noteStartPosition != noteEndPosition || lineStartPosition <= lineEndPosition)) {
 			if (i == noteCurrent) {
@@ -129,53 +132,36 @@ void Editor::DownSelect(Long noteCurrent, Long lineCurrent, Long row, Long colum
 }
 
 void Editor::Copy() {
-	CString clipBoard;
+	QClipboard *clipboard = QApplication::clipboard();
+
+	QString newText;
 	Long i = 0;
-	while (i < this->notepadForm->highlight->GetLength()) {
-		Glyph *line = this->notepadForm->highlight->GetAt(i);
+	while (i < this->notepad->highlight->GetLength()) {
+		Glyph *line = this->notepad->highlight->GetAt(i);
 		string content = line->GetContent();
-		content.append("\r\n");
-		clipBoard.Append(content.c_str());
+		content.append("\r\n"); //std
+		newText.append(QString::fromLocal8Bit(content.c_str())); //QString
 		i++;
 	}
-
-	HANDLE handle;
-	char *address = NULL;
-	handle = ::GlobalAlloc(GMEM_DDESHARE | GMEM_MOVEABLE, clipBoard.GetLength() - 1);
-	address = (char*)::GlobalLock(handle);
-	if (address == NULL) {
-		::GlobalFree(handle);
-	}
-	strcpy(address, clipBoard);
-	if (::OpenClipboard(this->notepadForm->m_hWnd)) {
-		::EmptyClipboard();
-		::SetClipboardData(CF_TEXT, handle);
-		::CloseClipboard();
-	}
-	::GlobalUnlock(handle);
+	newText.remove(newText.length() - 2, 2);
+	clipboard->setText(newText);
 }
 
 void Editor::Paste() {
-	string clipBoard;
-	HANDLE handle;
-	LPSTR address = NULL;
-	if (::IsClipboardFormatAvailable(CF_TEXT) != FALSE) {
-		if (::OpenClipboard(this->notepadForm->m_hWnd)) {
-			handle = GetClipboardData(CF_TEXT);
-			if (handle != NULL) {
-				address = (LPSTR)::GlobalLock(handle);
-				clipBoard = address;
-				::GlobalUnlock(handle);
-			}
-			CloseClipboard();
-		}
+	QString oldText;
+
+	const QClipboard *clipboard = QApplication::clipboard();
+	const QMimeData *mimeData = clipboard->mimeData();
+	if(mimeData->hasText()) {
+		oldText = mimeData->text();
 	}
-	Scanner scanner(clipBoard);
+
+	Scanner scanner(oldText.toLocal8Bit().data());
 	GlyphFactory glyphFactory;
 	Glyph *glyphClipBoard = glyphFactory.Make("");
 	Glyph *clipBoardLine = glyphFactory.Make("\r\n");
 	glyphClipBoard->Add(clipBoardLine);
-	while (scanner.IsEnd() == FALSE) {
+	while (scanner.IsEnd() == false) {
 		string token = scanner.GetToken();
 		if (token != "\r\n") {
 			Glyph *glyph = glyphFactory.Make(token.c_str());
@@ -189,19 +175,23 @@ void Editor::Paste() {
 	}
 
 	Long i = 0;
-	Long current = this->notepadForm->current->GetCurrent();
-	Glyph *line = this->notepadForm->current->Divide(current);
+	Long current = this->notepad->current->GetCurrent();
+	Glyph *line = this->notepad->current->Divide(current);
 	Glyph *copiedLine = glyphClipBoard->GetAt(i++);
-	this->notepadForm->current->Combine(copiedLine);
+	Long j = 0;
+	while (j < copiedLine->GetLength()) {
+		this->notepad->current->Add(copiedLine->GetAt(j));
+		j++;
+	}
 
 	while (i < glyphClipBoard->GetLength()) {
 		copiedLine = glyphClipBoard->GetAt(i);
-		Long noteCurrent = this->notepadForm->note->GetCurrent();
-		this->notepadForm->note->Add(noteCurrent + 1, copiedLine);
+		Long noteCurrent = this->notepad->note->GetCurrent();
+		this->notepad->note->Add(noteCurrent + 1, copiedLine);
 		i++;
 	}
-	this->notepadForm->current = this->notepadForm->note->GetAt(this->notepadForm->note->GetCurrent());
-	this->notepadForm->current->Combine(line);
+	this->notepad->current = this->notepad->note->GetAt(this->notepad->note->GetCurrent());
+	this->notepad->current->Combine(line);	
 }
 
 void Editor::Delete() {
@@ -229,7 +219,7 @@ void Editor::Delete() {
 			end = this->selector->GetLineStartPosition();
 		}
 	}
-	Glyph *line = this->notepadForm->note->GetAt(noteStart);
+	Glyph *line = this->notepad->note->GetAt(noteStart);
 	Long noteRepeatCount = noteEnd - noteStart + 1;
 	Long i = 0;
 	while (i < noteRepeatCount) {
@@ -249,21 +239,21 @@ void Editor::Delete() {
 			j++;
 		}
 		if (i < noteRepeatCount - 1) {
-			Glyph *nextLine = this->notepadForm->note->GetAt(noteStart + 1);
+			Glyph *nextLine = this->notepad->note->GetAt(noteStart + 1);
 			line->Combine(nextLine);
-			this->notepadForm->note->Remove(noteStart + 1);
+			this->notepad->note->Remove(noteStart + 1);
 		}
 		i++;
 	}
-	this->notepadForm->current = this->notepadForm->note->GetAt(noteStart);
-	if (this->notepadForm->highlight != NULL) {
-		delete this->notepadForm->highlight;
-		this->notepadForm->highlight = NULL;
+	this->notepad->current = this->notepad->note->GetAt(noteStart);
+	if (this->notepad->highlight != NULL) {
+		delete this->notepad->highlight;
+		this->notepad->highlight = NULL;
 	}
 }
 
 Editor& Editor::operator=(const Editor& source) {
-	this->notepadForm = source.notepadForm;
+	this->notepad = source.notepad;
 	this->selector = source.selector;
 
 	return *this;
