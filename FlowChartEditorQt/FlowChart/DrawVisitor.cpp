@@ -21,10 +21,8 @@
 #include "NumberBox.h"
 #include "A4Paper.h"
 #include "TextRegion.h"
-#include "TutorialMark.h"
-#include "GObject.h"
-
-#include "QtGObjectFactory.h"
+#include "../GObject/GObject.h"
+#include "../GObject/QtGObjectFactory.h"
 
 #include <qfont.h>
 
@@ -55,7 +53,7 @@ void DrawVisitor::Visit(Terminal *element) {
 	QRect rect(x, y, width, height);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	GObject *brush = factory.MakeBrush(element->GetBackGroundColor());
 	GObject *oldBrush = this->painter->SelectObject(*brush);
@@ -107,7 +105,7 @@ void DrawVisitor::Visit(Preparation *element) {
 	points[5] = QPoint(x + halfHeight, y + height);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	GObject *brush = factory.MakeBrush(element->GetBackGroundColor());
 	GObject *oldBrush = this->painter->SelectObject(*brush);
@@ -158,7 +156,7 @@ void DrawVisitor::Visit(InputOutput *element) {
 	points[3] = QPoint(x, y + height);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	GObject *brush = factory.MakeBrush(element->GetBackGroundColor());
 	GObject *oldBrush = this->painter->SelectObject(*brush);
@@ -204,7 +202,7 @@ void DrawVisitor::Visit(Process *element) {
 	QRect rect(x, y, width, height);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	GObject *brush = factory.MakeBrush(element->GetBackGroundColor());
 	GObject *oldBrush = this->painter->SelectObject(*brush);
@@ -255,7 +253,7 @@ void DrawVisitor::Visit(Decision *element) {
 	points[3] = QPoint(x, y + halfHeight);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	GObject *brush = factory.MakeBrush(element->GetBackGroundColor());
 	GObject *oldBrush = this->painter->SelectObject(*brush);
@@ -299,7 +297,7 @@ void DrawVisitor::Visit(Arrow *element) {
 	Long height = element->GetHeight();
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -355,7 +353,7 @@ void DrawVisitor::Visit(LeftDown *element) {
 	Long height = element->GetHeight();
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -412,7 +410,7 @@ void DrawVisitor::Visit(RightDown *element) {
 	Long height = element->GetHeight();
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -475,7 +473,7 @@ void DrawVisitor::Visit(Join *element) {
 	points[3] = QPoint(x + width, y + height);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -517,7 +515,7 @@ void DrawVisitor::Visit(RightDownJoin *element) {
 	points[4] = QPoint(x + width, y + height);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -562,7 +560,7 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	points[4] = QPoint(x + width - 13, y + height - 10);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -623,7 +621,7 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 	points[4] = QPoint(x + width, y + height - 6);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor), BORDERWIDTH, element->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -715,7 +713,7 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	QRect rect(x, y, width, height);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(a4Paper->GetBorderColor), BORDERWIDTH, a4Paper->GetBorderLine());
+	GObject *pen = factory.MakePen(QBrush(a4Paper->GetBorderColor()), BORDERWIDTH, a4Paper->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	GObject *brush = factory.MakeBrush(a4Paper->GetBackGroundColor());
 	GObject *oldBrush = this->painter->SelectObject(*brush);
@@ -737,9 +735,8 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 
 	if (a4Paper->GetIsMarking() == true) {
 		//눈금선 가로 19개 세로 39개
-		QtGObjectFactory factory;
-		GObject *pen = factory.MakePen(QBrush(QColor(200,200,200)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
-		GObject *oldPen = this->painter->SelectObject(*pen);
+		pen = factory.MakePen(QBrush(QColor(200,200,200)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
+		oldPen = this->painter->SelectObject(*pen);
 		this->painter->Update();
 
 		Long startY = y + 1;
@@ -767,9 +764,8 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	}
 
 	//여백 표시
-	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 255)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
-	GObject *oldPen = this->painter->SelectObject(*pen);
+	pen = factory.MakePen(QBrush(QColor(0, 0, 255)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
+	oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
 	Long leftMargin = a4Paper->GetLeftMargin();
@@ -788,7 +784,7 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 		delete pen;
 	}
 }
-
+/*
 void DrawVisitor::Visit(TutorialMark *tutorialMark) {
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(QColor(255, 0, 0)), BORDERWIDTH, Qt::DashDotLine);
@@ -818,3 +814,4 @@ void DrawVisitor::Visit(TutorialMark *tutorialMark) {
 		delete pen;
 	}
 }
+*/

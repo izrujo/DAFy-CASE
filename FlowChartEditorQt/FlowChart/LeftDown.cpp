@@ -11,7 +11,7 @@
 #pragma warning (disable : 4996)
 
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 
 #include "QtGObjectFactory.h"
 

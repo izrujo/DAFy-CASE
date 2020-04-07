@@ -28,7 +28,7 @@ protected:
 
 	virtual void Visit(NumberBox *numberBox);
 	virtual void Visit(A4Paper *a4Paper);
-	virtual void Visit(TutorialMark *tutorialMark);
+	//virtual void Visit(TutorialMark *tutorialMark);
 private:
 	GObject *painter;
 	ScrollController *scrollController;

@@ -6,7 +6,7 @@
 #include "CharacterMetrics.h"
 #include "Character.h"
 #include "Note.h"
-#include "Line.h"
+#include "Row.h"
 #include "Editor.h"
 #include "Selector.h"
 #include "Highlight.h"

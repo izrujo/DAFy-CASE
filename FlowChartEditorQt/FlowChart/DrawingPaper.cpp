@@ -6,7 +6,7 @@
 #include "VariableList.h"
 #include "Zoom.h"
 #include "A4Paper.h"
-#include "QtPainter.h"
+#include "../GObject/QtPainter.h"
 #include "DrawingTool.h"
 #include "MovingTool.h"
 #include "ResizingTool.h"
@@ -20,8 +20,8 @@
 #include "FlowChartTemplate.h"
 #include "ScrollController.h"
 #include "Scroll.h"
-#include "QtGObjectFactory.h"
-#include "GObject.h"
+#include "../GObject/QtGObjectFactory.h"
+#include "../GObject/GObject.h"
 #include "FlowChartKeyActionFactory.h"
 #include "FlowChartKeyActions.h"
 #include "CoordinateConverter.h"
@@ -561,8 +561,8 @@ void DrawingPaper::DrawSelectingArea() {
 	painter.SelectObject(*pen);
 	painter.Update();
 
-	QRect rect(this->startX, this->startY, this->currentX, this->currentY);
-	painter.DrawRect(rect);
+	QRect drawRect(this->startX, this->startY, this->currentX, this->currentY);
+	painter.DrawRect(drawRect);
 
 	painter.Render(&dc, 0, 0);
 
@@ -578,7 +578,6 @@ void DrawingPaper::DrawActiveShape(FlowChartShape::Shape *entity) {
 
 	QRect rect = this->frameRect();
 	QtPainter painter(rect.width(), rect.height());
-	QRect rect = this->frameRect();
 	int bgMode = painter.GetBackgroundMode();
 	painter.SetBackgroundMode(Qt::TransparentMode);
 

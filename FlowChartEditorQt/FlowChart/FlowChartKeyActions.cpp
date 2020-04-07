@@ -9,14 +9,12 @@
 #include "MemoryController.h"
 #include "ScrollController.h"
 #include "FlowChart.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "StatusBar.h"
-#include "TutorialForm.h"
-#include "Tutorials.h"
-#include "ToolTip.h"
-#include "TutorialController.h"
 #include "Clipboard.h"
 #include "Memory.h"
+
+using namespace FlowChartShape;
 
 FlowChartKeyAction::FlowChartKeyAction(FlowChartEditor *editor) {
 	this->editor = editor;
@@ -121,9 +119,9 @@ void EscapeKeyAction::OnKeyDown() {
 
 	if (flowChartTemplate->mode == FlowChartTemplate::DRAWON && canvas->mode != DrawingPaper::DRAWING) {
 		flowChartTemplate->mode = FlowChartTemplate::DRAWOFF;
-		Long i = dynamic_cast<Template*>(flowChartTemplate->flowChartTemplate)->GetLength() - 1;
+		Long i = flowChartTemplate->flowChartTemplate->GetLength() - 1;
 		while (i >= 7) { //numberBox만 없애기
-			dynamic_cast<Template*>(flowChartTemplate->flowChartTemplate)->Detach(i);
+			flowChartTemplate->flowChartTemplate->Detach(i);
 			i--;
 		}
 		//editor->isUnModeMenuEnabled = FALSE;
@@ -600,11 +598,12 @@ void CtrlPlusKeyAction::OnKeyDown() {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->scrollController->Update();
-
+		/*
 		CString rateStatus;
 		rateStatus.Format("%d", rate);
 		rateStatus += "%";
 		this->editor->statusBar->Modify(4, String((LPCTSTR)rateStatus));
+		*/
 	}
 }
 
@@ -638,11 +637,12 @@ void CtrlMinusKeyAction::OnKeyDown() {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->scrollController->Update();
-
+		/*
 		CString rateStatus;
 		rateStatus.Format("%d", rate);
 		rateStatus += "%";
 		this->editor->statusBar->Modify(4, String((LPCTSTR)rateStatus));
+		*/
 	}
 }
 

@@ -127,7 +127,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	x = attribute.pointFalse.x();
 	y = attribute.pointFalse.y();
 	width = repeatTrue->GetX() - x;
-	width2 = bufferRange.right - x + 20;
+	width2 = bufferRange.right() - x + 20;
 	height2 = repeatTrue->GetY() + dynamic_cast<RepeatTrue *>(repeatTrue)->GetHeight2() - y + 35;
 	height = height2 + 20;
 

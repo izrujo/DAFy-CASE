@@ -47,15 +47,15 @@ void MemoryController::Undo() {
 			//Shape *shape = execution->GetShape(i);
 			//Long index = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Find(shape);
 			Long index = execution->GetPosition(i);
-			dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Erase(index);
+			this->drawingPaper->flowChart->Detach(index);
 		}
 		else if (dynamic_cast<RemoveExecution*>(execution)) { //1.3. 실행했던 처리가 '삭제'였으면 현재 기호를 추가한다.
-		Long position = execution->GetPosition(execution->GetLength() - (i + 1)); //더해야할때는 앞에부터
-			if (position > dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetLength()) {
-				position = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetLength();
+			Long position = execution->GetPosition(execution->GetLength() - (i + 1)); //더해야할때는 앞에부터
+			if (position > this->drawingPaper->flowChart->GetLength()) {
+				position = this->drawingPaper->flowChart->GetLength();
 			}
 			Shape *shape = execution->GetShape(execution->GetLength() - (i + 1));
-			dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Insert(position, shape->Clone());
+			this->drawingPaper->flowChart->Insert(position, shape->Clone());
 			/*
 			//추가한 뒤 선택처리(DrawingTool LbuttonUp 참고)
 			if (this->drawingPaper->templateSelected != NULL) {
@@ -105,12 +105,12 @@ void MemoryController::Redo() {
 			//Shape *shape = execution->GetShape(i);
 			//Long index = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Find(shape);
 			Long index = execution->GetPosition(i);
-			dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Erase(index);
+			this->drawingPaper->flowChart->Detach(index);
 		}
 		else if (dynamic_cast<OtherExecution*>(execution)) { //1.4. 실행했던 처리가 '변경'이었으면 현재 기호로 치환한다.
 			Long position = execution->GetPosition(i);
 			Shape *cloneShape = execution->GetShape(i);
-			Shape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position);
+			Shape *shape = this->drawingPaper->flowChart->GetAt(position);
 			shape->Move(cloneShape->GetX(), cloneShape->GetY());
 			shape->ReSize(cloneShape->GetWidth(), cloneShape->GetHeight());
 			shape->Rewrite(cloneShape->GetContents());
@@ -127,7 +127,7 @@ Long MemoryController::RememberAdd(Long(*position), Long count) {
 	Execution *execution = new AddExecution;
 	Long i = 0;
 	while (i < count) {
-		Shape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position[i]);
+		Shape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
 		execution->Add(shape->Clone(), position[i]);
 		i++;
 	}
@@ -146,7 +146,7 @@ Long MemoryController::RememberRemove(Long(*position), Long count) {
 	Execution *execution = new RemoveExecution;
 	Long i = 0;
 	while (i < count) {
-		Shape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position[i]);
+		Shape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
 		execution->Add(shape->Clone(), position[i]);
 		i++;
 	}
@@ -165,7 +165,7 @@ Long MemoryController::RememberOther(Long(*position), Long count) {
 	Execution *execution = new OtherExecution;
 	Long i = 0;
 	while (i < count) {
-		Shape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position[i]);
+		Shape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
 		execution->Add(shape->Clone(), position[i]);
 		i++;
 	}
@@ -188,7 +188,7 @@ Long MemoryController::RememberRedo() {
 		Long i = 0;
 		while (i < execution->GetLength()) {
 			Long position = execution->GetPosition(i);
-			Shape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position);
+			Shape *shape = this->drawingPaper->flowChart->GetAt(position);
 			otherExecution->Add(shape->Clone(), position);
 			i++;
 		}
@@ -209,7 +209,7 @@ Long MemoryController::RememberUndo() {
 		Long i = 0;
 		while (i < execution->GetLength()) {
 			Long position = execution->GetPosition(i);
-			Shape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position);
+			Shape *shape = this->drawingPaper->flowChart->GetAt(position);
 			otherExecution->Add(shape->Clone(), position);
 			i++;
 		}

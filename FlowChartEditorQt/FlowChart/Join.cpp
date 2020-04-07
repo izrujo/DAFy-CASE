@@ -6,15 +6,15 @@
 *******************************************************************/
 
 #include "Join.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "Join.h"
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 
-#include "QtGObjectFactory.h"
+#include "../GObject/QtGObjectFactory.h"
 
 Join::Join(Long x, Long y, Long width, Long height, Long height2, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

@@ -33,17 +33,17 @@
 #include "RightDown.h"
 #include "RightDownJoin.h"
 
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "DrawVisitor.h"
-#include "QtPainter.h"
+#include "../GObject/QtPainter.h"
 
 //#include "StatusBar.h"
 //#include "ToolTip.h"
 //#include "TutorialForm.h"
-#include "Tutorials.h"
-#include "TutorialController.h"
+//#include "Tutorials.h"
+//#include "TutorialController.h"
 
-#include "QtGObjectFactory.h"
+#include "../GObject/QtGObjectFactory.h"
 
 #include <qpainter.h>
 #include <qevent.h>
@@ -92,9 +92,6 @@ FlowChartTemplate::~FlowChartTemplate() {
 	}
 	if (this->painter != NULL) {
 		delete this->painter;
-	}
-	if (this->font != NULL) {
-		delete this->font;
 	}
 }
 
@@ -161,13 +158,13 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 	Long index = -1;
 
 	index = this->flowChartTemplate->Find(event->pos());
-
 	if (index != -1) {
-		static_cast<DrawingPaper*>(editor->windows[0])->mode = DrawingPaper::DRAWING;
-		editor->statusBar->Modify(1, String("DRAWING"));
 
 		this->shapeSelected = this->flowChartTemplate->GetAt(index);
 
+		static_cast<DrawingPaper*>(editor->windows[0])->mode = DrawingPaper::DRAWING;
+	/*
+		editor->statusBar->Modify(1, String("DRAWING"));
 		String style;
 		switch (this->shapeSelected->GetSymbolID()) {
 		case ID_TERMINAL:
@@ -183,11 +180,7 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 		}
 		editor->statusBar->Modify(0, style);
 		editor->statusBar->Print();
-
-		TutorialForm *tutorialForm = (TutorialForm*)editor->windows[2];
-		if (tutorialForm != NULL) {
-			tutorialForm->tutorialController->Update();
-		}
+	*/
 	}
 	else {
 		this->shapeSelected = NULL;
@@ -197,7 +190,7 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 	Long index = -1;
 
-	COLORREF selectedColor = RGB(235, 235, 235);
+	QColor selectedColor(235, 235, 235);
 	FlowChartShape::Shape *shape;
 	Long i = 0;
 	while (i < this->flowChartTemplate->GetLength()) {

@@ -23,7 +23,7 @@ class NumberBox;
 class A4Paper;
 class TextRegion;
 
-class TutorialMark;
+//class TutorialMark;
 
 class FlowChartVisitor {
 public:
@@ -48,7 +48,7 @@ public:
 
 	virtual void Visit(NumberBox *numberBox) {};
 	virtual void Visit(A4Paper *a4Paper) = 0;
-	virtual void Visit(TutorialMark *tutorialMark) {};
+	//virtual void Visit(TutorialMark *tutorialMark) {};
 };
 
 #endif _FLOWCHARTVISITOR_H

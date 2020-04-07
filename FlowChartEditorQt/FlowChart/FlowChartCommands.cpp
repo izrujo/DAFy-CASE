@@ -6,7 +6,7 @@
 //#include "PreviewForm.h"
 #include "A4Paper.h"
 #include "FlowChart.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "DrawVisitor.h"
 #include "FlowChartTemplate.h"
 #include "NumberBox.h"
@@ -22,9 +22,9 @@ using namespace FlowChartShape;
 //#include "StatusBar.h"
 //#include "TutorialIntroForm.h"
 
-#include "QtGObjectFactory.h"
-#include "GObject.h"
-#include "QtPainter.h"
+#include "../GObject/QtGObjectFactory.h"
+#include "../GObject/GObject.h"
+#include "../GObject/QtPainter.h"
 
 #include <qfiledialog.h>
 #include <qtextstream.h>

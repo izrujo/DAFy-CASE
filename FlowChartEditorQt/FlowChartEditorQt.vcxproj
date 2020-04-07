@@ -94,8 +94,6 @@
     <ClCompile Include="FlowChart\DrawVisitor.cpp" />
     <ClCompile Include="FlowChart\EditorIntroForm.cpp" />
     <ClCompile Include="FlowChart\Executions.cpp" />
-    <ClCompile Include="FlowChart\ExpressionFactory.cpp" />
-    <ClCompile Include="FlowChart\Expressions.cpp" />
     <ClCompile Include="FlowChart\File.cpp" />
     <ClCompile Include="FlowChart\FlowChart.cpp" />
     <ClCompile Include="FlowChart\FlowChartCommandFactory.cpp" />
@@ -153,12 +151,6 @@
     <ClCompile Include="FlowChart\Tokenizer.cpp" />
     <ClCompile Include="FlowChart\Tool.cpp" />
     <ClCompile Include="FlowChart\ToolFactory.cpp" />
-    <ClCompile Include="FlowChart\TutorialController.cpp" />
-    <ClCompile Include="FlowChart\TutorialForm.cpp" />
-    <ClCompile Include="FlowChart\TutorialIntroForm.cpp" />
-    <ClCompile Include="FlowChart\TutorialMark.cpp" />
-    <ClCompile Include="FlowChart\TutorialMarkFactory.cpp" />
-    <ClCompile Include="FlowChart\Tutorials.cpp" />
     <ClCompile Include="FlowChart\VariableList.cpp" />
     <ClCompile Include="FlowChart\Zoom.cpp" />
     <ClCompile Include="FlowChart\ZoomVisitor.cpp" />
@@ -175,7 +167,6 @@
     <ClCompile Include="Notepad\KeyActionFactory.cpp" />
     <ClCompile Include="Notepad\KeyActions.cpp" />
     <ClCompile Include="Notepad\Row.cpp" />
-    <ClCompile Include="Notepad\main.cpp" />
     <ClCompile Include="Notepad\Note.cpp" />
     <ClCompile Include="Notepad\Notepad.cpp" />
     <ClCompile Include="Notepad\Observer.cpp" />
@@ -222,8 +213,6 @@
     <ClInclude Include="FlowChart\DrawVisitor.h" />
     <ClInclude Include="FlowChart\EditorIntroForm.h" />
     <ClInclude Include="FlowChart\Executions.h" />
-    <ClInclude Include="FlowChart\ExpressionFactory.h" />
-    <ClInclude Include="FlowChart\Expressions.h" />
     <ClInclude Include="FlowChart\File.h" />
     <ClInclude Include="FlowChart\FlowChart.h" />
     <ClInclude Include="FlowChart\FlowChartCommandFactory.h" />
@@ -282,12 +271,6 @@
     <ClInclude Include="FlowChart\Tokenizer.h" />
     <ClInclude Include="FlowChart\Tool.h" />
     <ClInclude Include="FlowChart\ToolFactory.h" />
-    <ClInclude Include="FlowChart\TutorialController.h" />
-    <QtMoc Include="FlowChart\TutorialIntroForm.h" />
-    <QtMoc Include="FlowChart\TutorialForm.h" />
-    <ClInclude Include="FlowChart\TutorialMark.h" />
-    <ClInclude Include="FlowChart\TutorialMarkFactory.h" />
-    <ClInclude Include="FlowChart\Tutorials.h" />
     <ClInclude Include="FlowChart\VariableList.h" />
     <ClInclude Include="FlowChart\Zoom.h" />
     <ClInclude Include="FlowChart\ZoomVisitor.h" />

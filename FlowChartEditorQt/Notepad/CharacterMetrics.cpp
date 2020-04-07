@@ -2,7 +2,7 @@
 #include "Notepad.h"
 #include "Glyph.h"
 #include "Character.h"
-#include "GObject.h"
+#include "../GObject/GObject.h"
 
 #include <qfont.h>
 

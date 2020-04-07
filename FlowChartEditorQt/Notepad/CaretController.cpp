@@ -4,8 +4,8 @@
 #include "Notepad.h"
 #include "Glyph.h"
 #include "Observer.h"
-#include "GObject.h"
-#include "QtPainter.h"
+#include "../GObject/GObject.h"
+#include "../GObject/QtPainter.h"
 
 #include <qpainter.h>
 #include <qmenubar.h>

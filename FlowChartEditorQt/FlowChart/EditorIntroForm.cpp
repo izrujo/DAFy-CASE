@@ -1,7 +1,7 @@
 #include "EditorIntroForm.h"
-#include "GObject.h"
-#include "QtPainter.h"
-#include "QtGObjectFactory.h"
+#include "../GObject/GObject.h"
+#include "../GObject/QtPainter.h"
+#include "../GObject/QtGObjectFactory.h"
 
 #include <qpainter.h>
 #include <qimage.h>
@@ -22,9 +22,9 @@ void EditorIntroForm::paintEvent(QPaintEvent *event) {
 
 	QImage image("icon ver.3.bmp");
 
-	QRect rect(270, 80, 330, 140);
+	QRect imageRect(270, 80, 330, 140);
 	
-	painter->DrawImage(rect, "icon ver.3.bmp", rect, Qt::AutoColor);
+	painter->DrawImage(rect, "icon ver.3.bmp", imageRect, Qt::AutoColor);
 
 	QtGObjectFactory factory;
 	GObject *font = factory.MakeFont("Malgun Gothic", 14, 70, false);

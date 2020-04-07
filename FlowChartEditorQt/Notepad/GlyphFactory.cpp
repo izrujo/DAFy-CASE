@@ -1,7 +1,7 @@
 #include "GlyphFactory.h"
 #include "Glyph.h"
 #include "Note.h"
-#include "Line.h"
+#include "Row.h"
 #include "Character.h"
 
 GlyphFactory::GlyphFactory() {
