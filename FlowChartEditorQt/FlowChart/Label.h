@@ -20,10 +20,10 @@ class SizeController;
 
 class Label : public Notepad {
 public:
-	static Label* Instance();
-	static Label* Instance(String *text);
+	static Label* Instance(QWidget *parent = Q_NULLPTR);
+	static Label* Instance(String *text, QWidget *parent = Q_NULLPTR);
 	static void Destroy();
-	void Open(Long x, Long y, Long width, Long height, String* text);
+	void Open(Long x, Long y, Long width, Long height);
 
 	Long GetX() const;
 	Long GetY() const;
@@ -31,8 +31,8 @@ public:
 	Long GetHeight() const;
 
 protected:
-	Label();
-	Label(String *text, COLORREF color);
+	Label(QWidget *parent = Q_NULLPTR);
+	Label(String *text, QWidget *parent = Q_NULLPTR);
 	~Label();
 
 public:
@@ -44,29 +44,18 @@ private:
 	Long width;
 	Long height;
 
-	COLORREF color;
-
-	// 줄간격
-
-	// 한글 입력 여부
-	//BOOL isHangulInputing;
-
+	//QColor color; Notepad StyleSheet 기능 이용
 private:
 	static Label *instance;
 protected:
-	afx_msg void OnKillFocus( CWnd* pNewWnd );
-	afx_msg void OnSetFocus( CWnd* pOldWnd );
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnPaint(); 
-	afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg LRESULT OnImeStartComposition(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnImeChar(WPARAM wParam, LPARAM lParam);
-	afx_msg LRESULT OnImeComposition(WPARAM wParam, LPARAM lParam);
-	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
-	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
-	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
-	afx_msg void OnSize(UINT nType, int cx, int cy);
+	void resizeEvent(QResizeEvent *event);
+	void keyPressEvent(QKeyEvent *event);
+	void inputMethodEvent(QInputMethodEvent *event);
+	void paintEvent(QPaintEvent *event);
+	void focusInEvent(QFocusEvent *event);
+	void focusOutEvent(QFocusEvent *event);
+	void mousePressEvent(QMouseEvent *event);
+	void mouseMoveEvent(QMouseEvent *event);
 };
 
 inline Long Label::GetX() const {

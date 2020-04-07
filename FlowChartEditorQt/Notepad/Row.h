@@ -1,5 +1,5 @@
-#ifndef _LINE_H
-#define _LINE_H
+#ifndef _ROW_H
+#define _ROW_H
 
 #include "Composite.h"
 #include <string>
@@ -8,11 +8,11 @@ typedef signed long int Long;
 using namespace std;
 
 class Glyph;
-class Line : public Composite {
+class Row : public Composite {
 public:
-	Line(Long capacity = 256);
-	Line(const Line& source);
-	virtual ~Line();
+	Row(Long capacity = 256);
+	Row(const Row& source);
+	virtual ~Row();
 
 	virtual Glyph* Divide(Long index);
 	virtual Glyph* Combine(Glyph *other);
@@ -20,10 +20,10 @@ public:
 	virtual Long MovePreviousWord();
 	virtual Long MoveNextWord();
 
-	Line& operator =(const Line& source);
+	Row& operator =(const Row& source);
 
 	virtual string GetContent();
 	virtual Glyph* Clone();
 };
 
-#endif //_LINE_H
+#endif //_ROW_H

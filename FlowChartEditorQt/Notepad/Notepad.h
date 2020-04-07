@@ -10,19 +10,19 @@ class CharacterMetrics;
 class Glyph;
 class Editor;
 class GObject;
-class QMenuBar;
-class QMenu;
-class QAction;
+class String;
 
 class Notepad : public QFrame, public Subject
 {
 	Q_OBJECT
 
 public:
-	Notepad(QFrame *parent = Q_NULLPTR);
+	Notepad(QWidget *parent = Q_NULLPTR);
+	Notepad(String *text, QWidget *parent = Q_NULLPTR);
+	Notepad(char *text, QWidget *parent = Q_NULLPTR);
 
 private:
-	Ui::NotepadClass ui;
+	Ui_Notepad::NotepadClass ui;
 
 public:
 	Glyph *note;
@@ -33,37 +33,23 @@ public:
 	Editor *editor;
 	Glyph *clipBoard;
 	GObject *painter;
-	QMenuBar *menuBar;
 
 protected:
 	void closeEvent(QCloseEvent *event);
 	void resizeEvent(QResizeEvent *event);
 	void keyPressEvent(QKeyEvent *event);
 	void inputMethodEvent(QInputMethodEvent *event);
-	
 	void paintEvent(QPaintEvent *event);
 	void focusInEvent(QFocusEvent *event);
 	void focusOutEvent(QFocusEvent *event);
-	//void OnCommandRange(UINT uID);
-	//void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 
 public:
 	bool GetIsComposing() const;
+
 private:
 	bool isComposing;
-
-	//¸Þ´º
-private slots:
-	void CommandRange(char *text);
-
-private:
-	void CreateActions();
-	void CreateMenus();
-	QMenu *formatMenu;
-	QAction *fontSetAction;
-
 };
 
 inline bool Notepad::GetIsComposing() const {

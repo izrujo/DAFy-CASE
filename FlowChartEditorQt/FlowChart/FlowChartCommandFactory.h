@@ -11,7 +11,7 @@ public:
 	~FlowChartCommandFactory();
 	FlowChartCommandFactory& operator=(const FlowChartCommandFactory& source);
 
-	FlowChartCommand* Make(int uID);
+	FlowChartCommand* Make(char *text);
 private:
 	FlowChartEditor *editor;
 };

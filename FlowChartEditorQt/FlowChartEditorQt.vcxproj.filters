@@ -293,19 +293,10 @@
     <ClCompile Include="Notepad\CharacterMetrics.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
-    <ClCompile Include="Notepad\Command.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\CommandFactory.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
     <ClCompile Include="Notepad\Composite.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
     <ClCompile Include="Notepad\Editor.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\FontCommand.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
     <ClCompile Include="Notepad\Glyph.cpp">
@@ -321,9 +312,6 @@
       <Filter>Notepad</Filter>
     </ClCompile>
     <ClCompile Include="Notepad\KeyActions.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Line.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
     <ClCompile Include="Notepad\main.cpp">
@@ -345,6 +333,12 @@
       <Filter>Notepad</Filter>
     </ClCompile>
     <ClCompile Include="Notepad\Subject.cpp">
+      <Filter>Notepad</Filter>
+    </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\qrc_Notepad.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Row.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
   </ItemGroup>
@@ -603,19 +597,10 @@
     <ClInclude Include="Notepad\CharacterMetrics.h">
       <Filter>Notepad</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Command.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
-    <ClInclude Include="Notepad\CommandFactory.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
     <ClInclude Include="Notepad\Composite.h">
       <Filter>Notepad</Filter>
     </ClInclude>
     <ClInclude Include="Notepad\Editor.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
-    <ClInclude Include="Notepad\FontCommand.h">
       <Filter>Notepad</Filter>
     </ClInclude>
     <ClInclude Include="Notepad\Glyph.h">
@@ -633,9 +618,6 @@
     <ClInclude Include="Notepad\KeyActions.h">
       <Filter>Notepad</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Line.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
     <ClInclude Include="Notepad\Note.h">
       <Filter>Notepad</Filter>
     </ClInclude>
@@ -649,6 +631,12 @@
       <Filter>Notepad</Filter>
     </ClInclude>
     <ClInclude Include="Notepad\Subject.h">
+      <Filter>Notepad</Filter>
+    </ClInclude>
+    <ClInclude Include="x64\Debug\uic\ui_Notepad.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Notepad\Row.h">
       <Filter>Notepad</Filter>
     </ClInclude>
   </ItemGroup>

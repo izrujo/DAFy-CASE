@@ -1,12 +1,21 @@
 #include "FlowChartEditor.h"
+#include "FlowChart/FlowChartCommandFactory.h"
+#include "FlowChart/FlowChartCommands.h"
+
+#include <qmenubar.h>
 
 FlowChartEditor::FlowChartEditor(QWidget *parent)
 	: QFrame(parent)
 {
 	ui.setupUi(this);
 
-	this->statusBar = NULL;
-	this->toolTip = NULL;
+	this->menuBar = NULL;
+
+	this->CreateActions();
+	this->CreateMenus();
+
+	//this->statusBar = NULL;
+	//this->toolTip = NULL;
 
 	QRect frameRect = this->frameRect();
 
@@ -79,6 +88,10 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 }
 
 void FlowChartEditor::closeEvent(QCloseEvent *event) {
+	if (this->menuBar != NULL) {
+		delete this->menuBar;
+	}
+
 	/*자식 윈도우 배열
 	Long i = 0;
 	while (i < this->windows.GetLength()) {
@@ -111,6 +124,10 @@ void FlowChartEditor::closeEvent(QCloseEvent *event) {
 }
 
 void FlowChartEditor::resizeEvent(QResizeEvent *event) {
+	if (this->menuBar != NULL) {
+		this->menuBar->resize(this->frameRect().width(), this->menuBar->height());
+	}
+
 	QRect frameRect1 = this->frameRect();
 	QRect frameRect2 = this->frameRect();
 
@@ -351,3 +368,194 @@ void FlowChartEditor::OnUpdateSelectionCommand(CCmdUI *cCmdUI) {
 	}
 }
 */
+
+void FlowChartEditor::CommandRange(char *text) { //문자열이 아닌 #define으로 선언해두고 쓰면 더 효율이 좋을까?
+	FlowChartCommandFactory commandFactory(this);
+	FlowChartCommand *command = commandFactory.Make(text); //action->text()
+	if (command != NULL) {
+		command->Execute();
+		delete command;
+	}
+
+	this->repaint();
+}
+
+void FlowChartEditor::CreateActions() {
+	//this->fontSetAction->setStatusTip(tr("Set Font"));
+
+	//==================== File Menu ====================
+	this->newAction = new QAction(QString::fromLocal8Bit(("새 파일(&N)")), this);
+	this->newAction->setShortcuts(QKeySequence::New);
+	connect(this->newAction, &QAction::triggered, this, [=]() { this->CommandRange("New"); });
+
+	this->openAction = new QAction(QString::fromLocal8Bit(("열기(&O)")), this);
+	this->openAction->setShortcuts(QKeySequence::Open);
+	connect(this->openAction, &QAction::triggered, this, [=]() { this->CommandRange("Open"); });
+
+	this->saveAction = new QAction(QString::fromLocal8Bit(("저장(&S)")), this);
+	this->saveAction->setShortcuts(QKeySequence::Save);
+	connect(this->saveAction, &QAction::triggered, this, [=]() { this->CommandRange("Save"); });
+
+	this->saveAsAction = new QAction(QString::fromLocal8Bit(("다른 이름으로 저장(&A)...")), this);
+	this->saveAsAction->setShortcuts(QKeySequence::SaveAs);
+	connect(this->saveAsAction, &QAction::triggered, this, [=]() { this->CommandRange("SaveAs"); });
+
+	this->saveAsImageAction = new QAction(QString::fromLocal8Bit(("이미지(JPG)로 저장(&I)...")), this);
+	//this->saveAsImageAction->setShortcuts(QKeySequence::New);
+	connect(this->saveAsImageAction, &QAction::triggered, this, [=]() { this->CommandRange("SaveAsImage"); });
+
+	this->printAction = new QAction(QString::fromLocal8Bit(("인쇄(&P)...")), this);
+	this->printAction->setShortcuts(QKeySequence::Print);
+	connect(this->printAction, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
+
+	this->exitAction = new QAction(QString::fromLocal8Bit(("끝내기(&X)...")), this);
+	this->exitAction->setShortcuts(QKeySequence::Close);
+	connect(this->exitAction, &QAction::triggered, this, [=]() { this->CommandRange("Exit"); });
+	//==================== File Menu ====================
+
+	//==================== Edit Menu ====================
+	this->undoAction = new QAction(QString::fromLocal8Bit(("실행 취소(&U)")), this); //실행 취소(U) Ctrl + Z
+	this->undoAction->setShortcuts(QKeySequence::Undo);
+	connect(this->undoAction, &QAction::triggered, this, [=]() { this->CommandRange("Undo"); });
+
+	this->redoAction = new QAction(QString::fromLocal8Bit(("다시 실행(&R)")), this); //다시 실행(R) Ctrl + Y
+	this->redoAction->setShortcuts(QKeySequence::Redo);
+	connect(this->redoAction, &QAction::triggered, this, [=]() { this->CommandRange("Redo"); });
+
+	this->copyAction = new QAction(QString::fromLocal8Bit(("복사하기(&C)")), this); //복사하기(C) Ctrl + C
+	this->copyAction->setShortcuts(QKeySequence::Copy);
+	connect(this->copyAction, &QAction::triggered, this, [=]() { this->CommandRange("Copy"); });
+
+	this->pasteAction = new QAction(QString::fromLocal8Bit(("붙여넣기(&P)")), this); //붙여넣기(P) Ctrl + V
+	this->pasteAction->setShortcuts(QKeySequence::Paste);
+	connect(this->pasteAction, &QAction::triggered, this, [=]() { this->CommandRange("Paste"); });
+
+	this->cutAction = new QAction(QString::fromLocal8Bit(("잘라내기(&T)")), this); //잘라내기(T) Ctrl + X
+	this->cutAction->setShortcuts(QKeySequence::Cut);
+	connect(this->cutAction, &QAction::triggered, this, [=]() { this->CommandRange("Cut"); });
+
+	this->deleteAction = new QAction(QString::fromLocal8Bit(("삭제(&L)")), this); //삭제(L) Del
+	this->deleteAction->setShortcuts(QKeySequence::Delete);
+	connect(this->deleteAction, &QAction::triggered, this, [=]() { this->CommandRange("Delete"); });
+
+	this->selectAllAction = new QAction(QString::fromLocal8Bit(("모두 선택(&A)")), this); //모두 선택(A) Ctrl + A
+	this->selectAllAction->setShortcuts(QKeySequence::SelectAll);
+	connect(this->selectAllAction, &QAction::triggered, this, [=]() { this->CommandRange("SelectAll"); });
+
+	this->positionAction = new QAction(QString::fromLocal8Bit(("기호 위치 같게(&O)")), this); //기호 위치 같게(O)
+	connect(this->positionAction, &QAction::triggered, this, [=]() { this->CommandRange("Position"); });
+
+	this->sizeAction = new QAction(QString::fromLocal8Bit(("기호 크기 같게(&S)")), this); //기호 크기 같게(S)
+	connect(this->sizeAction, &QAction::triggered, this, [=]() { this->CommandRange("Size"); });
+
+	this->intervalAction = new QAction(QString::fromLocal8Bit(("기호 같격 같게(&I)")), this); //기호 간격 같게(I)
+	connect(this->intervalAction, &QAction::triggered, this, [=]() { this->CommandRange("Interval"); });
+	//==================== Edit Menu ====================
+
+	//==================== Format Menu ====================
+	this->fontSetAction = new QAction(QString::fromLocal8Bit(("글꼴(&F)...")), this);
+	connect(this->fontSetAction, &QAction::triggered, this, [=]() { this->CommandRange("FontSet"); });
+
+	this->pageSetAction = new QAction(QString::fromLocal8Bit(("페이지 설정(&U)...")), this);
+	connect(this->pageSetAction, &QAction::triggered, this, [=]() { this->CommandRange("PageSet"); });
+	//==================== Format Menu ====================
+
+	//==================== Add Menu ====================
+	this->drawingModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드(&M)")), this); //그리기 모드(M) Ctrl + D
+	//this->drawingModeAction->setShortcuts(QKeySequence::SelectAll);
+	connect(this->drawingModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingMode"); });
+
+	this->drawingUnModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드 해제(&U)")), this); //그리기 모드 해제 ESC
+	this->drawingUnModeAction->setShortcuts(QKeySequence::Cancel);
+	connect(this->drawingUnModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingUnMode"); });
+
+	this->startTerminalSymbolAction = new QAction(QString::fromLocal8Bit(("시작 단말 기호(&S)")), this); //시작 단말 기호(S)
+	connect(this->startTerminalSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("StartTerminalSymbol"); });
+
+	this->preparationSymbolAction = new QAction(QString::fromLocal8Bit(("준비 기호(&P)")), this); //준비 기호(P)
+	connect(this->preparationSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("PreparationSymbol"); });
+
+	this->inputSymbolAction = new QAction(QString::fromLocal8Bit(("입력 기호(&I)")), this); //입력 기호(I)
+	connect(this->inputSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("InputSymbol"); });
+
+	this->processSymbolAction = new QAction(QString::fromLocal8Bit(("처리 기호(&R)")), this); //처리 기호(R)
+	connect(this->processSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("ProcessSymbol"); });
+
+	this->decisionSymbolAction = new QAction(QString::fromLocal8Bit(("판단 기호(&D)")), this); //판단 기호(D)
+	connect(this->decisionSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("DecisionSymbol"); });
+
+	this->outputSymbolAction = new QAction(QString::fromLocal8Bit(("출력 기호(&O)")), this); //출력 기호(O)
+	connect(this->outputSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("OutputSymbol"); });
+
+	this->stopTerminalSymbolAction = new QAction(QString::fromLocal8Bit(("종료 단말 기호(&T)")), this); //종료 단말 기호(T)
+	connect(this->stopTerminalSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("StopTerminalSymbol"); });
+	//==================== Add Menu ====================
+
+	//==================== ControlArchitecture Menu ====================
+	this->sequenceArchitectureAction = new QAction(QString::fromLocal8Bit(("순차구조(&S)")), this); //순차구조(S)
+	connect(this->sequenceArchitectureAction, &QAction::triggered, this, [=]() { this->CommandRange("SequenceArchitecture"); });
+
+	this->iterationArchitectureAction = new QAction(QString::fromLocal8Bit(("반복구조(&I)")), this); //반복구조(I)
+	connect(this->iterationArchitectureAction, &QAction::triggered, this, [=]() { this->CommandRange("IterationArchitecture"); });
+
+	this->selectionArchitectureAction = new QAction(QString::fromLocal8Bit(("선택구조(&E)")), this); //선택구조(E)
+	connect(this->selectionArchitectureAction, &QAction::triggered, this, [=]() { this->CommandRange("SelectionArchitecture"); });
+	//==================== ControlArchitecture Menu ====================
+
+	//==================== Help Menu ====================
+
+	//==================== Help Menu ====================
+}
+
+void FlowChartEditor::CreateMenus() {
+	this->menuBar = new QMenuBar(this);
+
+	this->fileMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("파일(&F)")));
+	this->fileMenu->addAction(this->newAction); //새 파일(N) Ctrl + N
+	this->fileMenu->addAction(this->openAction); //열기(O) Ctrl + O
+	this->fileMenu->addAction(this->saveAction); //저장(S) Ctrl + S
+	this->fileMenu->addAction(this->saveAsAction); //다른 이름으로 저장(A)... Ctrl + Alt + S
+	this->fileMenu->addAction(this->saveAsImageAction); //이미지(JPG)로 저장(I)... Ctrl + Alt + I
+	this->fileMenu->addSeparator(); //구분선
+	this->fileMenu->addAction(this->printAction); //인쇄(P)... Ctrl + P
+	this->fileMenu->addSeparator(); //구분선
+	this->fileMenu->addAction(this->exitAction); //끝내기(X) Alt + F4
+	
+	this->editMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("편집(&E)")));
+	this->editMenu->addAction(this->undoAction); //실행 취소(U) Ctrl + Z
+	this->editMenu->addAction(this->redoAction); //다시 실행(R) Ctrl + Y
+	this->editMenu->addSeparator(); //구분선
+	this->editMenu->addAction(this->copyAction); //복사하기(C) Ctrl + C
+	this->editMenu->addAction(this->pasteAction); //붙여넣기(P) Ctrl + V
+	this->editMenu->addAction(this->cutAction); //잘라내기(T) Ctrl + X
+	this->editMenu->addAction(this->deleteAction); //삭제(L) Del
+	this->editMenu->addSeparator(); //구분선
+	this->editMenu->addAction(this->selectAllAction); //모두 선택(A) Ctrl + A
+	this->editMenu->addSeparator(); //구분선
+	this->editMenu->addAction(this->positionAction); //기호 위치 같게(O)
+	this->editMenu->addAction(this->sizeAction); //기호 크기 같게(S)
+	this->editMenu->addAction(this->intervalAction); //기호 간격 같게(I)
+
+	this->formatMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("서식(&O)")));
+	this->formatMenu->addAction(this->fontSetAction); //글꼴(F)...
+	this->formatMenu->addAction(this->pageSetAction); //페이지 설정(U)...
+
+	this->addMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("삽입(&A)")));
+	this->addMenu->addAction(this->drawingModeAction); //그리기 모드(M) Ctrl + D
+	this->addMenu->addAction(this->drawingUnModeAction); //그리기 모드 해제 ESC
+	this->addMenu->addSeparator(); //구분선
+	this->addMenu->addAction(this->startTerminalSymbolAction); //시작 단말 기호(S)
+	this->addMenu->addAction(this->preparationSymbolAction); //준비 기호(P)
+	this->addMenu->addAction(this->inputSymbolAction); //입력 기호(I)
+	this->addMenu->addAction(this->processSymbolAction); //처리 기호(R)
+	this->addMenu->addAction(this->decisionSymbolAction); //판단 기호(D)
+	this->addMenu->addAction(this->outputSymbolAction); //출력 기호(O)
+	this->addMenu->addAction(this->stopTerminalSymbolAction); //종료 단말 기호(T)
+
+	this->controlArchitectureMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("제어구조(&C)")));
+	this->controlArchitectureMenu->addAction(this->sequenceArchitectureAction); //순차구조(S)
+	this->controlArchitectureMenu->addAction(this->iterationArchitectureAction); //반복구조(I)
+	this->controlArchitectureMenu->addAction(this->selectionArchitectureAction); //선택구조(E)
+
+	this->helpMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("도움말(&H)")));
+}

@@ -2,31 +2,27 @@
 #include "GlyphFactory.h"
 #include "Glyph.h"
 #include "Note.h"
-#include "Line.h"
+#include "Row.h"
 #include "CaretController.h"
 #include "CharacterMetrics.h"
-#include "Font.h"
+#include "../GObject/Font.h"
 #include "KeyActionFactory.h"
 #include "KeyActions.h"
-#include "CommandFactory.h"
-#include "Command.h"
 #include "Editor.h"
 #include "Selector.h"
 #include "Highlight.h"
-#include "GObject.h"
-#include "QtPainter.h"
-#include "QtGObjectFactory.h"
+#include "../GObject/GObject.h"
+#include "../GObject/QtPainter.h"
+#include "../GObject/QtGObjectFactory.h"
 #include "Caret.h"
-#include "HangulState.h"
+#include "../FlowChart/String.h"
+#include "Scanner.h"
 
 #include <qevent.h>
 #include <qpainter.h>
-#include <qmenubar.h>
-#include <qboxlayout.h>
 #include <qstyle.h>
-#include <qdebug.h>
 
-Notepad::Notepad(QFrame *parent)
+Notepad::Notepad(QWidget *parent)
 	: QFrame(parent)
 {
 	ui.setupUi(this);
@@ -38,18 +34,6 @@ Notepad::Notepad(QFrame *parent)
 	this->isComposing = false;
 	this->highlight = NULL;
 	this->clipBoard = NULL;
-	this->menuBar = NULL;
-
-	QWidget *topFiller = new QWidget;
-	topFiller->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-	QVBoxLayout *layout = new QVBoxLayout;
-	layout->setContentsMargins(5, 5, 5, 5);
-	layout->addWidget(topFiller);
-	this->setLayout(layout);
-
-	this->CreateActions();
-	this->CreateMenus();
 
 	QRect rect = this->frameRect();
 	this->painter = new QtPainter(rect.width(), rect.height());
@@ -58,6 +42,102 @@ Notepad::Notepad(QFrame *parent)
 	this->note = glyphFactory.Make("");
 	this->current = glyphFactory.Make("\r\n");
 	this->note->Add(this->current);
+
+	this->characterMetrics = new CharacterMetrics(this);
+	this->editor = new Editor(this);
+
+	Long index = this->note->Move(0);
+	this->current = this->note->GetAt(index);
+	this->current->First();
+
+
+	this->Notify();
+}
+
+Notepad::Notepad(String *text, QWidget *parent)
+	: QFrame(parent)
+{
+	ui.setupUi(this);
+
+	this->setFocusPolicy(Qt::WheelFocus);
+	this->setAttribute(Qt::WA_InputMethodEnabled, true);
+
+	this->caretController = NULL;
+	this->isComposing = false;
+	this->highlight = NULL;
+	this->clipBoard = NULL;
+
+	QRect rect = this->frameRect();
+	this->painter = new QtPainter(rect.width(), rect.height());
+
+	GlyphFactory glyphFactory;
+	this->note = glyphFactory.Make("");
+	Glyph *line = glyphFactory.Make("\r\n");
+	Glyph *glyph;
+	this->note->Add(line);
+
+	Long i = 0;
+	while (i < text->GetLength()) {
+		char character = text->GetAt(i);
+		if (character == '\n') {
+			glyph = glyphFactory.Make("\r\n");
+			this->note->Add(glyph);
+		}
+		else {
+			glyph = glyphFactory.Make(&character);
+			this->note->GetAt(this->note->GetLength() - 1)->Add(glyph);
+		}
+		i++;
+	}
+	this->current = this->note->GetAt(this->note->GetLength() - 1);
+
+	this->characterMetrics = new CharacterMetrics(this);
+	this->editor = new Editor(this);
+
+	Long index = this->note->Move(0);
+	this->current = this->note->GetAt(index);
+	this->current->First();
+
+
+	this->Notify();
+}
+
+Notepad::Notepad(char *text, QWidget *parent)
+	: QFrame(parent)
+{
+	ui.setupUi(this);
+
+	this->setFocusPolicy(Qt::WheelFocus);
+	this->setAttribute(Qt::WA_InputMethodEnabled, true);
+
+	this->caretController = NULL;
+	this->isComposing = false;
+	this->highlight = NULL;
+	this->clipBoard = NULL;
+
+	QRect rect = this->frameRect();
+	this->painter = new QtPainter(rect.width(), rect.height());
+
+	GlyphFactory glyphFactory;
+	this->note = glyphFactory.Make("");
+	Glyph *line = glyphFactory.Make("\r\n");
+	this->note->Add(line);
+	this->current = line;
+	Scanner scanner(text);
+	while (scanner.IsEnd() == FALSE) {
+		string token = scanner.GetToken();
+		Glyph *glyph = glyphFactory.Make(token.c_str());
+		if (token != "\r\n") {
+			this->current->Add(glyph);
+		}
+		else {
+			Long index = this->note->Add(glyph);
+			this->current = this->note->GetAt(index);
+		}
+		scanner.Next();
+	}
+
+	this->current = this->note->GetAt(this->note->GetLength() - 1);
 
 	this->characterMetrics = new CharacterMetrics(this);
 	this->editor = new Editor(this);
@@ -89,18 +169,12 @@ void Notepad::closeEvent(QCloseEvent *event) {
 	if (this->painter != NULL) {
 		delete this->painter;
 	}
-	if (this->menuBar != NULL) {
-		delete this->menuBar;
-	}
 }
 
 void Notepad::resizeEvent(QResizeEvent *event) {
 	if (this->painter != NULL) {
 		QRect rect = this->frameRect();
 		this->painter->Resize(rect.width(), rect.height());
-	}
-	if (this->menuBar != NULL) {
-		this->menuBar->resize(this->frameRect().width(), this->menuBar->height());
 	}
 	if (this->note != NULL) {
 		this->Notify();
@@ -214,51 +288,6 @@ void Notepad::inputMethodEvent(QInputMethodEvent *event) {
 	this->Notify();
 	this->repaint();
 }
-/*
-LRESULT Notepad::OnImeComposition(WPARAM wParam, LPARAM lParam) {
-	char buffer[2];
-	Long index;
-
-	if (lParam & GCS_COMPSTR) {
-		buffer[0] = (TCHAR)HIBYTE(LOWORD(wParam));
-		buffer[1] = (TCHAR)LOBYTE(LOWORD(wParam));
-
-
-	}
-
-	return ::DefWindowProc((HWND)this->winId(), WM_IME_COMPOSITION, wParam, lParam);
-}
-
-LRESULT Notepad::OnImeChar(WPARAM wParam, LPARAM lParam) {
-	char buffer[2];
-	Long index = this->current->GetCurrent();
-	this->current->Remove(index - 1);
-
-	if (IsDBCSLeadByte((BYTE)(wParam >> 8)) == TRUE) {
-		buffer[0] = (TCHAR)HIBYTE(LOWORD(wParam));
-		buffer[1] = (TCHAR)LOBYTE(LOWORD(wParam));
-	}
-	else {
-		buffer[0] = (TCHAR)wParam;
-	}
-
-	GlyphFactory glyphFactory;
-	Glyph *glyph = glyphFactory.Make(buffer);
-
-	if (this->current->GetCurrent() >= this->current->GetLength()) {
-		this->current->Add(glyph);
-	}
-	else {
-		this->current->Add(this->current->GetCurrent(), glyph);
-	}
-
-	this->isComposing = FALSE;
-	this->Notify();
-	this->repaint();
-
-	return 0;
-}
-*/
 
 void Notepad::paintEvent(QPaintEvent *event) {
 	QPainter dc(this);
@@ -269,7 +298,7 @@ void Notepad::paintEvent(QPaintEvent *event) {
 	Glyph *line;
 	string content;
 
-	Long firstY = this->menuBar->y() + this->menuBar->height();
+	Long firstY = 0;
 	Long i = 0;
 	while (i < this->note->GetLength()) {
 		line = this->note->GetAt(i);
@@ -491,29 +520,4 @@ void Notepad::mouseMoveEvent(QMouseEvent *event) {
 
 	this->Notify();
 	this->repaint();
-}
-
-void Notepad::CommandRange(char *text) { //문자열이 아닌 #define으로 선언해두고 쓰면 더 효율이 좋을까?
-	CommandFactory commandFactory(this);
-	Command *command = commandFactory.Make(text); //action->text()
-	if (command != NULL) {
-		command->Execute();
-		delete command;
-	}
-
-	this->repaint();
-}
-
-void Notepad::CreateActions() {
-	this->fontSetAction = new QAction(QString::fromLocal8Bit(("글꼴(&F)...")), this);
-	//this->fontSetAction->setShortcuts(QKeySequence::New); 단축키없음
-	//this->fontSetAction->setStatusTip(tr("Set Font"));
-	connect(this->fontSetAction, &QAction::triggered, this, [=]() { this->CommandRange("FontSet"); });
-}
-
-void Notepad::CreateMenus() {
-	this->menuBar = new QMenuBar(this);
-	//alt 누르면 O로 메뉴 선택 됨!
-	this->formatMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("서식(&O)")));
-	this->formatMenu->addAction(this->fontSetAction);
 }

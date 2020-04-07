@@ -1,19 +1,19 @@
-#include "Line.h"
+#include "Row.h"
 #include "Glyph.h"
 #include "Character.h"
 
-Line::Line(Long capacity)
+Row::Row(Long capacity)
 	: Composite(capacity) {
 }
 
-Line::Line(const Line& source)
+Row::Row(const Row& source)
 	: Composite(source){
 }
 
-Line::~Line() {
+Row::~Row() {
 }
 
-Long Line::MovePreviousWord() {
+Long Row::MovePreviousWord() {
 	while (this->current > 0 && (this->glyphs[this->current - 1]->GetContent())[0] == ' ') {
 		this->current--;
 	}
@@ -24,7 +24,7 @@ Long Line::MovePreviousWord() {
 	return this->current;
 }
 
-Long Line::MoveNextWord() {
+Long Row::MoveNextWord() {
 	while (this->current < this->length && (this->glyphs[this->current]->GetContent())[0] == ' ') {
 		this->current++;
 	}
@@ -38,13 +38,13 @@ Long Line::MoveNextWord() {
 	return this->current;
 }
 
-Line& Line::operator =(const Line& source) {
+Row& Row::operator =(const Row& source) {
 	Composite::operator =(source);
 
 	return *this;
 }
 
-string Line::GetContent() {
+string Row::GetContent() {
 	string content = "";
 	Long i = 0;
 	while (i < this->length) {
@@ -54,12 +54,12 @@ string Line::GetContent() {
 	return content;
 }
 
-Glyph* Line::Clone() {
-	return new Line(*this);
+Glyph* Row::Clone() {
+	return new Row(*this);
 }
 
-Glyph* Line::Divide(Long index) {
-	Glyph *line = new Line;
+Glyph* Row::Divide(Long index) {
+	Glyph *line = new Row;
 	Glyph *character;
 	Long i = index;
 	Long length = this->length;
@@ -74,7 +74,7 @@ Glyph* Line::Divide(Long index) {
 
 	return line;
 }
-Glyph* Line::Combine(Glyph *other) {
+Glyph* Row::Combine(Glyph *other) {
 	Long i = 0;
 	while (i < other->GetLength()) {
 		Glyph *character = other->GetAt(i);

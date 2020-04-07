@@ -167,17 +167,14 @@
     <ClCompile Include="Notepad\CaretController.cpp" />
     <ClCompile Include="Notepad\Character.cpp" />
     <ClCompile Include="Notepad\CharacterMetrics.cpp" />
-    <ClCompile Include="Notepad\Command.cpp" />
-    <ClCompile Include="Notepad\CommandFactory.cpp" />
     <ClCompile Include="Notepad\Composite.cpp" />
     <ClCompile Include="Notepad\Editor.cpp" />
-    <ClCompile Include="Notepad\FontCommand.cpp" />
     <ClCompile Include="Notepad\Glyph.cpp" />
     <ClCompile Include="Notepad\GlyphFactory.cpp" />
     <ClCompile Include="Notepad\Highlight.cpp" />
     <ClCompile Include="Notepad\KeyActionFactory.cpp" />
     <ClCompile Include="Notepad\KeyActions.cpp" />
-    <ClCompile Include="Notepad\Line.cpp" />
+    <ClCompile Include="Notepad\Row.cpp" />
     <ClCompile Include="Notepad\main.cpp" />
     <ClCompile Include="Notepad\Note.cpp" />
     <ClCompile Include="Notepad\Notepad.cpp" />
@@ -186,6 +183,12 @@
     <ClCompile Include="Notepad\Selector.cpp" />
     <ClCompile Include="Notepad\Subject.cpp" />
     <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\qrc_Notepad.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -213,6 +216,7 @@
     <ClInclude Include="FlowChart\CoordinateConverter.h" />
     <ClInclude Include="FlowChart\Creator.h" />
     <ClInclude Include="FlowChart\Decision.h" />
+    <ClInclude Include="x64\Debug\uic\ui_Notepad.h" />
     <QtMoc Include="FlowChart\DrawingPaper.h" />
     <ClInclude Include="FlowChart\DrawingTool.h" />
     <ClInclude Include="FlowChart\DrawVisitor.h" />
@@ -292,17 +296,14 @@
     <ClInclude Include="Notepad\CaretController.h" />
     <ClInclude Include="Notepad\Character.h" />
     <ClInclude Include="Notepad\CharacterMetrics.h" />
-    <ClInclude Include="Notepad\Command.h" />
-    <ClInclude Include="Notepad\CommandFactory.h" />
     <ClInclude Include="Notepad\Composite.h" />
     <ClInclude Include="Notepad\Editor.h" />
-    <ClInclude Include="Notepad\FontCommand.h" />
     <ClInclude Include="Notepad\Glyph.h" />
     <ClInclude Include="Notepad\GlyphFactory.h" />
     <ClInclude Include="Notepad\Highlight.h" />
     <ClInclude Include="Notepad\KeyActionFactory.h" />
     <ClInclude Include="Notepad\KeyActions.h" />
-    <ClInclude Include="Notepad\Line.h" />
+    <ClInclude Include="Notepad\Row.h" />
     <ClInclude Include="Notepad\Note.h" />
     <QtMoc Include="Notepad\Notepad.h" />
     <ClInclude Include="Notepad\Observer.h" />

@@ -20,105 +20,98 @@ FlowChartCommandFactory& FlowChartCommandFactory::operator=(const FlowChartComma
 	return *this;
 }
 
-FlowChartCommand* FlowChartCommandFactory::Make(int uID) {
+FlowChartCommand* FlowChartCommandFactory::Make(char *text) {
 	FlowChartCommand *command = 0;
 
-	switch (uID) {
-	case IDM_FILE_SAVE:
+	if (text == "Save") {
 		command = new SaveCommand(this->editor);
-		break;
-	case IDM_FILE_SAVEAS:
+	}
+	else if (text == "SaveAs") {
 		command = new SaveAsCommand(this->editor);
-		break;
-	case IDM_FILE_OPEN:
+	}
+	else if (text == "Open") {
 		command = new OpenCommand(this->editor);
-		break;
-	case IDM_FILE_NEW:
+	}
+	else if (text == "New") {
 		command = new NewCommand(this->editor);
-		break;
-	case IDM_EDIT_UNDO:
+	}
+	else if (text == "Undo") {
 		command = new UndoCommand(this->editor);
-		break;
-	case IDM_EDIT_REDO:
+	}
+	else if (text == "Redo") {
 		command = new RedoCommand(this->editor);
-		break;
-	case IDM_FORMAT_FONT:
+	}
+	else if (text == "FontSet") {
 		command = new FontSetCommand(this->editor);
-		break;
-	case IDM_FILE_PRINT:
-		//command = new PreviewCommand(this->editor);
-		break;
-	case IDM_FILE_SAVEASIMAGE:
+	}
+	else if (text == "Print") {
+		command = new PreviewCommand(this->editor);
+	}
+	else if (text == "SaveAsImage") {
 		command = new SaveAsImageCommand(this->editor);
-		break;
-	case IDM_ADD_MODE:
+	}
+	else if (text == "DrawingMode") {
 		command = new DrawingModeCommand(this->editor);
-		break;
-	case IDM_ADD_UNMODE:
+	}
+	else if (text == "DrawingUnMode") {
 		command = new DrawingUnModeCommand(this->editor);
-		break;
-	case IDM_EDIT_COPY:
+	}
+	else if (text == "Copy") {
 		command = new CopyCommand(this->editor);
-		break;
-	case IDM_EDIT_PASTE:
+	}
+	else if (text == "Paste") {
 		command = new PasteCommand(this->editor);
-		break;
-	case IDM_EDIT_CUT:
+	}
+	else if (text == "Cut") {
 		command = new CutCommand(this->editor);
-		break;
-	case IDM_EDIT_DELETE:
+	}
+	else if (text == "Delete") {
 		command = new DeleteCommand(this->editor);
-		break;
-	case IDM_EDIT_SELECTALL:
+	}
+	else if (text == "SelectAll") {
 		command = new SelectAllCommand(this->editor);
-		break;
-	case IDM_ADD_START:
+	}
+	else if (text == "StartSymbol") {
 		command = new StartCommand(this->editor);
-		break;
-	case IDM_ADD_PREPARATION:
+	}
+	else if (text == "PreparationSymbol") {
 		command = new PreparationCommand(this->editor);
-		break;
-	case IDM_ADD_INPUT:
+	}
+	else if (text == "InputSymbol") {
 		command = new InputCommand(this->editor);
-		break;
-	case IDM_ADD_PROCESS:
+	}
+	else if (text == "ProcessSymbol") {
 		command = new ProcessCommand(this->editor);
-		break;
-	case IDM_ADD_DECISION:
+	}
+	else if (text == "DecisionSymbol") {
 		command = new DecisionCommand(this->editor);
-		break;
-	case IDM_ADD_OUTPUT:
+	}
+	else if (text == "OutputSymbol") {
 		command = new OutputCommand(this->editor);
-		break;
-	case IDM_ADD_STOP:
+	}
+	else if (text == "StopTerminalSymbol") {
 		command = new StopCommand(this->editor);
-		break;
-	case IDM_FORMAT_PAGESET:
+	}
+	else if (text == "PageSet") {
 		command = new PageSetCommand(this->editor);
-		break;
-	case IDM_EDIT_POSITION:
+	}
+	else if (text == "Position") {
 		command = new PositionCommand(this->editor);
-		break;
-	case IDM_EDIT_SIZE:
+	}
+	else if (text == "Size") {
 		command = new SizeCommand(this->editor);
-		break;
-	case IDM_EDIT_INTERVAL:
+	}
+	else if (text == "Interval") {
 		command = new IntervalCommand(this->editor);
-		break;
-	case IDM_CONTROL_SEQUENCE:
+	}
+	else if (text == "SequenceArchitecture") {
 		command = new SequenceCommand(this->editor);
-		break;
-	case IDM_CONTROL_ITERATION:
+	}
+	else if (text == "IterationArchitecture") {
 		command = new IterationCommand(this->editor);
-		break;
-	case IDM_CONTROL_SELECTION:
+	}
+	else if (text == "SelectionArchitecture") {
 		command = new SelectionCommand(this->editor);
-		break;
-	case IDM_HELP_TUTORIAL:
-		//command = new TutorialCommand(this->editor);
-		break;
-	default:
-		break;
 	}
 
 	return command;

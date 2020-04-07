@@ -42,9 +42,9 @@ public:
 
 };
 
-namespace Ui {
+namespace Ui_Notepad {
     class NotepadClass: public Ui_NotepadClass {};
-} // namespace Ui
+} // namespace Ui_Notepad
 
 QT_END_NAMESPACE
 

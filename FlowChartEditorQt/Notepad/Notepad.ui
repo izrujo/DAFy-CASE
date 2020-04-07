@@ -14,11 +14,8 @@
    <string>Notepad</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QMenuBar {
-    background-color: white;
-    spacing: 3px; /* spacing between menu bar items */
-	border-bottom: 1px solid gray; 
-}</string>
+   <string notr="true">background-color: rgba(255, 255, 255, 0);
+border-color: rgba(255, 255, 255, 0);</string>
   </property>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
