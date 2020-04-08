@@ -5,7 +5,7 @@
 
 TextRegion::TextRegion(Long x, Long y, Long width, Long height,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
-	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+	: NShape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }
 
@@ -14,12 +14,12 @@ TextRegion::~TextRegion() {
 }
 
 TextRegion::TextRegion(const TextRegion& source)
-	:Shape(source) {
+	:NShape(source) {
 
 }
 
 TextRegion& TextRegion::operator =(const TextRegion& source) {
-	Shape::operator=(source);
+	NShape::operator=(source);
 
 	return *this;
 }
@@ -42,7 +42,7 @@ void TextRegion::Draw(GObject *painter) {
 }
 
 
-Shape* TextRegion::Clone() {
+NShape* TextRegion::Clone() {
 	return new TextRegion(*this);
 }
 

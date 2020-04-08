@@ -36,34 +36,34 @@ RightDown& RightDown::operator =(const RightDown& source) {
 	return *this;
 }
 
-bool RightDown::IsEqual(const Shape& other) {
+bool RightDown::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<RightDown *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<RightDown *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool RightDown::IsNotEqual(const Shape& other) {
+bool RightDown::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<RightDown *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<RightDown *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool RightDown::operator ==(const Shape& other) {
+bool RightDown::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<RightDown *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<RightDown *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool RightDown::operator !=(const Shape& other) {
+bool RightDown::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<RightDown *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<RightDown *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -83,7 +83,7 @@ void RightDown::DrawActiveShape(GObject *painter) {
 	painter->DrawPolygon(arrow, 3);
 }
 
-Shape* RightDown::Clone() {
+NShape* RightDown::Clone() {
 	return new RightDown(*this);
 }
 
@@ -264,7 +264,7 @@ void RightDown::GetLine(char(*line)) {
 
 bool RightDown::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Line::IsStyle(style) || (style >> 11) % 2) {
+	if (NShape::IsStyle(style) || Line::IsStyle(style) || (style >> 11) % 2) {
 		ret = true;
 	}
 	return ret;

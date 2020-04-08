@@ -1,6 +1,5 @@
 #include "FlowChartCommandFactory.h"
 #include "FlowChartCommands.h"
-#include "resource.h"
 
 FlowChartCommandFactory::FlowChartCommandFactory(FlowChartEditor *editor) {
 	this->editor = editor;

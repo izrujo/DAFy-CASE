@@ -147,7 +147,7 @@ bool Attribute::operator != (const Attribute& other) {
 	return retVO;
 }
 
-Shape::Shape()
+NShape::NShape()
 	: backGroundColor(QColor(255, 255, 255)),
 	borderColor(QColor(0, 0, 0)),
 	contents() {
@@ -159,7 +159,7 @@ Shape::Shape()
 	this->isSelected = false;
 }
 
-Shape::Shape(Long x, Long y, Long width, Long height, QColor backGroundColor,
+NShape::NShape(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: backGroundColor(backGroundColor),
 	borderColor(borderColor),
@@ -172,9 +172,9 @@ Shape::Shape(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	this->isSelected = false;
 }
 
-Shape::~Shape() {}
+NShape::~NShape() {}
 
-Shape::Shape(const Shape& source)
+NShape::NShape(const NShape& source)
 	: backGroundColor(source.backGroundColor),
 	borderColor(source.borderColor),
 	contents(source.contents) {
@@ -186,7 +186,7 @@ Shape::Shape(const Shape& source)
 	this->isSelected = source.isSelected;
 }
 
-Shape& Shape::operator=(const Shape& source)
+NShape& NShape::operator=(const NShape& source)
 {
 	this->x = source.x;
 	this->y = source.y;
@@ -206,7 +206,7 @@ Shape& Shape::operator=(const Shape& source)
 	return *this;
 }
 
-bool Shape::IsEqual(const Shape& other) {
+bool NShape::IsEqual(const NShape& other) {
 	bool retVo = false;
 
 	if (this->x == other.x &&
@@ -222,7 +222,7 @@ bool Shape::IsEqual(const Shape& other) {
 	return retVo;
 }
 
-bool Shape::IsNotEqual(const Shape& other) {
+bool NShape::IsNotEqual(const NShape& other) {
 	bool retVo = false;
 
 	if (this->x != other.x ||
@@ -238,7 +238,7 @@ bool Shape::IsNotEqual(const Shape& other) {
 	return retVo;
 }
 
-Long Shape::IsUpperThan(const Shape& other) {
+Long NShape::IsUpperThan(const NShape& other) {
 	Long retVo;
 
 	if (this->y < other.y)
@@ -251,7 +251,7 @@ Long Shape::IsUpperThan(const Shape& other) {
 	return retVo;
 }
 
-Long Shape::IsDownThan(const Shape& other) {
+Long NShape::IsDownThan(const NShape& other) {
 	Long retVo;
 
 	if (this->y > other.y)
@@ -264,7 +264,7 @@ Long Shape::IsDownThan(const Shape& other) {
 	return retVo;
 }
 
-Long Shape::IsFrontThan(const Shape& other) {
+Long NShape::IsFrontThan(const NShape& other) {
 	Long retVo;
 
 	if (this->x < other.x)
@@ -277,7 +277,7 @@ Long Shape::IsFrontThan(const Shape& other) {
 	return retVo;
 }
 
-Long Shape::IsRearThan(const Shape& other) {
+Long NShape::IsRearThan(const NShape& other) {
 	Long retVo;
 
 	if (this->x > other.x)
@@ -290,7 +290,7 @@ Long Shape::IsRearThan(const Shape& other) {
 	return retVo;
 }
 
-bool Shape::operator ==(const Shape& other) {
+bool NShape::operator ==(const NShape& other) {
 	bool retVo = false;
 
 	if (this->x == other.x &&
@@ -305,7 +305,7 @@ bool Shape::operator ==(const Shape& other) {
 	}
 	return retVo;
 }
-bool Shape::operator !=(const Shape& other) {
+bool NShape::operator !=(const NShape& other) {
 	bool retVo = false;
 
 	if (this->x != other.x ||
@@ -321,24 +321,24 @@ bool Shape::operator !=(const Shape& other) {
 	return retVo;
 }
 
-void Shape::Move(Long x, Long y) {
+void NShape::Move(Long x, Long y) {
 	this->x = x;
 	this->y = y;
 }
 
-void Shape::ReSize(Long width, Long height) {
+void NShape::ReSize(Long width, Long height) {
 	this->width = width;
 	this->height = height;
 }
 
-void Shape::Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor) {
+void NShape::Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor) {
 	this->backGroundColor = backGroundColor;
 	this->borderLine = borderLine;
 	this->borderColor = borderColor;
 }
 
 
-void Shape::DrawActiveShape(GObject *painter) {
+void NShape::DrawActiveShape(GObject *painter) {
 	QPoint points[BOXVERTECIES];
 	points[0] = QPoint(this->x - LINETHICKNESS, this->y - LINETHICKNESS);
 	points[1] = QPoint(this->x + this->width + LINETHICKNESS, this->y - LINETHICKNESS);
@@ -352,17 +352,17 @@ void Shape::DrawActiveShape(GObject *painter) {
 //////////////////////////////////////////////////////////////////////////
 // 선택 관련 : 2015-11-23
 
-void Shape::Select(bool selected) {
+void NShape::Select(bool selected) {
 	this->isSelected = selected;
 }
 
-int Shape::GetHitCode(QPoint point) {
+int NShape::GetHitCode(QPoint point) {
 	QRegion region;
 	this->GetRegion(&region);
 	return GetHitCode(point, region);
 }
 
-int Shape::GetHitCode(const QPoint& point, const QRegion& region) {
+int NShape::GetHitCode(const QPoint& point, const QRegion& region) {
 	int result = HIT_NONE;
 	if (region.contains(point)) {
 		result = HIT_BODY;
@@ -404,7 +404,7 @@ int Shape::GetHitCode(const QPoint& point, const QRegion& region) {
 	return result;
 }
 
-void Shape::GetSelectionMarkerRect(int marker, QRect *rect)
+void NShape::GetSelectionMarkerRect(int marker, QRect *rect)
 {
 	int x;
 	int y;
@@ -446,7 +446,7 @@ void Shape::GetSelectionMarkerRect(int marker, QRect *rect)
 	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
-void Shape::GetSelectionMarkerAllRegion(QRegion *region) {
+void NShape::GetSelectionMarkerAllRegion(QRegion *region) {
 	QRect rect;
 	QRegion addRegion;
 
@@ -500,7 +500,7 @@ void Shape::GetSelectionMarkerAllRegion(QRegion *region) {
 	*region += addRegion;
 }
 
-QCursor Shape::GetCursor(int hit) const {
+QCursor NShape::GetCursor(int hit) const {
 	QCursor cursor;
 	switch (hit) {
 	case HIT_BODY:
@@ -535,7 +535,7 @@ QCursor Shape::GetCursor(int hit) const {
 	return cursor;
 }
 
-void Shape::Copy(Shape *object) {
+void NShape::Copy(NShape *object) {
 	this->x = object->GetX();
 	this->y = object->GetY();
 	this->width = object->GetWidth();
@@ -549,7 +549,7 @@ void Shape::Copy(Shape *object) {
 }
 
 
-void Shape::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController)
+void NShape::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController)
 {
 	QRect rectSelect;
 
@@ -607,7 +607,7 @@ void Shape::DrawSelectionMarkers(GObject *painter, ScrollController *scrollContr
 	}
 }
 
-void Shape::MakeRectToPoint(QPoint point, QRect *rect) {
+void NShape::MakeRectToPoint(QPoint point, QRect *rect) {
 	Long left = point.x() - BOXSCOPE;
 	Long top = point.y() - BOXSCOPE;
 	Long right = point.x() + BOXSCOPE;
@@ -615,11 +615,11 @@ void Shape::MakeRectToPoint(QPoint point, QRect *rect) {
 	rect->setCoords(left, top, right, bottom);
 }
 
-void Shape::Rewrite(char(*text)) {
+void NShape::Rewrite(char(*text)) {
 	this->contents = text;
 }
 
-int Shape::GetSymbolID() {
+int NShape::GetSymbolID() {
 	int id = 0;
 	if (dynamic_cast<InputOutput*>(this)) {
 		id = ID_INPUTOUTPUT;
@@ -640,7 +640,7 @@ int Shape::GetSymbolID() {
 	return id;
 }
 
-int Shape::GetLineID() {
+int NShape::GetLineID() {
 	int id = 0;
 	if (dynamic_cast<Arrow*>(this)) {
 		id = ID_ARROW;
@@ -668,101 +668,101 @@ int Shape::GetLineID() {
 }
 
 //Block virtual 정의
-Long Shape::Attach(Shape *shape) {
+Long NShape::Attach(NShape *shape) {
 	return -1;
 }
 
-Long Shape::Insert(Long index, Shape *shape) {
+Long NShape::Insert(Long index, NShape *shape) {
 	return -1;
 }
 
-Long Shape::Detach(Long index) {
+Long NShape::Detach(Long index) {
 	return -1;
 }
 
-Long Shape::Detach(SHAPE identify) {
+Long NShape::Detach(SHAPE identify) {
 	return -1;
 }
 
-bool Shape::DetachSelectedAll() {
+bool NShape::DetachSelectedAll() {
 	return false;
 }
 
-Shape* Shape::GetAt(Long index) {
+NShape* NShape::GetAt(Long index) {
 	return 0;
 }
 
-Long Shape::Find(Shape* shape) {
+Long NShape::Find(NShape* shape) {
 	return -1;
 }
 
-Long Shape::Find(QPoint point) {
+Long NShape::Find(QPoint point) {
 	return -1;
 }
 
-Long Shape::Find(Long x, Long y) {
+Long NShape::Find(Long x, Long y) {
 	return -1;
 }
 
-Long Shape::Find(QRect rect) {
+Long NShape::Find(QRect rect) {
 	return -1;
 }
 
-Long Shape::Find(SHAPE identify) {
+Long NShape::Find(SHAPE identify) {
 	return -1;
 }
 
-Long Shape::Find(Long fromIndex, SHAPE identify) {
+Long NShape::Find(Long fromIndex, SHAPE identify) {
 	return -1;
 }
 
-void Shape::Find(Long styles, Long* (*indexes), Long *count) {
+void NShape::Find(Long styles, Long* (*indexes), Long *count) {
 
 }
 
-void Shape::Swap(Long toIndex, Long fromIndex) {
+void NShape::Swap(Long toIndex, Long fromIndex) {
 
 }
 
-void Shape::Swap(Long toIndex, Shape *shape) {
+void NShape::Swap(Long toIndex, NShape *shape) {
 
 }
 
-void Shape::Clear() {
+void NShape::Clear() {
 
 }
 
-void Shape::SelectAll() {
+void NShape::SelectAll() {
 
 }
 
-void Shape::UnSelectAll() {
+void NShape::UnSelectAll() {
 
 }
-void Shape::GetSelecteds(Long* (*indexes), Long *count) {
+void NShape::GetSelecteds(Long* (*indexes), Long *count) {
 
 }
 
-Long Shape::CountSelecteds() {
+Long NShape::CountSelecteds() {
 	return -1;
 }
 
-void Shape::AscendingSort() {
+void NShape::AscendingSort() {
 
 }
 
-void Shape::DescendingSort() {
+void NShape::DescendingSort() {
 
 }
 
-Long Shape::GetCapacity() const {
+Long NShape::GetCapacity() const {
 	return -1;
 }
 
-Long Shape::GetLength() const {
+Long NShape::GetLength() const {
 	return -1;
 }
 
-Long Shape::GetCurrent() const {
+Long NShape::GetCurrent() const {
 	return -1;
 }

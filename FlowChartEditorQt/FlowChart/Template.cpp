@@ -70,6 +70,6 @@ void Template::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* Template::Clone() {
+NShape* Template::Clone() {
 	return new Template(*this);
 }

@@ -10,9 +10,7 @@
 
 #include "Shape.h"
 
-using namespace FlowChartShape;
-
-class Symbol : public Shape {
+class Symbol : public NShape {
 	public:		
 		Symbol(Long x, Long y, Long width, Long height, 
 			QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,

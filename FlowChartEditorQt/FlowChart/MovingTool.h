@@ -2,7 +2,6 @@
 #define _MOVINGTOOL_H
 
 #include "Tool.h"
-class FlowChart;
 
 class MovingTool : public Tool {
 public:

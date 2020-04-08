@@ -15,15 +15,15 @@ SizeMake::~SizeMake() {
 void SizeMake::Create(DrawingPaper *canvas) {
 	Long i;
 	Long j = 0;
-	Shape *shape;
-	Shape* (*indexes) = 0;
+	NShape *shape;
+	NShape* (*indexes) = 0;
 	Long count = 0;
 
 	// 1. 선택된 기호들을 찾는다.
 	Long it = canvas->flowChart->GetLength();
 
 	if (it > 0) {
-		indexes = new Shape*[it];
+		indexes = new NShape*[it];
 	}
 	Long(*positions) = new Long[it];
 

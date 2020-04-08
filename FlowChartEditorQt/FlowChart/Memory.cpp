@@ -102,7 +102,7 @@ Execution* Memory::GetAt(Long index) {
 	return this->executions.GetAt(index);
 }
 
-void Memory::Quadrate(Shape *flowChart) {
+void Memory::Quadrate(NShape *flowChart) {
 	//1. execution 개수만큼 반복한다.
 	Long i = 0;
 	while (i < this->length) {
@@ -111,7 +111,7 @@ void Memory::Quadrate(Shape *flowChart) {
 		Long j = 0;
 		while (j < execution->GetLength()) {
 			//1.1.1. 실제 flowChart에서 현재 shape를 찾는다.
-			Shape *shape = execution->GetShape(j);
+			NShape *shape = execution->GetShape(j);
 			Long k = 0;
 			while (k < dynamic_cast<FlowChart*>(flowChart)->GetLength() &&
 				dynamic_cast<FlowChart*>(flowChart)->GetAt(k)->GetContents() != shape->GetContents()) {

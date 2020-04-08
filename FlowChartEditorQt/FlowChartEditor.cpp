@@ -327,7 +327,7 @@ void FlowChartEditor::OnUpdateIterationCommand(CCmdUI *cCmdUI) {
 	Long count;
 	(dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->windows[0])->flowChart))->GetSelecteds(&indexes, &count);
 	if (count > 1) {
-		Shape *shape = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->
+		NShape *shape = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->
 			flowChart)->GetAt(indexes[0]);
 		if (dynamic_cast<Decision*>(shape)) {
 			cCmdUI->Enable(TRUE);
@@ -343,13 +343,13 @@ void FlowChartEditor::OnUpdateSelectionCommand(CCmdUI *cCmdUI) {
 	Long count;
 	(dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper*>(this->windows[0])->flowChart))->GetSelecteds(&indexes, &count);
 	if (count > 1) {
-		Shape *shape = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->
+		NShape *shape = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->
 			flowChart)->GetAt(indexes[0]);
 		if (dynamic_cast<Decision*>(shape)) {
 			Long leftCount = 0;
 			Long i = 1;
 			while (i < count) {
-				Shape *left = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->flowChart)->GetAt(indexes[i]);
+				NShape *left = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->flowChart)->GetAt(indexes[i]);
 				if (left->CenterOfGravityX() < shape->CenterOfGravityX()) {
 					leftCount++;
 				}

@@ -14,11 +14,11 @@ IntervalMake::~IntervalMake(){
 
 void IntervalMake::Create(DrawingPaper *canvas){
 	// 1. 선택된 도형들을 찾는다.
-	Shape *shape;
+	NShape *shape;
 	Long count = 0;
 
 	Long it = canvas->flowChart->GetLength();
-	Shape* (*indexes) = new Shape* [it];
+	NShape* (*indexes) = new NShape* [it];
 	Long(*positions) = new Long[it];
 
 	Long i = 0;	
@@ -39,7 +39,7 @@ void IntervalMake::Create(DrawingPaper *canvas){
 	}
 
 	// 2. 도형들을 y 좌표를 기준으로 오름차순으로 정렬 한다. (삽입정렬)
-	Shape *temp;	
+	NShape *temp;	
 	Long y;
 	Long y_;
 	Long j;

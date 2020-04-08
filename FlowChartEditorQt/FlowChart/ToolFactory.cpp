@@ -19,14 +19,12 @@
 
 #include <Windows.h>
 
-using FlowChartShape::Shape;
-
 ToolFactory::ToolFactory() {
 }
 
 Tool* ToolFactory::Create(DrawingPaper *canvas, QPoint point) {
 	Tool *tool = 0;
-	Shape *shape;
+	NShape *shape;
 	FlowChartEditor* editor;
 	bool isControlPressed;
 
@@ -58,7 +56,7 @@ Tool* ToolFactory::Create(DrawingPaper *canvas, QPoint point) {
 			point.setX(point.x() + positionX);
 			point.setY(point.y() + positionY);
 
-			Shape *holdA4Paper = canvas->a4Paper->Clone();
+			NShape *holdA4Paper = canvas->a4Paper->Clone();
 			FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
 			holdA4Paper->Accept(zoomVisitor);
 

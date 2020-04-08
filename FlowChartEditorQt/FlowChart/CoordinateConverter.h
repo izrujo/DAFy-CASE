@@ -5,7 +5,6 @@
 
 typedef signed long int Long;
 #include "Shape.h"
-using namespace FlowChartShape;
 
 class CoordinateConverter {
 public:
@@ -14,7 +13,7 @@ public:
 	~CoordinateConverter();
 	CoordinateConverter& operator=(const CoordinateConverter& source);
 
-	void Update(Shape *a4Paper);
+	void Update(NShape *a4Paper);
 	QPoint ConvertVirtual(QPoint realPoint);
 	QPoint ConvertReal(QPoint virtualPoint);
 

@@ -12,7 +12,7 @@ class PreviewForm : public QFrame
 	Q_OBJECT
 
 public:
-	PreviewForm(QWidget *parent = Q_NULLPTR, FlowChartShape::Shape *flowChart = 0);
+	PreviewForm(QWidget *parent = Q_NULLPTR, NShape *flowChart = 0);
 	
 protected:
 	void closeEvent(QCloseEvent *event);
@@ -21,8 +21,8 @@ protected:
 	//afx_msg void OnCommandRange(UINT uID);
 public:
 	FlowChartEditor *editor;
-	FlowChartShape::Shape *flowChart;
-	FlowChartShape::Shape *a4Paper;
+	NShape *flowChart;
+	NShape *a4Paper;
 	GObject *painter;
 	//CToolBar toolBar;
 };

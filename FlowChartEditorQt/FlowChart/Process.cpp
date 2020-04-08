@@ -30,34 +30,34 @@ Process& Process::operator =(const Process& source) {
 	return *this;
 }
 
-bool Process::IsEqual(const Shape& other) {
+bool Process::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Process *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Process *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Process::IsNotEqual(const Shape& other) {
+bool Process::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Process *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Process *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool Process::operator ==(const Shape& other) {
+bool Process::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Process *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Process *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Process::operator !=(const Shape& other) {
+bool Process::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Process *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Process *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -66,7 +66,7 @@ void Process::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* Process::Clone() {
+NShape* Process::Clone() {
 	return new Process(*this);
 }
 
@@ -132,12 +132,12 @@ void Process::GetLine(char(*line)) {
 
 bool Process::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 5) % 2) {
+	if (NShape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 5) % 2) {
 		ret = true;
 	}
 	return ret;
 }
 
 void Process::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	Shape::DrawSelectionMarkers(painter, scrollController);
+	NShape::DrawSelectionMarkers(painter, scrollController);
 }

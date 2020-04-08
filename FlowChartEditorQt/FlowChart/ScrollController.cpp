@@ -1,7 +1,6 @@
 #include "ScrollController.h"
 #include "Scroll.h"
 #include "DrawingPaper.h"
-#include "FlowChart.h"
 
 ScrollController::ScrollController(DrawingPaper *drawingPaper) {
 	this->drawingPaper = drawingPaper;

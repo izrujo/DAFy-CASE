@@ -22,8 +22,6 @@
 #include "../FlowChartEditor.h"
 #pragma warning (disable : 4996)
 
-using FlowChartShape::Shape;
-
 ResizingTool* ResizingTool::instance = 0;
 
 ResizingTool::ResizingTool() {
@@ -58,7 +56,7 @@ void ResizingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 
 void ResizingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	Long x, y, width, height, width2, height2;
-	Shape *shape;
+	NShape *shape;
 	shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
 	
 	Long(*indexes)=new Long[canvas->flowChart->GetLength()];

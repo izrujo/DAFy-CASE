@@ -3,7 +3,7 @@
 
 #include "Array.h"
 class Execution;
-class Shape;
+class NShape;
 
 class Memory {
 public:
@@ -18,7 +18,7 @@ public:
 
 	Execution* GetAt(Long index);
 
-	void Quadrate(Shape *flowChart);
+	void Quadrate(NShape *flowChart);
 
 	Long GetCapacity() const;
 	Long GetLength() const;

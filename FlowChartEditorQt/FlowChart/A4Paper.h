@@ -4,9 +4,7 @@
 
 #include "Shape.h"
 
-using namespace FlowChartShape;
-
-class A4Paper : public Shape {
+class A4Paper : public NShape {
 public:
 	A4Paper(Long x, Long y, Long width, Long height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
@@ -18,7 +16,7 @@ public:
 
 	virtual void Accept(FlowChartVisitor *draw);
 
-	virtual Shape* Clone();
+	virtual NShape* Clone();
 
 	//마우스 드래그로 여러 도형 한번에 선택시 사용
 	virtual void GetRegion(QRegion *region) {};

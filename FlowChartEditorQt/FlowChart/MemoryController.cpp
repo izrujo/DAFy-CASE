@@ -44,7 +44,7 @@ void MemoryController::Undo() {
 		//1.1. 현재 기호의 위치를 구하다.
 		if (dynamic_cast<AddExecution*>(execution)) { //1.2. 실행했던 처리가 '추가'였으면 지운다.
 			//지울 때 기준을 positions으로 잡으면 positions 값이 더 작은 shape를 먼저 지우면 더 큰 positions이 망가짐.
-			//Shape *shape = execution->GetShape(i);
+			//NShape *shape = execution->GetShape(i);
 			//Long index = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Find(shape);
 			Long index = execution->GetPosition(i);
 			this->drawingPaper->flowChart->Detach(index);
@@ -54,7 +54,7 @@ void MemoryController::Undo() {
 			if (position > this->drawingPaper->flowChart->GetLength()) {
 				position = this->drawingPaper->flowChart->GetLength();
 			}
-			Shape *shape = execution->GetShape(execution->GetLength() - (i + 1));
+			NShape *shape = execution->GetShape(execution->GetLength() - (i + 1));
 			this->drawingPaper->flowChart->Insert(position, shape->Clone());
 			/*
 			//추가한 뒤 선택처리(DrawingTool LbuttonUp 참고)
@@ -68,8 +68,8 @@ void MemoryController::Undo() {
 		}
 		else if (dynamic_cast<OtherExecution*>(execution)) { //1.4. 실행했던 처리가 '변경'이었으면 현재 기호로 치환한다.
 			Long position = execution->GetPosition(i);
-			Shape *cloneShape = execution->GetShape(i);
-			Shape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position);
+			NShape *cloneShape = execution->GetShape(i);
+			NShape *shape = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetAt(position);
 			shape->Move(cloneShape->GetX(), cloneShape->GetY());
 			shape->ReSize(cloneShape->GetWidth(), cloneShape->GetHeight());
 			shape->Rewrite(cloneShape->GetContents());
@@ -98,19 +98,19 @@ void MemoryController::Redo() {
 			if (position > dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetLength()) {
 				position = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetLength();
 			}
-			Shape *shape = execution->GetShape(execution->GetLength() - (i + 1));
+			NShape *shape = execution->GetShape(execution->GetLength() - (i + 1));
 			this->drawingPaper->flowChart->Insert(position, shape->Clone());
 		}
 		else if (dynamic_cast<RemoveExecution*>(execution)) { //1.3. 실행했던 처리가 '삭제'였으면 삭제한다.
-			//Shape *shape = execution->GetShape(i);
+			//NShape *shape = execution->GetShape(i);
 			//Long index = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Find(shape);
 			Long index = execution->GetPosition(i);
 			this->drawingPaper->flowChart->Detach(index);
 		}
 		else if (dynamic_cast<OtherExecution*>(execution)) { //1.4. 실행했던 처리가 '변경'이었으면 현재 기호로 치환한다.
 			Long position = execution->GetPosition(i);
-			Shape *cloneShape = execution->GetShape(i);
-			Shape *shape = this->drawingPaper->flowChart->GetAt(position);
+			NShape *cloneShape = execution->GetShape(i);
+			NShape *shape = this->drawingPaper->flowChart->GetAt(position);
 			shape->Move(cloneShape->GetX(), cloneShape->GetY());
 			shape->ReSize(cloneShape->GetWidth(), cloneShape->GetHeight());
 			shape->Rewrite(cloneShape->GetContents());
@@ -127,7 +127,7 @@ Long MemoryController::RememberAdd(Long(*position), Long count) {
 	Execution *execution = new AddExecution;
 	Long i = 0;
 	while (i < count) {
-		Shape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
+		NShape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
 		execution->Add(shape->Clone(), position[i]);
 		i++;
 	}
@@ -146,7 +146,7 @@ Long MemoryController::RememberRemove(Long(*position), Long count) {
 	Execution *execution = new RemoveExecution;
 	Long i = 0;
 	while (i < count) {
-		Shape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
+		NShape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
 		execution->Add(shape->Clone(), position[i]);
 		i++;
 	}
@@ -165,7 +165,7 @@ Long MemoryController::RememberOther(Long(*position), Long count) {
 	Execution *execution = new OtherExecution;
 	Long i = 0;
 	while (i < count) {
-		Shape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
+		NShape *shape = this->drawingPaper->flowChart->GetAt(position[i]);
 		execution->Add(shape->Clone(), position[i]);
 		i++;
 	}
@@ -188,7 +188,7 @@ Long MemoryController::RememberRedo() {
 		Long i = 0;
 		while (i < execution->GetLength()) {
 			Long position = execution->GetPosition(i);
-			Shape *shape = this->drawingPaper->flowChart->GetAt(position);
+			NShape *shape = this->drawingPaper->flowChart->GetAt(position);
 			otherExecution->Add(shape->Clone(), position);
 			i++;
 		}
@@ -209,7 +209,7 @@ Long MemoryController::RememberUndo() {
 		Long i = 0;
 		while (i < execution->GetLength()) {
 			Long position = execution->GetPosition(i);
-			Shape *shape = this->drawingPaper->flowChart->GetAt(position);
+			NShape *shape = this->drawingPaper->flowChart->GetAt(position);
 			otherExecution->Add(shape->Clone(), position);
 			i++;
 		}

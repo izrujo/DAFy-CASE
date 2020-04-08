@@ -24,7 +24,7 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 
 	Long count = 0;
 
-	Shape * shape;
+	NShape * shape;
 
 	Creator creator;
 	Tokenizer tokenizer;
@@ -78,7 +78,7 @@ Long File::Save(DrawingPaper *canvas, const char(*fileName)) {
 	Long end;
 	Long count = 0;
 	char line[256];
-	Shape *shape;
+	NShape *shape;
 	Long rate;
 	// 3. 저장한다.
 	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);

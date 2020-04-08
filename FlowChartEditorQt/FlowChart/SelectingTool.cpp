@@ -16,8 +16,6 @@
 
 #include <windows.h>
 
-using FlowChartShape::Shape;
-
 SelectingTool* SelectingTool::instance = 0;
 
 SelectingTool::SelectingTool() {
@@ -69,7 +67,7 @@ void SelectingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 
 void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	QRegion region;
-	Shape *shape;
+	NShape *shape;
 	Long i;
 	Long it;
 	Long index;
@@ -87,8 +85,8 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	canvas->currentX += positionX;
 	canvas->currentY += positionY;
 
-	Shape *holdA4Paper = canvas->a4Paper->Clone();
-	Shape *holdFlowChart = canvas->flowChart->Clone();
+	NShape *holdA4Paper = canvas->a4Paper->Clone();
+	NShape *holdFlowChart = canvas->flowChart->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
 	holdA4Paper->Accept(zoomVisitor);
 	holdFlowChart->Accept(zoomVisitor);

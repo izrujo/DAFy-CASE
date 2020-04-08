@@ -31,39 +31,39 @@ Decision& Decision::operator =(const Decision& source) {
 	return *this;
 }
 
-bool Decision::IsEqual(const Shape& other) {
+bool Decision::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Decision *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Decision *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Decision::IsNotEqual(const Shape& other) {
+bool Decision::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Decision *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Decision *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool Decision::operator ==(const Shape& other) {
+bool Decision::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Decision *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Decision *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Decision::operator !=(const Shape& other) {
+bool Decision::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Decision *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Decision *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-Shape* Decision::Clone() {
+NShape* Decision::Clone() {
 	return new Decision(*this);
 }
 
@@ -171,12 +171,12 @@ void Decision::GetLine(char(*line)) {
 
 bool Decision::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 6) % 2) {
+	if (NShape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 6) % 2) {
 		ret = true;
 	}
 	return ret;
 }
 
 void Decision::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	Shape::DrawSelectionMarkers(painter, scrollController);
+	NShape::DrawSelectionMarkers(painter, scrollController);
 }

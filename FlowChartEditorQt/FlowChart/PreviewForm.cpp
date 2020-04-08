@@ -18,7 +18,7 @@
 
 #include <qpainter.h>
 
-PreviewForm::PreviewForm(QWidget *parent, FlowChartShape::Shape *flowChart) 
+PreviewForm::PreviewForm(QWidget *parent, NShape *flowChart) 
 	: QFrame(parent) {
 	this->editor = editor;
 	this->flowChart = flowChart;
@@ -89,16 +89,16 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 	zoom.Set(10);
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(&zoom);
 
-	FlowChartShape::Shape *cloneA4 = this->a4Paper->Clone();
+	NShape *cloneA4 = this->a4Paper->Clone();
 	cloneA4->Accept(zoomVisitor);
 	cloneA4->Move(cloneA4->GetX() - 670, cloneA4->GetY() - 1347);
 	dynamic_cast<A4Paper*>(cloneA4)->SetIsMarking(false);
 	cloneA4->Accept(drawVisitor);
 
-	FlowChartShape::Shape *cloneFlowChart = this->flowChart->Clone();
+	NShape *cloneFlowChart = this->flowChart->Clone();
 	cloneFlowChart->Accept(zoomVisitor);
 
-	FlowChartShape::Shape *shape;
+	NShape *shape;
 	Long i = 0;
 	while (i < cloneFlowChart->GetLength()) {
 		shape = cloneFlowChart->GetAt(i);

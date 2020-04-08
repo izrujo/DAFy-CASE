@@ -1,12 +1,12 @@
 /******************************************************************
-* 파일 이름 : Shape.h
+* 파일 이름 : NShape.h
 * 기능 : 도형(기호,선)의 추상화 클래스
 * 작성자 : 송윤창
 * 작성일자 : 2015년 3월 30일
 *******************************************************************/
 
-#ifndef _SHAPE_H
-#define _SHAPE_H
+#ifndef _NSHAPE_H
+#define _NSHAPE_H
 
 #include "String.h" //path 설정
 
@@ -173,32 +173,28 @@ inline QPoint Attribute::GetPointFalse() const {
 	return this->pointFalse;
 }
 
-namespace FlowChartShape {
-	class Shape;
-}
-
-class FlowChartShape::Shape {
+class NShape {
 public:
-	Shape();
-	Shape(Long x, Long y, Long width, Long height,
+	NShape();
+	NShape(Long x, Long y, Long width, Long height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 
-	virtual ~Shape() = 0;
+	virtual ~NShape() = 0;
 
-	Shape(const Shape& source);
-	Shape& operator=(const Shape& source);
+	NShape(const NShape& source);
+	NShape& operator=(const NShape& source);
 
-	virtual bool IsEqual(const Shape& other);
-	virtual bool IsNotEqual(const Shape& other);
+	virtual bool IsEqual(const NShape& other);
+	virtual bool IsNotEqual(const NShape& other);
 
-	Long IsUpperThan(const Shape& other);
-	Long IsDownThan(const Shape& other);
-	Long IsFrontThan(const Shape& other);
-	Long IsRearThan(const Shape& other);
+	Long IsUpperThan(const NShape& other);
+	Long IsDownThan(const NShape& other);
+	Long IsFrontThan(const NShape& other);
+	Long IsRearThan(const NShape& other);
 
-	virtual bool operator ==(const Shape& other);
-	virtual bool operator !=(const Shape& other);
+	virtual bool operator ==(const NShape& other);
+	virtual bool operator !=(const NShape& other);
 
 	void Move(Long x, Long y);
 	virtual void ReSize(Long width, Long height);
@@ -211,7 +207,7 @@ public:
 	// Visitor 패턴 적용
 	virtual void Accept(FlowChartVisitor *draw) = 0;
 	// Prototype 패턴 적용
-	virtual Shape* Clone() = 0;
+	virtual NShape* Clone() = 0;
 
 	//마우스 드래그로 여러 도형 한번에 선택시 사용
 	virtual void GetRegion(QRegion *region) = 0;
@@ -248,7 +244,7 @@ public:
 
 	virtual QCursor GetCursor(int hit) const; //QCursor class 존재
 
-	virtual void Copy(Shape *object);
+	virtual void Copy(NShape *object);
 
 	virtual void GetLine(char(*line)) {};
 
@@ -268,14 +264,14 @@ protected:
 	virtual void GetSelectionMarkerRect(int marker, QRect *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
 
 public: //Block virtual 선언
-	virtual Long Attach(Shape *shape);
-	virtual Long Insert(Long index, Shape *shape);
+	virtual Long Attach(NShape *shape);
+	virtual Long Insert(Long index, NShape *shape);
 	virtual Long Detach(Long index);
 	virtual Long Detach(SHAPE identify);
 	virtual bool DetachSelectedAll();
-	virtual Shape* GetAt(Long index);
+	virtual NShape* GetAt(Long index);
 
-	virtual Long Find(Shape* shape);
+	virtual Long Find(NShape* shape);
 	virtual Long Find(QPoint point);
 	virtual Long Find(Long x, Long y);
 	virtual Long Find(QRect rect);
@@ -284,7 +280,7 @@ public: //Block virtual 선언
 	virtual void Find(Long styles, Long* (*indexes), Long *count);
 
 	virtual void Swap(Long toIndex, Long fromIndex);
-	virtual void Swap(Long toIndex, Shape *shape);
+	virtual void Swap(Long toIndex, NShape *shape);
 	virtual void Clear();
 
 	virtual void SelectAll();
@@ -310,67 +306,68 @@ protected:
 	bool isSelected;
 };
 
-inline Long Shape::GetX() const {
+inline Long NShape::GetX() const {
 	return this->x;
 }
 
-inline Long Shape::GetY() const {
+inline Long NShape::GetY() const {
 	return this->y;
 }
 
-inline Long Shape::GetWidth() const {
+inline Long NShape::GetWidth() const {
 	return this->width;
 }
 
-inline Long Shape::GetHeight() const {
+inline Long NShape::GetHeight() const {
 	return this->height;
 }
 
-inline QColor& Shape::GetBackGroundColor() const {
+inline QColor& NShape::GetBackGroundColor() const {
 	return const_cast<QColor&>(this->backGroundColor);
 }
 
-inline Qt::PenStyle Shape::GetBorderLine() const {
+inline Qt::PenStyle NShape::GetBorderLine() const {
 	return this->borderLine;
 }
 
-inline QColor& Shape::GetBorderColor() const {
+inline QColor& NShape::GetBorderColor() const {
 	return const_cast<QColor&>(this->borderColor);
 }
 
-inline String& Shape::GetContents() const {
+inline String& NShape::GetContents() const {
 	return const_cast<String&>(this->contents);
 }
 
-inline Long Shape::GetLeft() const {
+inline Long NShape::GetLeft() const {
 	return this->x;
 }
-inline Long Shape::GetTop() const {
+inline Long NShape::GetTop() const {
 	return this->y;
 }
 
-inline Long Shape::GetRight() const {
+inline Long NShape::GetRight() const {
 	return (this->x + this->width);
 }
 
-inline Long Shape::GetBottom() const {
+inline Long NShape::GetBottom() const {
 	return (this->y + this->height);
 }
 
-inline bool Shape::IsSelected() const {
+inline bool NShape::IsSelected() const {
 	return this->isSelected;
 }
 
-inline Long Shape::CenterOfGravityY() const {
+inline Long NShape::CenterOfGravityY() const {
 	return this->y + this->height / 2;
 }
 
-inline Long Shape::CenterOfGravityX() const {
+inline Long NShape::CenterOfGravityX() const {
 	return this->x + this->width / 2;
 }
 
-inline bool Shape::IsStyle(Long style) {
+inline bool NShape::IsStyle(Long style) {
 	return (style == ALL) ? (true) : (false);
 }
 
-#endif // _SHAPE_H
+
+#endif // _NSHAPE_H

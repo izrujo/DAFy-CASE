@@ -25,6 +25,7 @@
 #include "../GObject/Font.h"
 
 #include <qevent.h>
+#include <windows.h>
 
 Label* Label::instance = 0;
 
@@ -116,7 +117,7 @@ void Label::keyPressEvent(QKeyEvent *event) {
 	*/
 
 	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
-	FlowChartShape::Shape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
+	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
 	//준비기호가 아닐 때 처리한다.
 	if (!(dynamic_cast<Preparation*>(shape))) {
 		bool isMustCheck = false;
@@ -151,7 +152,7 @@ void Label::keyPressEvent(QKeyEvent *event) {
 			character = *(line->GetAt(startIndex)->GetContent().c_str());
 			if (ret == -1 && (character != Qt::Key_Apostrophe && character != Qt::Key_QuoteDbl)) { //따옴표 뒤에 쓴 글자면 안함
 				this->current->Remove(this->current->GetCurrent() - 1);
-				bool result = PlaySound((LPCWSTR)"sound_button_wrong0.2.wav", NULL, SND_FILENAME);
+				BOOL result = PlaySound((LPCWSTR)"sound_button_wrong0.2.wav", NULL, SND_FILENAME);
 			}
 		}
 	}

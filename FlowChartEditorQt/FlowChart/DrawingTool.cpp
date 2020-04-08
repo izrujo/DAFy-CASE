@@ -19,8 +19,6 @@
 
 #include "../GObject/Painter.h"
 
-using FlowChartShape::Shape;
-
 DrawingTool* DrawingTool::instance = 0;
 
 DrawingTool::DrawingTool() {
@@ -56,7 +54,7 @@ void DrawingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 	canvas->currentX = point.x() + positionX;
 	canvas->currentY = point.y() + positionY;
 
-	Shape *holdA4Paper = canvas->a4Paper->Clone();
+	NShape *holdA4Paper = canvas->a4Paper->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
 	holdA4Paper->Accept(zoomVisitor);
 
@@ -114,7 +112,7 @@ void DrawingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	canvas->currentX = point.x() + positionX;
 	canvas->currentY = point.y() + positionY;
 
-	Shape *holdA4Paper = canvas->a4Paper->Clone();
+	NShape *holdA4Paper = canvas->a4Paper->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
 	holdA4Paper->Accept(zoomVisitor);
 

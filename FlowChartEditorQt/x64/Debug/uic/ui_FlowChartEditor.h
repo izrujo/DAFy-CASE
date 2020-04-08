@@ -37,9 +37,9 @@ public:
 
 };
 
-namespace Ui_FlowChart {
+namespace Ui_FlowChartEditor {
     class FlowChartEditorClass: public Ui_FlowChartEditorClass {};
-} // namespace Ui_FlowChart
+} // namespace Ui
 
 QT_END_NAMESPACE
 

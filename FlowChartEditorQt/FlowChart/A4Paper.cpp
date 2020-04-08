@@ -3,7 +3,7 @@
 
 A4Paper::A4Paper(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
-	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+	: NShape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->isMarking = true;
 	this->leftMargin = 40;
 	this->topMargin = 40;
@@ -15,7 +15,7 @@ A4Paper::~A4Paper() {
 }
 
 A4Paper::A4Paper(const A4Paper& source)
-	:Shape(source) {
+	:NShape(source) {
 	this->isMarking = true;
 	this->leftMargin = source.leftMargin;
 	this->topMargin = source.topMargin;
@@ -24,7 +24,7 @@ A4Paper::A4Paper(const A4Paper& source)
 }
 
 A4Paper& A4Paper::operator =(const A4Paper& source) {
-	Shape::operator=(source);
+	NShape::operator=(source);
 	this->isMarking = true;
 	this->leftMargin = source.leftMargin;
 	this->topMargin = source.topMargin;
@@ -37,7 +37,7 @@ void A4Paper::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* A4Paper::Clone() {
+NShape* A4Paper::Clone() {
 	return new A4Paper(*this);
 }
 

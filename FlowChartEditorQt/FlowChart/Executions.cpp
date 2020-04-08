@@ -52,7 +52,7 @@ Execution& Execution::operator=(const Execution& source) {
 	return *this;
 }
 
-Long Execution::Add(Shape *shape, Long position) {
+Long Execution::Add(NShape *shape, Long position) {
 	Long index;
 	if (this->length < this->capacity) {
 		index = this->shapes.Store(this->length, shape);
@@ -84,7 +84,7 @@ Long Execution::Modify(Long index, Long position) {
 	return this->positions.Modify(index, position);
 }
 
-Shape* Execution::GetShape(Long index) {
+NShape* Execution::GetShape(Long index) {
 	return this->shapes.GetAt(index);
 }
 

@@ -29,34 +29,34 @@ Terminal& Terminal::operator =(const Terminal& source) {
 	return *this;
 }
 
-bool Terminal::IsEqual(const Shape& other) {
+bool Terminal::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Terminal *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Terminal *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Terminal::IsNotEqual(const Shape& other) {
+bool Terminal::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Terminal *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Terminal *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool Terminal::operator ==(const Shape& other) {
+bool Terminal::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Terminal *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Terminal *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Terminal::operator !=(const Shape& other) {
+bool Terminal::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Terminal *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Terminal *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -65,7 +65,7 @@ void Terminal::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* Terminal::Clone() {
+NShape* Terminal::Clone() {
 	return new Terminal(*this);
 }
 
@@ -185,12 +185,12 @@ void Terminal::GetLine(char(*line)) {
 
 bool Terminal::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 2) % 2) {
+	if (NShape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 2) % 2) {
 		ret = true;
 	}
 	return ret;
 }
 
 void Terminal::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	Shape::DrawSelectionMarkers(painter, scrollController);
+	NShape::DrawSelectionMarkers(painter, scrollController);
 }

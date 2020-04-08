@@ -12,24 +12,22 @@
 #include "Shape.h"
 #include "Array.h"
 
-using namespace FlowChartShape;
-
-class Block : public Shape {
+class Block : public NShape {
 public:
 	Block(Long capacity = 30);
 	Block(const Block& source);
 	virtual ~Block() = 0;
 	Block& operator=(const Block& source);
-	Shape* operator[](Long index);
+	NShape* operator[](Long index);
 
-	virtual Long Attach(Shape *shape);
-	virtual Long Insert(Long index, Shape *shape);
+	virtual Long Attach(NShape *shape);
+	virtual Long Insert(Long index, NShape *shape);
 	virtual Long Detach(Long index);
 	virtual Long Detach(SHAPE identify);
 	virtual bool DetachSelectedAll();
-	virtual Shape* GetAt(Long index);
+	virtual NShape* GetAt(Long index);
 
-	virtual Long Find(Shape* shape);
+	virtual Long Find(NShape* shape);
 	virtual Long Find(QPoint point);
 	virtual Long Find(Long x, Long y);
 	virtual Long Find(QRect rect);
@@ -38,7 +36,7 @@ public:
 	virtual void Find(Long styles, Long* (*indexes), Long *count);
 
 	virtual void Swap(Long toIndex, Long fromIndex);
-	virtual void Swap(Long toIndex, Shape *shape);
+	virtual void Swap(Long toIndex, NShape *shape);
 	virtual void Clear();
 
 	virtual void SelectAll();
@@ -52,7 +50,7 @@ public:
 	virtual Long GetLength() const;
 	virtual Long GetCurrent() const;
 protected:
-	Array<Shape*> shapes;
+	Array<NShape*> shapes;
 	Long capacity;
 	Long length;
 	Long current;

@@ -14,7 +14,6 @@
 #include "DrawingPaper.h"
 
 #include "Array.h"
-#include "Shape.h"
 
 #include "Symbol.h"
 #include "Line.h"
@@ -55,19 +54,19 @@ FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	this->oldShapeSelected = NULL;
 
 	this->flowChartTemplate = new Template;
-	FlowChartShape::Shape *template1 = new Terminal(25, 90, 150, 50, QColor(255, 153, 153), 
+	NShape *template1 = new Terminal(25, 90, 150, 50, QColor(255, 153, 153), 
 		Qt::SolidLine, QColor(0, 0, 0), String("START"));
-	FlowChartShape::Shape *template2 = new Preparation(25, 160, 150, 50, QColor(153, 153, 255), 
+	NShape *template2 = new Preparation(25, 160, 150, 50, QColor(153, 153, 255), 
 		Qt::SolidLine, QColor(0, 0, 0), String("Preparation"));
-	FlowChartShape::Shape *template3 = new InputOutput(25, 230, 150, 50, QColor(255, 255, 153), 
+	NShape *template3 = new InputOutput(25, 230, 150, 50, QColor(255, 255, 153), 
 		Qt::SolidLine, QColor(0, 0, 0), String("READ "));
-	FlowChartShape::Shape *template4 = new Process(25, 300, 150, 50, QColor(153, 255, 153), 
+	NShape *template4 = new Process(25, 300, 150, 50, QColor(153, 255, 153), 
 		Qt::SolidLine, QColor(0, 0, 0), String("Process"));
-	FlowChartShape::Shape *template5 = new Decision(25, 370, 150, 50, QColor(255, 153, 255), 
+	NShape *template5 = new Decision(25, 370, 150, 50, QColor(255, 153, 255), 
 		Qt::SolidLine, QColor(0, 0, 0), String("Decision"));
-	FlowChartShape::Shape *template6 = new InputOutput(25, 440, 150, 50, QColor(255, 255, 153), 
+	NShape *template6 = new InputOutput(25, 440, 150, 50, QColor(255, 255, 153), 
 		Qt::SolidLine, QColor(0, 0, 0), String("PRINT "));
-	FlowChartShape::Shape *template7 = new Terminal(25, 510, 150, 50, QColor(255, 153, 153), 
+	NShape *template7 = new Terminal(25, 510, 150, 50, QColor(255, 153, 153), 
 		Qt::SolidLine, QColor(0, 0, 0), String("STOP"));
 
 	this->flowChartTemplate->Attach(template1);
@@ -192,7 +191,7 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 	Long index = -1;
 
 	QColor selectedColor(235, 235, 235);
-	FlowChartShape::Shape *shape;
+	NShape *shape;
 	Long i = 0;
 	while (i < this->flowChartTemplate->GetLength()) {
 		shape = this->flowChartTemplate->GetAt(i);

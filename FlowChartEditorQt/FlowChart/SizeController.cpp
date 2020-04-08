@@ -25,13 +25,13 @@ SizeController::~SizeController() {
 void SizeController::Update() {
 	DrawingPaper *drawingPaper = (DrawingPaper*)this->label->parentWidget();
 
-	Shape *holdA4Paper = drawingPaper->a4Paper->Clone();
-	Shape *holdFlowChart = drawingPaper->flowChart->Clone();
+	NShape *holdA4Paper = drawingPaper->a4Paper->Clone();
+	NShape *holdFlowChart = drawingPaper->flowChart->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(drawingPaper->zoom);
 	holdA4Paper->Accept(zoomVisitor);
 	holdFlowChart->Accept(zoomVisitor);
 
-	Shape *shape = holdFlowChart->GetAt(drawingPaper->indexOfSelected);
+	NShape *shape = holdFlowChart->GetAt(drawingPaper->indexOfSelected);
 	Long height = this->label->characterMetrics->GetY(this->label->note->GetLength());
 
 	Long width = 0;
@@ -45,7 +45,7 @@ void SizeController::Update() {
 		i++;
 	}
 
-	Shape *realShape= drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
+	NShape *realShape= drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
 	Long realWidth = realShape->GetWidth();
 	Long realHeight = realShape->GetHeight();
 	Long realLabelWidth;

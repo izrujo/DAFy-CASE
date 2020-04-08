@@ -35,34 +35,34 @@ LeftDown& LeftDown::operator =(const LeftDown& source) {
 	return *this;
 }
 
-bool LeftDown::IsEqual(const Shape& other) {
+bool LeftDown::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<LeftDown *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<LeftDown *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool LeftDown::IsNotEqual(const Shape& other) {
+bool LeftDown::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<LeftDown *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<LeftDown *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool LeftDown::operator ==(const Shape& other) {
+bool LeftDown::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<LeftDown *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<LeftDown *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool LeftDown::operator !=(const Shape& other) {
+bool LeftDown::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<LeftDown *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<LeftDown *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -71,7 +71,7 @@ void LeftDown::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* LeftDown::Clone() {
+NShape* LeftDown::Clone() {
 	return new LeftDown(*this);
 }
 
@@ -264,7 +264,7 @@ void LeftDown::GetLine(char(*line)) {
 
 bool LeftDown::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Line::IsStyle(style) || (style >> 10) % 2) {
+	if (NShape::IsStyle(style) || Line::IsStyle(style) || (style >> 10) % 2) {
 		ret = true;
 	}
 	return ret;

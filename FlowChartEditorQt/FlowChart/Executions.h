@@ -4,8 +4,6 @@
 #include "Array.h"
 #include "Shape.h"
 
-using namespace FlowChartShape;
-
 class Execution {
 public:
 	Execution(Long capacity = 32);
@@ -13,12 +11,12 @@ public:
 	virtual ~Execution() = 0;
 	Execution& operator=(const Execution& source);
 
-	Long Add(Shape *shape, Long position);
+	Long Add(NShape *shape, Long position);
 	Long Remove(Long index);
 
 	Long Modify(Long index, Long position);
 	
-	Shape* GetShape(Long index);
+	NShape* GetShape(Long index);
 	Long GetPosition(Long index);
 
 	virtual Execution* Clone() = 0;
@@ -26,7 +24,7 @@ public:
 	Long GetCapacity() const;
 	Long GetLength() const;
 protected:
-	Array<Shape*> shapes;
+	Array<NShape*> shapes;
 	Array<Long> positions;
 	Long capacity;
 	Long length;

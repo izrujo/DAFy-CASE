@@ -25,8 +25,8 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 	// 1. 배열 첨자가 가장 작은 도형을 찾는다.	
 	Long(*indexes);
 	Long length;
-	Shape *shape;
-	Shape *arrow;
+	NShape *shape;
+	NShape *arrow;
 	Long x, y, width, height;
 	Long i, j, k;
 	Long index = -1;

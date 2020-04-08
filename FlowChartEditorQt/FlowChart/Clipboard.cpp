@@ -16,7 +16,7 @@ Clipboard::~Clipboard() {
 }
 
 Long Clipboard::Copy(DrawingPaper *canvas) {
-	Shape *shape;
+	NShape *shape;
 	buffer->Clear();
 	for (Long i = 0; i < canvas->flowChart->GetLength(); i++) {
 		shape = canvas->flowChart->GetAt(i);
@@ -28,7 +28,7 @@ Long Clipboard::Copy(DrawingPaper *canvas) {
 }
 
 Long Clipboard::Paste(DrawingPaper *canvas) {
-	Shape *shape;
+	NShape *shape;
 	canvas->flowChart->UnSelectAll();
 	canvas->mode = DrawingPaper::IDLE;
 	for (Long i = 0; i < buffer->GetLength(); i++) {
@@ -44,7 +44,7 @@ Long Clipboard::Paste(DrawingPaper *canvas) {
 }
 
 Long Clipboard::Cut(DrawingPaper *canvas) {
-	Shape *shape;
+	NShape *shape;
 	buffer->Clear();
 	for (Long i = 0; i < canvas->flowChart->GetLength(); i++) {
 		shape = canvas->flowChart->GetAt(i);

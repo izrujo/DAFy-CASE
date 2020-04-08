@@ -3,7 +3,7 @@
 
 NumberBox::NumberBox(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
-	: Shape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
+	: NShape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
 }
 
@@ -12,12 +12,12 @@ NumberBox::~NumberBox() {
 }
 
 NumberBox::NumberBox(const NumberBox& source)
-	: Shape(source) {
+	: NShape(source) {
 
 }
 
 NumberBox& NumberBox::operator =(const NumberBox& source) {
-	Shape::operator=(source);
+	NShape::operator=(source);
 
 	return *this;
 }
@@ -26,6 +26,6 @@ void NumberBox::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* NumberBox::Clone() {
+NShape* NumberBox::Clone() {
 	return new NumberBox(*this);
 }

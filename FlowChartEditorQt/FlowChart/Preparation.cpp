@@ -31,34 +31,34 @@ Preparation& Preparation::operator =(const Preparation& source) {
 	return *this;
 }
 
-bool Preparation::IsEqual(const Shape& other) {
+bool Preparation::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Preparation *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Preparation *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Preparation::IsNotEqual(const Shape& other) {
+bool Preparation::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Preparation *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Preparation *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool Preparation::operator ==(const Shape& other) {
+bool Preparation::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Preparation *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Preparation *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Preparation::operator !=(const Shape& other) {
+bool Preparation::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Preparation *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Preparation *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -67,7 +67,7 @@ void Preparation::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* Preparation::Clone() {
+NShape* Preparation::Clone() {
 	return new Preparation(*this);
 }
 
@@ -170,12 +170,12 @@ void Preparation::GetLine(char(*line)) {
 
 bool Preparation::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 3) % 2) {
+	if (NShape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 3) % 2) {
 		ret = true;
 	}
 	return ret;
 }
 
 void Preparation::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	Shape::DrawSelectionMarkers(painter, scrollController);
+	NShape::DrawSelectionMarkers(painter, scrollController);
 }

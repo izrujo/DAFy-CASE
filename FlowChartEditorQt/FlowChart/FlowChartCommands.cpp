@@ -3,7 +3,7 @@
 #include "DrawingPaper.h"
 #include "Memory.h"
 #include "MemoryController.h"
-//#include "PreviewForm.h"
+#include "PreviewForm.h"
 #include "A4Paper.h"
 #include "FlowChart.h"
 #include "../GObject/Painter.h"
@@ -30,7 +30,7 @@
 #include <qfontdialog.h>
 #include <qstring.h>
 #include <qpixmap.h>
-#include <QtPrintSupport/QPageSetupDialog>
+#include <QtPrintSupport/qpagesetupdialog.h>
 #include <QtPrintSupport/qprinter.h>
 
 using namespace std;
@@ -316,11 +316,11 @@ PreviewCommand& PreviewCommand::operator =(const PreviewCommand& source) {
 }
 
 void PreviewCommand::Execute() {
-	Shape *flowChart = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Clone();
+	NShape *flowChart = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Clone();
 	PreviewForm *previewForm = new PreviewForm(this->editor, flowChart);
-	previewForm->Create(NULL, "인쇄 미리 보기", 13565952UL, CRect(0, 0, 1200, 875));
-	previewForm->ShowWindow(SW_NORMAL);
-	previewForm->UpdateWindow();
+	//previewForm->Create(NULL, "인쇄 미리 보기", 13565952UL, CRect(0, 0, 1200, 875));
+	//previewForm->ShowWindow(SW_NORMAL);
+	//previewForm->UpdateWindow();
 }
 
 //SaveAsImageCommand
@@ -356,8 +356,8 @@ void SaveAsImageCommand::Execute() {
 	QFile file(fileName);
 	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 	if (isOpen == true && fileName.length() > 0) {
-		Shape *flowChart = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Clone();
-		Shape *paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper->Clone();
+		NShape *flowChart = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Clone();
+		NShape *paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper->Clone();
 
 		flowChart->UnSelectAll();
 
@@ -420,13 +420,13 @@ void DrawingModeCommand::Execute() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWOFF) {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWON;
 
-		Shape *one = new NumberBox(15, 85, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("1"));
-		Shape *two = new NumberBox(15, 155, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("2"));
-		Shape *three = new NumberBox(15, 225, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("3"));
-		Shape *four = new NumberBox(15, 295, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("4"));
-		Shape *five = new NumberBox(15, 365, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("5"));
-		Shape *six = new NumberBox(15, 435, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("6"));
-		Shape *seven = new NumberBox(15, 505, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("7"));
+		NShape *one = new NumberBox(15, 85, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("1"));
+		NShape *two = new NumberBox(15, 155, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("2"));
+		NShape *three = new NumberBox(15, 225, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("3"));
+		NShape *four = new NumberBox(15, 295, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("4"));
+		NShape *five = new NumberBox(15, 365, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("5"));
+		NShape *six = new NumberBox(15, 435, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("6"));
+		NShape *seven = new NumberBox(15, 505, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("7"));
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(one);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(two);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(three);
@@ -565,7 +565,7 @@ DeleteCommand& DeleteCommand::operator =(const DeleteCommand& source) {
 
 void DeleteCommand::Execute() {
 	Long it;
-	Shape *shape;
+	NShape *shape;
 
 	Long count;
 	Long(*indexes);
@@ -820,9 +820,10 @@ PageSetCommand& PageSetCommand::operator =(const PageSetCommand& source) {
 
 void PageSetCommand::Execute() {
 	//페이지 방향 설정 못하게 막는 방법 찾기
-	QPageSetupDialog dlg(this->editor);
+	/*
+	QPageSetupDialog dlg((QWidget*)this->editor);
 	QPrinter *printer = dlg.printer();
-	Shape *a4Paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper;
+	NShape *a4Paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper;
 	Long left = dynamic_cast<A4Paper*>(a4Paper)->GetLeftMargin() * 210 / 1653 * 100;
 	Long top = dynamic_cast<A4Paper*>(a4Paper)->GetTopMargin() * 297 / 2338 * 100;
 	Long right = dynamic_cast<A4Paper*>(a4Paper)->GetRightMargin() * 210 / 1653 * 100;
@@ -843,6 +844,7 @@ void PageSetCommand::Execute() {
 
 		dynamic_cast<A4Paper*>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 	}
+	*/
 }
 
 //PositionCommand

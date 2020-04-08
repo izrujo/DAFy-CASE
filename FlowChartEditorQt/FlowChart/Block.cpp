@@ -30,7 +30,7 @@ Block::~Block() {
 }
 
 Block& Block::operator=(const Block& source) {
-	Shape *shape;
+	NShape *shape;
 
 	Long i = 0;
 	while (i < this->length) {
@@ -57,11 +57,11 @@ Block& Block::operator=(const Block& source) {
 	return *this;
 }
 
-Shape* Block::operator[](Long index) {
+NShape* Block::operator[](Long index) {
 	return this->shapes[index];
 }
 
-Long Block::Attach(Shape *shape) {
+Long Block::Attach(NShape *shape) {
 	if (this->length < this->capacity) {
 		this->current = this->shapes.Store(this->length, shape);
 	}
@@ -74,7 +74,7 @@ Long Block::Attach(Shape *shape) {
 	return this->current;
 }
 
-Long Block::Insert(Long index, Shape *shape) {
+Long Block::Insert(Long index, NShape *shape) {
 	this->current = -1;
 	this->current = this->shapes.Insert(index, shape);
 	if (this->length >= this->capacity) {
@@ -124,11 +124,11 @@ bool Block::DetachSelectedAll() {
 	return ret;
 }
 
-Shape* Block::GetAt(Long index) {
+NShape* Block::GetAt(Long index) {
 	return this->shapes.GetAt(index);
 }
 
-Long Block::Find(Shape* shape) {
+Long Block::Find(NShape* shape) {
 	Long index = -1;
 	Long i = 0;
 	while (i < this->length && index == -1) {
@@ -213,8 +213,8 @@ void Block::Swap(Long toIndex, Long fromIndex) {
 	this->shapes.Swap(toIndex, fromIndex);
 }
 
-void Block::Swap(Long toIndex, Shape *shape) {
-	Shape *temp;
+void Block::Swap(Long toIndex, NShape *shape) {
+	NShape *temp;
 
 	temp = this->shapes.GetAt(toIndex);
 	if (temp != 0) {
@@ -264,7 +264,7 @@ void Block::GetSelecteds(Long* (*indexes), Long *count) {
 		*indexes = new Long[this->length];
 	}
 	for (i = 0; i < this->length; i++) {
-		Shape *shape = this->shapes[i];
+		NShape *shape = this->shapes[i];
 		if (shape->IsSelected()) {
 			(*indexes)[j] = i;
 			(*count)++;
@@ -286,7 +286,7 @@ Long Block::CountSelecteds() {
 }
 
 void Block::AscendingSort() {
-	Shape *temp;
+	NShape *temp;
 	Long i;
 	Long j;
 	Long k;
@@ -320,7 +320,7 @@ void Block::AscendingSort() {
 }
 
 void Block::DescendingSort() {
-	Shape *temp;
+	NShape *temp;
 	Long i;
 	Long j;
 	Long k;

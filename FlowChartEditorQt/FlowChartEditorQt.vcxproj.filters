@@ -128,9 +128,6 @@
     <ClCompile Include="FlowChart\Process.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\RectangleRegion.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\RepeatFalse.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -162,9 +159,6 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\SequenceMake.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Shape.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\SizeController.cpp">
@@ -314,6 +308,9 @@
     <ClCompile Include="GObject\QtPen.cpp">
       <Filter>Graphic Objects</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\Shape.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -417,9 +414,6 @@
     <ClInclude Include="FlowChart\Process.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\RectangleRegion.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\RepeatFalse.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -451,9 +445,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\SequenceMake.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Shape.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\SizeController.h">
@@ -593,6 +584,9 @@
     </ClInclude>
     <ClInclude Include="GObject\QtPen.h">
       <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Shape.h">
+      <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

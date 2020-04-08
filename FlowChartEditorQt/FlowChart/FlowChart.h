@@ -25,7 +25,7 @@ public:
 	virtual void DrawActiveShape(GObject *painter);
 	virtual void Accept(FlowChartVisitor *draw);
 
-	virtual Shape* Clone();
+	virtual NShape* Clone();
 
 	virtual void GetRegion(QRegion *region) {};
 	virtual void GetRegion(Long thickness, QRegion *region) {};

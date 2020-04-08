@@ -64,6 +64,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -116,7 +117,6 @@
     <ClCompile Include="FlowChart\Preparation.cpp" />
     <ClCompile Include="FlowChart\PreviewForm.cpp" />
     <ClCompile Include="FlowChart\Process.cpp" />
-    <ClCompile Include="FlowChart\RectangleRegion.cpp" />
     <ClCompile Include="FlowChart\RepeatFalse.cpp" />
     <ClCompile Include="FlowChart\RepeatTrue.cpp" />
     <ClCompile Include="FlowChart\ResizingTool.cpp" />
@@ -246,7 +246,6 @@
     <ClInclude Include="FlowChart\Preparation.h" />
     <QtMoc Include="FlowChart\PreviewForm.h" />
     <ClInclude Include="FlowChart\Process.h" />
-    <ClInclude Include="FlowChart\RectangleRegion.h" />
     <ClInclude Include="FlowChart\RepeatFalse.h" />
     <ClInclude Include="FlowChart\RepeatTrue.h" />
     <ClInclude Include="FlowChart\ResizingTool.h" />

@@ -15,7 +15,6 @@ typedef unsigned long int ULong;
 class Text;
 class String;
 class Caret;
-class Shape;
 class SizeController;
 
 class Label : public Notepad {

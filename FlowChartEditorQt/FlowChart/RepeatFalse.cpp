@@ -39,38 +39,38 @@ RepeatFalse& RepeatFalse::operator=(const RepeatFalse& source) {
 	return *this;
 }
 
-bool RepeatFalse::IsEqual(const Shape& other) {
+bool RepeatFalse::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<RepeatFalse *>(const_cast<Shape *>(&other)) &&
-		dynamic_cast<RepeatFalse *>(const_cast<Shape *>(&other))->width2 == this->width2 &&
-		dynamic_cast<RepeatFalse *>(const_cast<Shape *>(&other))->height2 == this->height2) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<RepeatFalse *>(const_cast<NShape *>(&other)) &&
+		dynamic_cast<RepeatFalse *>(const_cast<NShape *>(&other))->width2 == this->width2 &&
+		dynamic_cast<RepeatFalse *>(const_cast<NShape *>(&other))->height2 == this->height2) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool RepeatFalse::IsNotEqual(const Shape& other) {
+bool RepeatFalse::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<RepeatFalse *>(const_cast<Shape *>(&other)) ||
-		dynamic_cast<RepeatFalse *>(const_cast<Shape *>(&other))->width2 != this->width2 ||
-		dynamic_cast<RepeatFalse *>(const_cast<Shape *>(&other))->height2 != this->height2) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<RepeatFalse *>(const_cast<NShape *>(&other)) ||
+		dynamic_cast<RepeatFalse *>(const_cast<NShape *>(&other))->width2 != this->width2 ||
+		dynamic_cast<RepeatFalse *>(const_cast<NShape *>(&other))->height2 != this->height2) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool RepeatFalse::operator ==(const Shape& other) {
+bool RepeatFalse::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<RepeatFalse *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<RepeatFalse *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool RepeatFalse::operator !=(const Shape& other) {
+bool RepeatFalse::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<RepeatFalse *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<RepeatFalse *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -95,7 +95,7 @@ void RepeatFalse::DrawActiveShape(GObject *painter) {
 	painter->DrawPolygon(arrow, 3);
 }
 
-Shape* RepeatFalse::Clone() {
+NShape* RepeatFalse::Clone() {
 	return new RepeatFalse(*this);
 }
 
@@ -220,7 +220,7 @@ bool RepeatFalse::IsIncluded(const QRect& rect) {
 	return ret;
 }
 
-void RepeatFalse::Copy(Shape *object) {
+void RepeatFalse::Copy(NShape *object) {
 	x = object->GetX();
 	y = object->GetY();
 	width = object->GetWidth();
@@ -356,7 +356,7 @@ void RepeatFalse::GetLine(char(*line)) {
 
 bool RepeatFalse::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Line::IsStyle(style) || (style >> 14) % 2) {
+	if (NShape::IsStyle(style) || Line::IsStyle(style) || (style >> 14) % 2) {
 		ret = true;
 	}
 	return ret;

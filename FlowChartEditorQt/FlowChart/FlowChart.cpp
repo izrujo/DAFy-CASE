@@ -36,14 +36,14 @@
 using namespace std;
 int main(int argc, char *argv[]) {
 	FlowChart flowChart;
-	Shape *shape1 = new Terminal(100, 100, 100, 100, 20, DASH, 20, "Symbol");
-	Shape *shape2 = new Arrow(100, 100, 0, 100, 20, DASH, 20, "Arrow");
-	Shape *shape3 = new LeftDown(100, 100, 100, 100, 20, DASH, 20, "LeftDown");
-	Shape *shape4 = new Join(100, 100, 100, 100, -130, 20, DASH, 20, "Join-Right");
-	Shape *shape5 = new Join(100, 100, 100, 100, -70, 20, DASH, 20, "Join-Left");
-	Shape *shape6 = new RightDownJoin(100, 100, 100, 30, 30, 30, 20, DASH, 20, "RightDownJoin");
-	Shape *shape7 = new RepeatTrue(5, 50, 100, 30, 30, 30, 20, DASH, 20, "RepeatTrue");
-	Shape *shape8 = new RepeatFalse(5, 50, 100, 30, 30, 30, 20, DASH, 20, "RepeatFalse");
+	NShape *shape1 = new Terminal(100, 100, 100, 100, 20, DASH, 20, "Symbol");
+	NShape *shape2 = new Arrow(100, 100, 0, 100, 20, DASH, 20, "Arrow");
+	NShape *shape3 = new LeftDown(100, 100, 100, 100, 20, DASH, 20, "LeftDown");
+	NShape *shape4 = new Join(100, 100, 100, 100, -130, 20, DASH, 20, "Join-Right");
+	NShape *shape5 = new Join(100, 100, 100, 100, -70, 20, DASH, 20, "Join-Left");
+	NShape *shape6 = new RightDownJoin(100, 100, 100, 30, 30, 30, 20, DASH, 20, "RightDownJoin");
+	NShape *shape7 = new RepeatTrue(5, 50, 100, 30, 30, 30, 20, DASH, 20, "RepeatTrue");
+	NShape *shape8 = new RepeatFalse(5, 50, 100, 30, 30, 30, 20, DASH, 20, "RepeatFalse");
 
 	flowChart.Attach(shape1);
 	flowChart.Attach(shape2);
@@ -51,7 +51,7 @@ int main(int argc, char *argv[]) {
 	flowChart.Attach(shape4);
 	flowChart.Attach(shape5);
 
-	Shape *shape = flowChart.GetAt(0);
+	NShape *shape = flowChart.GetAt(0);
 	flowChart.Move(flowChart.GetLength() - 1, shape);
 
 	Long i;
@@ -142,7 +142,7 @@ void FlowChart::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* FlowChart::Clone() {
+NShape* FlowChart::Clone() {
 	return new FlowChart(*this);
 }
 

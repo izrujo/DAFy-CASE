@@ -40,38 +40,38 @@ RightDownJoin& RightDownJoin::operator =(const RightDownJoin& source) {
 	return *this;
 }
 
-bool RightDownJoin::IsEqual(const Shape& other) {
+bool RightDownJoin::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<RightDownJoin *>(const_cast<Shape *>(&other)) &&
-		dynamic_cast<RightDownJoin *>(const_cast<Shape *>(&other))->width2 == this->width2 &&
-		dynamic_cast<RightDownJoin *>(const_cast<Shape *>(&other))->height2 == this->height2) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<RightDownJoin *>(const_cast<NShape *>(&other)) &&
+		dynamic_cast<RightDownJoin *>(const_cast<NShape *>(&other))->width2 == this->width2 &&
+		dynamic_cast<RightDownJoin *>(const_cast<NShape *>(&other))->height2 == this->height2) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool RightDownJoin::IsNotEqual(const Shape& other) {
+bool RightDownJoin::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<RightDownJoin *>(const_cast<Shape *>(&other)) ||
-		dynamic_cast<RightDownJoin *>(const_cast<Shape *>(&other))->width2 != this->width2 ||
-		dynamic_cast<RightDownJoin *>(const_cast<Shape *>(&other))->height2 != this->height2) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<RightDownJoin *>(const_cast<NShape *>(&other)) ||
+		dynamic_cast<RightDownJoin *>(const_cast<NShape *>(&other))->width2 != this->width2 ||
+		dynamic_cast<RightDownJoin *>(const_cast<NShape *>(&other))->height2 != this->height2) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool RightDownJoin::operator ==(const Shape& other) {
+bool RightDownJoin::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<RightDownJoin *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<RightDownJoin *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool RightDownJoin::operator !=(const Shape& other) {
+bool RightDownJoin::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<RightDownJoin *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<RightDownJoin *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -90,7 +90,7 @@ void RightDownJoin::DrawActiveShape(GObject *painter) {
 	painter->DrawPolyline(points, 5);
 }
 
-Shape* RightDownJoin::Clone() {
+NShape* RightDownJoin::Clone() {
 	return new RightDownJoin(*this);
 }
 
@@ -239,7 +239,7 @@ int RightDownJoin::GetHitCode(const QPoint& point, const QRegion& region) {
 	return result;
 }
 
-void RightDownJoin::Copy(Shape *object) {
+void RightDownJoin::Copy(NShape *object) {
 	this->x = object->GetX();
 	this->y = object->GetY();
 	this->width = object->GetWidth();
@@ -355,7 +355,7 @@ void RightDownJoin::GetLine(char(*line)) {
 
 bool RightDownJoin::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Line::IsStyle(style) || (style >> 15) % 2) {
+	if (NShape::IsStyle(style) || Line::IsStyle(style) || (style >> 15) % 2) {
 		ret = true;
 	}
 	return ret;

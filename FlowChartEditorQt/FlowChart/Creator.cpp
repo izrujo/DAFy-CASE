@@ -17,8 +17,8 @@ Creator::Creator() {}
 
 Creator::~Creator() {}
 
-Shape* Creator::Create(Long shapeID, Long x, Long y, Long width, Long height, Long width2, Long height2, char(*contents)) {
-	Shape *shape;
+NShape* Creator::Create(Long shapeID, Long x, Long y, Long width, Long height, Long width2, Long height2, char(*contents)) {
+	NShape *shape;
 	if (shapeID == ID_TERMINAL) {
 		shape = new Terminal(x, y, width, height, QColor(255, 153, 153), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}

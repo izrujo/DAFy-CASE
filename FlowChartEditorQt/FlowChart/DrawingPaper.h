@@ -44,8 +44,8 @@ public:
 
 
 	void DrawSelectingArea();
-	void DrawActiveShape(FlowChartShape::Shape *entity); // 라인은 모양이 다 다르다.
-	void DrawActiveShape2(FlowChartShape::Shape *entity); // 라인은 모양이 다 다르다.
+	void DrawActiveShape(NShape *entity); // 라인은 모양이 다 다르다.
+	void DrawActiveShape2(NShape *entity); // 라인은 모양이 다 다르다.
 
 	void DrawSelectionMark(QPoint(*points), Long count);
 	void DrawSelectionMark2(QPoint(*points), Long count);
@@ -58,11 +58,11 @@ public:
 	QCursor GetCursor(QPoint point); //커서
 
 public:
-	FlowChartShape::Shape *templateSelected;
+	NShape *templateSelected;
 	Painter *painter;
 
 	//19.09.16 private에서 public : 스크롤 처리 위함
-	FlowChartShape::Shape *flowChart; // 사용자들이 스텐실을 등록하기 위해서 패턴을 사용함
+	NShape *flowChart; // 사용자들이 스텐실을 등록하기 위해서 패턴을 사용함
 	ScrollController *scrollController;
 
 	/////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ public:
 	VariableList *variableList;
 	Clipboard *clipboard;
 	Zoom *zoom;
-	FlowChartShape::Shape *a4Paper;
+	NShape *a4Paper;
 
 	QMenu *popup; //팝업메뉴(우클릭)
 private:

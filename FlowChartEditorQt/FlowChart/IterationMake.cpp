@@ -21,8 +21,8 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	// 1. 배열 첨자가 가장 작은 도형을 찾는다.
 	Long(*indexes);
 	Long length;
-	Shape *shape;
-	Shape *top, *repeatTrue;
+	NShape *shape;
+	NShape *top, *repeatTrue;
 	Long topIndex = -1;
 	Long x, y, width, height, width2, height2;
 	Long i, j;
@@ -69,11 +69,11 @@ void IterationMake::Create(DrawingPaper *canvas) {
 		attribute = initAttribute;
 		if (dynamic_cast<RepeatTrue *>(buffer.GetAt(indexes[i]))) {
 			buffer.GetAt(indexes[i])->GetAttribute(&attribute);
-			Shape::MakeRectToPoint(attribute.pointOut, &rect);
+			NShape::MakeRectToPoint(attribute.pointOut, &rect);
 		}
 		else {
 			buffer.GetAt(indexes[i])->GetAttribute(&attribute);
-			Shape::MakeRectToPoint(attribute.pointIn, &rect);
+			NShape::MakeRectToPoint(attribute.pointIn, &rect);
 		}
 		if (top->IsIncluded(rect)) {
 			buffer.Detach(indexes[i]);

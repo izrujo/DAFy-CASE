@@ -26,7 +26,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	// 1. 배열 첨자가 가장 작은 도형을 찾는다.
 	Long(*indexes) = 0;
 	Long length;
-	Shape *shape, *top;
+	NShape *shape, *top;
 	Long x, y, width, height, width2, height2;
 	Long index = -1, index_ = -1;
 	Long i, j;
@@ -71,7 +71,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	for (i = length; i > 0; i--) {
 		attribute = initAttribute;
 		temp.GetAt(i - 1)->GetAttribute(&attribute);
-		Shape::MakeRectToPoint(attribute.pointIn, &rect);
+		NShape::MakeRectToPoint(attribute.pointIn, &rect);
 		if (top->IsIncluded(rect)) {
 			temp.Detach(i - 1);
 		}
@@ -123,7 +123,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	if (i >= 0 && dynamic_cast<RightDownJoin *>(tempLefts.GetAt(i))) {
 		attribute = initAttribute;
 		tempLefts.GetAt(i)->GetAttribute(&attribute);
-		Shape::MakeRectToPoint(attribute.pointFalse, &rect);
+		NShape::MakeRectToPoint(attribute.pointFalse, &rect);
 		if (top->IsIncluded(rect)) {
 			index_ = lefts.Find(tempLefts.GetAt(i));
 			lefts.Detach(index_);
@@ -134,8 +134,8 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	{
 		attribute = initAttribute;
 		tempLefts.GetAt(i)->GetAttribute(&attribute);
-		Shape::MakeRectToPoint(attribute.pointTrue, &rect);
-		Shape::MakeRectToPoint(attribute.pointFalse, &rect2);
+		NShape::MakeRectToPoint(attribute.pointTrue, &rect);
+		NShape::MakeRectToPoint(attribute.pointFalse, &rect2);
 		if (tempRights.GetAt(j)->IsIncluded(rect) || tempRights.GetAt(j)->IsIncluded(rect2)) {
 			index_ = lefts.Find(tempLefts.GetAt(i));
 			lefts.Detach(index_);
@@ -146,7 +146,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	if (j >= 0 && dynamic_cast<RightDownJoin *>(tempRights.GetAt(j))) {
 		attribute = initAttribute;
 		tempRights.GetAt(j)->GetAttribute(&attribute);
-		Shape::MakeRectToPoint(attribute.pointFalse, &rect);
+		NShape::MakeRectToPoint(attribute.pointFalse, &rect);
 		if (top->IsIncluded(rect)) {
 			index_ = rights.Find(tempRights.GetAt(j));
 			rights.Detach(index_);
@@ -156,8 +156,8 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	else if (j >= 0 && dynamic_cast<Join *>(tempRights.GetAt(j))) {
 		attribute = initAttribute;
 		tempRights.GetAt(j)->GetAttribute(&attribute);
-		Shape::MakeRectToPoint(attribute.pointTrue, &rect);
-		Shape::MakeRectToPoint(attribute.pointFalse, &rect2);
+		NShape::MakeRectToPoint(attribute.pointTrue, &rect);
+		NShape::MakeRectToPoint(attribute.pointFalse, &rect2);
 		if (tempLefts.GetAt(i)->IsIncluded(rect) || tempLefts.GetAt(i)->IsIncluded(rect2)) {
 			index_ = rights.Find(tempRights.GetAt(j));
 			rights.Detach(index_);

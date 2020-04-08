@@ -10,7 +10,7 @@
 
 #include <QtWidgets/QFrame>
 #include "Shape.h"
-class Painter;
+class GObject;
 
 typedef signed long int Long;
 
@@ -24,11 +24,11 @@ public:
 	FlowChartTemplate(QWidget *parent = Q_NULLPTR);
 	~FlowChartTemplate();
 public:
-	FlowChartShape::Shape *shapeSelected;
-	Painter *painter;
+	NShape *shapeSelected;
+	GObject *painter;
 	int mode;
-	FlowChartShape::Shape *flowChartTemplate;
-	FlowChartShape::Shape *oldShapeSelected;
+	NShape *flowChartTemplate;
+	NShape *oldShapeSelected;
 protected:
 	void paintEvent(QPaintEvent *event);
 	void mousePressEvent(QMouseEvent *event);

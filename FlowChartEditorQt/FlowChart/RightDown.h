@@ -20,17 +20,17 @@ public:
 	RightDown(const RightDown& source);
 	RightDown& operator =(const RightDown& source);
 
-	virtual bool IsEqual(const Shape& other);
-	virtual bool IsNotEqual(const Shape& other);
+	virtual bool IsEqual(const NShape& other);
+	virtual bool IsNotEqual(const NShape& other);
 
-	virtual bool operator ==(const Shape& other);
-	virtual bool operator !=(const Shape& other);
+	virtual bool operator ==(const NShape& other);
+	virtual bool operator !=(const NShape& other);
 
 	virtual void DrawActiveShape(GObject *painter);
 
 	virtual void Accept(FlowChartVisitor *draw);
 
-	virtual Shape* Clone();
+	virtual NShape* Clone();
 
 	virtual void GetRegion(QRegion *region);
 	virtual void GetRegion(Long thickness, QRegion *region);

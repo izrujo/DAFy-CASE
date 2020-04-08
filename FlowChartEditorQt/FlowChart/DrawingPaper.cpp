@@ -35,6 +35,8 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 
+using namespace FlowChartEditorKey;
+
 DrawingPaper::DrawingPaper(QWidget *parent) 
 	: QFrame(parent) {
 	this->templateSelected = NULL;
@@ -164,12 +166,12 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	//Visitor 패턴 적용	
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter, this->scrollController);
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
-	FlowChartShape::Shape *cloneA4 = this->a4Paper->Clone();
+	NShape *cloneA4 = this->a4Paper->Clone();
 	cloneA4->Accept(zoomVisitor);
 	cloneA4->Accept(drawVisitor);
 
 	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
-	FlowChartShape::Shape *cloneFlowChart = this->flowChart->Clone();
+	NShape *cloneFlowChart = this->flowChart->Clone();
 	cloneFlowChart->Accept(zoomVisitor);
 	cloneFlowChart->Accept(drawVisitor);
 
@@ -229,7 +231,7 @@ void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 		string content = this->label->note->GetContent();
 		String contents(content);
 
-		FlowChartShape::Shape *shape = this->flowChart->GetAt(this->indexOfSelected);
+		NShape *shape = this->flowChart->GetAt(this->indexOfSelected);
 
 		shape->Rewrite(contents);
 		//=====================intellisense========================
@@ -287,7 +289,7 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 		//템플릿 창 기호에 마우스 올릴 때 효과가 마우스가 떠나도 지속되는 오류 때문에 넣음.
 		FlowChartTemplate *templateWnd = static_cast<FlowChartTemplate*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[1]);
 		QColor selectedColor(235, 235, 235);
-		FlowChartShape::Shape *shape;
+		NShape *shape;
 		Long i = 0;
 		while (i < templateWnd->flowChartTemplate->GetLength()) {
 			shape = templateWnd->flowChartTemplate->GetAt(i);
@@ -319,7 +321,7 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 
 void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 	// 상태 패턴 : 텍스트 조작자 Manipulator
-	FlowChartShape::Shape *shape;
+	NShape *shape;
 	Long left, top, right, bottom, halfHeight;
 
 	QRect rect = this->frameRect();
@@ -332,8 +334,8 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 	}
 	point.setX(point.x() + positionX);
 	point.setY(point.y() + positionY);
-	FlowChartShape::Shape *holdA4Paper = this->a4Paper->Clone();
-	FlowChartShape::Shape *holdFlowChart = this->flowChart->Clone();
+	NShape *holdA4Paper = this->a4Paper->Clone();
+	NShape *holdFlowChart = this->flowChart->Clone();
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
 	holdA4Paper->Accept(zoomVisitor);
 	holdFlowChart->Accept(zoomVisitor);
@@ -453,7 +455,7 @@ void DrawingPaper::keyPressEvent(QKeyEvent *event) {
 
 	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 	FlowChartKeyActionFactory keyActionFactory(editor);
-	FlowChartKeyAction *keyAction = keyActionFactory.Make(event->modifiers(), event->key());
+	FlowChartEditorKey::KeyAction *keyAction = keyActionFactory.Make(event->modifiers(), event->key());
 	if (keyAction != 0) {
 		keyAction->OnKeyDown();
 		delete keyAction;
@@ -495,7 +497,7 @@ void DrawingPaper::OnContextMenu(const QPoint& pos) {
 
 	Long(*indexes);
 	Long count;
-	FlowChartShape::Shape *shape;
+	NShape *shape;
 	this->flowChart->GetSelecteds(&indexes, &count);
 
 	if (count > 1) {
@@ -511,7 +513,7 @@ void DrawingPaper::OnContextMenu(const QPoint& pos) {
 			Long leftCount = 0;
 			Long i = 1;
 			while (i < count) {
-				FlowChartShape::Shape *left = this->flowChart->GetAt(indexes[i]);
+				NShape *left = this->flowChart->GetAt(indexes[i]);
 				if (left->CenterOfGravityX() < shape->CenterOfGravityX()) {
 					leftCount++;
 				}
@@ -573,7 +575,7 @@ void DrawingPaper::DrawSelectingArea() {
 
 }
 
-void DrawingPaper::DrawActiveShape(FlowChartShape::Shape *entity) {
+void DrawingPaper::DrawActiveShape(NShape *entity) {
 	//원래 dc생성해서 바로 그림(속성 Painter 사용 안함)
 	QPainter dc(this);
 
@@ -595,7 +597,7 @@ void DrawingPaper::DrawActiveShape(FlowChartShape::Shape *entity) {
 	painter.Render(&dc, 0, 0);
 }
 
-void DrawingPaper::DrawActiveShape2(FlowChartShape::Shape *entity) {
+void DrawingPaper::DrawActiveShape2(NShape *entity) {
 	int oldMode = this->painter->GetBackgroundMode();
 	this->painter->SetBackgroundMode(Qt::TransparentMode);
 
@@ -737,7 +739,7 @@ QCursor DrawingPaper::GetCursor(QPoint point) {
 	QCursor result;
 	Long i = 0;
 	Long end;
-	FlowChartShape::Shape *shape;
+	NShape *shape;
 
 	if (this->mode == SELECT) {
 		Long positionX = this->scrollController->GetScroll(1)->value();
@@ -745,7 +747,7 @@ QCursor DrawingPaper::GetCursor(QPoint point) {
 		point.setX(point.x() + positionX);
 		point.setY(point.y() + positionY);
 
-		FlowChartShape::Shape *holdA4Paper = this->a4Paper->Clone();
+		NShape *holdA4Paper = this->a4Paper->Clone();
 		FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
 		holdA4Paper->Accept(zoomVisitor);
 

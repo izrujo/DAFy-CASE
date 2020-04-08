@@ -34,34 +34,34 @@ InputOutput& InputOutput::operator=(const InputOutput& source) {
 	return *this;
 }
 
-bool InputOutput::IsEqual(const Shape& other) {
+bool InputOutput::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<InputOutput *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<InputOutput *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool InputOutput::IsNotEqual(const Shape& other) {
+bool InputOutput::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<InputOutput *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<InputOutput *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool InputOutput::operator ==(const Shape& other) {
+bool InputOutput::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<InputOutput *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<InputOutput *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool InputOutput::operator !=(const Shape& other) {
+bool InputOutput::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<InputOutput *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<InputOutput *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -70,7 +70,7 @@ void InputOutput::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-Shape* InputOutput::Clone() {
+NShape* InputOutput::Clone() {
 	return new InputOutput(*this);
 }
 
@@ -166,12 +166,12 @@ void InputOutput::GetLine(char(*line)) {
 
 bool InputOutput::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 8) % 2) {
+	if (NShape::IsStyle(style) || Symbol::IsStyle(style) || (style >> 8) % 2) {
 		ret = true;
 	}
 	return ret;
 }
 
 void InputOutput::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	Shape::DrawSelectionMarkers(painter, scrollController);
+	NShape::DrawSelectionMarkers(painter, scrollController);
 }

@@ -35,34 +35,34 @@ Arrow& Arrow::operator =(const Arrow& source) {
 	return *this;
 }
 
-bool Arrow::IsEqual(const Shape& other) {
+bool Arrow::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Arrow *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Arrow *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Arrow::IsNotEqual(const Shape& other) {
+bool Arrow::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Arrow *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Arrow *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool Arrow::operator ==(const Shape& other) {
+bool Arrow::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Arrow *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Arrow *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Arrow::operator !=(const Shape& other) {
+bool Arrow::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Arrow *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Arrow *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
@@ -77,7 +77,7 @@ void Arrow::DrawActiveShape(GObject *painter) {
 	painter->DrawLine(point1, point2);
 }
 
-Shape* Arrow::Clone() {
+NShape* Arrow::Clone() {
 	return new Arrow(*this);
 }
 
@@ -203,7 +203,7 @@ void Arrow::GetLine(char(*line)) {
 
 bool Arrow::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Line::IsStyle(style) || (style >> 9) % 2) {
+	if (NShape::IsStyle(style) || Line::IsStyle(style) || (style >> 9) % 2) {
 		ret = true;
 	}
 	return ret;

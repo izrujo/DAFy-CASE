@@ -18,7 +18,7 @@ CoordinateConverter& CoordinateConverter::operator=(const CoordinateConverter& s
 	return *this;
 }
 
-void CoordinateConverter::Update(Shape *a4Paper) {
+void CoordinateConverter::Update(NShape *a4Paper) {
 	Long x = a4Paper->GetX();
 	Long y = a4Paper->GetY();
 	Long width = a4Paper->GetWidth();

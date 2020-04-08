@@ -10,9 +10,7 @@
 
 #include "Shape.h"
 
-using FlowChartShape::Shape;
-
-class Line : public Shape {
+class Line : public NShape {
 public:
 	Line(Long x, Long y, Long width, Long height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,

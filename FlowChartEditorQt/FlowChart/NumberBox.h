@@ -3,9 +3,7 @@
 
 #include "Shape.h"
 
-using namespace FlowChartShape;
-
-class NumberBox : public Shape {
+class NumberBox : public NShape {
 public:
 	NumberBox(Long x, Long y, Long width, Long height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
@@ -18,7 +16,7 @@ public:
 
 	virtual void Accept(FlowChartVisitor *draw);
 
-	virtual Shape* Clone();
+	virtual NShape* Clone();
 
 	virtual void GetRegion(QRegion *region) {};
 	virtual void GetRegion(Long thickness, QRegion *region) {};

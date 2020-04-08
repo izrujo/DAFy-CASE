@@ -11,8 +11,6 @@
 #include "CoordinateConverter.h"
 #include "../FlowChartEditor.h"
 
-using FlowChartShape::Shape;
-
 MovingTool* MovingTool::instance = 0;
 
 MovingTool::MovingTool() {

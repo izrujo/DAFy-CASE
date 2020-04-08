@@ -21,13 +21,13 @@ void MoveMake::Create(DrawingPaper *canvas){
 	Long j = 0;
 	Long count = 0;
 	Long it;
-	Shape *shape;
-	Shape* (*indexes) = 0;
+	NShape *shape;
+	NShape* (*indexes) = 0;
 
 	// 1. 선택된 기호들을 찾는다.
 	i = 0;
 	it = canvas->flowChart->GetLength();
-	indexes = new Shape*[it];
+	indexes = new NShape*[it];
 
 	Long(*positions) = new Long[it];
 

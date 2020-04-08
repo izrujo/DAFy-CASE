@@ -3,9 +3,7 @@
 
 #include "Shape.h"
 
-using FlowChartShape::Shape;
-
-class TextRegion : public Shape {
+class TextRegion : public NShape {
 public:
 	TextRegion(Long x, Long y, Long width, Long height, 
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
@@ -19,7 +17,7 @@ public:
 	void Draw(GObject *painter);
 
 	virtual void Accept(FlowChartVisitor *draw) {};
-	virtual Shape* Clone();
+	virtual NShape* Clone();
 
 	virtual void GetRegion(QRegion *region) {};
 	virtual void GetRegion(Long thickness, QRegion *region) {};

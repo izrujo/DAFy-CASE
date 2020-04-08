@@ -38,41 +38,41 @@ Join& Join::operator =(const Join& source) {
 	return *this;
 }
 
-bool Join::IsEqual(const Shape& other) {
+bool Join::IsEqual(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Join *>(const_cast<Shape *>(&other)) &&
-		dynamic_cast<Join *>(const_cast<Shape *>(&other))->height2 == this->height2) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Join *>(const_cast<NShape *>(&other)) &&
+		dynamic_cast<Join *>(const_cast<NShape *>(&other))->height2 == this->height2) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Join::IsNotEqual(const Shape& other) {
+bool Join::IsNotEqual(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Join *>(const_cast<Shape *>(&other)) ||
-		dynamic_cast<Join *>(const_cast<Shape *>(&other))->height2 != this->height2) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Join *>(const_cast<NShape *>(&other)) ||
+		dynamic_cast<Join *>(const_cast<NShape *>(&other))->height2 != this->height2) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-bool Join::operator ==(const Shape& other) {
+bool Join::operator ==(const NShape& other) {
 	bool retVo = false;
-	if (dynamic_cast<Join *>(const_cast<Shape *>(&other))) {
-		retVo = Shape::IsEqual(other);
+	if (dynamic_cast<Join *>(const_cast<NShape *>(&other))) {
+		retVo = NShape::IsEqual(other);
 	}
 	return retVo;
 }
 
-bool Join::operator !=(const Shape& other) {
+bool Join::operator !=(const NShape& other) {
 	bool retVo = false;
-	if (!dynamic_cast<Join *>(const_cast<Shape*>(&other))) {
-		retVo = Shape::IsNotEqual(other);
+	if (!dynamic_cast<Join *>(const_cast<NShape*>(&other))) {
+		retVo = NShape::IsNotEqual(other);
 	}
 	return retVo;
 }
 
-Shape* Join::Clone() {
+NShape* Join::Clone() {
 	return new Join(*this);
 }
 
@@ -190,7 +190,7 @@ bool Join::IsIncluded(const QRect& rect) {
 	return ret;
 }
 
-void Join::Copy(Shape *object) {
+void Join::Copy(NShape *object) {
 	this->x = object->GetX();
 	this->y = object->GetY();
 	this->width = object->GetWidth();
@@ -331,7 +331,7 @@ void Join::GetLine(char(*line)) {
 
 bool Join::IsStyle(Long style) {
 	bool ret = false;
-	if (Shape::IsStyle(style) || Line::IsStyle(style) || (style >> 12) % 2) {
+	if (NShape::IsStyle(style) || Line::IsStyle(style) || (style >> 12) % 2) {
 		ret = true;
 	}
 	return ret;
