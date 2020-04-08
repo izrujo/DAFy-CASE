@@ -8,7 +8,7 @@
 
 
 #include "Shape.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 
 #include "InputOutput.h"
 #include "Preparation.h"
@@ -16,7 +16,7 @@
 #include "Process.h"
 #include "Decision.h"
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 #include "Arrow.h"
 #include "LeftDown.h"
 #include "RightDown.h"
@@ -25,7 +25,7 @@
 #include "RepeatFalse.h"
 #include "RightDownJoin.h"
 
-#include "QtGObjectFactory.h"
+#include "../GObject/QtGObjectFactory.h"
 
 //#include <qcursor.h>
 
@@ -559,8 +559,8 @@ void Shape::DrawSelectionMarkers(GObject *painter, ScrollController *scrollContr
 	painter->Update();
 
 	GetSelectionMarkerRect(HIT_TOPLEFT, &rectSelect);
-	Long positionX = scrollController->GetScroll(1)->GetPosition();
-	Long positionY = scrollController->GetScroll(0)->GetPosition();
+	Long positionX = scrollController->GetScroll(1)->value();
+	Long positionY = scrollController->GetScroll(0)->value();
 	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
 		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
 	painter->DrawRect(rectSelect);

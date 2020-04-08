@@ -99,7 +99,7 @@ void MemoryController::Redo() {
 				position = dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->GetLength();
 			}
 			Shape *shape = execution->GetShape(execution->GetLength() - (i + 1));
-			dynamic_cast<FlowChart*>(this->drawingPaper->flowChart)->Insert(position, shape->Clone());
+			this->drawingPaper->flowChart->Insert(position, shape->Clone());
 		}
 		else if (dynamic_cast<RemoveExecution*>(execution)) { //1.3. 실행했던 처리가 '삭제'였으면 삭제한다.
 			//Shape *shape = execution->GetShape(i);

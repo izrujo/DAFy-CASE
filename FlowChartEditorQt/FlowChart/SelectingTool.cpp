@@ -3,19 +3,18 @@
 
 #include "DrawingPaper.h"
 #include "Shape.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "Line.h"
 #include "Arrow.h"
 #include "Decision.h"
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 #include "ZoomVisitor.h"
 #include "Zoom.h"
 #include "CoordinateConverter.h"
-#include "TutorialForm.h"
-#include "Tutorials.h"
-#include "FlowChartEditor.h"
-#include "TutorialController.h"
+#include "../FlowChartEditor.h"
+
+#include <windows.h>
 
 using FlowChartShape::Shape;
 
@@ -80,8 +79,8 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (canvas->scrollController != NULL) {
-		positionX = canvas->scrollController->GetScroll(1)->GetPosition();
-		positionY = canvas->scrollController->GetScroll(0)->GetPosition();
+		positionX = canvas->scrollController->GetScroll(1)->value();
+		positionY = canvas->scrollController->GetScroll(0)->value();
 	}
 	canvas->startX += positionX;
 	canvas->startY += positionY;
@@ -119,11 +118,6 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 			{
 				canvas->flowChart->GetAt(i)->Select(true);
 			}
-		}
-
-		TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->windows[2];
-		if (tutorialForm != NULL) {
-			tutorialForm->tutorialController->Update();
 		}
 	}
 

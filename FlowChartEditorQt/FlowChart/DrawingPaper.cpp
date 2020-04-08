@@ -35,7 +35,8 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 
-DrawingPaper::DrawingPaper(QWidget *parent = Q_NULLPTR) {
+DrawingPaper::DrawingPaper(QWidget *parent) 
+	: QFrame(parent) {
 	this->templateSelected = NULL;
 
 	this->flowChart = NULL;

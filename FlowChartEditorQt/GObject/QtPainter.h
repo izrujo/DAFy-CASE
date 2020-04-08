@@ -1,12 +1,14 @@
 #ifndef _QTPAINTER_H
 #define _QTPAINTER_H
 
-#include "Painter.h"
+#include "../GObject/Painter.h"
 
 class QPixmap;
 class QPainter;
 
 class QtPainter : public Painter {
+private:
+	friend class SaveAsImageCommand;
 public:
 	QtPainter(Long width, Long height, QColor backgroundColor = QColor(255, 255, 255), Long capacity = 3);
 	QtPainter(const QtPainter& source);

@@ -54,7 +54,7 @@ void CaretController::Update() {
 		x = this->notepad->characterMetrics->GetX(this->notepad->current, this->notepad->current->GetCurrent()); //??
 	}
 	Long index = this->notepad->note->GetCurrent();
-	y = this->notepad->menuBar->y() + this->notepad->menuBar->height() + this->notepad->characterMetrics->GetY(index);
+	y =this->notepad->characterMetrics->GetY(index);
 
 	QRect rect(x, y, width, height);
 	this->caret->Hide();

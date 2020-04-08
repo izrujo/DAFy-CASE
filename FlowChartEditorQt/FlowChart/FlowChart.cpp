@@ -30,7 +30,7 @@
 #if 0
 #include <stdio.h>
 #pragma warning (disable:4996)
-#include "Painter.h"
+#include "../GObject/Painter.h"
 
 #include <iostream>
 using namespace std;
@@ -130,7 +130,7 @@ FlowChart& FlowChart::operator=(const FlowChart& source) {
 	return *this;
 }
 
-void FlowChart::DrawActiveShape(Painter *painter){
+void FlowChart::DrawActiveShape(GObject *painter){
 	Long i = 0;
 	while (i < this->length) {
 		this->shapes[i]->DrawActiveShape(painter);

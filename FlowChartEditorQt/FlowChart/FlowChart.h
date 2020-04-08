@@ -13,7 +13,7 @@
 typedef signed long int Long;
 
 class FlowChartVisitor;
-class Painter;
+class GObject;
 
 class FlowChart : public Block {
 public:
@@ -22,7 +22,7 @@ public:
 	virtual ~FlowChart();
 	FlowChart& operator=(const FlowChart& source);
 
-	virtual void DrawActiveShape(Painter *painter);
+	virtual void DrawActiveShape(GObject *painter);
 	virtual void Accept(FlowChartVisitor *draw);
 
 	virtual Shape* Clone();

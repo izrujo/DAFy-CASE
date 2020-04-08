@@ -75,7 +75,7 @@ void DrawVisitor::Visit(Terminal *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	this->painter->DrawTextW(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(this->painter, this->scrollController);
@@ -128,7 +128,7 @@ void DrawVisitor::Visit(Preparation *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 	QRect rect(x + halfHeight, y, width - height, height);
-	this->painter->DrawTextW(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -179,7 +179,7 @@ void DrawVisitor::Visit(InputOutput *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 	QRect rect(x + halfHeight, y, width - height, height);
-	this->painter->DrawTextW(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -224,7 +224,7 @@ void DrawVisitor::Visit(Process *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	this->painter->DrawTextW(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -276,7 +276,7 @@ void DrawVisitor::Visit(Decision *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 	QRect rect(x + halfWidth / 2, y + halfHeight / 2, halfWidth, halfHeight);
-	this->painter->DrawTextW(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -332,7 +332,7 @@ void DrawVisitor::Visit(Arrow *element) {
 	String contents = element->GetContents();
 
 	QRect rect(x + endLength / 2, y, height * 2, height);
-	this->painter->DrawTextW(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -389,7 +389,7 @@ void DrawVisitor::Visit(LeftDown *element) {
 	String contents = element->GetContents();
 
 	QRect rect(x - width, y - height, width, height);
-	this->painter->DrawTextW(rect, Qt::AlignRight | Qt::AlignBottom, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignRight | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -445,7 +445,7 @@ void DrawVisitor::Visit(RightDown *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 	QRect rect(x, y - height, width, height);
-	this->painter->DrawTextW(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -530,7 +530,7 @@ void DrawVisitor::Visit(RightDownJoin *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 	QRect rect(x, y - height2, width2, height2);
-	this->painter->DrawTextW(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -655,7 +655,7 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 	QRect rect(x, y - height2, width2, height2);
-	this->painter->DrawTextW(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
@@ -695,7 +695,7 @@ void DrawVisitor::Visit(NumberBox *numberBox) {
 
 	String contents = numberBox->GetContents();
 	QRect rect(x, y, width, height);
-	this->painter->DrawTextW(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
+	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 }
 
 void DrawVisitor::Visit(A4Paper *a4Paper) {

@@ -48,7 +48,8 @@
 #include <qpainter.h>
 #include <qevent.h>
 
-FlowChartTemplate::FlowChartTemplate(QWidget *parent = Q_NULLPTR) {
+FlowChartTemplate::FlowChartTemplate(QWidget *parent) 
+	: QFrame(parent) {
 	this->shapeSelected = NULL;
 	this->mode = DRAWOFF;
 	this->oldShapeSelected = NULL;

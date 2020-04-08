@@ -1,7 +1,7 @@
 #include "TextRegion.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "FlowChartVisitor.h"
-#include "QtGObjectFactory.h"
+#include "../GObject/QtGObjectFactory.h"
 
 TextRegion::TextRegion(Long x, Long y, Long width, Long height,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
@@ -32,7 +32,7 @@ void TextRegion::Draw(GObject *painter) {
 	painter->SelectObject(*font);
 	painter->Update();
 
-	painter->DrawText(this->x, this->y, QString::fromLocal8Bit(this->contents));
+	painter->DrawTextQ(this->x, this->y, QString::fromLocal8Bit(this->contents));
 
 	painter->SelectObject(*current);
 	painter->Update();

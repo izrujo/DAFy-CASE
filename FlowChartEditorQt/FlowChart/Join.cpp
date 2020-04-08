@@ -285,8 +285,8 @@ void Join::DrawSelectionMarkers(GObject *painter, ScrollController *scrollContro
 	painter->Update();
 	
 	GetSelectionMarkerRect(HIT_TRUE, &rectSelect);
-	Long positionX = scrollController->GetScroll(1)->GetPosition();
-	Long positionY = scrollController->GetScroll(0)->GetPosition();
+	Long positionX = scrollController->GetScroll(1)->value();
+	Long positionY = scrollController->GetScroll(0)->value();
 	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
 		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
 	painter->DrawRect(rectSelect);

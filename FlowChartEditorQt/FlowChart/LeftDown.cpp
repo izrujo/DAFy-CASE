@@ -6,14 +6,14 @@
 *******************************************************************/
 
 #include "LeftDown.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
 #include "ScrollController.h"
 #include "Scroll.h"
 
-#include "QtGObjectFactory.h"
+#include "../GObject/QtGObjectFactory.h"
 
 LeftDown::LeftDown(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
@@ -228,8 +228,8 @@ void LeftDown::DrawSelectionMarkers(GObject *painter, ScrollController *scrollCo
 	painter->Update();
 
 	GetSelectionMarkerRect(HIT_IN, &rectSelect);
-	Long positionX = scrollController->GetScroll(1)->GetPosition();
-	Long positionY = scrollController->GetScroll(0)->GetPosition();
+	Long positionX = scrollController->GetScroll(1)->value();
+	Long positionY = scrollController->GetScroll(0)->value();
 	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
 		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
 	painter->DrawRect(rectSelect);

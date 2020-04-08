@@ -16,7 +16,7 @@ Glyph* GlyphFactory::Make(const char(*content)) {
 		glyph = new Note;
 	}
 	else if (content[0] == '\r' && content[1] == '\n') {
-		glyph = new Line;
+		glyph = new Row;
 	}
 	else if (!(content[0] & 0x80)) {
 		glyph = new SingleByteCharacter(content[0]);

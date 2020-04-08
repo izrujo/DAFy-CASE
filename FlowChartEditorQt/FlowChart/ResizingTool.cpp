@@ -16,13 +16,10 @@
 #include <stdio.h>
 
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 #include "MemoryController.h"
 
-#include "TutorialForm.h"
-#include "Tutorials.h"
-#include "FlowChartEditor.h"
-#include "TutorialController.h"
+#include "../FlowChartEditor.h"
 #pragma warning (disable : 4996)
 
 using FlowChartShape::Shape;
@@ -316,9 +313,4 @@ void ResizingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	canvas->mode = DrawingPaper::SELECT;
 	canvas->tool = SelectingTool::Instance();
 	canvas->repaint();
-
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
 }

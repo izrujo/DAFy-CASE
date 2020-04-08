@@ -229,7 +229,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		x = decisionAttribute.pointFalse.x();
 		y = decisionAttribute.pointFalse.y();
 
-		width2 = bufferRange.right - x + 30;
+		width2 = bufferRange.right() - x + 30;
 
 		attribute = initAttribute;
 		i = tempLefts.GetLength() - 1;

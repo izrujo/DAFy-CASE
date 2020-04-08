@@ -6,7 +6,8 @@
 #include <qpainter.h>
 #include <qimage.h>
 
-EditorIntroForm::EditorIntroForm(QWidget *parent = Q_NULLPTR) {
+EditorIntroForm::EditorIntroForm(QWidget *parent)
+	: QFrame(parent) {
 
 }
 
@@ -32,13 +33,13 @@ void EditorIntroForm::paintEvent(QPaintEvent *event) {
 	painter->Update();
 	
 	QRect rect2(100, 150, 500, 200);
-	painter->DrawText(rect2, Qt::AlignCenter, "FlowChartEditor");
+	painter->DrawTextQ(rect2, Qt::AlignCenter, "FlowChartEditor");
 
 	QRect rect3(100, 200, 500, 250);
-	painter->DrawText(rect3, Qt::AlignCenter, "ver 0.05");
+	painter->DrawTextQ(rect3, Qt::AlignCenter, "ver 0.05");
 
 	QRect rect4(100, 300, 500, 350);
-	painter->DrawText(rect4, Qt::AlignCenter, "NaACoaching.com");
+	painter->DrawTextQ(rect4, Qt::AlignCenter, "NaACoaching.com");
 
 	if (painter != NULL) {
 		delete painter;

@@ -9,7 +9,7 @@
 #include "Preparation.h"
 #include "VariableList.h"
 #include "Zoom.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 
 #include <qfile.h>
 #include <qtextstream.h>

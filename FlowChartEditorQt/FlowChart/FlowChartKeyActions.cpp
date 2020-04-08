@@ -14,7 +14,7 @@
 #include "Clipboard.h"
 #include "Memory.h"
 
-using namespace FlowChartShape;
+using FlowChartShape::Shape;
 
 FlowChartKeyAction::FlowChartKeyAction(FlowChartEditor *editor) {
 	this->editor = editor;

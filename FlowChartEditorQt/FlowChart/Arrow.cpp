@@ -6,14 +6,14 @@
 *******************************************************************/
 
 #include "Arrow.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #pragma warning (disable : 4996)
 #include "FlowChartVisitor.h"
 
 #include "ScrollController.h"
 #include "Scroll.h"
 
-#include "QtGObjectFactory.h"
+#include "../GObject/QtGObjectFactory.h"
 
 Arrow::Arrow(Long x, Long y, Long width, Long height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

@@ -224,39 +224,6 @@
     <ClCompile Include="FlowChart\Label.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Brush.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Font.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\GObject.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\GObjectFactory.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Painter.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Pen.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtBrush.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtFont.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtGObjectFactory.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtPainter.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\QtPen.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Notepad\Caret.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
@@ -313,6 +280,39 @@
     </ClCompile>
     <ClCompile Include="Notepad\Row.cpp">
       <Filter>Notepad</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\Brush.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\Font.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\GObject.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\GObjectFactory.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\Painter.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\Pen.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\QtBrush.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\QtFont.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\QtGObjectFactory.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\QtPainter.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="GObject\QtPen.cpp">
+      <Filter>Graphic Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -507,39 +507,6 @@
     <ClInclude Include="FlowChart\Label.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Brush.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Font.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\GObject.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\GObjectFactory.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Painter.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Pen.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtBrush.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtFont.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtGObjectFactory.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtPainter.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\QtPen.h">
-      <Filter>Graphic Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Notepad\Array.h">
       <Filter>Notepad</Filter>
     </ClInclude>
@@ -593,6 +560,39 @@
     </ClInclude>
     <ClInclude Include="Notepad\Row.h">
       <Filter>Notepad</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\Brush.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\Font.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\GObject.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\GObjectFactory.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\Painter.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\Pen.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\QtBrush.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\QtFont.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\QtGObjectFactory.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\QtPainter.h">
+      <Filter>Graphic Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="GObject\QtPen.h">
+      <Filter>Graphic Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

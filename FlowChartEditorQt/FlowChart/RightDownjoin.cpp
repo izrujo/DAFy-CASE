@@ -6,14 +6,14 @@
 *******************************************************************/
 
 #include "RightDownJoin.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 
-#include "QtGObjectFactory.h"
+#include "../GObject/QtGObjectFactory.h"
 
 RightDownJoin::RightDownJoin(Long x, Long y, Long width, Long height, Long width2, Long height2, 
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents) 
@@ -310,8 +310,8 @@ void RightDownJoin::DrawSelectionMarkers(GObject *painter, ScrollController *scr
 	painter->Update();
 
 	GetSelectionMarkerRect(HIT_FALSE, &rectSelect);
-	Long positionX = scrollController->GetScroll(1)->GetPosition();
-	Long positionY = scrollController->GetScroll(0)->GetPosition();
+	Long positionX = scrollController->GetScroll(1)->value();
+	Long positionY = scrollController->GetScroll(0)->value();
 	rectSelect.setCoords(rectSelect.left() - positionX, rectSelect.top() - positionY,
 		rectSelect.right() - positionX, rectSelect.bottom() - positionY);
 	painter->DrawRect(rectSelect);

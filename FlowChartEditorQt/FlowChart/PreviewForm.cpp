@@ -3,7 +3,7 @@
 #include "ZoomVisitor.h"
 #include "Zoom.h"
 #include "drawVisitor.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "../FlowChartEditor.h"
 #include "FlowChart.h"
 #include "DrawingPaper.h"
@@ -13,12 +13,13 @@
 #include "Join.h"
 #include "A4Paper.h"
 #include "ResolutionVisitor.h"
-#include "QtPainter.h"
-#include "QtGObjectFactory.h"
+#include "../GObject/QtPainter.h"
+#include "../GObject/QtGObjectFactory.h"
 
 #include <qpainter.h>
 
-PreviewForm::PreviewForm(QWidget *parent = Q_NULLPTR, FlowChartShape::Shape *flowChart) {
+PreviewForm::PreviewForm(QWidget *parent, FlowChartShape::Shape *flowChart) 
+	: QFrame(parent) {
 	this->editor = editor;
 	this->flowChart = flowChart;
 

@@ -15,8 +15,7 @@
 #include "Zoom.h"
 #include "Tool.h"
 #include "Shape.h"
-
-using namespace FlowChartShape;
+#include "../GObject/QtPainter.h"
 
 //#include "TutorialForm.h"
 //#include "StatusBar.h"

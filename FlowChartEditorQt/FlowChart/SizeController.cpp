@@ -23,7 +23,7 @@ SizeController::~SizeController() {
 }
 
 void SizeController::Update() {
-	DrawingPaper *drawingPaper = (DrawingPaper*)this->label->GetParent();
+	DrawingPaper *drawingPaper = (DrawingPaper*)this->label->parentWidget();
 
 	Shape *holdA4Paper = drawingPaper->a4Paper->Clone();
 	Shape *holdFlowChart = drawingPaper->flowChart->Clone();
@@ -31,7 +31,7 @@ void SizeController::Update() {
 	holdA4Paper->Accept(zoomVisitor);
 	holdFlowChart->Accept(zoomVisitor);
 
-	Shape *shape = dynamic_cast<FlowChart*>(holdFlowChart)->GetAt(drawingPaper->indexOfSelected);
+	Shape *shape = holdFlowChart->GetAt(drawingPaper->indexOfSelected);
 	Long height = this->label->characterMetrics->GetY(this->label->note->GetLength());
 
 	Long width = 0;
@@ -45,7 +45,7 @@ void SizeController::Update() {
 		i++;
 	}
 
-	Shape *realShape= dynamic_cast<FlowChart*>(drawingPaper->flowChart)->GetAt(drawingPaper->indexOfSelected);
+	Shape *realShape= drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
 	Long realWidth = realShape->GetWidth();
 	Long realHeight = realShape->GetHeight();
 	Long realLabelWidth;
@@ -80,8 +80,9 @@ void SizeController::Update() {
 		realShape->ReSize(realWidth, realLabelHeight);
 	}
 
-	this->label->MoveWindow(this->label->GetX(), newY, width, height);
-	this->label->GetParent()->InvalidateRect(&rect);
+	this->label->move(this->label->GetX(), newY);
+	this->label->resize(width, height);
+	this->label->parentWidget()->repaint(rect.left, rect.top, rect.right, rect.bottom);
 }
 
 SizeController& SizeController::operator=(const SizeController& source) {

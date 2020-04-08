@@ -11,9 +11,9 @@
 #include "MemoryController.h"
 #include "Executions.h"
 #include <cmath>
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 
 Zoom::Zoom(Long rate) {
 	this->rate = rate;

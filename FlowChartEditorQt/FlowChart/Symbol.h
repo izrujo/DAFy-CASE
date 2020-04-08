@@ -10,7 +10,7 @@
 
 #include "Shape.h"
 
-using FlowChartShape::Shape;
+using namespace FlowChartShape;
 
 class Symbol : public Shape {
 	public:		

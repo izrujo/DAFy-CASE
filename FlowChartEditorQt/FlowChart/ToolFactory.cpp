@@ -9,13 +9,15 @@
 
 #include "DrawingPaper.h"
 
-#include "FlowChartEditor.h"
+#include "../FlowChartEditor.h"
 #include "FlowChartTemplate.h"
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 #include "Zoom.h"
 #include "ZoomVisitor.h"
 #include "CoordinateConverter.h"
+
+#include <Windows.h>
 
 using FlowChartShape::Shape;
 
@@ -50,11 +52,11 @@ Tool* ToolFactory::Create(DrawingPaper *canvas, QPoint point) {
 			Long positionX = 0;
 			Long positionY = 0;
 			if (canvas->scrollController != NULL) {
-				positionX = canvas->scrollController->GetScroll(1)->GetPosition();
-				positionY = canvas->scrollController->GetScroll(0)->GetPosition();
+				positionX = canvas->scrollController->GetScroll(1)->value();
+				positionY = canvas->scrollController->GetScroll(0)->value();
 			}
-			point.x += positionX;
-			point.y += positionY;
+			point.setX(point.x() + positionX);
+			point.setY(point.y() + positionY);
 
 			Shape *holdA4Paper = canvas->a4Paper->Clone();
 			FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
@@ -66,20 +68,20 @@ Tool* ToolFactory::Create(DrawingPaper *canvas, QPoint point) {
 			QPoint currentReal(point.x(), point.y());
 			QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
-			quotient = currentVirtual.x * 100 / canvas->zoom->GetRate();
-			remainder = currentVirtual.x * 100 % canvas->zoom->GetRate();
+			quotient = currentVirtual.x() * 100 / canvas->zoom->GetRate();
+			remainder = currentVirtual.x() * 100 % canvas->zoom->GetRate();
 			if (remainder >= 50) quotient++;
-			currentVirtual.x = quotient;
+			currentVirtual.setX(quotient);
 
-			quotient = currentVirtual.y * 100 / canvas->zoom->GetRate();
-			remainder = currentVirtual.y * 100 % canvas->zoom->GetRate();
+			quotient = currentVirtual.y() * 100 / canvas->zoom->GetRate();
+			remainder = currentVirtual.y() * 100 % canvas->zoom->GetRate();
 			if (remainder >= 50) quotient++;
-			currentVirtual.y = quotient;
+			currentVirtual.setY(quotient);
 
 			currentReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(currentVirtual);
 
-			point.x = currentReal.x;
-			point.y = currentReal.y;
+			point.setX(currentReal.x());
+			point.setY(currentReal.y());
 
 			while (i < count && tool == 0)
 			{

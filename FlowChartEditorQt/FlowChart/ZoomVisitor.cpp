@@ -68,20 +68,20 @@ void ZoomVisitor::Visit(Terminal *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -112,20 +112,20 @@ void ZoomVisitor::Visit(Preparation *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -156,20 +156,20 @@ void ZoomVisitor::Visit(InputOutput *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -200,20 +200,20 @@ void ZoomVisitor::Visit(Process *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -244,20 +244,20 @@ void ZoomVisitor::Visit(Decision *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -288,20 +288,20 @@ void ZoomVisitor::Visit(Arrow *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -332,20 +332,20 @@ void ZoomVisitor::Visit(LeftDown *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -376,20 +376,20 @@ void ZoomVisitor::Visit(RightDown *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() - width / 2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }
@@ -427,20 +427,20 @@ void ZoomVisitor::Visit(Join *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width / 2;
-	(height < 0) ? (y = realPoint.y - (height2 - height) / 2 - height) : (y = realPoint.y - height2 / 2);
+	x = realPoint.x() - width / 2;
+	(height < 0) ? (y = realPoint.y() - (height2 - height) / 2 - height) : (y = realPoint.y() - height2 / 2);
 
 	element->Move(x, y);
 }
@@ -483,20 +483,20 @@ void ZoomVisitor::Visit(RightDownJoin *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x + (width2 - width) / 2 - width2;
-	y = realPoint.y - (height + height2) / 2;
+	x = realPoint.x() + (width2 - width) / 2 - width2;
+	y = realPoint.y() - (height + height2) / 2;
 
 	element->Move(x, y);
 }
@@ -539,20 +539,20 @@ void ZoomVisitor::Visit(RepeatTrue *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x - width2 / 2;
-	y = realPoint.y - height / 2 - height2;
+	x = realPoint.x() - width2 / 2;
+	y = realPoint.y() - height / 2 - height2;
 
 	element->Move(x, y);
 }
@@ -595,20 +595,20 @@ void ZoomVisitor::Visit(RepeatFalse *element) {
 	QPoint realPoint(centerX, centerY);
 	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x * rate / 100;
-	remainder = virtualPoint.x * rate % 100;
+	quotient = virtualPoint.x() * rate / 100;
+	remainder = virtualPoint.x() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.x = quotient;
+	virtualPoint.setX(quotient);
 
-	quotient = virtualPoint.y * rate / 100;
-	remainder = virtualPoint.y * rate % 100;
+	quotient = virtualPoint.y() * rate / 100;
+	remainder = virtualPoint.y() * rate % 100;
 	if (remainder >= 50) quotient++;
-	virtualPoint.y = quotient;
+	virtualPoint.setY(quotient);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x + (width2 - width) / 2 - width2;
-	y = realPoint.y - height / 2;
+	x = realPoint.x() + (width2 - width) / 2 - width2;
+	y = realPoint.y() - height / 2;
 
 	element->Move(x, y);
 }

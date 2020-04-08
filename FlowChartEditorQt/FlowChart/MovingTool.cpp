@@ -4,15 +4,12 @@
 #include "Shape.h"
 #include "SelectingTool.h"
 #include "ScrollController.h"
-#include "Scrolls.h"
+#include "Scroll.h"
 #include "MemoryController.h"
 #include "Zoom.h"
 #include "ZoomVisitor.h"
 #include "CoordinateConverter.h"
-#include "TutorialForm.h"
-#include "Tutorials.h"
-#include "FlowChartEditor.h"
-#include "TutorialController.h"
+#include "../FlowChartEditor.h"
 
 using FlowChartShape::Shape;
 
@@ -89,10 +86,4 @@ void MovingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	canvas->mode = DrawingPaper::SELECT;
 	canvas->tool = SelectingTool::Instance();
 	canvas->repaint();
-
-	FlowChartEditor *editor = (FlowChartEditor*)canvas->parentWidget();
-	TutorialForm *tutorialForm = static_cast<TutorialForm*>(editor->windows[2]);
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
 }

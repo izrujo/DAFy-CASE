@@ -6,7 +6,7 @@
 *******************************************************************/
 
 #include "Process.h"
-#include "Painter.h"
+#include "../GObject/Painter.h"
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 

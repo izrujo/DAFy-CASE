@@ -87,7 +87,7 @@ void ResolutionVisitor::Visit(Terminal *element) {
 	remainder = this->mmWidth * virtualPoint.x() % this->pixelWidth;
 	if (remainder >= this->pixelWidth / 2) quotient++;
 	virtualPoint.setX(quotient);
-	inch = virtualPoint.x / 25.4;
+	inch = virtualPoint.x() / 25.4;
 	virtualPoint.setX(static_cast<Long>(round(inch * this->dpi)));
 
 	quotient = this->mmHeight * virtualPoint.y() / this->pixelHeight;

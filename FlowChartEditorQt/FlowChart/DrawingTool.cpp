@@ -17,12 +17,7 @@
 #include "ZoomVisitor.h"
 #include "CoordinateConverter.h"
 
-#include "TutorialForm.h"
-#include "Tutorials.h"
-#include "ToolTip.h"
-
-#include "Painter.h"
-#include "TutorialController.h"
+#include "../GObject/Painter.h"
 
 using FlowChartShape::Shape;
 
