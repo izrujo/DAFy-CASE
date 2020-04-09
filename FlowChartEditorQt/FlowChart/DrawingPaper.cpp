@@ -35,8 +35,6 @@
 #include <qmessagebox.h>
 #include <qfiledialog.h>
 
-using namespace FlowChartEditorKey;
-
 DrawingPaper::DrawingPaper(QWidget *parent) 
 	: QFrame(parent) {
 	this->templateSelected = NULL;
@@ -455,7 +453,7 @@ void DrawingPaper::keyPressEvent(QKeyEvent *event) {
 
 	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 	FlowChartKeyActionFactory keyActionFactory(editor);
-	FlowChartEditorKey::KeyAction *keyAction = keyActionFactory.Make(event->modifiers(), event->key());
+	FlowChartKeyAction *keyAction = keyActionFactory.Make(event->modifiers(), event->key());
 	if (keyAction != 0) {
 		keyAction->OnKeyDown();
 		delete keyAction;

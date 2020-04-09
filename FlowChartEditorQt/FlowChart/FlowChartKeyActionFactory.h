@@ -12,7 +12,7 @@ public:
 	~FlowChartKeyActionFactory();
 	FlowChartKeyActionFactory& operator=(const FlowChartKeyActionFactory& source);
 
-	FlowChartEditorKey::KeyAction* Make(int modifiers, int key);
+	FlowChartKeyAction* Make(int modifiers, int key);
 private:
 	FlowChartEditor *editor;
 };

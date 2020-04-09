@@ -820,7 +820,7 @@ PageSetCommand& PageSetCommand::operator =(const PageSetCommand& source) {
 
 void PageSetCommand::Execute() {
 	//페이지 방향 설정 못하게 막는 방법 찾기
-	/*
+	
 	QPageSetupDialog dlg((QWidget*)this->editor);
 	QPrinter *printer = dlg.printer();
 	NShape *a4Paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper;
@@ -844,7 +844,7 @@ void PageSetCommand::Execute() {
 
 		dynamic_cast<A4Paper*>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 	}
-	*/
+	
 }
 
 //PositionCommand
