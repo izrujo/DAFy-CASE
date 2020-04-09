@@ -1,25 +1,29 @@
-<UI version="4.0" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
  <class>FlowChartEditorClass</class>
- <widget class="QWidget" name="FlowChartEditorClass" >
-  <property name="objectName" >
-   <string notr="true">FlowChartEditorClass</string>
-  </property>
-  <property name="geometry" >
+ <widget class="QWidget" name="FlowChartEditorClass">
+  <property name="geometry">
    <rect>
-	<x>0</x>
-	<y>0</y>
-	<width>600</width>
-	<height>400</height>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>400</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>FlowChartEditor</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">QMenuBar {
+    background-color: white;
+    spacing: 3px; /* spacing between menu bar items */
+	border-bottom: 1px solid gray; 
+}</string>
+  </property>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-   <include location="FlowChartEditor.qrc"/>
+  <include location="FlowChartEditor.qrc"/>
  </resources>
  <connections/>
-</UI>
+</ui>

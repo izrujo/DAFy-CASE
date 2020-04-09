@@ -47,26 +47,40 @@
 #include <qpainter.h>
 #include <qevent.h>
 
-FlowChartTemplate::FlowChartTemplate(QWidget *parent) 
+FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	: QFrame(parent) {
+	this->setMouseTracking(true);
+
 	this->shapeSelected = NULL;
 	this->mode = DRAWOFF;
 	this->oldShapeSelected = NULL;
 
+	QRect rect = this->frameRect();
+	Long width = 150;
+	Long height = 50;
+	Long x = (190 - width) / 2;
+	Long y = 50;
+
 	this->flowChartTemplate = new Template;
-	NShape *template1 = new Terminal(25, 90, 150, 50, QColor(255, 153, 153), 
+	NShape *template1 = new Terminal(x, y, width, height, QColor(255, 153, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("START"));
-	NShape *template2 = new Preparation(25, 160, 150, 50, QColor(153, 153, 255), 
+	y += 70;
+	NShape *template2 = new Preparation(x, y, width, height, QColor(153, 153, 255),
 		Qt::SolidLine, QColor(0, 0, 0), String("Preparation"));
-	NShape *template3 = new InputOutput(25, 230, 150, 50, QColor(255, 255, 153), 
+	y += 70;
+	NShape *template3 = new InputOutput(x, y, width, height, QColor(255, 255, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("READ "));
-	NShape *template4 = new Process(25, 300, 150, 50, QColor(153, 255, 153), 
+	y += 70;
+	NShape *template4 = new Process(x, y, width, height, QColor(153, 255, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("Process"));
-	NShape *template5 = new Decision(25, 370, 150, 50, QColor(255, 153, 255), 
+	y += 70;
+	NShape *template5 = new Decision(x, y, width, height, QColor(255, 153, 255),
 		Qt::SolidLine, QColor(0, 0, 0), String("Decision"));
-	NShape *template6 = new InputOutput(25, 440, 150, 50, QColor(255, 255, 153), 
+	y += 70;
+	NShape *template6 = new InputOutput(x, y, width, height, QColor(255, 255, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("PRINT "));
-	NShape *template7 = new Terminal(25, 510, 150, 50, QColor(255, 153, 153), 
+	y += 70;
+	NShape *template7 = new Terminal(x, y, width, height, QColor(255, 153, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("STOP"));
 
 	this->flowChartTemplate->Attach(template1);
@@ -77,12 +91,11 @@ FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	this->flowChartTemplate->Attach(template6);
 	this->flowChartTemplate->Attach(template7);
 
-	QRect rect = this->frameRect();
 	this->painter = new QtPainter(rect.width(), rect.height());
 
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[0]);
 	GObject *font = canvas->painter->CurrentObject("Font");
-	this->painter->SelectObject(*font);
+	this->painter->SelectObject(*font->Clone());
 	this->painter->Update();
 }
 
@@ -103,41 +116,73 @@ void FlowChartTemplate::paintEvent(QPaintEvent *event) {
 	this->painter->SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
 
 	QtGObjectFactory factory;
-	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 2);
+
+	QRect frameRect = this->frameRect();
+
+	this->painter->Resize(frameRect.width(), frameRect.height()); // canvas size 변경
+
+	//FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+	//=======창 테두리=========
+	GObject *pen = factory.MakePen(QBrush(QColor(153, 204, 204)), 5);
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	QRect rect = this->frameRect();
-
-	this->painter->Resize(rect.width(), rect.height()); // canvas size 변경
+	this->painter->DrawRect(QRect(0,0,190,570));
+	
+	//=======창 테두리=========
 
 	//=======창 제목========
-	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
-	//QRect rect2 = rect;
+	QRect titleRect;
+	//왜인지 모르겠지만 setCoords()가 끝나면 width와 height를 -1씩 한다.
+	titleRect.setCoords(2, 2, frameRect.width() - 3, 30 - 3); //5 = 테두리 두께
+	dynamic_cast<QPen*>(pen)->setWidth(1);
+	GObject *brush = factory.MakeBrush(QColor(102,204,204));
+	GObject *oldBrush = this->painter->SelectObject(*brush);
+	this->painter->Update();
 
-	//POINT backPoints[7] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect2.top + 40}, {rect2.right - 40, rect2.top + 40},
-	//{rect2.right - 40, rect2.top + 13}, {rect2.left, rect2.top + 13}, {0, 0} };
-	//CRgn region;
-	//region.CreatePolygonRgn(backPoints, 7, ALTERNATE);
-	//this->painter->FillRegion(region, RGB(235, 235, 235));
+	this->painter->DrawRect(titleRect);
 
-	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
-	//this->painter->DrawLine(rect2.left, rect2.top + 10, rect2.right - 50, rect2.top + 10);
-	//this->painter->DrawLine(rect2.left, rect2.top + 13, rect2.right - 40, rect2.top + 13);
-	//this->painter->DrawLine(rect2.right - 40, rect2.top + 13, rect2.right - 40, rect2.top + 40);
-	//this->painter->DrawLine(rect2.left, rect2.top + 40, rect2.right, rect2.top + 40);
+	this->painter->SelectObject(*oldBrush);
+	this->painter->SelectObject(*oldPen);
+	this->painter->Update();
+	if (brush != 0) {
+		delete brush;
+	}
+	if (pen != 0) {
+		delete pen;
+	}
+	
+	GObject *oldFont = this->painter->CurrentObject("Font");
+	GObject *font = factory.MakeFont(oldFont->GetFamily(), 5, oldFont->GetWeight(), oldFont->GetItalic());
+	pen = factory.MakePen(QBrush(QColor(102, 255, 255)), 2);
+	oldPen = this->painter->SelectObject(*pen);
+	this->painter->Update();
 
-	//rect2.top += 15;
+	this->painter->DrawTextQ(titleRect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(" 기호 상자"));
 
-	//this->painter->DrawTextA(-20, " Template", -1, &rect2, DT_LEFT | DT_TOP);
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldFont);
+	this->painter->Update();
+	if (font != 0) {
+		delete font;
+	}
+	if (pen != 0) {
+		delete pen;
+	}
+	//=======창 제목========
+
 	//======================
+	pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 2);
+	oldPen = this->painter->SelectObject(*pen);
+	this->painter->Update();
+
 	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
 	this->flowChartTemplate->Accept(visitor);
 	this->painter->Render(&dc, 0, 0);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->Update();
-	if (pen != NULL) {
+	if (pen != 0) {
 		delete pen;
 	}
 
@@ -163,24 +208,24 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 		this->shapeSelected = this->flowChartTemplate->GetAt(index);
 
 		static_cast<DrawingPaper*>(editor->windows[0])->mode = DrawingPaper::DRAWING;
-	/*
-		editor->statusBar->Modify(1, String("DRAWING"));
-		String style;
-		switch (this->shapeSelected->GetSymbolID()) {
-		case ID_TERMINAL:
-			style = "    단말 기호"; break;
-		case ID_PREPARATION:
-			style = "    준비 기호"; break;
-		case ID_INPUTOUTPUT:
-			style = "    입출력 기호"; break;
-		case ID_PROCESS:
-			style = "    처리 기호"; break;
-		case ID_DECISION:
-			style = "    판단 기호"; break;
-		}
-		editor->statusBar->Modify(0, style);
-		editor->statusBar->Print();
-	*/
+		/*
+			editor->statusBar->Modify(1, String("DRAWING"));
+			String style;
+			switch (this->shapeSelected->GetSymbolID()) {
+			case ID_TERMINAL:
+				style = "    단말 기호"; break;
+			case ID_PREPARATION:
+				style = "    준비 기호"; break;
+			case ID_INPUTOUTPUT:
+				style = "    입출력 기호"; break;
+			case ID_PROCESS:
+				style = "    처리 기호"; break;
+			case ID_DECISION:
+				style = "    판단 기호"; break;
+			}
+			editor->statusBar->Modify(0, style);
+			editor->statusBar->Print();
+		*/
 	}
 	else {
 		this->shapeSelected = NULL;

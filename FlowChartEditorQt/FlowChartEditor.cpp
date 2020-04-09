@@ -1,6 +1,8 @@
 #include "FlowChartEditor.h"
 #include "FlowChart/FlowChartCommandFactory.h"
 #include "FlowChart/FlowChartCommands.h"
+#include "FlowChart/DrawingPaper.h"
+#include "FlowChart/FlowChartTemplate.h"
 
 #include <qmenubar.h>
 
@@ -9,24 +11,24 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 {
 	ui.setupUi(this);
 
+	
 	this->menuBar = NULL;
 
+	QRect frameRect = this->frameRect();
+	
 	this->CreateActions();
 	this->CreateMenus();
+	this->menuBar->resize(frameRect.width(), this->menuBar->height());
 
-	//this->statusBar = NULL;
-	//this->toolTip = NULL;
+	//자식 윈도우 생성 - 위치와 크기, 스타일 지정
+	DrawingPaper *drawingPaper = new DrawingPaper(this);
+	drawingPaper->move(200, 1 + this->menuBar->height());
+	this->windows.Store(0, drawingPaper);
 
-	QRect frameRect = this->frameRect();
-
-	/*자식 윈도우 생성 - 위치와 크기, 스타일 지정
-	this->windows.Store(0, new DrawingPaper);
-	this->windows.Store(1, new FlowChartTemplate);
-	this->windows.Store(2, NULL);
-
-	//this->windows[0]->Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPSIBLINGS, rect, this, 1000);
-	//this->windows[1]->Create(NULL, NULL, WS_CHILD | WS_VISIBLE | WS_BORDER | WS_CLIPSIBLINGS, rect, this, 2000);
-	*/
+	FlowChartTemplate *fTemplate = new FlowChartTemplate(this);
+	fTemplate->move(5, 5 + this->menuBar->height());
+	this->windows.Store(1, fTemplate);
+	//this->windows.Store(2, NULL);
 
 	//this->isUnModeMenuEnabled = FALSE; //메뉴 컨트롤에 관한 속성 초기화
 
@@ -124,13 +126,16 @@ void FlowChartEditor::closeEvent(QCloseEvent *event) {
 }
 
 void FlowChartEditor::resizeEvent(QResizeEvent *event) {
-	if (this->menuBar != NULL) {
-		this->menuBar->resize(this->frameRect().width(), this->menuBar->height());
-	}
+	QRect frameRect = this->frameRect();
 
-	QRect frameRect1 = this->frameRect();
-	QRect frameRect2 = this->frameRect();
+	this->menuBar->resize(frameRect.width(), this->menuBar->height());
 
+	this->windows[0]->resize(frameRect.width() - 200, frameRect.height() - this->menuBar->height() + 1);
+	this->windows[0]->repaint();
+	
+	Long height = frameRect.height() - this->menuBar->height() - 446;
+	this->windows[1]->resize(190, frameRect.height() - this->menuBar->height() - 446);
+	this->windows[1]->repaint();
 	/*frameRect 값을 조정?
 	rect.left = 205;
 	rect2.right = 200;
@@ -520,7 +525,7 @@ void FlowChartEditor::CreateMenus() {
 	this->fileMenu->addAction(this->printAction); //인쇄(P)... Ctrl + P
 	this->fileMenu->addSeparator(); //구분선
 	this->fileMenu->addAction(this->exitAction); //끝내기(X) Alt + F4
-	
+
 	this->editMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("편집(&E)")));
 	this->editMenu->addAction(this->undoAction); //실행 취소(U) Ctrl + Z
 	this->editMenu->addAction(this->redoAction); //다시 실행(R) Ctrl + Y

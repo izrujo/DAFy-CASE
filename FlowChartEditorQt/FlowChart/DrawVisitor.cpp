@@ -59,7 +59,7 @@ void DrawVisitor::Visit(Terminal *element) {
 	GObject *oldBrush = this->painter->SelectObject(*brush);
 	this->painter->Update();
 
-	this->painter->DrawRoundedRect(rect, 50.0, 50.0);
+	this->painter->DrawRoundedRect(rect, 30.0, 30.0);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->SelectObject(*oldBrush);

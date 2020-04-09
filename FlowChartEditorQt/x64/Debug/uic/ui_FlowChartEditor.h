@@ -23,7 +23,12 @@ public:
     {
         if (FlowChartEditorClass->objectName().isEmpty())
             FlowChartEditorClass->setObjectName(QString::fromUtf8("FlowChartEditorClass"));
-        FlowChartEditorClass->resize(600, 400);
+		FlowChartEditorClass->setWindowState(Qt::WindowMaximized);
+        FlowChartEditorClass->setStyleSheet(QString::fromUtf8("QMenuBar {\n"
+"    background-color: white;\n"
+"    spacing: 3px; /* spacing between menu bar items */\n"
+"	border-bottom: 1px gray; \n"
+"}"));
 
         retranslateUi(FlowChartEditorClass);
 
