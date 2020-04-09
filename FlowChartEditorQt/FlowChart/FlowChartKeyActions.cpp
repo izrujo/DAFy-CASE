@@ -13,46 +13,46 @@
 #include "Clipboard.h"
 #include "Memory.h"
 
-FlowChartEditorKey::KeyAction::KeyAction(FlowChartEditor *editor) {
+FlowChartKeyAction::FlowChartKeyAction(FlowChartEditor *editor) {
 	this->editor = editor;
 }
 
-FlowChartEditorKey::KeyAction::KeyAction(const FlowChartEditorKey::KeyAction& source) {
+FlowChartKeyAction::FlowChartKeyAction(const FlowChartKeyAction& source) {
 	this->editor = source.editor;
 }
 
-FlowChartEditorKey::KeyAction::~KeyAction() {
+FlowChartKeyAction::~FlowChartKeyAction() {
 
 }
 
-FlowChartEditorKey::KeyAction& FlowChartEditorKey::KeyAction::operator=(const FlowChartEditorKey::KeyAction& source) {
+FlowChartKeyAction& FlowChartKeyAction::operator=(const FlowChartKeyAction& source) {
 	this->editor = source.editor;
 
 	return *this;
 }
 
-//FlowChartEditorKey::DeleteKeyAction
-FlowChartEditorKey::DeleteKeyAction::DeleteKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FDeleteKeyAction
+FDeleteKeyAction::FDeleteKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::DeleteKeyAction::DeleteKeyAction(const FlowChartEditorKey::DeleteKeyAction& source)
-	: KeyAction(source) {
+FDeleteKeyAction::FDeleteKeyAction(const FDeleteKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::DeleteKeyAction::~DeleteKeyAction() {
+FDeleteKeyAction::~FDeleteKeyAction() {
 
 }
 
-FlowChartEditorKey::DeleteKeyAction& FlowChartEditorKey::DeleteKeyAction::operator=(const FlowChartEditorKey::DeleteKeyAction& source) {
-	KeyAction::operator=(source);
+FDeleteKeyAction& FDeleteKeyAction::operator=(const FDeleteKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::DeleteKeyAction::OnKeyDown() {
+void FDeleteKeyAction::OnKeyDown() {
 	Long it;
 	NShape *shape;
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
@@ -79,28 +79,28 @@ void FlowChartEditorKey::DeleteKeyAction::OnKeyDown() {
 	}
 }
 
-//EscapeKeyAction
-FlowChartEditorKey::EscapeKeyAction::EscapeKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FEscapeKeyAction
+FEscapeKeyAction::FEscapeKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::EscapeKeyAction::EscapeKeyAction(const FlowChartEditorKey::EscapeKeyAction& source)
-	: KeyAction(source) {
+FEscapeKeyAction::FEscapeKeyAction(const FEscapeKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::EscapeKeyAction::~EscapeKeyAction() {
+FEscapeKeyAction::~FEscapeKeyAction() {
 
 }
 
-FlowChartEditorKey::EscapeKeyAction& FlowChartEditorKey::EscapeKeyAction::operator=(const FlowChartEditorKey::EscapeKeyAction& source) {
-	KeyAction::operator=(source);
+FEscapeKeyAction& FEscapeKeyAction::operator=(const FEscapeKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::EscapeKeyAction::OnKeyDown() {
+void FEscapeKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	Long count;
 	Long(*indexes);
@@ -139,28 +139,28 @@ void FlowChartEditorKey::EscapeKeyAction::OnKeyDown() {
 	}
 }
 
-//LeftKeyAction
-FlowChartEditorKey::LeftKeyAction::LeftKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FLeftKeyAction
+FLeftKeyAction::FLeftKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::LeftKeyAction::LeftKeyAction(const FlowChartEditorKey::LeftKeyAction& source)
-	: KeyAction(source) {
+FLeftKeyAction::FLeftKeyAction(const FLeftKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::LeftKeyAction::~LeftKeyAction() {
+FLeftKeyAction::~FLeftKeyAction() {
 
 }
 
-FlowChartEditorKey::LeftKeyAction& FlowChartEditorKey::LeftKeyAction::operator=(const FlowChartEditorKey::LeftKeyAction& source) {
-	KeyAction::operator=(source);
+FLeftKeyAction& FLeftKeyAction::operator=(const FLeftKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::LeftKeyAction::OnKeyDown() {
+void FLeftKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	Long count;
 	Long(*indexes);
@@ -183,28 +183,28 @@ void FlowChartEditorKey::LeftKeyAction::OnKeyDown() {
 	}
 }
 
-//RightKeyAction
-FlowChartEditorKey::RightKeyAction::RightKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FRightKeyAction
+FRightKeyAction::FRightKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::RightKeyAction::RightKeyAction(const FlowChartEditorKey::RightKeyAction& source)
-	: KeyAction(source) {
+FRightKeyAction::FRightKeyAction(const FRightKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::RightKeyAction::~RightKeyAction() {
+FRightKeyAction::~FRightKeyAction() {
 
 }
 
-FlowChartEditorKey::RightKeyAction& FlowChartEditorKey::RightKeyAction::operator=(const FlowChartEditorKey::RightKeyAction& source) {
-	KeyAction::operator=(source);
+FRightKeyAction& FRightKeyAction::operator=(const FRightKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::RightKeyAction::OnKeyDown() {
+void FRightKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	Long count;
 	Long(*indexes);
@@ -226,28 +226,28 @@ void FlowChartEditorKey::RightKeyAction::OnKeyDown() {
 	}
 }
 
-//UpKeyAction
-FlowChartEditorKey::UpKeyAction::UpKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FUpKeyAction
+FUpKeyAction::FUpKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::UpKeyAction::UpKeyAction(const FlowChartEditorKey::UpKeyAction& source)
-	: KeyAction(source) {
+FUpKeyAction::FUpKeyAction(const FUpKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::UpKeyAction::~UpKeyAction() {
+FUpKeyAction::~FUpKeyAction() {
 
 }
 
-FlowChartEditorKey::UpKeyAction& FlowChartEditorKey::UpKeyAction::operator=(const FlowChartEditorKey::UpKeyAction& source) {
-	KeyAction::operator=(source);
+FUpKeyAction& FUpKeyAction::operator=(const FUpKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::UpKeyAction::OnKeyDown() {
+void FUpKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	Long count;
 	Long(*indexes);
@@ -268,28 +268,28 @@ void FlowChartEditorKey::UpKeyAction::OnKeyDown() {
 	}
 }
 
-//DownKeyAction
-FlowChartEditorKey::DownKeyAction::DownKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FDownKeyAction
+FDownKeyAction::FDownKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::DownKeyAction::DownKeyAction(const FlowChartEditorKey::DownKeyAction& source)
-	: KeyAction(source) {
+FDownKeyAction::FDownKeyAction(const FDownKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::DownKeyAction::~DownKeyAction() {
+FDownKeyAction::~FDownKeyAction() {
 
 }
 
-FlowChartEditorKey::DownKeyAction& FlowChartEditorKey::DownKeyAction::operator=(const FlowChartEditorKey::DownKeyAction& source) {
-	KeyAction::operator=(source);
+FDownKeyAction& FDownKeyAction::operator=(const FDownKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::DownKeyAction::OnKeyDown() {
+void FDownKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	Long count;
 	Long(*indexes);
@@ -313,28 +313,28 @@ void FlowChartEditorKey::DownKeyAction::OnKeyDown() {
 	}
 }
 
-//CtrlDKeyAction
-FlowChartEditorKey::CtrlDKeyAction::CtrlDKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlDKeyAction
+FCtrlDKeyAction::FCtrlDKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlDKeyAction::CtrlDKeyAction(const FlowChartEditorKey::CtrlDKeyAction& source)
-	: KeyAction(source) {
+FCtrlDKeyAction::FCtrlDKeyAction(const FCtrlDKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlDKeyAction::~CtrlDKeyAction() {
+FCtrlDKeyAction::~FCtrlDKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlDKeyAction& FlowChartEditorKey::CtrlDKeyAction::operator=(const FlowChartEditorKey::CtrlDKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlDKeyAction& FCtrlDKeyAction::operator=(const FCtrlDKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlDKeyAction::OnKeyDown() {
+void FCtrlDKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWOFF) {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWON;
 
@@ -357,28 +357,28 @@ void FlowChartEditorKey::CtrlDKeyAction::OnKeyDown() {
 	}
 }
 
-//OneKeyAction
-FlowChartEditorKey::OneKeyAction::OneKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FOneKeyAction
+FOneKeyAction::FOneKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::OneKeyAction::OneKeyAction(const FlowChartEditorKey::OneKeyAction& source)
-	: KeyAction(source) {
+FOneKeyAction::FOneKeyAction(const FOneKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::OneKeyAction::~OneKeyAction() {
+FOneKeyAction::~FOneKeyAction() {
 
 }
 
-FlowChartEditorKey::OneKeyAction& FlowChartEditorKey::OneKeyAction::operator=(const FlowChartEditorKey::OneKeyAction& source) {
-	KeyAction::operator=(source);
+FOneKeyAction& FOneKeyAction::operator=(const FOneKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::OneKeyAction::OnKeyDown() {
+void FOneKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -386,28 +386,28 @@ void FlowChartEditorKey::OneKeyAction::OnKeyDown() {
 	}
 }
 
-//TwoKeyAction
-FlowChartEditorKey::TwoKeyAction::TwoKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FTwoKeyAction
+FTwoKeyAction::FTwoKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::TwoKeyAction::TwoKeyAction(const FlowChartEditorKey::TwoKeyAction& source)
-	: KeyAction(source) {
+FTwoKeyAction::FTwoKeyAction(const FTwoKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::TwoKeyAction::~TwoKeyAction() {
+FTwoKeyAction::~FTwoKeyAction() {
 
 }
 
-FlowChartEditorKey::TwoKeyAction& FlowChartEditorKey::TwoKeyAction::operator=(const FlowChartEditorKey::TwoKeyAction& source) {
-	KeyAction::operator=(source);
+FTwoKeyAction& FTwoKeyAction::operator=(const FTwoKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::TwoKeyAction::OnKeyDown() {
+void FTwoKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -415,28 +415,28 @@ void FlowChartEditorKey::TwoKeyAction::OnKeyDown() {
 	}
 }
 
-//ThreeKeyAction
-FlowChartEditorKey::ThreeKeyAction::ThreeKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FThreeKeyAction
+FThreeKeyAction::FThreeKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::ThreeKeyAction::ThreeKeyAction(const FlowChartEditorKey::ThreeKeyAction& source)
-	: KeyAction(source) {
+FThreeKeyAction::FThreeKeyAction(const FThreeKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::ThreeKeyAction::~ThreeKeyAction() {
+FThreeKeyAction::~FThreeKeyAction() {
 
 }
 
-FlowChartEditorKey::ThreeKeyAction& FlowChartEditorKey::ThreeKeyAction::operator=(const FlowChartEditorKey::ThreeKeyAction& source) {
-	KeyAction::operator=(source);
+FThreeKeyAction& FThreeKeyAction::operator=(const FThreeKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::ThreeKeyAction::OnKeyDown() {
+void FThreeKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -445,28 +445,28 @@ void FlowChartEditorKey::ThreeKeyAction::OnKeyDown() {
 	}
 }
 
-//FourKeyAction
-FlowChartEditorKey::FourKeyAction::FourKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FFourKeyAction
+FFourKeyAction::FFourKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::FourKeyAction::FourKeyAction(const FlowChartEditorKey::FourKeyAction& source)
-	: KeyAction(source) {
+FFourKeyAction::FFourKeyAction(const FFourKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::FourKeyAction::~FourKeyAction() {
+FFourKeyAction::~FFourKeyAction() {
 
 }
 
-FlowChartEditorKey::FourKeyAction& FlowChartEditorKey::FourKeyAction::operator=(const FlowChartEditorKey::FourKeyAction& source) {
-	KeyAction::operator=(source);
+FFourKeyAction& FFourKeyAction::operator=(const FFourKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::FourKeyAction::OnKeyDown() {
+void FFourKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -475,28 +475,28 @@ void FlowChartEditorKey::FourKeyAction::OnKeyDown() {
 	}
 }
 
-//FiveKeyAction
-FlowChartEditorKey::FiveKeyAction::FiveKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FFiveKeyAction
+FFiveKeyAction::FFiveKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::FiveKeyAction::FiveKeyAction(const FlowChartEditorKey::FiveKeyAction& source)
-	: KeyAction(source) {
+FFiveKeyAction::FFiveKeyAction(const FFiveKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::FiveKeyAction::~FiveKeyAction() {
+FFiveKeyAction::~FFiveKeyAction() {
 
 }
 
-FlowChartEditorKey::FiveKeyAction& FlowChartEditorKey::FiveKeyAction::operator=(const FlowChartEditorKey::FiveKeyAction& source) {
-	KeyAction::operator=(source);
+FFiveKeyAction& FFiveKeyAction::operator=(const FFiveKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::FiveKeyAction::OnKeyDown() {
+void FFiveKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -505,28 +505,28 @@ void FlowChartEditorKey::FiveKeyAction::OnKeyDown() {
 	}
 }
 
-//SixKeyAction
-FlowChartEditorKey::SixKeyAction::SixKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FSixKeyAction
+FSixKeyAction::FSixKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::SixKeyAction::SixKeyAction(const FlowChartEditorKey::SixKeyAction& source)
-	: KeyAction(source) {
+FSixKeyAction::FSixKeyAction(const FSixKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::SixKeyAction::~SixKeyAction() {
+FSixKeyAction::~FSixKeyAction() {
 
 }
 
-FlowChartEditorKey::SixKeyAction& FlowChartEditorKey::SixKeyAction::operator=(const FlowChartEditorKey::SixKeyAction& source) {
-	KeyAction::operator=(source);
+FSixKeyAction& FSixKeyAction::operator=(const FSixKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::SixKeyAction::OnKeyDown() {
+void FSixKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -535,28 +535,28 @@ void FlowChartEditorKey::SixKeyAction::OnKeyDown() {
 	}
 }
 
-//SevenKeyAction
-FlowChartEditorKey::SevenKeyAction::SevenKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FSevenKeyAction
+FSevenKeyAction::FSevenKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::SevenKeyAction::SevenKeyAction(const FlowChartEditorKey::SevenKeyAction& source)
-	: KeyAction(source) {
+FSevenKeyAction::FSevenKeyAction(const FSevenKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::SevenKeyAction::~SevenKeyAction() {
+FSevenKeyAction::~FSevenKeyAction() {
 
 }
 
-FlowChartEditorKey::SevenKeyAction& FlowChartEditorKey::SevenKeyAction::operator=(const FlowChartEditorKey::SevenKeyAction& source) {
-	KeyAction::operator=(source);
+FSevenKeyAction& FSevenKeyAction::operator=(const FSevenKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::SevenKeyAction::OnKeyDown() {
+void FSevenKeyAction::OnKeyDown() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
@@ -565,28 +565,28 @@ void FlowChartEditorKey::SevenKeyAction::OnKeyDown() {
 	}
 }
 
-//CtrlPlusKeyAction
-FlowChartEditorKey::CtrlPlusKeyAction::CtrlPlusKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlPlusKeyAction
+FCtrlPlusKeyAction::FCtrlPlusKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlPlusKeyAction::CtrlPlusKeyAction(const FlowChartEditorKey::CtrlPlusKeyAction& source)
-	: KeyAction(source) {
+FCtrlPlusKeyAction::FCtrlPlusKeyAction(const FCtrlPlusKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlPlusKeyAction::~CtrlPlusKeyAction() {
+FCtrlPlusKeyAction::~FCtrlPlusKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlPlusKeyAction& FlowChartEditorKey::CtrlPlusKeyAction::operator=(const FlowChartEditorKey::CtrlPlusKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlPlusKeyAction& FCtrlPlusKeyAction::operator=(const FCtrlPlusKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlPlusKeyAction::OnKeyDown() {
+void FCtrlPlusKeyAction::OnKeyDown() {
 	Long oldRate = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->GetRate();
 	Long rate;
 	if (oldRate < 150) {
@@ -604,28 +604,28 @@ void FlowChartEditorKey::CtrlPlusKeyAction::OnKeyDown() {
 	}
 }
 
-//CtrlMinusKeyAction
-FlowChartEditorKey::CtrlMinusKeyAction::CtrlMinusKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlMinusKeyAction
+FCtrlMinusKeyAction::FCtrlMinusKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlMinusKeyAction::CtrlMinusKeyAction(const FlowChartEditorKey::CtrlMinusKeyAction& source)
-	: KeyAction(source) {
+FCtrlMinusKeyAction::FCtrlMinusKeyAction(const FCtrlMinusKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlMinusKeyAction::~CtrlMinusKeyAction() {
+FCtrlMinusKeyAction::~FCtrlMinusKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlMinusKeyAction& FlowChartEditorKey::CtrlMinusKeyAction::operator=(const FlowChartEditorKey::CtrlMinusKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlMinusKeyAction& FCtrlMinusKeyAction::operator=(const FCtrlMinusKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlMinusKeyAction::OnKeyDown() {
+void FCtrlMinusKeyAction::OnKeyDown() {
 	Long oldRate = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->GetRate();
 	Long rate;
 	if (oldRate > 40) {
@@ -643,28 +643,28 @@ void FlowChartEditorKey::CtrlMinusKeyAction::OnKeyDown() {
 	}
 }
 
-//CtrlAKeyAction
-FlowChartEditorKey::CtrlAKeyAction::CtrlAKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlAKeyAction
+FCtrlAKeyAction::FCtrlAKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlAKeyAction::CtrlAKeyAction(const FlowChartEditorKey::CtrlAKeyAction& source)
-	: KeyAction(source) {
+FCtrlAKeyAction::FCtrlAKeyAction(const FCtrlAKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlAKeyAction::~CtrlAKeyAction() {
+FCtrlAKeyAction::~FCtrlAKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlAKeyAction& FlowChartEditorKey::CtrlAKeyAction::operator=(const FlowChartEditorKey::CtrlAKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlAKeyAction& FCtrlAKeyAction::operator=(const FCtrlAKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlAKeyAction::OnKeyDown() {
+void FCtrlAKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	NShape *flowChart = canvas->flowChart;
 	flowChart->SelectAll();
@@ -673,106 +673,106 @@ void FlowChartEditorKey::CtrlAKeyAction::OnKeyDown() {
 	}
 }
 
-//CtrlCKeyAction
-FlowChartEditorKey::CtrlCKeyAction::CtrlCKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlCKeyAction
+FCtrlCKeyAction::FCtrlCKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlCKeyAction::CtrlCKeyAction(const FlowChartEditorKey::CtrlCKeyAction& source)
-	: KeyAction(source) {
+FCtrlCKeyAction::FCtrlCKeyAction(const FCtrlCKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlCKeyAction::~CtrlCKeyAction() {
+FCtrlCKeyAction::~FCtrlCKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlCKeyAction& FlowChartEditorKey::CtrlCKeyAction::operator=(const FlowChartEditorKey::CtrlCKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlCKeyAction& FCtrlCKeyAction::operator=(const FCtrlCKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlCKeyAction::OnKeyDown() {
+void FCtrlCKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Copy(canvas);
 }
 
-//CtrlVKeyAction
-FlowChartEditorKey::CtrlVKeyAction::CtrlVKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlVKeyAction
+FCtrlVKeyAction::FCtrlVKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlVKeyAction::CtrlVKeyAction(const FlowChartEditorKey::CtrlVKeyAction& source)
-	: KeyAction(source) {
+FCtrlVKeyAction::FCtrlVKeyAction(const FCtrlVKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlVKeyAction::~CtrlVKeyAction() {
+FCtrlVKeyAction::~FCtrlVKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlVKeyAction& FlowChartEditorKey::CtrlVKeyAction::operator=(const FlowChartEditorKey::CtrlVKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlVKeyAction& FCtrlVKeyAction::operator=(const FCtrlVKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlVKeyAction::OnKeyDown() {
+void FCtrlVKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Paste(canvas);
 }
 
-//CtrlXKeyAction
-FlowChartEditorKey::CtrlXKeyAction::CtrlXKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlXKeyAction
+FCtrlXKeyAction::FCtrlXKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlXKeyAction::CtrlXKeyAction(const FlowChartEditorKey::CtrlXKeyAction& source)
-	: KeyAction(source) {
+FCtrlXKeyAction::FCtrlXKeyAction(const FCtrlXKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlXKeyAction::~CtrlXKeyAction() {
+FCtrlXKeyAction::~FCtrlXKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlXKeyAction& FlowChartEditorKey::CtrlXKeyAction::operator=(const FlowChartEditorKey::CtrlXKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlXKeyAction& FCtrlXKeyAction::operator=(const FCtrlXKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlXKeyAction::OnKeyDown() {
+void FCtrlXKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Cut(canvas);
 }
 
-//CtrlZKeyAction
-FlowChartEditorKey::CtrlZKeyAction::CtrlZKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlZKeyAction
+FCtrlZKeyAction::FCtrlZKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlZKeyAction::CtrlZKeyAction(const FlowChartEditorKey::CtrlZKeyAction& source)
-	: KeyAction(source) {
+FCtrlZKeyAction::FCtrlZKeyAction(const FCtrlZKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlZKeyAction::~CtrlZKeyAction() {
+FCtrlZKeyAction::~FCtrlZKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlZKeyAction& FlowChartEditorKey::CtrlZKeyAction::operator=(const FlowChartEditorKey::CtrlZKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlZKeyAction& FCtrlZKeyAction::operator=(const FCtrlZKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlZKeyAction::OnKeyDown() {
+void FCtrlZKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	if (canvas->memoryController->GetUndoMemory()->GetLength() > 0) {
 		canvas->memoryController->RememberUndo();
@@ -782,28 +782,28 @@ void FlowChartEditorKey::CtrlZKeyAction::OnKeyDown() {
 	}
 }
 
-//CtrlYKeyAction
-FlowChartEditorKey::CtrlYKeyAction::CtrlYKeyAction(FlowChartEditor *editor)
-	: KeyAction(editor) {
+//FCtrlYKeyAction
+FCtrlYKeyAction::FCtrlYKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
 
 }
 
-FlowChartEditorKey::CtrlYKeyAction::CtrlYKeyAction(const FlowChartEditorKey::CtrlYKeyAction& source)
-	: KeyAction(source) {
+FCtrlYKeyAction::FCtrlYKeyAction(const FCtrlYKeyAction& source)
+	: FlowChartKeyAction(source) {
 
 }
 
-FlowChartEditorKey::CtrlYKeyAction::~CtrlYKeyAction() {
+FCtrlYKeyAction::~FCtrlYKeyAction() {
 
 }
 
-FlowChartEditorKey::CtrlYKeyAction& FlowChartEditorKey::CtrlYKeyAction::operator=(const FlowChartEditorKey::CtrlYKeyAction& source) {
-	KeyAction::operator=(source);
+FCtrlYKeyAction& FCtrlYKeyAction::operator=(const FCtrlYKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
 
 	return *this;
 }
 
-void FlowChartEditorKey::CtrlYKeyAction::OnKeyDown() {
+void FCtrlYKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	if (canvas->memoryController->GetRedoMemory()->GetLength() > 0) {
 		canvas->memoryController->RememberRedo();

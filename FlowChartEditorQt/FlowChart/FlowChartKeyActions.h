@@ -4,260 +4,257 @@
 #define MOVEDISTANCE 5
 class FlowChartEditor;
 
-namespace FlowChartEditorKey {
+class FlowChartKeyAction {
+public:
+	FlowChartKeyAction(FlowChartEditor *editor = 0);
+	FlowChartKeyAction(const FlowChartKeyAction& source);
+	virtual	~FlowChartKeyAction() = 0;
+	FlowChartKeyAction& operator=(const FlowChartKeyAction& source);
 
-	class KeyAction {
-	public:
-		KeyAction(FlowChartEditor *editor = 0);
-		KeyAction(const KeyAction& source);
-		virtual	~KeyAction() = 0;
-		KeyAction& operator=(const KeyAction& source);
+	virtual void OnKeyDown() = 0;
+protected:
+	FlowChartEditor *editor;
+};
 
-		virtual void OnKeyDown() = 0;
-	protected:
-		FlowChartEditor *editor;
-	};
+//FDeleteKeyAction
+class FDeleteKeyAction : public FlowChartKeyAction {
+public:
+	FDeleteKeyAction(FlowChartEditor *editor = 0);
+	FDeleteKeyAction(const FDeleteKeyAction& source);
+	virtual	~FDeleteKeyAction();
+	FDeleteKeyAction& operator=(const FDeleteKeyAction& source);
 
-	//DeleteKeyAction
-	class DeleteKeyAction : public KeyAction {
-	public:
-		DeleteKeyAction(FlowChartEditor *editor = 0);
-		DeleteKeyAction(const DeleteKeyAction& source);
-		virtual	~DeleteKeyAction();
-		DeleteKeyAction& operator=(const DeleteKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FEscapeKeyAction
+class FEscapeKeyAction : public FlowChartKeyAction {
+public:
+	FEscapeKeyAction(FlowChartEditor *editor = 0);
+	FEscapeKeyAction(const FEscapeKeyAction& source);
+	virtual	~FEscapeKeyAction();
+	FEscapeKeyAction& operator=(const FEscapeKeyAction& source);
 
-	//EscapeKeyAction
-	class EscapeKeyAction : public KeyAction {
-	public:
-		EscapeKeyAction(FlowChartEditor *editor = 0);
-		EscapeKeyAction(const EscapeKeyAction& source);
-		virtual	~EscapeKeyAction();
-		EscapeKeyAction& operator=(const EscapeKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FLeftKeyAction
+class FLeftKeyAction : public FlowChartKeyAction {
+public:
+	FLeftKeyAction(FlowChartEditor *editor = 0);
+	FLeftKeyAction(const FLeftKeyAction& source);
+	virtual	~FLeftKeyAction();
+	FLeftKeyAction& operator=(const FLeftKeyAction& source);
 
-	//LeftKeyAction
-	class LeftKeyAction : public KeyAction {
-	public:
-		LeftKeyAction(FlowChartEditor *editor = 0);
-		LeftKeyAction(const LeftKeyAction& source);
-		virtual	~LeftKeyAction();
-		LeftKeyAction& operator=(const LeftKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FRightKeyAction
+class FRightKeyAction : public FlowChartKeyAction {
+public:
+	FRightKeyAction(FlowChartEditor *editor = 0);
+	FRightKeyAction(const FRightKeyAction& source);
+	virtual	~FRightKeyAction();
+	FRightKeyAction& operator=(const FRightKeyAction& source);
 
-	//RightKeyAction
-	class RightKeyAction : public KeyAction {
-	public:
-		RightKeyAction(FlowChartEditor *editor = 0);
-		RightKeyAction(const RightKeyAction& source);
-		virtual	~RightKeyAction();
-		RightKeyAction& operator=(const RightKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FUpKeyAction
+class FUpKeyAction : public FlowChartKeyAction {
+public:
+	FUpKeyAction(FlowChartEditor *editor = 0);
+	FUpKeyAction(const FUpKeyAction& source);
+	virtual	~FUpKeyAction();
+	FUpKeyAction& operator=(const FUpKeyAction& source);
 
-	//UpKeyAction
-	class UpKeyAction : public KeyAction {
-	public:
-		UpKeyAction(FlowChartEditor *editor = 0);
-		UpKeyAction(const UpKeyAction& source);
-		virtual	~UpKeyAction();
-		UpKeyAction& operator=(const UpKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FDownKeyAction
+class FDownKeyAction : public FlowChartKeyAction {
+public:
+	FDownKeyAction(FlowChartEditor *editor = 0);
+	FDownKeyAction(const FDownKeyAction& source);
+	virtual	~FDownKeyAction();
+	FDownKeyAction& operator=(const FDownKeyAction& source);
 
-	//DownKeyAction
-	class DownKeyAction : public KeyAction {
-	public:
-		DownKeyAction(FlowChartEditor *editor = 0);
-		DownKeyAction(const DownKeyAction& source);
-		virtual	~DownKeyAction();
-		DownKeyAction& operator=(const DownKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlDKeyAction
+class FCtrlDKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlDKeyAction(FlowChartEditor *editor = 0);
+	FCtrlDKeyAction(const FCtrlDKeyAction& source);
+	virtual	~FCtrlDKeyAction();
+	FCtrlDKeyAction& operator=(const FCtrlDKeyAction& source);
 
-	//CtrlDKeyAction
-	class CtrlDKeyAction : public KeyAction {
-	public:
-		CtrlDKeyAction(FlowChartEditor *editor = 0);
-		CtrlDKeyAction(const CtrlDKeyAction& source);
-		virtual	~CtrlDKeyAction();
-		CtrlDKeyAction& operator=(const CtrlDKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FOneKeyAction
+class FOneKeyAction : public FlowChartKeyAction {
+public:
+	FOneKeyAction(FlowChartEditor *editor = 0);
+	FOneKeyAction(const FOneKeyAction& source);
+	virtual	~FOneKeyAction();
+	FOneKeyAction& operator=(const FOneKeyAction& source);
 
-	//OneKeyAction
-	class OneKeyAction : public KeyAction {
-	public:
-		OneKeyAction(FlowChartEditor *editor = 0);
-		OneKeyAction(const OneKeyAction& source);
-		virtual	~OneKeyAction();
-		OneKeyAction& operator=(const OneKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FTwoKeyAction
+class FTwoKeyAction : public FlowChartKeyAction {
+public:
+	FTwoKeyAction(FlowChartEditor *editor = 0);
+	FTwoKeyAction(const FTwoKeyAction& source);
+	virtual	~FTwoKeyAction();
+	FTwoKeyAction& operator=(const FTwoKeyAction& source);
 
-	//TwoKeyAction
-	class TwoKeyAction : public KeyAction {
-	public:
-		TwoKeyAction(FlowChartEditor *editor = 0);
-		TwoKeyAction(const TwoKeyAction& source);
-		virtual	~TwoKeyAction();
-		TwoKeyAction& operator=(const TwoKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FThreeKeyAction
+class FThreeKeyAction : public FlowChartKeyAction {
+public:
+	FThreeKeyAction(FlowChartEditor *editor = 0);
+	FThreeKeyAction(const FThreeKeyAction& source);
+	virtual	~FThreeKeyAction();
+	FThreeKeyAction& operator=(const FThreeKeyAction& source);
 
-	//ThreeKeyAction
-	class ThreeKeyAction : public KeyAction {
-	public:
-		ThreeKeyAction(FlowChartEditor *editor = 0);
-		ThreeKeyAction(const ThreeKeyAction& source);
-		virtual	~ThreeKeyAction();
-		ThreeKeyAction& operator=(const ThreeKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FFourKeyAction
+class FFourKeyAction : public FlowChartKeyAction {
+public:
+	FFourKeyAction(FlowChartEditor *editor = 0);
+	FFourKeyAction(const FFourKeyAction& source);
+	virtual	~FFourKeyAction();
+	FFourKeyAction& operator=(const FFourKeyAction& source);
 
-	//FourKeyAction
-	class FourKeyAction : public KeyAction {
-	public:
-		FourKeyAction(FlowChartEditor *editor = 0);
-		FourKeyAction(const FourKeyAction& source);
-		virtual	~FourKeyAction();
-		FourKeyAction& operator=(const FourKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FFiveKeyAction
+class FFiveKeyAction : public FlowChartKeyAction {
+public:
+	FFiveKeyAction(FlowChartEditor *editor = 0);
+	FFiveKeyAction(const FFiveKeyAction& source);
+	virtual	~FFiveKeyAction();
+	FFiveKeyAction& operator=(const FFiveKeyAction& source);
 
-	//FiveKeyAction
-	class FiveKeyAction : public KeyAction {
-	public:
-		FiveKeyAction(FlowChartEditor *editor = 0);
-		FiveKeyAction(const FiveKeyAction& source);
-		virtual	~FiveKeyAction();
-		FiveKeyAction& operator=(const FiveKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FSixKeyAction
+class FSixKeyAction : public FlowChartKeyAction {
+public:
+	FSixKeyAction(FlowChartEditor *editor = 0);
+	FSixKeyAction(const FSixKeyAction& source);
+	virtual	~FSixKeyAction();
+	FSixKeyAction& operator=(const FSixKeyAction& source);
 
-	//SixKeyAction
-	class SixKeyAction : public KeyAction {
-	public:
-		SixKeyAction(FlowChartEditor *editor = 0);
-		SixKeyAction(const SixKeyAction& source);
-		virtual	~SixKeyAction();
-		SixKeyAction& operator=(const SixKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FSevenKeyAction
+class FSevenKeyAction : public FlowChartKeyAction {
+public:
+	FSevenKeyAction(FlowChartEditor *editor = 0);
+	FSevenKeyAction(const FSevenKeyAction& source);
+	virtual	~FSevenKeyAction();
+	FSevenKeyAction& operator=(const FSevenKeyAction& source);
 
-	//SevenKeyAction
-	class SevenKeyAction : public KeyAction {
-	public:
-		SevenKeyAction(FlowChartEditor *editor = 0);
-		SevenKeyAction(const SevenKeyAction& source);
-		virtual	~SevenKeyAction();
-		SevenKeyAction& operator=(const SevenKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlPlusKeyAction
+class FCtrlPlusKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlPlusKeyAction(FlowChartEditor *editor = 0);
+	FCtrlPlusKeyAction(const FCtrlPlusKeyAction& source);
+	virtual	~FCtrlPlusKeyAction();
+	FCtrlPlusKeyAction& operator=(const FCtrlPlusKeyAction& source);
 
-	//CtrlPlusKeyAction
-	class CtrlPlusKeyAction : public KeyAction {
-	public:
-		CtrlPlusKeyAction(FlowChartEditor *editor = 0);
-		CtrlPlusKeyAction(const CtrlPlusKeyAction& source);
-		virtual	~CtrlPlusKeyAction();
-		CtrlPlusKeyAction& operator=(const CtrlPlusKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlMinusKeyAction
+class FCtrlMinusKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlMinusKeyAction(FlowChartEditor *editor = 0);
+	FCtrlMinusKeyAction(const FCtrlMinusKeyAction& source);
+	virtual	~FCtrlMinusKeyAction();
+	FCtrlMinusKeyAction& operator=(const FCtrlMinusKeyAction& source);
 
-	//CtrlMinusKeyAction
-	class CtrlMinusKeyAction : public KeyAction {
-	public:
-		CtrlMinusKeyAction(FlowChartEditor *editor = 0);
-		CtrlMinusKeyAction(const CtrlMinusKeyAction& source);
-		virtual	~CtrlMinusKeyAction();
-		CtrlMinusKeyAction& operator=(const CtrlMinusKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlAKeyAction
+class FCtrlAKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlAKeyAction(FlowChartEditor *editor = 0);
+	FCtrlAKeyAction(const FCtrlAKeyAction& source);
+	virtual	~FCtrlAKeyAction();
+	FCtrlAKeyAction& operator=(const FCtrlAKeyAction& source);
 
-	//CtrlAKeyAction
-	class CtrlAKeyAction : public KeyAction {
-	public:
-		CtrlAKeyAction(FlowChartEditor *editor = 0);
-		CtrlAKeyAction(const CtrlAKeyAction& source);
-		virtual	~CtrlAKeyAction();
-		CtrlAKeyAction& operator=(const CtrlAKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlCKeyAction
+class FCtrlCKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlCKeyAction(FlowChartEditor *editor = 0);
+	FCtrlCKeyAction(const FCtrlCKeyAction& source);
+	virtual	~FCtrlCKeyAction();
+	FCtrlCKeyAction& operator=(const FCtrlCKeyAction& source);
 
-	//CtrlCKeyAction
-	class CtrlCKeyAction : public KeyAction {
-	public:
-		CtrlCKeyAction(FlowChartEditor *editor = 0);
-		CtrlCKeyAction(const CtrlCKeyAction& source);
-		virtual	~CtrlCKeyAction();
-		CtrlCKeyAction& operator=(const CtrlCKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlVKeyAction
+class FCtrlVKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlVKeyAction(FlowChartEditor *editor = 0);
+	FCtrlVKeyAction(const FCtrlVKeyAction& source);
+	virtual	~FCtrlVKeyAction();
+	FCtrlVKeyAction& operator=(const FCtrlVKeyAction& source);
 
-	//CtrlVKeyAction
-	class CtrlVKeyAction : public KeyAction {
-	public:
-		CtrlVKeyAction(FlowChartEditor *editor = 0);
-		CtrlVKeyAction(const CtrlVKeyAction& source);
-		virtual	~CtrlVKeyAction();
-		CtrlVKeyAction& operator=(const CtrlVKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlXKeyAction
+class FCtrlXKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlXKeyAction(FlowChartEditor *editor = 0);
+	FCtrlXKeyAction(const FCtrlXKeyAction& source);
+	virtual	~FCtrlXKeyAction();
+	FCtrlXKeyAction& operator=(const FCtrlXKeyAction& source);
 
-	//CtrlXKeyAction
-	class CtrlXKeyAction : public KeyAction {
-	public:
-		CtrlXKeyAction(FlowChartEditor *editor = 0);
-		CtrlXKeyAction(const CtrlXKeyAction& source);
-		virtual	~CtrlXKeyAction();
-		CtrlXKeyAction& operator=(const CtrlXKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlZKeyAction
+class FCtrlZKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlZKeyAction(FlowChartEditor *editor = 0);
+	FCtrlZKeyAction(const FCtrlZKeyAction& source);
+	virtual	~FCtrlZKeyAction();
+	FCtrlZKeyAction& operator=(const FCtrlZKeyAction& source);
 
-	//CtrlZKeyAction
-	class CtrlZKeyAction : public KeyAction {
-	public:
-		CtrlZKeyAction(FlowChartEditor *editor = 0);
-		CtrlZKeyAction(const CtrlZKeyAction& source);
-		virtual	~CtrlZKeyAction();
-		CtrlZKeyAction& operator=(const CtrlZKeyAction& source);
+	virtual void OnKeyDown();
+};
 
-		virtual void OnKeyDown();
-	};
+//FCtrlYKeyAction
+class FCtrlYKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlYKeyAction(FlowChartEditor *editor = 0);
+	FCtrlYKeyAction(const FCtrlYKeyAction& source);
+	virtual	~FCtrlYKeyAction();
+	FCtrlYKeyAction& operator=(const FCtrlYKeyAction& source);
 
-	//CtrlYKeyAction
-	class CtrlYKeyAction : public KeyAction {
-	public:
-		CtrlYKeyAction(FlowChartEditor *editor = 0);
-		CtrlYKeyAction(const CtrlYKeyAction& source);
-		virtual	~CtrlYKeyAction();
-		CtrlYKeyAction& operator=(const CtrlYKeyAction& source);
-
-		virtual void OnKeyDown();
-	};
-}
+	virtual void OnKeyDown();
+};
 #endif //_FLOWCHARTKEYACTIONS_H
