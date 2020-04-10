@@ -84,6 +84,10 @@ void QtPainter::Resize(Long width, Long height, QColor color) {
 	}
 }
 
+void QtPainter::Rotate(float angle) {
+	this->qPainter->rotate(angle);
+}
+
 QRectF& QtPainter::BoundingRect(const QRectF& rectangle, int flags, const QString& text) {
 	return this->qPainter->boundingRect(rectangle, flags, text);
 }

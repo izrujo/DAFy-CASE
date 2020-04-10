@@ -23,6 +23,9 @@ class NumberBox;
 class A4Paper;
 class TextRegion;
 
+class WindowTitle;
+class WindowPin;
+
 //class TutorialMark;
 
 class FlowChartVisitor {
@@ -48,6 +51,9 @@ public:
 
 	virtual void Visit(NumberBox *numberBox) {};
 	virtual void Visit(A4Paper *a4Paper) = 0;
+
+	virtual void Visit(WindowTitle *windowTitle) {};
+	virtual void Visit(WindowPin *windowPin) {};
 	//virtual void Visit(TutorialMark *tutorialMark) {};
 };
 

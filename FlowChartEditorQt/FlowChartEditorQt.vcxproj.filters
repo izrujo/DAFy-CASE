@@ -311,6 +311,12 @@
     <ClCompile Include="FlowChart\Shape.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\WindowTitle.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\WindowPin.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -586,6 +592,12 @@
       <Filter>Graphic Objects</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Shape.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\WindowPin.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\WindowTitle.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>

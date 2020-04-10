@@ -38,6 +38,7 @@ public:
 	//QtPainter 가상 함수 선언 및 정의
 	virtual void Render(QPainter *painter, int x, int y) {}; //painter : 실제 화면
 	virtual void Resize(Long width, Long height, QColor color = QColor(255, 255, 255)) {};
+	virtual void Rotate(float angle) {};
 
 	virtual QRectF& BoundingRect(const QRectF& rectangle, int flags, const QString& text) { return QRectF(); };
 	virtual QRect& BoundingRect(const QRect& rectangle, int flags, const QString& text) { return QRect(); };

@@ -31,29 +31,27 @@
 #include "RepeatTrue.h"
 #include "RightDown.h"
 #include "RightDownJoin.h"
+#include "WindowTitle.h"
+#include "WindowPin.h"
 
 #include "../GObject/Painter.h"
 #include "DrawVisitor.h"
 #include "../GObject/QtPainter.h"
-
-//#include "StatusBar.h"
-//#include "ToolTip.h"
-//#include "TutorialForm.h"
-//#include "Tutorials.h"
-//#include "TutorialController.h"
-
 #include "../GObject/QtGObjectFactory.h"
 
 #include <qpainter.h>
 #include <qevent.h>
+#include <qmenubar.h>
 
 FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	: QFrame(parent) {
 	this->setMouseTracking(true);
+	this->setFocusPolicy(Qt::StrongFocus);
 
 	this->shapeSelected = NULL;
 	this->mode = DRAWOFF;
 	this->oldShapeSelected = NULL;
+	this->windowBorderColor = QColor(153, 204, 204);
 
 	QRect rect = this->frameRect();
 	Long width = 150;
@@ -91,6 +89,13 @@ FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	this->flowChartTemplate->Attach(template6);
 	this->flowChartTemplate->Attach(template7);
 
+	this->windowTitle = new WindowTitle(2, 2, 186, 30, QColor(102, 204, 204),
+		Qt::SolidLine, QColor(153, 204, 204), String(" 기호 상자")); //x, y는 창 테두리 두께 5와 타이틀 두께 1의 기시감? 해결
+	Long windowPinX = this->windowTitle->GetX() + this->windowTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	Long windowPinY = this->windowTitle->GetY() + 4;
+	this->windowPin = new WindowPin(windowPinX, windowPinY, 26, 23, QColor(102, 204, 204),
+		Qt::SolidLine, QColor(255, 255, 255));
+
 	this->painter = new QtPainter(rect.width(), rect.height());
 
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[0]);
@@ -105,6 +110,9 @@ FlowChartTemplate::~FlowChartTemplate() {
 	}
 	if (this->painter != NULL) {
 		delete this->painter;
+	}
+	if (this->windowTitle != NULL) {
+		delete this->windowTitle;
 	}
 }
 
@@ -121,63 +129,34 @@ void FlowChartTemplate::paintEvent(QPaintEvent *event) {
 
 	this->painter->Resize(frameRect.width(), frameRect.height()); // canvas size 변경
 
-	//FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 	//=======창 테두리=========
-	GObject *pen = factory.MakePen(QBrush(QColor(153, 204, 204)), 5);
+	GObject *pen = factory.MakePen(QBrush(this->windowBorderColor), 5);
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	this->painter->DrawRect(QRect(0,0,190,570));
-	
+	this->painter->DrawRect(QRect(0, 0, 190, frameRect.height()));
+
+	this->painter->SelectObject(*oldPen);
+	this->painter->Update();
+	if (pen != 0) {
+		delete pen;
+	}
 	//=======창 테두리=========
 
-	//=======창 제목========
-	QRect titleRect;
-	//왜인지 모르겠지만 setCoords()가 끝나면 width와 height를 -1씩 한다.
-	titleRect.setCoords(2, 2, frameRect.width() - 3, 30 - 3); //5 = 테두리 두께
-	dynamic_cast<QPen*>(pen)->setWidth(1);
-	GObject *brush = factory.MakeBrush(QColor(102,204,204));
-	GObject *oldBrush = this->painter->SelectObject(*brush);
-	this->painter->Update();
+	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
+	this->flowChartTemplate->Accept(visitor);
 
-	this->painter->DrawRect(titleRect);
-
-	this->painter->SelectObject(*oldBrush);
-	this->painter->SelectObject(*oldPen);
-	this->painter->Update();
-	if (brush != 0) {
-		delete brush;
-	}
-	if (pen != 0) {
-		delete pen;
-	}
-	
-	GObject *oldFont = this->painter->CurrentObject("Font");
-	GObject *font = factory.MakeFont(oldFont->GetFamily(), 5, oldFont->GetWeight(), oldFont->GetItalic());
-	pen = factory.MakePen(QBrush(QColor(102, 255, 255)), 2);
-	oldPen = this->painter->SelectObject(*pen);
-	this->painter->Update();
-
-	this->painter->DrawTextQ(titleRect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(" 기호 상자"));
-
-	this->painter->SelectObject(*oldPen);
-	this->painter->SelectObject(*oldFont);
-	this->painter->Update();
-	if (font != 0) {
-		delete font;
-	}
-	if (pen != 0) {
-		delete pen;
-	}
-	//=======창 제목========
+	//창 제목 먼저
+	this->windowTitle->Accept(visitor);
+	//고정 핀
+	this->windowPin->Accept(visitor);
 
 	//======================
 	pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 2);
 	oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
-	this->flowChartTemplate->Accept(visitor);
+
 	this->painter->Render(&dc, 0, 0);
 
 	this->painter->SelectObject(*oldPen);
@@ -186,6 +165,9 @@ void FlowChartTemplate::paintEvent(QPaintEvent *event) {
 		delete pen;
 	}
 
+	if (visitor != 0) {
+		delete visitor;
+	}
 	/*
 	bool ret;
 	if (editor->toolTip != NULL) {
@@ -230,9 +212,23 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 	else {
 		this->shapeSelected = NULL;
 	}
+
+	QRect pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
+	bool isContain = pinRect.contains(event->pos());
+	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
+	if (isContain == true) {
+		if (isPinned == true) {
+			dynamic_cast<WindowPin*>(this->windowPin)->SetIsPinned(false);
+		}
+		else {
+			dynamic_cast<WindowPin*>(this->windowPin)->SetIsPinned(true);
+		}
+	}
+	this->repaint();
 }
 
 void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
+	//기호들
 	Long index = -1;
 
 	QColor selectedColor(235, 235, 235);
@@ -254,5 +250,64 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 		shape->Paint(selectedColor, shape->GetBorderLine(), shape->GetBorderColor());
 	}
 
+	//윈도우 핀
+	QRect pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
+	bool isContain = pinRect.contains(event->pos());
+	if (isContain == true && this->hasFocus()) {
+		this->windowPin->Paint(QColor(102, 255, 255), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+	else if (isContain == false && this->hasFocus()) {
+		this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+	else if (isContain == true && !this->hasFocus()) {
+		this->windowPin->Paint(QColor(204, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+	else { //isContain == false && !this->hasFocus()
+		this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+
+	this->repaint();
+}
+
+void FlowChartTemplate::focusOutEvent(QFocusEvent *event) {
+	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
+	if (isPinned == true) {
+		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
+		this->windowBorderColor = this->windowTitle->GetBorderColor();
+		this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+	else { //고정 해제된 상태에서 포커스 아웃됨.
+		this->windowTitle->ReSize(this->windowTitle->GetHeight(), this->windowTitle->GetWidth() / 2);
+		this->resize(this->windowTitle->GetWidth(), this->windowTitle->GetHeight());
+
+		dynamic_cast<WindowTitle*>(this->windowTitle)->SetIsFocusedAndPinned(false);
+
+		//DrawingPaper
+		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
+		canvas->move(this->x() * 2 + this->windowTitle->GetWidth(), canvas->y());
+		canvas->resize(canvas->width() + canvas->x() - (this->x() * 2 + this->width()), canvas->height());
+	}
+	this->repaint();
+}
+
+void FlowChartTemplate::focusInEvent(QFocusEvent *event) {
+	dynamic_cast<WindowTitle*>(this->windowTitle)->SetIsFocusedAndPinned(true);
+	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
+	if (isPinned == true) {
+		this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
+		this->windowBorderColor = this->windowTitle->GetBorderColor();
+		this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+	else {
+		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+		this->resize(190, editor->frameRect().height() - editor->menuBar->height() - 20);
+		this->windowTitle->ReSize(this->windowTitle->GetHeight() * 2, this->windowTitle->GetWidth());
+
+		//DrawingPaper
+		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
+		canvas->move(canvas->x() + this->width(), canvas->y());
+		canvas->resize(canvas->width() - canvas->x() - (this->x() * 2 + this->width()), canvas->height());
+	}
 	this->repaint();
 }

@@ -141,6 +141,8 @@
     <ClCompile Include="FlowChart\Tool.cpp" />
     <ClCompile Include="FlowChart\ToolFactory.cpp" />
     <ClCompile Include="FlowChart\VariableList.cpp" />
+    <ClCompile Include="FlowChart\WindowPin.cpp" />
+    <ClCompile Include="FlowChart\WindowTitle.cpp" />
     <ClCompile Include="FlowChart\Zoom.cpp" />
     <ClCompile Include="FlowChart\ZoomVisitor.cpp" />
     <ClCompile Include="GObject\Brush.cpp" />
@@ -206,6 +208,8 @@
     <ClInclude Include="FlowChart\CoordinateConverter.h" />
     <ClInclude Include="FlowChart\Creator.h" />
     <ClInclude Include="FlowChart\Decision.h" />
+    <ClInclude Include="FlowChart\WindowPin.h" />
+    <ClInclude Include="FlowChart\WindowTitle.h" />
     <ClInclude Include="GObject\Brush.h" />
     <ClInclude Include="GObject\Font.h" />
     <ClInclude Include="GObject\GObject.h" />

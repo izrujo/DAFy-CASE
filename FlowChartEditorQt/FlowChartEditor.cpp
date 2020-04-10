@@ -133,8 +133,8 @@ void FlowChartEditor::resizeEvent(QResizeEvent *event) {
 	this->windows[0]->resize(frameRect.width() - 200, frameRect.height() - this->menuBar->height() + 1);
 	this->windows[0]->repaint();
 	
-	Long height = frameRect.height() - this->menuBar->height() - 446;
-	this->windows[1]->resize(190, frameRect.height() - this->menuBar->height() - 446);
+	Long height = frameRect.height() - this->menuBar->height() - 20;
+	this->windows[1]->resize(190, frameRect.height() - this->menuBar->height() - 20);
 	this->windows[1]->repaint();
 	/*frameRect 값을 조정?
 	rect.left = 205;

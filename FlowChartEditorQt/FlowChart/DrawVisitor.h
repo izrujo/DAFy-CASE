@@ -28,6 +28,9 @@ protected:
 
 	virtual void Visit(NumberBox *numberBox);
 	virtual void Visit(A4Paper *a4Paper);
+
+	virtual void Visit(WindowTitle *windowTitle);
+	virtual void Visit(WindowPin *windowPin);
 	//virtual void Visit(TutorialMark *tutorialMark);
 private:
 	GObject *painter;

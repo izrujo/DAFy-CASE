@@ -29,10 +29,16 @@ public:
 	int mode;
 	NShape *flowChartTemplate;
 	NShape *oldShapeSelected;
+	
+	NShape *windowTitle;
+	QColor windowBorderColor;
+	NShape *windowPin;
 protected:
 	void paintEvent(QPaintEvent *event);
 	void mousePressEvent(QMouseEvent *event);
 	void mouseMoveEvent(QMouseEvent *event); //tracking 설정이 디폴트면 마우스 아무거나 눌렀을 때만 호출됨.
+	void focusOutEvent(QFocusEvent *event);
+	void focusInEvent(QFocusEvent *event);
 };
 
 #endif // _FLOWCHARTTEMPLATE_H

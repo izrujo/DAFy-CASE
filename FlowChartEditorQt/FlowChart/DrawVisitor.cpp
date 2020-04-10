@@ -23,6 +23,8 @@
 #include "TextRegion.h"
 #include "../GObject/GObject.h"
 #include "../GObject/QtGObjectFactory.h"
+#include "WindowTitle.h"
+#include "WindowPin.h"
 
 #include <qfont.h>
 
@@ -592,7 +594,7 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	}
 
 	// 텍스트를 '안' 출력한다.
-	
+
 	if (element->IsSelected() == true) {
 		element->DrawSelectionMarkers(painter, this->scrollController);
 	}
@@ -730,12 +732,12 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	if (brush != NULL) {
 		delete brush;
 	}
-	
+
 	//입체효과
 
 	if (a4Paper->GetIsMarking() == true) {
 		//눈금선 가로 19개 세로 39개
-		pen = factory.MakePen(QBrush(QColor(200,200,200)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
+		pen = factory.MakePen(QBrush(QColor(200, 200, 200)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
 		oldPen = this->painter->SelectObject(*pen);
 		this->painter->Update();
 
@@ -784,6 +786,139 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 		delete pen;
 	}
 }
+
+void DrawVisitor::Visit(WindowTitle *windowTitle) {
+	QtGObjectFactory factory;
+
+	//====속성
+	Long x = windowTitle->GetX();
+	Long y = windowTitle->GetY();
+	Long width = windowTitle->GetWidth();
+	Long height = windowTitle->GetHeight();
+	Long borderWidth = 1;
+	QColor fillColor = windowTitle->GetBackGroundColor();
+	QColor borderColor = windowTitle->GetBorderColor();
+	String content = windowTitle->GetContents();
+
+	//====사각형
+	//GObject 설정
+	GObject *pen = factory.MakePen(QBrush(borderColor), borderWidth);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	GObject *brush = factory.MakeBrush(fillColor);
+	GObject *oldBrush = this->painter->SelectObject(*brush);
+	this->painter->Update();
+
+	//그리기
+	QRect rect(x, y, width, height);
+	this->painter->DrawRect(rect);
+
+	//펜 복구
+	this->painter->SelectObject(*oldPen);
+	this->painter->Update();
+	if (pen != 0) {
+		delete pen;
+	}
+
+	//====텍스트
+	//GObject 설정
+	GObject *oldFont = this->painter->CurrentObject("Font");
+	GObject *font = factory.MakeFont(oldFont->GetFamily(), 5, oldFont->GetWeight(), oldFont->GetItalic());
+	pen = factory.MakePen(QBrush(QColor(255, 255, 255)), 2);
+	oldPen = this->painter->SelectObject(*pen);
+	this->painter->Update();
+
+	//그리기
+	/*if (!windowTitle->GetIsFocusedAndPinned()) this->painter->Rotate(45);*/
+	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(content));
+	/*if (!windowTitle->GetIsFocusedAndPinned()) this->painter->Rotate(-45);*/
+
+	//====painter 복구
+	this->painter->SelectObject(*oldBrush);
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldFont);
+	this->painter->Update();
+	if (brush != 0) {
+		delete brush;
+	}
+	if (font != 0) {
+		delete font;
+	}
+	if (pen != 0) {
+		delete pen;
+	}
+}
+
+void DrawVisitor::Visit(WindowPin *windowPin) {
+	Long x = windowPin->GetX();
+	Long y = windowPin->GetY();
+	Long width = windowPin->GetWidth();
+	Long height = windowPin->GetHeight();
+	float hhhWidth = width / 8.0; //half of half of half of width
+	float hhhHeight = height / 8.0;
+	QColor fillColor = windowPin->GetBackGroundColor();
+	QColor borderColor = windowPin->GetBorderColor();
+
+	QtGObjectFactory factory;
+
+	QRect fillRect(x, y, width, height);
+	GObject *brush = factory.MakeBrush(fillColor);
+	this->painter->FillRect(fillRect, *brush);
+	if (brush != 0) {
+		delete brush;
+	}
+
+	GObject *pen = factory.MakePen(QBrush(borderColor), 1);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	brush = factory.MakeBrush(borderColor);
+	GObject *oldBrush = this->painter->SelectObject(*brush);
+	this->painter->Update();
+
+	bool isPinned = windowPin->GetIsPinned();
+	QRectF rect;
+	QPointF point1;
+	QPointF point2;
+	if (isPinned == true) {
+		rect.setX(x + hhhWidth * 3);
+		rect.setY(y + hhhHeight * 2);
+		rect.setWidth(hhhWidth * 2);
+		rect.setHeight(hhhHeight * 2);
+		this->painter->DrawRect(rect);
+
+		point1 = QPointF(x + hhhWidth * 2, y + hhhHeight * 4);
+		point2 = QPointF(x + hhhWidth * 6, y + hhhHeight * 4);
+		this->painter->DrawLine(point1, point2);
+
+		point1 = QPointF(x + hhhWidth * 4, y + hhhHeight * 4);
+		point2 = QPointF(x + hhhWidth * 4, y + hhhHeight * 6);
+		this->painter->DrawLine(point1, point2);
+	}
+	else {
+		rect.setX(x + hhhWidth * 4);
+		rect.setY(y + hhhHeight * 3);
+		rect.setWidth(hhhWidth * 2);
+		rect.setHeight(hhhHeight * 2);
+		this->painter->DrawRect(rect);
+
+		point1 = QPointF(x + hhhWidth * 4, y + hhhHeight * 2);
+		point2 = QPointF(x + hhhWidth * 4, y + hhhHeight * 6);
+		this->painter->DrawLine(point1, point2);
+
+		point1 = QPointF(x + hhhWidth * 2, y + hhhHeight * 4);
+		point2 = QPointF(x + hhhWidth * 4, y + hhhHeight * 4);
+		this->painter->DrawLine(point1, point2);
+	}
+
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldBrush);
+	this->painter->Update();
+	if (pen != 0) {
+		delete pen;
+	}
+	if (brush != 0) {
+		delete brush;
+	}
+}
+
 /*
 void DrawVisitor::Visit(TutorialMark *tutorialMark) {
 	QtGObjectFactory factory;

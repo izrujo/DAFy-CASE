@@ -2,7 +2,6 @@
 
 #include "DrawingPaper.h"
 #include "../FlowChartEditor.h"
-#include "FlowChartTemplate.h"
 
 #include "FlowChart.h"
 #include "Shape.h"
