@@ -828,9 +828,19 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 	this->painter->Update();
 
 	//그리기
-	/*if (!windowTitle->GetIsFocusedAndPinned()) this->painter->Rotate(45);*/
-	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(content));
-	/*if (!windowTitle->GetIsFocusedAndPinned()) this->painter->Rotate(-45);*/
+	if (windowTitle->GetIsFocusedAndPinned()) {
+		this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(content));
+	}
+	else {
+		QString verticalContent = QString::fromLocal8Bit(content);
+		verticalContent.remove(QChar(' '));
+		Long i = 1;
+		while (i < verticalContent.size()) {
+			verticalContent.insert(i, '\n');
+			i+=2;
+		}
+		this->painter->DrawTextQ(rect, 0, verticalContent);
+	}
 
 	//====painter 복구
 	this->painter->SelectObject(*oldBrush);

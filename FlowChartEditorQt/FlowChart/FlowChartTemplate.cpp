@@ -266,48 +266,65 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 		this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
 	}
 
+	//고정 해제 윈도우 타이틀에 마우스 올렸을 때
+	bool isFocusedAndPinned = dynamic_cast<WindowTitle*>(this->windowTitle)->GetIsFocusedAndPinned();
+	if (isFocusedAndPinned == false) {
+		QRect titleRect(this->x(), this->y(), this->width(), this->height());
+		isContain = titleRect.contains(event->pos());
+		if (isContain == true) {
+			this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
+			this->windowBorderColor = this->windowTitle->GetBorderColor();
+			this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
+		}
+		else {
+			this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
+			this->windowBorderColor = this->windowTitle->GetBorderColor();
+			this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
+		}
+	}
+
 	this->repaint();
 }
 
 void FlowChartTemplate::focusOutEvent(QFocusEvent *event) {
+	this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
+	this->windowBorderColor = this->windowTitle->GetBorderColor();
+	this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
+
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
-	if (isPinned == true) {
-		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
-		this->windowBorderColor = this->windowTitle->GetBorderColor();
-		this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
-	}
-	else { //고정 해제된 상태에서 포커스 아웃됨.
-		this->windowTitle->ReSize(this->windowTitle->GetHeight(), this->windowTitle->GetWidth() / 2);
+	if (isPinned == false) { //고정 해제된 상태에서 포커스 아웃됨.
+		this->windowTitle->ReSize(this->windowTitle->GetHeight(), this->windowTitle->GetWidth() / 2 + 20);
 		this->resize(this->windowTitle->GetWidth(), this->windowTitle->GetHeight());
 
 		dynamic_cast<WindowTitle*>(this->windowTitle)->SetIsFocusedAndPinned(false);
-
+		/*
 		//DrawingPaper
 		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
 		canvas->move(this->x() * 2 + this->windowTitle->GetWidth(), canvas->y());
 		canvas->resize(canvas->width() + canvas->x() - (this->x() * 2 + this->width()), canvas->height());
+		*/
 	}
 	this->repaint();
 }
 
 void FlowChartTemplate::focusInEvent(QFocusEvent *event) {
 	dynamic_cast<WindowTitle*>(this->windowTitle)->SetIsFocusedAndPinned(true);
+	this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
+	this->windowBorderColor = this->windowTitle->GetBorderColor();
+	this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
+
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
-	if (isPinned == true) {
-		this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
-		this->windowBorderColor = this->windowTitle->GetBorderColor();
-		this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
-	}
-	else {
+	if (isPinned == false) {
 		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 		this->resize(190, editor->frameRect().height() - editor->menuBar->height() - 20);
-		this->windowTitle->ReSize(this->windowTitle->GetHeight() * 2, this->windowTitle->GetWidth());
-
+		this->windowTitle->ReSize((this->windowTitle->GetHeight() - 20) * 2, this->windowTitle->GetWidth());
+		/*
 		//DrawingPaper
 		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
 		canvas->move(canvas->x() + this->width(), canvas->y());
 		canvas->resize(canvas->width() - canvas->x() - (this->x() * 2 + this->width()), canvas->height());
+		*/
 	}
 	this->repaint();
 }
