@@ -2,7 +2,10 @@
 #include "Scroll.h"
 #include "DrawingPaper.h"
 
-ScrollController::ScrollController(DrawingPaper *drawingPaper) {
+#include <qDebug.h>
+
+ScrollController::ScrollController(DrawingPaper *drawingPaper) 
+	: scrolls(2) {
 	this->drawingPaper = drawingPaper;
 
 	this->height = this->drawingPaper->a4Paper->GetY() * 2 + this->drawingPaper->a4Paper->GetHeight();
@@ -110,18 +113,25 @@ void ScrollController::Update() {
 		lineSize = 100;
 		position = this->scrolls.GetAt(0)->value();
 		if (this->scrolls.GetAt(0) != NULL) {
+			delete this->scrolls.GetAt(0);
 			this->scrolls.Delete(0);
 		}
-		Scroll *scroll = new Scroll(Qt::Vertical, this->drawingPaper);
+		this->scrolls.Insert(0, new Scroll(Qt::Vertical, this->drawingPaper)); //setValue->Move->paintEvent->Visit->GetScroll(1) 오류: Delete해서 1번째가 없음.
+		Scroll *scroll = this->scrolls.GetAt(0);
 		scroll->setMinimum(minimum);
 		scroll->setMaximum(maximum);
 		scroll->setPageStep(pageSize);
 		scroll->setSingleStep(lineSize);
 		scroll->setValue(position);
-		this->scrolls.Insert(0, scroll);
+		
+		scroll->resize(20, this->drawingPaper->height());
+		scroll->move(this->drawingPaper->frameRect().right() - 20, scroll->y());
+		scroll->show();
+
 	}
 	else {
 		if (this->scrolls.GetAt(0) != 0) {
+			delete this->scrolls.GetAt(0);
 			this->scrolls.Delete(0);
 		}
 	}
@@ -139,18 +149,25 @@ void ScrollController::Update() {
 		lineSize = 150;
 		position = this->scrolls.GetAt(1)->value();
 		if (this->scrolls.GetAt(1) != NULL) {
+			delete this->scrolls.GetAt(1);
 			this->scrolls.Delete(1);
 		}
-		Scroll *scroll = new Scroll(Qt::Horizontal, this->drawingPaper);
+		this->scrolls.Insert(1, new Scroll(Qt::Horizontal, this->drawingPaper));
+		Scroll *scroll = this->scrolls.GetAt(1);
 		scroll->setMinimum(minimum);
 		scroll->setMaximum(maximum);
 		scroll->setPageStep(pageSize);
 		scroll->setSingleStep(lineSize);
 		scroll->setValue(position);
-		this->scrolls.Insert(1, scroll);
+
+		scroll->resize(this->drawingPaper->width(), 20);
+		scroll->move(scroll->x(), this->drawingPaper->frameRect().bottom() - 20);
+		scroll->show();
+
 	}
 	else {
 		if (this->scrolls.GetAt(1) != 0) {
+			delete this->scrolls.GetAt(1);
 			this->scrolls.Delete(1);
 		}
 	}

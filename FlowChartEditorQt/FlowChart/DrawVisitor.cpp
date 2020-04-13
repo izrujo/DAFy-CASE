@@ -704,6 +704,8 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	Long positionX = 0;
 	Long positionY = 0;
 	if (this->scrollController != NULL) {
+		Scroll *horizontal = this->scrollController->GetScroll(1);
+		Scroll *vertical = this->scrollController->GetScroll(0);
 		positionX = this->scrollController->GetScroll(1)->value();
 		positionY = this->scrollController->GetScroll(0)->value();
 	}

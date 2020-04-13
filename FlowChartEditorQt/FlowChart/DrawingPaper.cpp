@@ -149,7 +149,7 @@ DrawingPaper::~DrawingPaper() {
 
 void DrawingPaper::paintEvent(QPaintEvent *event) {
 	QPainter painter(this);
-	QRect rect = frameRect();
+	QRect rect = this->frameRect();
 
 	FlowChartEditor *editor = (FlowChartEditor*)this->parent();
 
@@ -160,6 +160,8 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	//this->painter->EraseBackground((float)0, (float)0, (float)rect.Width(), (float)rect.Height());
 	//POINT points[5] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {0, 0} };
 	//this->painter->FillBackground(points, 5, RGB(235, 235, 235));
+
+	this->painter->EraseRect(rect);
 
 	//Visitor 패턴 적용	
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter, this->scrollController);
