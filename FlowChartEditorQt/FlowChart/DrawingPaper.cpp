@@ -161,7 +161,7 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	//POINT points[5] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {0, 0} };
 	//this->painter->FillBackground(points, 5, RGB(235, 235, 235));
 
-	this->painter->EraseRect(rect);
+	//this->painter->EraseRect(rect);
 
 	//Visitor 패턴 적용	
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter, this->scrollController);
@@ -460,8 +460,6 @@ void DrawingPaper::keyPressEvent(QKeyEvent *event) {
 		keyAction->OnKeyDown();
 		delete keyAction;
 	}
-	//CDC *dc = editor->GetDC();
-	//editor->ReleaseDC(dc);
 	editor->windows[1]->repaint(); //왜?
 
 	this->repaint();
@@ -555,6 +553,7 @@ void DrawingPaper::DrawSelectingArea() {
 	QPainter dc(this);
 
 	QRect rect = this->frameRect();
+	
 	QtPainter painter(rect.width(), rect.height());
 
 	painter.SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
@@ -572,7 +571,6 @@ void DrawingPaper::DrawSelectingArea() {
 	//painter.SelectObject(*oldPen);
 	//painter.Update();
 	//this->ReleaseDC(dc);
-
 }
 
 void DrawingPaper::DrawActiveShape(NShape *entity) {

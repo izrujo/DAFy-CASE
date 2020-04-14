@@ -374,7 +374,7 @@ void FlowChartEditor::OnUpdateSelectionCommand(CCmdUI *cCmdUI) {
 }
 */
 
-void FlowChartEditor::CommandRange(char *text) { //문자열이 아닌 #define으로 선언해두고 쓰면 더 효율이 좋을까?
+void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선언해두고 쓰면 더 효율이 좋을까?
 	FlowChartCommandFactory commandFactory(this);
 	FlowChartCommand *command = commandFactory.Make(text); //action->text()
 	if (command != NULL) {
@@ -471,7 +471,7 @@ void FlowChartEditor::CreateActions() {
 	connect(this->drawingModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingMode"); });
 
 	this->drawingUnModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드 해제(&U)")), this); //그리기 모드 해제 ESC
-	this->drawingUnModeAction->setShortcuts(QKeySequence::Cancel);
+	//this->drawingUnModeAction->setShortcuts(QKeySequence::Cancel); 없애.
 	connect(this->drawingUnModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingUnMode"); });
 
 	this->startTerminalSymbolAction = new QAction(QString::fromLocal8Bit(("시작 단말 기호(&S)")), this); //시작 단말 기호(S)

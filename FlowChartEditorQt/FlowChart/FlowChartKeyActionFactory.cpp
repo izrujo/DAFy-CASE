@@ -52,7 +52,7 @@ FlowChartKeyAction* FlowChartKeyActionFactory::Make(int modifiers, int key) {
 	else if (isCtrl && key == Qt::Key_D) { //Ctrl + D
 		keyAction = new FCtrlDKeyAction(this->editor);
 	}
-	else if (isCtrl && key == Qt::Key_Plus) {
+	else if (isCtrl && (key == Qt::Key_Plus || key == Qt::Key_Equal)) {
 		keyAction = new FCtrlPlusKeyAction(this->editor);
 	}
 	else if (isCtrl&& key == Qt::Key_Minus) {

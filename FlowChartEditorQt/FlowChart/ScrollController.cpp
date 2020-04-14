@@ -108,7 +108,7 @@ void ScrollController::Update() {
 	//3. 클라이언트 영역 높이가 전체 영역 높이보다 작으면 스크롤을 생성한다.
 	if (clientHeight < this->height) {
 		minimum = this->scrolls.GetAt(0)->minimum();
-		maximum = this->height;
+		maximum = this->height - clientHeight;
 		pageSize = clientHeight;
 		lineSize = 100;
 		position = this->scrolls.GetAt(0)->value();
@@ -144,7 +144,7 @@ void ScrollController::Update() {
 	//3. 클라이언트 영역 너비가 전체 영역 너비보다 작으면 스크롤을 생성한다.
 	if (clientWidth < this->width) {
 		minimum = this->scrolls.GetAt(1)->minimum();
-		maximum = this->width;
+		maximum = this->width - clientWidth;
 		pageSize = clientWidth;
 		lineSize = 150;
 		position = this->scrolls.GetAt(1)->value();
@@ -160,7 +160,7 @@ void ScrollController::Update() {
 		scroll->setSingleStep(lineSize);
 		scroll->setValue(position);
 
-		scroll->resize(this->drawingPaper->width(), 20);
+		scroll->resize(this->drawingPaper->width() - 20, 20);
 		scroll->move(scroll->x(), this->drawingPaper->frameRect().bottom() - 20);
 		scroll->show();
 

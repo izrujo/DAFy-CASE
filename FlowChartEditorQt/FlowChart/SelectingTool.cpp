@@ -141,5 +141,5 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 		delete[] indexes;
 	}
 
-	canvas->repaint();
+	//canvas->repaint();
 }

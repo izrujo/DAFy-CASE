@@ -19,7 +19,7 @@ FlowChartCommandFactory& FlowChartCommandFactory::operator=(const FlowChartComma
 	return *this;
 }
 
-FlowChartCommand* FlowChartCommandFactory::Make(char *text) {
+FlowChartCommand* FlowChartCommandFactory::Make(string text) {
 	FlowChartCommand *command = 0;
 
 	if (text == "Save") {

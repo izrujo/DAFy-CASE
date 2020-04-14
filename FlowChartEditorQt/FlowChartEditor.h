@@ -5,6 +5,8 @@
 #include <qstring.h>
 #include "ui_FlowChartEditor.h"
 #include "FlowChart/Array.h"
+#include <iostream>
+using namespace std;
 
 #define INVALID_SPACE 5
 
@@ -60,7 +62,7 @@ protected:
 
 	//¸Þ´º
 private slots:
-	void CommandRange(char *text);
+	void CommandRange(string text);
 
 private:
 	void CreateActions();

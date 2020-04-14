@@ -120,7 +120,7 @@ FlowChart::~FlowChart() {
 }
 
 FlowChart::FlowChart(const FlowChart& source) 
-	: Block(source.capacity) {
+	: Block(source) {
 	
 }
 
