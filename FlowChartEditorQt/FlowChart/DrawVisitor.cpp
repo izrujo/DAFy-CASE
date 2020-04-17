@@ -740,20 +740,20 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 
 	if (a4Paper->GetIsMarking() == true) {
 		//눈금선 가로 19개 세로 39개
-		pen = factory.MakePen(QBrush(QColor(200, 200, 200)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
+		pen = factory.MakePen(QBrush(QColor(200, 200, 200)), 1, a4Paper->GetBorderLine()); //점선으로?
 		oldPen = this->painter->SelectObject(*pen);
 		this->painter->Update();
 
-		Long startY = y + 1;
-		Long endY = y + height - 1;
+		Long startY = y + 2;
+		Long endY = y + height - 2;
 		Long interval = width / 20;
 		Long startX = x + interval;
 		while (startX < x + width) {
 			this->painter->DrawLine(QPoint(startX, startY), QPoint(startX, endY));
 			startX += interval;
 		}
-		startX = x + 1;
-		Long endX = x + width - 1;
+		startX = x + 2;
+		Long endX = x + width - 2;
 		interval = height / 40;
 		startY = y + interval;
 		while (startY < y + height) {
@@ -769,7 +769,7 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	}
 
 	//여백 표시
-	pen = factory.MakePen(QBrush(QColor(0, 0, 255)), BORDERWIDTH, a4Paper->GetBorderLine()); //점선으로?
+	pen = factory.MakePen(QBrush(QColor(0, 0, 255)), 1, a4Paper->GetBorderLine()); //점선으로?
 	oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
@@ -778,10 +778,10 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	Long topMargin = a4Paper->GetTopMargin();
 	Long bottomMargin = a4Paper->GetBottomMargin();
 
-	painter->DrawLine(QPoint(x + leftMargin, y + 1), QPoint(x + leftMargin, y + height - 1));
-	painter->DrawLine(QPoint(x + 1, y + topMargin), QPoint(x + width - 1, y + topMargin));
-	painter->DrawLine(QPoint(x + width - rightMargin, y + 1), QPoint(x + width - rightMargin, y + height - 1));
-	painter->DrawLine(QPoint(x + 1, y + height - bottomMargin), QPoint(x + width - 1, y + height - bottomMargin));
+	painter->DrawLine(QPoint(x + leftMargin, y + 2), QPoint(x + leftMargin, y + height - 2));
+	painter->DrawLine(QPoint(x + 2, y + topMargin), QPoint(x + width - 2, y + topMargin));
+	painter->DrawLine(QPoint(x + width - rightMargin, y + 2), QPoint(x + width - rightMargin, y + height - 2));
+	painter->DrawLine(QPoint(x + 2, y + height - bottomMargin), QPoint(x + width - 2, y + height - bottomMargin));
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->Update();
@@ -826,15 +826,18 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 	//GObject 설정
 	GObject *oldFont = this->painter->CurrentObject("Font");
 	GObject *font = factory.MakeFont(oldFont->GetFamily(), 5, oldFont->GetWeight(), oldFont->GetItalic());
-	pen = factory.MakePen(QBrush(QColor(255, 255, 255)), 2);
-	oldPen = this->painter->SelectObject(*pen);
-	this->painter->Update();
-
+	
 	//그리기
 	if (windowTitle->GetIsFocusedAndPinned()) {
+		pen = factory.MakePen(QBrush(QColor(255, 255, 255)), 2);
+		oldPen = this->painter->SelectObject(*pen);
+		this->painter->Update();
 		this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(content));
 	}
 	else {
+		pen = factory.MakePen(QBrush(windowTitle->GetBorderColor()), 2);
+		oldPen = this->painter->SelectObject(*pen);
+		this->painter->Update();
 		QString verticalContent = QString::fromLocal8Bit(content);
 		verticalContent.remove(QChar(' '));
 		Long i = 1;
@@ -842,6 +845,7 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 			verticalContent.insert(i, '\n');
 			i+=2;
 		}
+		rect.setX(rect.x() + 3);
 		this->painter->DrawTextQ(rect, 0, verticalContent);
 	}
 

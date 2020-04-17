@@ -24,7 +24,7 @@ public:
         if (NotepadClass->objectName().isEmpty())
             NotepadClass->setObjectName(QString::fromUtf8("NotepadClass"));
         NotepadClass->resize(600, 400);
-        NotepadClass->setStyleSheet(QString::fromUtf8("background-color: rgba(255, 255, 255, 0);\n"
+        NotepadClass->setStyleSheet(QString::fromUtf8("background-color: rgba(255, 0, 0, 0);\n"
 "border-color: rgba(255, 255, 255, 0);"));
 
         retranslateUi(NotepadClass);

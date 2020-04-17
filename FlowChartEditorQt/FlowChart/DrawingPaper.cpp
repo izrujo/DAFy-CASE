@@ -27,6 +27,7 @@
 #include "CoordinateConverter.h"
 #include "Decision.h"
 #include "File.h"
+#include "WindowTitle.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -34,9 +35,13 @@
 #include <qmenu.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
+#include <qdebug.h>
 
-DrawingPaper::DrawingPaper(QWidget *parent) 
+DrawingPaper::DrawingPaper(QWidget *parent)
 	: QFrame(parent) {
+
+	this->setFocusPolicy(Qt::WheelFocus);
+
 	this->templateSelected = NULL;
 
 	this->flowChart = NULL;
@@ -69,13 +74,13 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 
 	this->popup = NULL;
 
+	this->drawSelectingAreaFlag = false;
+
 	QRect frameRect = this->frameRect();
 
 	this->flowChart = new FlowChart;
 
 	this->painter = new QtPainter(frameRect.width(), frameRect.height()); //트리플 버퍼링 유지하자.
-
-	//this->SetFocus();
 
 	this->clipboard = new Clipboard;
 
@@ -89,6 +94,8 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 	this->zoom->Set(40);
 
 	connect(this, &QWidget::customContextMenuRequested, this, &DrawingPaper::OnContextMenu);
+
+	this->setFocus();
 }
 
 DrawingPaper::~DrawingPaper() {
@@ -100,11 +107,11 @@ DrawingPaper::~DrawingPaper() {
 		delete this->painter;
 		this->painter = NULL;
 	}
-	
+
 	if (Label::Instance() != NULL) {
 		Label::Destroy();
 	}
-	
+
 	if (DrawingTool::Instance() != NULL) {
 		DrawingTool::Destroy();
 	}
@@ -161,7 +168,7 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	//POINT points[5] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {0, 0} };
 	//this->painter->FillBackground(points, 5, RGB(235, 235, 235));
 
-	//this->painter->EraseRect(rect);
+	this->painter->Resize(rect.width(), rect.height(), QColor(250, 250, 250));
 
 	//Visitor 패턴 적용	
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter, this->scrollController);
@@ -178,6 +185,10 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	if (this->templateSelected != NULL && this->templateSelected->IsSelected())
 	{
 		this->templateSelected->Accept(drawVisitor);
+	}
+
+	if (this->drawSelectingAreaFlag == true) {
+		this->DrawSelectingArea();
 	}
 
 	this->painter->Render(&painter, 0, 0);
@@ -228,6 +239,7 @@ void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 	if (this->label != NULL)
 	{
 		//19.09.03 Label의 (편집된)내용을 기호 안의 실제 데이터로 넣는 처리==================
+		Glyph *note = this->label->note;
 		string content = this->label->note->GetContent();
 		String contents(content);
 
@@ -269,25 +281,11 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 	else { //마우스가 암것도 안누르고 그냥 있는 상태일 때
 		//OnSetCursor 부분
 		QCursor cursor = this->GetCursor(event->pos());
-		//if (cursor.shape() != Qt::ArrowCursor) {
 		this->setCursor(cursor);
-		//}
-		//else {
-		//	QFrame::mouseMoveEvent(event);
-		//}
 
-		/* Status Bar
-		CString x;
-		x.Format("X : %d", point.x);
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(2, String((LPCTSTR)x));
-		CString y;
-		y.Format("Y : %d", point.y);
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(3, String((LPCTSTR)y));
-		dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Print();
-		*/
+		FlowChartTemplate *templateWnd = static_cast<FlowChartTemplate*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[1]);
 
 		//템플릿 창 기호에 마우스 올릴 때 효과가 마우스가 떠나도 지속되는 오류 때문에 넣음.
-		FlowChartTemplate *templateWnd = static_cast<FlowChartTemplate*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[1]);
 		QColor selectedColor(235, 235, 235);
 		NShape *shape;
 		Long i = 0;
@@ -351,7 +349,7 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 		this->clearFocus();
 
 		QColor color = shape->GetBackGroundColor();
-		this->label = Label::Instance(&(shape->GetContents()), this);
+		this->label = Label::Instance(&(shape->GetContents()), color, this);
 
 		halfHeight = shape->GetHeight() / 2;
 		left = shape->GetX() + halfHeight - positionX;
@@ -359,7 +357,6 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 		right = shape->GetX() + shape->GetWidth() - halfHeight + 5 - positionX;
 		bottom = shape->GetY() + shape->GetHeight() - 1 - positionY;
 
-		
 		this->label->Open(left, top, right - left, bottom - top);
 		this->label->show();
 
@@ -396,7 +393,7 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 	if (this->scrollController == NULL) {
 		this->scrollController = new ScrollController(this);
 
-		this->scrollController->GetScroll(0)->setValue(1311);
+		this->scrollController->GetScroll(0)->setValue(1283);
 		//Long previousPosition = this->SetScrollPos(SB_VERT, position, TRUE);
 		//position = this->GetScrollPos(SB_VERT);
 		//this->scrollController->MoveVerticalScroll(position);
@@ -419,7 +416,8 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 
 void DrawingPaper::wheelEvent(QWheelEvent *event) {
 	QPoint delta = event->angleDelta();
-	if (event->modifiers() == Qt::Key_Control && this->scrollController->GetScroll(0) != NULL) { //zoom
+	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
+	if (isControlPressed && this->scrollController->GetScroll(0) != NULL) { //zoom
 		Long oldRate = this->zoom->GetRate();
 		Long rate;
 		//CString rateStatus;
@@ -550,27 +548,38 @@ void DrawingPaper::OnContextMenu(const QPoint& pos) {
 }
 
 void DrawingPaper::DrawSelectingArea() {
-	QPainter dc(this);
-
-	QRect rect = this->frameRect();
-	
-	QtPainter painter(rect.width(), rect.height());
-
-	painter.SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
+	int compositionMode = this->painter->GetCompositionMode();
+	this->painter->SetCompositionMode(QPainter::RasterOp_NotSourceXorDestination);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(QColor(166, 166, 166)), 1, Qt::DotLine);
-	painter.SelectObject(*pen);
-	painter.Update();
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	this->painter->Update();
 
-	QRect drawRect(this->startX, this->startY, this->currentX, this->currentY);
-	painter.DrawRect(drawRect);
+	Long x = this->startX;
+	Long width = this->currentX - this->startX;
+	if (this->startX > this->currentX) {
+		x = this->currentX;
+		width = this->startX - this->currentX;
+	}
+	Long y = this->startY;
+	Long height = this->currentY - this->startY;
+	if (this->startY > this->currentY) {
+		y = this->currentY;
+		height = this->startY - this->currentY;
+	}
 
-	painter.Render(&dc, 0, 0);
+	QRect drawRect(x, y, width, height);
+	this->painter->DrawRect(drawRect);
 
-	//painter.SelectObject(*oldPen);
-	//painter.Update();
-	//this->ReleaseDC(dc);
+	this->painter->SelectObject(*oldPen);
+	this->painter->Update();
+	if (pen != 0) {
+		delete pen;
+	}
+	this->painter->SetCompositionMode(compositionMode);
+
+	this->drawSelectingAreaFlag = false;
 }
 
 void DrawingPaper::DrawActiveShape(NShape *entity) {

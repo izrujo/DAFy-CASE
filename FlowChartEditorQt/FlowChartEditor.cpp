@@ -3,14 +3,18 @@
 #include "FlowChart/FlowChartCommands.h"
 #include "FlowChart/DrawingPaper.h"
 #include "FlowChart/FlowChartTemplate.h"
+#include "FlowChart/WindowTitle.h"
 
 #include <qmenubar.h>
+#include <qevent.h>
+#include <qpainter.h>
 
 FlowChartEditor::FlowChartEditor(QWidget *parent)
 	: QFrame(parent)
 {
 	ui.setupUi(this);
 
+	this->setMouseTracking(true);
 	
 	this->menuBar = NULL;
 
@@ -169,6 +173,11 @@ void FlowChartEditor::resizeEvent(QResizeEvent *event) {
 		this->windows[0]->MoveWindow(rect);
 	}
 	*/
+}
+
+void FlowChartEditor::paintEvent(QPaintEvent *event) {
+	QPainter painter(this);
+	painter.fillRect(this->frameRect(), QColor(235, 235, 235));
 }
 
 /*우클릭 메뉴인가?
@@ -390,61 +399,47 @@ void FlowChartEditor::CreateActions() {
 
 	//==================== File Menu ====================
 	this->newAction = new QAction(QString::fromLocal8Bit(("새 파일(&N)")), this);
-	this->newAction->setShortcuts(QKeySequence::New);
 	connect(this->newAction, &QAction::triggered, this, [=]() { this->CommandRange("New"); });
 
 	this->openAction = new QAction(QString::fromLocal8Bit(("열기(&O)")), this);
-	this->openAction->setShortcuts(QKeySequence::Open);
 	connect(this->openAction, &QAction::triggered, this, [=]() { this->CommandRange("Open"); });
 
 	this->saveAction = new QAction(QString::fromLocal8Bit(("저장(&S)")), this);
-	this->saveAction->setShortcuts(QKeySequence::Save);
 	connect(this->saveAction, &QAction::triggered, this, [=]() { this->CommandRange("Save"); });
 
 	this->saveAsAction = new QAction(QString::fromLocal8Bit(("다른 이름으로 저장(&A)...")), this);
-	this->saveAsAction->setShortcuts(QKeySequence::SaveAs);
 	connect(this->saveAsAction, &QAction::triggered, this, [=]() { this->CommandRange("SaveAs"); });
 
 	this->saveAsImageAction = new QAction(QString::fromLocal8Bit(("이미지(JPG)로 저장(&I)...")), this);
-	//this->saveAsImageAction->setShortcuts(QKeySequence::New);
 	connect(this->saveAsImageAction, &QAction::triggered, this, [=]() { this->CommandRange("SaveAsImage"); });
 
 	this->printAction = new QAction(QString::fromLocal8Bit(("인쇄(&P)...")), this);
-	this->printAction->setShortcuts(QKeySequence::Print);
 	connect(this->printAction, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
 
 	this->exitAction = new QAction(QString::fromLocal8Bit(("끝내기(&X)...")), this);
-	this->exitAction->setShortcuts(QKeySequence::Close);
 	connect(this->exitAction, &QAction::triggered, this, [=]() { this->CommandRange("Exit"); });
 	//==================== File Menu ====================
 
 	//==================== Edit Menu ====================
 	this->undoAction = new QAction(QString::fromLocal8Bit(("실행 취소(&U)")), this); //실행 취소(U) Ctrl + Z
-	this->undoAction->setShortcuts(QKeySequence::Undo);
 	connect(this->undoAction, &QAction::triggered, this, [=]() { this->CommandRange("Undo"); });
 
 	this->redoAction = new QAction(QString::fromLocal8Bit(("다시 실행(&R)")), this); //다시 실행(R) Ctrl + Y
-	this->redoAction->setShortcuts(QKeySequence::Redo);
 	connect(this->redoAction, &QAction::triggered, this, [=]() { this->CommandRange("Redo"); });
 
 	this->copyAction = new QAction(QString::fromLocal8Bit(("복사하기(&C)")), this); //복사하기(C) Ctrl + C
-	this->copyAction->setShortcuts(QKeySequence::Copy);
 	connect(this->copyAction, &QAction::triggered, this, [=]() { this->CommandRange("Copy"); });
 
 	this->pasteAction = new QAction(QString::fromLocal8Bit(("붙여넣기(&P)")), this); //붙여넣기(P) Ctrl + V
-	this->pasteAction->setShortcuts(QKeySequence::Paste);
 	connect(this->pasteAction, &QAction::triggered, this, [=]() { this->CommandRange("Paste"); });
 
 	this->cutAction = new QAction(QString::fromLocal8Bit(("잘라내기(&T)")), this); //잘라내기(T) Ctrl + X
-	this->cutAction->setShortcuts(QKeySequence::Cut);
 	connect(this->cutAction, &QAction::triggered, this, [=]() { this->CommandRange("Cut"); });
 
 	this->deleteAction = new QAction(QString::fromLocal8Bit(("삭제(&L)")), this); //삭제(L) Del
-	this->deleteAction->setShortcuts(QKeySequence::Delete);
 	connect(this->deleteAction, &QAction::triggered, this, [=]() { this->CommandRange("Delete"); });
 
 	this->selectAllAction = new QAction(QString::fromLocal8Bit(("모두 선택(&A)")), this); //모두 선택(A) Ctrl + A
-	this->selectAllAction->setShortcuts(QKeySequence::SelectAll);
 	connect(this->selectAllAction, &QAction::triggered, this, [=]() { this->CommandRange("SelectAll"); });
 
 	this->positionAction = new QAction(QString::fromLocal8Bit(("기호 위치 같게(&O)")), this); //기호 위치 같게(O)
@@ -467,11 +462,9 @@ void FlowChartEditor::CreateActions() {
 
 	//==================== Add Menu ====================
 	this->drawingModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드(&M)")), this); //그리기 모드(M) Ctrl + D
-	//this->drawingModeAction->setShortcuts(QKeySequence::SelectAll);
 	connect(this->drawingModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingMode"); });
 
 	this->drawingUnModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드 해제(&U)")), this); //그리기 모드 해제 ESC
-	//this->drawingUnModeAction->setShortcuts(QKeySequence::Cancel); 없애.
 	connect(this->drawingUnModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingUnMode"); });
 
 	this->startTerminalSymbolAction = new QAction(QString::fromLocal8Bit(("시작 단말 기호(&S)")), this); //시작 단말 기호(S)

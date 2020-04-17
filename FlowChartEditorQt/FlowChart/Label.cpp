@@ -29,11 +29,11 @@
 
 Label* Label::instance = 0;
 
-Label* Label::Instance(String *text, QWidget *parent)
+Label* Label::Instance(String *text, QColor color, QWidget *parent)
 {
 	if (instance == 0)
 	{
-		instance = new Label(text, parent);
+		instance = new Label(text, color, parent);
 	}
 	return instance;
 }
@@ -55,17 +55,19 @@ Label::Label(QWidget *parent)
 	this->width = 0;
 	this->height = 0;
 	this->sizeController = NULL;
+	this->color = QColor(255, 255, 255);
 
 	this->sizeController = new SizeController(this);
 }
 
-Label::Label(String *text, QWidget *parent)
+Label::Label(String *text, QColor color, QWidget *parent)
 	: Notepad(text, parent) {
 	this->x = 0;
 	this->y = 0;
 	this->width = 0;
 	this->height = 0;
 	this->sizeController = NULL;
+	this->color = color;
 
 	this->sizeController = new SizeController(this);
 }
@@ -163,6 +165,8 @@ void Label::inputMethodEvent(QInputMethodEvent *event) {
 }
 
 void Label::paintEvent(QPaintEvent *event) {
+	QRect frameRect = this->frameRect();
+	this->painter->Resize(frameRect.width(), frameRect.height(), this->color);
 	Notepad::paintEvent(event);
 }
 
@@ -172,7 +176,6 @@ void Label::focusInEvent(QFocusEvent *event) {
 
 void Label::focusOutEvent(QFocusEvent *event) {
 	Notepad::focusOutEvent(event);
-	this->close();
 }
 
 void Label::mousePressEvent(QMouseEvent *event) {

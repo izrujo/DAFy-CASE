@@ -823,24 +823,25 @@ void PageSetCommand::Execute() {
 	
 	QPageSetupDialog dlg((QWidget*)this->editor);
 	QPrinter *printer = dlg.printer();
+	printer->setFullPage(true); //must be before setmargin
 	NShape *a4Paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper;
-	Long left = dynamic_cast<A4Paper*>(a4Paper)->GetLeftMargin() * 210 / 1653 * 100;
-	Long top = dynamic_cast<A4Paper*>(a4Paper)->GetTopMargin() * 297 / 2338 * 100;
-	Long right = dynamic_cast<A4Paper*>(a4Paper)->GetRightMargin() * 210 / 1653 * 100;
-	Long bottom = dynamic_cast<A4Paper*>(a4Paper)->GetBottomMargin() * 297 / 2338 * 100;
+	qreal left = dynamic_cast<A4Paper*>(a4Paper)->GetLeftMargin() * 210 / 1653;
+	qreal top = dynamic_cast<A4Paper*>(a4Paper)->GetTopMargin() * 297 / 2338;
+	qreal right = dynamic_cast<A4Paper*>(a4Paper)->GetRightMargin() * 210 / 1653;
+	qreal bottom = dynamic_cast<A4Paper*>(a4Paper)->GetBottomMargin() * 297 / 2338;
 	printer->setPageMargins(QMarginsF(left, top, right, bottom), QPageLayout::Millimeter);
 	int dialogCode = dlg.exec();
 	if (dialogCode == QDialog::Accepted) {
 		//printer = dlg.printer(); //was passsed 라고 언급되어있음.
-		QRectF marginRect = printer->pageRect(QPrinter::Millimeter);
-		
+		printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::Millimeter);
+
 		Long paperWidth = a4Paper->GetWidth();
 		Long paperHeight = a4Paper->GetHeight();
 
-		Long leftMargin = marginRect.left() / 100 * paperWidth / 210;
-		Long rightMargin = marginRect.right() / 100 * paperWidth / 210;
-		Long topMargin = marginRect.top() / 100 * paperHeight / 297;
-		Long bottomMargin = marginRect.bottom() / 100 * paperHeight / 297;
+		Long leftMargin = left / 100 * paperWidth / 210;
+		Long rightMargin = right / 100 * paperWidth / 210;
+		Long topMargin = top / 100 * paperHeight / 297;
+		Long bottomMargin = bottom / 100 * paperHeight / 297;
 
 		dynamic_cast<A4Paper*>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 	}

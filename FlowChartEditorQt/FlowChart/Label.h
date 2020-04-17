@@ -20,7 +20,7 @@ class SizeController;
 class Label : public Notepad {
 public:
 	static Label* Instance(QWidget *parent = Q_NULLPTR);
-	static Label* Instance(String *text, QWidget *parent = Q_NULLPTR);
+	static Label* Instance(String *text, QColor color = QColor(255, 255, 255), QWidget *parent = Q_NULLPTR);
 	static void Destroy();
 	void Open(Long x, Long y, Long width, Long height);
 
@@ -31,7 +31,7 @@ public:
 
 protected:
 	Label(QWidget *parent = Q_NULLPTR);
-	Label(String *text, QWidget *parent = Q_NULLPTR);
+	Label(String *text, QColor color, QWidget *parent = Q_NULLPTR);
 	~Label();
 
 public:
@@ -43,7 +43,7 @@ private:
 	Long width;
 	Long height;
 
-	//QColor color; Notepad StyleSheet 기능 이용
+	QColor color;
 private:
 	static Label *instance;
 protected:

@@ -89,6 +89,8 @@ public:
 	NShape *a4Paper;
 
 	QMenu *popup; //팝업메뉴(우클릭)
+
+	bool drawSelectingAreaFlag;
 private:
 	friend class Label;
 	friend class FlowChartTemplate;

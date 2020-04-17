@@ -269,9 +269,6 @@
     <ClCompile Include="Notepad\Subject.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
-    <ClCompile Include="x64\Debug\rcc\qrc_Notepad.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="Notepad\Row.cpp">
       <Filter>Notepad</Filter>
     </ClCompile>
@@ -316,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="FlowChart\WindowPin.cpp">
       <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\Notepad\qrc_Notepad.cpp">
+      <Filter>Generated Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -552,9 +552,6 @@
     <ClInclude Include="Notepad\Subject.h">
       <Filter>Notepad</Filter>
     </ClInclude>
-    <ClInclude Include="x64\Debug\uic\ui_Notepad.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="Notepad\Row.h">
       <Filter>Notepad</Filter>
     </ClInclude>
@@ -599,6 +596,9 @@
     </ClInclude>
     <ClInclude Include="FlowChart\WindowTitle.h">
       <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="x64\Debug\uic\Notepad\ui_Notepad.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,7 +18,8 @@
     background-color: white;
     spacing: 3px; /* spacing between menu bar items */
 	border-bottom: 1px solid gray; 
-}</string>
+}
+background-color: rgb(0, 0, 0);</string>
   </property>
  </widget>
  <layoutdefault spacing="6" margin="11"/>

@@ -30,7 +30,7 @@ Notepad::Notepad(QWidget *parent)
 	this->setFocusPolicy(Qt::WheelFocus);
 	this->setAttribute(Qt::WA_InputMethodEnabled, true);
 
-	this->caretController = NULL;
+	this->caretController = new CaretController(this);
 	this->isComposing = false;
 	this->highlight = NULL;
 	this->clipBoard = NULL;
@@ -62,7 +62,7 @@ Notepad::Notepad(String *text, QWidget *parent)
 	this->setFocusPolicy(Qt::WheelFocus);
 	this->setAttribute(Qt::WA_InputMethodEnabled, true);
 
-	this->caretController = NULL;
+	this->caretController = new CaretController(this);
 	this->isComposing = false;
 	this->highlight = NULL;
 	this->clipBoard = NULL;
@@ -110,7 +110,7 @@ Notepad::Notepad(char *text, QWidget *parent)
 	this->setFocusPolicy(Qt::WheelFocus);
 	this->setAttribute(Qt::WA_InputMethodEnabled, true);
 
-	this->caretController = NULL;
+	this->caretController = new CaretController(this);
 	this->isComposing = false;
 	this->highlight = NULL;
 	this->clipBoard = NULL;
@@ -292,8 +292,8 @@ void Notepad::inputMethodEvent(QInputMethodEvent *event) {
 void Notepad::paintEvent(QPaintEvent *event) {
 	QPainter dc(this);
 
-	QRect frameRect = this->frameRect();
-	this->painter->Resize(frameRect.width(), frameRect.height());
+	//QRect frameRect = this->frameRect();
+	//this->painter->Resize(frameRect.width(), frameRect.height());
 
 	Glyph *line;
 	string content;

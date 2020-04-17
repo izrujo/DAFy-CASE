@@ -510,7 +510,7 @@ QCursor NShape::GetCursor(int hit) const {
 		cursor.setShape(Qt::SizeFDiagCursor);
 		break;
 	case HIT_TOPMIDDLE:
-		cursor.setShape(Qt::SizeBDiagCursor);
+		cursor.setShape(Qt::SizeVerCursor);
 		break;
 	case HIT_TOPRIGHT:
 		cursor.setShape(Qt::SizeBDiagCursor);
@@ -519,7 +519,7 @@ QCursor NShape::GetCursor(int hit) const {
 		cursor.setShape(Qt::SizeBDiagCursor);
 		break;
 	case HIT_BOTTOMMIDDLE:
-		cursor.setShape(Qt::SizeBDiagCursor);
+		cursor.setShape(Qt::SizeVerCursor);
 		break;
 	case HIT_BOTTOMRIGHT:
 		cursor.setShape(Qt::SizeFDiagCursor);

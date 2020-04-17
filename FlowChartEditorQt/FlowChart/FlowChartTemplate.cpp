@@ -51,7 +51,7 @@ FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	this->shapeSelected = NULL;
 	this->mode = DRAWOFF;
 	this->oldShapeSelected = NULL;
-	this->windowBorderColor = QColor(153, 204, 204);
+	this->windowBorderColor = QColor(255, 255, 255);
 
 	QRect rect = this->frameRect();
 	Long width = 150;
@@ -89,11 +89,11 @@ FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	this->flowChartTemplate->Attach(template6);
 	this->flowChartTemplate->Attach(template7);
 
-	this->windowTitle = new WindowTitle(2, 2, 186, 30, QColor(102, 204, 204),
-		Qt::SolidLine, QColor(153, 204, 204), String(" 기호 상자")); //x, y는 창 테두리 두께 5와 타이틀 두께 1의 기시감? 해결
+	this->windowTitle = new WindowTitle(2, 2, 186, 30, QColor(235, 235, 235),
+		Qt::SolidLine, QColor(255, 255, 255), String(" 기호 상자")); //x, y는 창 테두리 두께 5와 타이틀 두께 1의 기시감? 해결
 	Long windowPinX = this->windowTitle->GetX() + this->windowTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 	Long windowPinY = this->windowTitle->GetY() + 4;
-	this->windowPin = new WindowPin(windowPinX, windowPinY, 26, 23, QColor(102, 204, 204),
+	this->windowPin = new WindowPin(windowPinX, windowPinY, 26, 23, QColor(235, 235, 235),
 		Qt::SolidLine, QColor(255, 255, 255));
 
 	this->painter = new QtPainter(rect.width(), rect.height());
@@ -213,17 +213,6 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 		this->shapeSelected = NULL;
 	}
 
-	QRect pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
-	bool isContain = pinRect.contains(event->pos());
-	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
-	if (isContain == true) {
-		if (isPinned == true) {
-			dynamic_cast<WindowPin*>(this->windowPin)->SetIsPinned(false);
-		}
-		else {
-			dynamic_cast<WindowPin*>(this->windowPin)->SetIsPinned(true);
-		}
-	}
 	this->repaint();
 }
 
@@ -266,24 +255,58 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 		this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
 	}
 
-	//고정 해제 윈도우 타이틀에 마우스 올렸을 때
+	//고정 해제된 기호 상자 윈도우 타이틀에 마우스 올렸을 때
 	bool isFocusedAndPinned = dynamic_cast<WindowTitle*>(this->windowTitle)->GetIsFocusedAndPinned();
 	if (isFocusedAndPinned == false) {
 		QRect titleRect(this->x(), this->y(), this->width(), this->height());
 		isContain = titleRect.contains(event->pos());
-		if (isContain == true) {
+		if (isContain == true && !this->hasFocus()) {
+		//	this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
+		//	this->windowBorderColor = this->windowTitle->GetBorderColor();
+		}
+		else if (isContain == true) {
 			this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
 			this->windowBorderColor = this->windowTitle->GetBorderColor();
 			this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
 		}
+		/*
 		else {
 			this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
 			this->windowBorderColor = this->windowTitle->GetBorderColor();
 			this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
 		}
+		*/
 	}
 
 	this->repaint();
+}
+
+void FlowChartTemplate::mouseReleaseEvent(QMouseEvent *event) {
+	QRect pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
+	bool isContain = pinRect.contains(event->pos());
+	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
+	bool previousIsPinned = isPinned;
+	if (isContain == true) {
+		if (isPinned == true) {
+			dynamic_cast<WindowPin*>(this->windowPin)->SetIsPinned(false);
+		}
+		else {
+			dynamic_cast<WindowPin*>(this->windowPin)->SetIsPinned(true);
+		}
+	}
+
+	isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
+	if (previousIsPinned == false && isPinned == true) {
+		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
+		Long newX = this->x() * 2 + this->width();
+		Long newWidth = editor->width() - newX;
+		canvas->move(newX, canvas->y());
+		canvas->resize(newWidth, canvas->height());
+	}
+	else if (previousIsPinned == true && isPinned == false) {
+		this->clearFocus();
+	}
 }
 
 void FlowChartTemplate::focusOutEvent(QFocusEvent *event) {
@@ -294,16 +317,21 @@ void FlowChartTemplate::focusOutEvent(QFocusEvent *event) {
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
 	if (isPinned == false) { //고정 해제된 상태에서 포커스 아웃됨.
 		this->windowTitle->ReSize(this->windowTitle->GetHeight(), this->windowTitle->GetWidth() / 2 + 20);
-		this->resize(this->windowTitle->GetWidth(), this->windowTitle->GetHeight());
+		this->windowTitle->Move(this->windowTitle->GetX(), this->windowTitle->GetY() - 3);
+		this->resize(this->windowTitle->GetWidth(), this->windowTitle->GetHeight() - 3);
 
 		dynamic_cast<WindowTitle*>(this->windowTitle)->SetIsFocusedAndPinned(false);
-		/*
+
+		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
+		this->windowBorderColor = this->windowTitle->GetBorderColor();
+
 		//DrawingPaper
 		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
-		canvas->move(this->x() * 2 + this->windowTitle->GetWidth(), canvas->y());
-		canvas->resize(canvas->width() + canvas->x() - (this->x() * 2 + this->width()), canvas->height());
-		*/
+		Long newX = this->x() * 2 + this->windowTitle->GetWidth();
+		Long newWidth = editor->width() - newX;
+		canvas->move(newX, canvas->y());
+		canvas->resize(newWidth, canvas->height());
 	}
 	this->repaint();
 }
@@ -314,17 +342,34 @@ void FlowChartTemplate::focusInEvent(QFocusEvent *event) {
 	this->windowBorderColor = this->windowTitle->GetBorderColor();
 	this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
 
+	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
 	if (isPinned == false) {
-		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 		this->resize(190, editor->frameRect().height() - editor->menuBar->height() - 20);
 		this->windowTitle->ReSize((this->windowTitle->GetHeight() - 20) * 2, this->windowTitle->GetWidth());
-		/*
+		this->windowTitle->Move(this->windowTitle->GetX(), this->windowTitle->GetY() + 3);
+	}
+	else {
 		//DrawingPaper
 		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
-		canvas->move(canvas->x() + this->width(), canvas->y());
-		canvas->resize(canvas->width() - canvas->x() - (this->x() * 2 + this->width()), canvas->height());
-		*/
+		Long newX = this->x() * 2 + this->width();
+		Long newWidth = editor->width() - newX;
+		canvas->move(newX, canvas->y());
+		canvas->resize(newWidth, canvas->height());
 	}
 	this->repaint();
+}
+
+void FlowChartTemplate::leaveEvent(QEvent *event) {
+	if (!dynamic_cast<WindowTitle*>(this->windowTitle)->GetIsFocusedAndPinned()) {
+		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
+		this->windowBorderColor = this->windowTitle->GetBorderColor();
+	}
+}
+
+void FlowChartTemplate::enterEvent(QEvent *event) {
+	if (!dynamic_cast<WindowTitle*>(this->windowTitle)->GetIsFocusedAndPinned()) {
+		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
+		this->windowBorderColor = this->windowTitle->GetBorderColor();
+	}
 }

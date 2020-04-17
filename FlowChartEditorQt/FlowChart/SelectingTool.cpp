@@ -51,18 +51,21 @@ void SelectingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 void SelectingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	bool isMouseLButtonPressed;
 	isMouseLButtonPressed = ((::GetKeyState(VK_LBUTTON) & 0x8000) != 0);
-
+	
+	/*
 	if (isMouseLButtonPressed) { // 왼쪽 마우스 버튼이 눌려져있을때
-		canvas->DrawSelectingArea();
+		canvas->drawSelectingAreaFlag = true;
+		canvas->update();
 	}
+	*/
 
 	canvas->currentX = point.x();
 	canvas->currentY = point.y();
 
 	if (isMouseLButtonPressed) {
-		canvas->DrawSelectingArea();
+		canvas->drawSelectingAreaFlag = true;
+		canvas->update();
 	}
-
 }
 
 void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
@@ -140,6 +143,4 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	if (indexes != 0) {
 		delete[] indexes;
 	}
-
-	//canvas->repaint();
 }

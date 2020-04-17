@@ -39,6 +39,7 @@ private:
 protected:
 	void closeEvent(QCloseEvent *event);
 	void resizeEvent(QResizeEvent *event);
+	void paintEvent(QPaintEvent *event);
 	/* 해당하는 함수 찾기
 	BOOL PreTranslateMessage(MSG *pMsg);
 	afx_msg void OnDropFiles(HDROP hDropInfo);
