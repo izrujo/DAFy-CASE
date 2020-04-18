@@ -260,22 +260,11 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 	if (isFocusedAndPinned == false) {
 		QRect titleRect(this->x(), this->y(), this->width(), this->height());
 		isContain = titleRect.contains(event->pos());
-		if (isContain == true && !this->hasFocus()) {
-		//	this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
-		//	this->windowBorderColor = this->windowTitle->GetBorderColor();
-		}
-		else if (isContain == true) {
+		if (isContain == true && this->hasFocus()) {
 			this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
 			this->windowBorderColor = this->windowTitle->GetBorderColor();
 			this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
 		}
-		/*
-		else {
-			this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
-			this->windowBorderColor = this->windowTitle->GetBorderColor();
-			this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
-		}
-		*/
 	}
 
 	this->repaint();
@@ -361,15 +350,41 @@ void FlowChartTemplate::focusInEvent(QFocusEvent *event) {
 }
 
 void FlowChartTemplate::leaveEvent(QEvent *event) {
+	//고정해제, 포커스 아웃, 마우스 올리고 치울 때 색깔 처리
 	if (!dynamic_cast<WindowTitle*>(this->windowTitle)->GetIsFocusedAndPinned()) {
 		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
 		this->windowBorderColor = this->windowTitle->GetBorderColor();
 	}
+
+	//기호들 바뀐 색깔 유지되는거 방지
+	QColor selectedColor(235, 235, 235);
+	NShape *shape;
+	Long i = 0;
+	while (i < this->flowChartTemplate->GetLength()) {
+		shape = this->flowChartTemplate->GetAt(i);
+		if (shape->GetBackGroundColor() == selectedColor && this->oldShapeSelected != NULL) {
+			shape->Paint(this->oldShapeSelected->GetBackGroundColor(), shape->GetBorderLine(), shape->GetBorderColor());
+		}
+		i++;
+	}
+
+	//윈도우 핀
+	if (this->hasFocus()) {
+		this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+	else {
+		this->windowPin->Paint(QColor(235, 235, 235), Qt::SolidLine, this->windowPin->GetBorderColor());
+	}
+
+	this->repaint();
 }
 
 void FlowChartTemplate::enterEvent(QEvent *event) {
+	//고정해제, 포커스 아웃, 마우스 올리고 치울 때 색깔 처리
 	if (!dynamic_cast<WindowTitle*>(this->windowTitle)->GetIsFocusedAndPinned()) {
 		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
 		this->windowBorderColor = this->windowTitle->GetBorderColor();
 	}
+
+	this->repaint();
 }

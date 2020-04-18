@@ -282,21 +282,6 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 		//OnSetCursor 부분
 		QCursor cursor = this->GetCursor(event->pos());
 		this->setCursor(cursor);
-
-		FlowChartTemplate *templateWnd = static_cast<FlowChartTemplate*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[1]);
-
-		//템플릿 창 기호에 마우스 올릴 때 효과가 마우스가 떠나도 지속되는 오류 때문에 넣음.
-		QColor selectedColor(235, 235, 235);
-		NShape *shape;
-		Long i = 0;
-		while (i < templateWnd->flowChartTemplate->GetLength()) {
-			shape = templateWnd->flowChartTemplate->GetAt(i);
-			if (shape->GetBackGroundColor() == selectedColor && templateWnd->oldShapeSelected != NULL) {
-				shape->Paint(templateWnd->oldShapeSelected->GetBackGroundColor(), shape->GetBorderLine(), shape->GetBorderColor());
-			}
-			i++;
-		}
-		templateWnd->repaint();
 	}
 }
 
