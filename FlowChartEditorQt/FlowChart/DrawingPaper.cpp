@@ -28,6 +28,7 @@
 #include "Decision.h"
 #include "File.h"
 #include "WindowTitle.h"
+#include "SketchBook.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -41,6 +42,8 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 	: QFrame(parent) {
 
 	this->setFocusPolicy(Qt::WheelFocus);
+
+	this->windowBorderColor = QColor(102, 204, 204);
 
 	this->templateSelected = NULL;
 
@@ -159,14 +162,6 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	QRect rect = this->frameRect();
 
 	FlowChartEditor *editor = (FlowChartEditor*)this->parent();
-
-	//그리기 전 기본 설정 : 필요 없을 것 같음.
-	//HFONT hFont = editor->font->Create();
-	//this->painter->ChangeFont(hFont, editor->font->GetColor());
-	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(0, 0, 0));
-	//this->painter->EraseBackground((float)0, (float)0, (float)rect.Width(), (float)rect.Height());
-	//POINT points[5] = { {0, 0}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {0, 0} };
-	//this->painter->FillBackground(points, 5, RGB(235, 235, 235));
 
 	this->painter->Resize(rect.width(), rect.height(), QColor(250, 250, 250));
 
@@ -345,6 +340,18 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 }
 
 void DrawingPaper::resizeEvent(QResizeEvent *event) {
+	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
+	SketchBook *sketchBook = editor->sketchBook;
+	Long width = 0;
+	Long i = 0;
+	while (i < sketchBook->GetLength()) {
+		NShape *canvasTitle = sketchBook->GetCanvas(i);
+		canvasTitle->Move(this->x() + width, canvasTitle->GetY());
+		width += canvasTitle->GetWidth();
+		i++;
+	}
+	editor->update();
+
 	QRect frameRect = this->frameRect();
 	if (this->painter != NULL) {
 		delete this->painter;

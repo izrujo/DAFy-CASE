@@ -91,6 +91,8 @@ public:
 	QMenu *popup; //팝업메뉴(우클릭)
 
 	bool drawSelectingAreaFlag;
+
+	QColor windowBorderColor;
 private:
 	friend class Label;
 	friend class FlowChartTemplate;

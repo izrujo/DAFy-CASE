@@ -4,6 +4,13 @@
 #include "FlowChart/DrawingPaper.h"
 #include "FlowChart/FlowChartTemplate.h"
 #include "FlowChart/WindowTitle.h"
+#include "GObject/GObject.h"
+#include "GObject/QtGObjectFactory.h"
+#include "GObject/QtPainter.h"
+#include "FlowChart/SketchBook.h"
+#include "FlowChart/WindowTitle.h"
+#include "FlowChart/FlowChartVisitor.h"
+#include "FlowChart/DrawVisitor.h"
 
 #include <qmenubar.h>
 #include <qevent.h>
@@ -26,20 +33,27 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 
 	//자식 윈도우 생성 - 위치와 크기, 스타일 지정
 	DrawingPaper *drawingPaper = new DrawingPaper(this);
-	drawingPaper->move(200, 1 + this->menuBar->height());
+	drawingPaper->move(200, this->menuBar->height() + 5 + 32);
 	this->windows.Store(0, drawingPaper);
 
 	FlowChartTemplate *fTemplate = new FlowChartTemplate(this);
 	fTemplate->move(5, 5 + this->menuBar->height());
 	this->windows.Store(1, fTemplate);
-	//this->windows.Store(2, NULL);
 
-	//this->isUnModeMenuEnabled = FALSE; //메뉴 컨트롤에 관한 속성 초기화
+	this->painter = new QtPainter(frameRect.width(), frameRect.height(), QColor(235, 235, 235));
 
-	/*아이콘
-	HICON flowChartEditorIcon = AfxGetApp()->LoadIcon(IDI_ICON1);
-	this->SetIcon(flowChartEditorIcon, TRUE);
-	*/
+	this->sketchBook = new SketchBook;
+
+	Long height = 26;
+	//임시
+	NShape *firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height-4, 186, height, QColor(102, 204, 204),
+		Qt::SolidLine, QColor(102, 204, 204), String(" 제목 없음"));
+	this->sketchBook->Add(firstTitle, drawingPaper->flowChart->Clone());
+	NShape *tempTitle = new WindowTitle(drawingPaper->x() + 186, drawingPaper->y() - height-4, 186, height, QColor(235, 235, 235),
+		Qt::SolidLine, QColor(235, 235, 235), String(" 임시"));
+	this->sketchBook->Add(tempTitle, drawingPaper->flowChart->Clone());
+	
+
 
 	/*상태 표시줄
 	HINSTANCE hInstance = (HINSTANCE)::GetWindowLong(this->m_hWnd, GWL_HINSTANCE);
@@ -78,53 +92,26 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	this->statusBar->Print();
 	*/
 
-	/*상단 메뉴
-	menu.LoadMenuA(IDR_MENU);
-	SetMenu(&menu);
-	*/
-
 	//파일처리에 관련된 것인듯
 	//DragAcceptFiles(TRUE);
-
-	//폰트
-	//this->font = new FlowChartFont(this);
-
-	//Accelerators
-	//this->hAccel = ::LoadAccelerators(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATOR));
 }
 
 void FlowChartEditor::closeEvent(QCloseEvent *event) {
 	if (this->menuBar != NULL) {
 		delete this->menuBar;
 	}
+	if (this->painter != NULL) {
+		delete this->painter;
+	}
+	if (this->sketchBook != NULL) {
+		delete this->sketchBook;
+	}
 
-	/*자식 윈도우 배열
 	Long i = 0;
-	while (i < this->windows.GetLength()) {
-		if (this->windows[i] = NULL) {
-			delete this->windows[i];
-		}
-		this->windows[i] = NULL;
+	while (i < 2) {
+		delete this->windows[i];
 		i++;
 	}
-	*/
-	/*폰트
-	if (this->font != NULL) {
-		delete this->font;
-	}
-	*/
-	/*상태 표시줄
-	if (this->statusBar != NULL) {
-		delete this->statusBar;
-	}
-	*/
-	/*툴팁
-	if (this->toolTip != NULL) {
-		this->toolTip->Destroy();
-	}
-	*/
-	//Accelerators
-	//DestroyAcceleratorTable(this->hAccel);
 
 	QFrame::closeEvent(event);
 }
@@ -134,50 +121,59 @@ void FlowChartEditor::resizeEvent(QResizeEvent *event) {
 
 	this->menuBar->resize(frameRect.width(), this->menuBar->height());
 
-	this->windows[0]->resize(frameRect.width() - 200, frameRect.height() - this->menuBar->height() + 1);
+	this->windows[0]->resize(frameRect.width() - 200, frameRect.height() - this->menuBar->height() - 32 - 20);
 	this->windows[0]->repaint();
 	
-	Long height = frameRect.height() - this->menuBar->height() - 20;
 	this->windows[1]->resize(190, frameRect.height() - this->menuBar->height() - 20);
 	this->windows[1]->repaint();
-	/*frameRect 값을 조정?
-	rect.left = 205;
-	rect2.right = 200;
-	*/
-
-	/*상태 표시줄
-	Long gap;
-	WINDOWPLACEMENT sbPosition;
-	int statusBars[7];
-	HWND hWndStatus = this->statusBar->GetHandle();
-	if (hWndStatus != NULL) {
-		::GetWindowPlacement(hWndStatus, &sbPosition);
-		gap = sbPosition.rcNormalPosition.bottom - sbPosition.rcNormalPosition.top;
-		rect.bottom = rect.bottom - gap;
-		rect2.bottom = rect2.bottom - gap;
-		::MoveWindow(hWndStatus, 0, rect.bottom, rect.right, gap, FALSE);
-
-		statusBars[0] = rect.right - 700;
-		statusBars[1] = statusBars[0] + 100;
-		statusBars[2] = statusBars[1] + 100;
-		statusBars[3] = statusBars[2] + 100;
-		statusBars[4] = statusBars[3] + 100;
-		statusBars[5] = statusBars[4] + 200;
-		statusBars[6] = statusBars[5] + 100;
-		::SendMessage(hWndStatus, SB_SETPARTS, (WPARAM)7, (LPARAM)statusBars);
-	}
-	*/
-	/*mfc에서 오류 해결인듯
-	if (this->windows[0] != NULL && this->windows[1] != NULL) { //최대화해서 출력하니 OnClose 이후에 OnSize가 호출.
-		this->windows[1]->MoveWindow(rect2);
-		this->windows[0]->MoveWindow(rect);
-	}
-	*/
 }
 
 void FlowChartEditor::paintEvent(QPaintEvent *event) {
 	QPainter painter(this);
-	painter.fillRect(this->frameRect(), QColor(235, 235, 235));
+
+	QRect frameRect = this->frameRect();
+
+	this->painter->Resize(frameRect.width(), frameRect.height(), QColor(235, 235, 235));
+	
+	DrawingPaper *canvas = dynamic_cast<DrawingPaper*>(this->windows[0]);
+	QColor windowBorderColor = canvas->windowBorderColor;
+	//=======창 테두리=========
+	QtGObjectFactory factory;
+	GObject *pen = factory.MakePen(QBrush(windowBorderColor), 3);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	this->painter->Update();
+
+	QPoint p1(canvas->x()+1, canvas->y()-2);
+	QPoint p2(canvas->x()+1 + canvas->width(), canvas->y()-2);
+	this->painter->DrawLine(p1, p2);
+
+	this->painter->SelectObject(*oldPen);
+	this->painter->Update();
+	if (pen != 0) {
+		delete pen;
+	}
+	//=======창 테두리=========
+
+	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
+
+	this->sketchBook->Draw(visitor);
+
+	this->painter->Render(&painter, 0, 0);
+}
+
+void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->windows[0]);
+	
+	//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
+	this->sketchBook->Unfold(canvas->flowChart->Clone());
+	
+	//스케치북을 펼친다 : 현재 캔버스의 쪽과 캔버스 타이틀 색깔 바꾸기
+	this->sketchBook->Fold(event->pos());
+	//스케치북을 펼친다 : 펼친 캔버스의 저장되어있던 순서도로 바꾼다.
+	canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
+
+	this->repaint();
+	canvas->repaint();
 }
 
 /*우클릭 메뉴인가?

@@ -34,3 +34,14 @@ NShape* WindowTitle::Clone() {
 void WindowTitle::SetIsFocusedAndPinned(bool isFocusedAndPinned) {
 	this->isFocusedAndPinned = isFocusedAndPinned;
 }
+
+bool WindowTitle::IsIncluded(QPoint point) {
+	bool ret;
+
+	QRect regionRect;
+	regionRect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion region(regionRect);
+	ret = region.contains(point);
+
+	return ret;
+}

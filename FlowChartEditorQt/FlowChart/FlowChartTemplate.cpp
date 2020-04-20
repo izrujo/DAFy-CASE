@@ -264,7 +264,7 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 		QRect titleRect(this->x(), this->y(), this->width(), this->height());
 		isContain = titleRect.contains(event->pos());
 		if (isContain == true && this->hasFocus()) {
-			this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
+			this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
 			this->windowBorderColor = this->windowTitle->GetBorderColor();
 			this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
 		}
@@ -330,7 +330,7 @@ void FlowChartTemplate::focusOutEvent(QFocusEvent *event) {
 
 void FlowChartTemplate::focusInEvent(QFocusEvent *event) {
 	dynamic_cast<WindowTitle*>(this->windowTitle)->SetIsFocusedAndPinned(true);
-	this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(153, 204, 204));
+	this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
 	this->windowBorderColor = this->windowTitle->GetBorderColor();
 	this->windowPin->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowPin->GetBorderColor());
 

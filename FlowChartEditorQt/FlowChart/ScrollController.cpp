@@ -124,10 +124,10 @@ void ScrollController::Update() {
 		scroll->setSingleStep(lineSize);
 		scroll->setValue(position);
 		
+		Long right = this->drawingPaper->frameRect().right()+1;
 		scroll->resize(20, this->drawingPaper->height());
-		scroll->move(this->drawingPaper->frameRect().right() - 20, scroll->y());
+		scroll->move(right - 20, scroll->y());
 		scroll->show();
-
 	}
 	else {
 		if (this->scrolls.GetAt(0) != 0) {
@@ -160,10 +160,10 @@ void ScrollController::Update() {
 		scroll->setSingleStep(lineSize);
 		scroll->setValue(position);
 
+		Long bottom = this->drawingPaper->frameRect().bottom() + 1;
 		scroll->resize(this->drawingPaper->width() - 20, 20);
-		scroll->move(scroll->x(), this->drawingPaper->frameRect().bottom() - 20);
+		scroll->move(scroll->x(), bottom - 20);
 		scroll->show();
-
 	}
 	else {
 		if (this->scrolls.GetAt(1) != 0) {

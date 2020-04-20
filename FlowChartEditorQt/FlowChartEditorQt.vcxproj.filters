@@ -317,6 +317,9 @@
     <ClCompile Include="x64\Debug\rcc\Notepad\qrc_Notepad.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\SketchBook.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -599,6 +602,9 @@
     </ClInclude>
     <ClInclude Include="x64\Debug\uic\Notepad\ui_Notepad.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\SketchBook.h">
+      <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

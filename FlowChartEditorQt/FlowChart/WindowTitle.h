@@ -20,6 +20,8 @@ public:
 	virtual void GetRegion(QRegion *region) {};
 	virtual void GetRegion(Long thickness, QRegion *region) {};
 
+	virtual bool IsIncluded(QPoint point);
+
 	void SetIsFocusedAndPinned(bool isFocusedAndPinned);
 
 	bool GetIsFocusedAndPinned() const;
