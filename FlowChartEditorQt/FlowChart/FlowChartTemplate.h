@@ -42,6 +42,7 @@ protected:
 	void focusInEvent(QFocusEvent *event);
 	void leaveEvent(QEvent *event);
 	void enterEvent(QEvent *event);
+	void keyPressEvent(QKeyEvent *event); //DrawingMode, one, two, three, etc.
 };
 
 #endif // _FLOWCHARTTEMPLATE_H

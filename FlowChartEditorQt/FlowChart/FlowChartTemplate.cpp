@@ -39,6 +39,9 @@
 #include "../GObject/QtPainter.h"
 #include "../GObject/QtGObjectFactory.h"
 
+#include "FlowChartKeyActionFactory.h"
+#include "FlowChartKeyActions.h"
+
 #include <qpainter.h>
 #include <qevent.h>
 #include <qmenubar.h>
@@ -223,7 +226,7 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 	QColor selectedColor(235, 235, 235);
 	NShape *shape;
 	Long i = 0;
-	while (i < this->flowChartTemplate->GetLength()) {
+	while (i < 7/*this->flowChartTemplate->GetLength()*/) {
 		shape = this->flowChartTemplate->GetAt(i);
 		if (shape->GetBackGroundColor() == selectedColor && this->oldShapeSelected != NULL) {
 			shape->Paint(this->oldShapeSelected->GetBackGroundColor(), shape->GetBorderLine(), shape->GetBorderColor());
@@ -360,7 +363,7 @@ void FlowChartTemplate::leaveEvent(QEvent *event) {
 	QColor selectedColor(235, 235, 235);
 	NShape *shape;
 	Long i = 0;
-	while (i < this->flowChartTemplate->GetLength()) {
+	while (i < 7/*this->flowChartTemplate->GetLength()*/) {
 		shape = this->flowChartTemplate->GetAt(i);
 		if (shape->GetBackGroundColor() == selectedColor && this->oldShapeSelected != NULL) {
 			shape->Paint(this->oldShapeSelected->GetBackGroundColor(), shape->GetBorderLine(), shape->GetBorderColor());
@@ -385,6 +388,19 @@ void FlowChartTemplate::enterEvent(QEvent *event) {
 		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
 		this->windowBorderColor = this->windowTitle->GetBorderColor();
 	}
+
+	this->repaint();
+}
+
+void FlowChartTemplate::keyPressEvent(QKeyEvent *event) {
+	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
+	FlowChartKeyActionFactory keyActionFactory(editor);
+	FlowChartKeyAction *keyAction = keyActionFactory.Make(event->modifiers(), event->key());
+	if (keyAction != 0) {
+		keyAction->OnKeyDown();
+		delete keyAction;
+	}
+	editor->windows[1]->repaint(); //¿Ö?
 
 	this->repaint();
 }

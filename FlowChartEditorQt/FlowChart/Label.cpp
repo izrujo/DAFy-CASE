@@ -48,7 +48,7 @@ Label* Label::Instance(QWidget *parent)
 }
 
 
-Label::Label(QWidget *parent) 
+Label::Label(QWidget *parent)
 	: Notepad(parent) {
 	this->x = 0;
 	this->y = 0;
@@ -101,7 +101,7 @@ void Label::keyPressEvent(QKeyEvent *event) {
 	Notepad::keyPressEvent(event);
 	int nChar = event->key();
 	/* 한 칸 띄우기 없음
-	//특수문자면 한칸 띄우는데 예외들 : ' " > <  . ! 
+	//특수문자면 한칸 띄우는데 예외들 : ' " > <  . !
 	if (((nChar >= 33 && nChar <= 47) || (nChar >= 58 && nChar <= 64)
 		|| (nChar >= 91 && nChar <= 96) || (nChar >= 123 && nChar <= 126))
 		&& (nChar != 34 && nChar != 39 && nChar != 60 && nChar != 62 && nChar != 33 /*&& nChar != 46)) { //여기가 예외인 특수기호들
@@ -117,11 +117,11 @@ void Label::keyPressEvent(QKeyEvent *event) {
 		}
 	}
 	*/
-
+	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
 	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
 	//준비기호가 아닐 때 처리한다.
-	if (!(dynamic_cast<Preparation*>(shape))) {
+	if (!(dynamic_cast<Preparation*>(shape)) && !isControlPressed) {
 		bool isMustCheck = false;
 		//영문이 입력되면 무조건 처리한다.
 		if ((nChar >= Qt::Key_A && nChar <= Qt::Key_Z) /*|| (nChar >= 97 && nChar <= 122)*/) {
@@ -176,6 +176,27 @@ void Label::focusInEvent(QFocusEvent *event) {
 
 void Label::focusOutEvent(QFocusEvent *event) {
 	Notepad::focusOutEvent(event);
+
+	//19.09.03 Label의 (편집된)내용을 기호 안의 실제 데이터로 넣는 처리==================
+	DrawingPaper *canvas = (DrawingPaper*)this->parentWidget();
+
+	string content = this->note->GetContent();
+	String contents(content);
+
+	NShape *shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
+
+	shape->Rewrite(contents);
+	//=====================intellisense========================
+	if (dynamic_cast<Preparation*>(shape)) {
+		if (canvas->variableList != NULL) {
+			delete canvas->variableList;
+		}
+		canvas->variableList = new VariableList;
+		canvas->variableList->Add(shape->GetContents());
+	}
+	//=========================================================
+
+	this->Destroy();
 }
 
 void Label::mousePressEvent(QMouseEvent *event) {

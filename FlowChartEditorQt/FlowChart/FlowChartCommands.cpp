@@ -17,10 +17,6 @@
 #include "Shape.h"
 #include "../GObject/QtPainter.h"
 
-//#include "TutorialForm.h"
-//#include "StatusBar.h"
-//#include "TutorialIntroForm.h"
-
 #include "../GObject/QtGObjectFactory.h"
 #include "../GObject/GObject.h"
 #include "../GObject/QtPainter.h"
@@ -34,6 +30,7 @@
 #include <QtPrintSupport/qprinter.h>
 
 using namespace std;
+
 //FlowChartCommand
 FlowChartCommand::FlowChartCommand(FlowChartEditor *editor) {
 	this->editor = editor;
@@ -282,9 +279,14 @@ void FontSetCommand::Execute() {
 
 	//취소 눌렀을 때 설정할 원래 폰트
 	GObject *oldFont = static_cast<DrawingPaper*>(this->editor->windows[0])->painter->CurrentObject("Font");
+	QString family = oldFont->GetFamily();
+	Long weight = oldFont->GetWeight();
+	Long pointSize = oldFont->GetPointSize();
+	bool italic = oldFont->GetItalic();
+	QFont cancelFont(family, weight, pointSize, italic);
 
 	bool ok;
-	QFont userfont = QFontDialog::getFont(&ok, *(QFont*)oldFont, this->editor);
+	QFont userfont = QFontDialog::getFont(&ok, cancelFont, this->editor);
 
 	if (ok == true) {
 		QtGObjectFactory factory;
@@ -420,13 +422,26 @@ void DrawingModeCommand::Execute() {
 	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWOFF) {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWON;
 
-		NShape *one = new NumberBox(15, 85, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("1"));
-		NShape *two = new NumberBox(15, 155, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("2"));
-		NShape *three = new NumberBox(15, 225, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("3"));
-		NShape *four = new NumberBox(15, 295, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("4"));
-		NShape *five = new NumberBox(15, 365, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("5"));
-		NShape *six = new NumberBox(15, 435, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("6"));
-		NShape *seven = new NumberBox(15, 505, 15, 15, QColor(230, 230, 230), Qt::SolidLine, QColor(0, 0, 0), String("7"));
+		NShape *terminal = dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(0);
+		Long x = terminal->GetX() - 5;
+		Long y = terminal->GetY() - 5;
+		Long size = 20;
+		QColor backgroundColor(0, 0, 0);
+		QColor borderColor(255, 255, 255);
+
+		NShape *one = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("1"));
+		y += 70;
+		NShape *two = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("2"));
+		y += 70;
+		NShape *three = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("3"));
+		y += 70;
+		NShape *four = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("4"));
+		y += 70;
+		NShape *five = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("5"));
+		y += 70;
+		NShape *six = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("6"));
+		y += 70;
+		NShape *seven = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("7"));
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(one);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(two);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(three);

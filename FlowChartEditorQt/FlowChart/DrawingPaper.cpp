@@ -234,31 +234,7 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 }
 
 void DrawingPaper::mousePressEvent(QMouseEvent *event) {
-	this->setFocus();
-
-	if (this->label != NULL)
-	{
-		//19.09.03 Label의 (편집된)내용을 기호 안의 실제 데이터로 넣는 처리==================
-		Glyph *note = this->label->note;
-		string content = this->label->note->GetContent();
-		String contents(content);
-
-		NShape *shape = this->flowChart->GetAt(this->indexOfSelected);
-
-		shape->Rewrite(contents);
-		//=====================intellisense========================
-		if (dynamic_cast<Preparation*>(shape)) {
-			if (this->variableList != NULL) {
-				delete this->variableList;
-			}
-			this->variableList = new VariableList;
-			this->variableList->Add(shape->GetContents());
-		}
-		//=========================================================
-
-		this->label->Destroy();
-		this->label = NULL;
-	}
+	//this->setFocus();
 
 	QPoint point = event->pos();
 	this->tool = ToolFactory::Create(this, point);

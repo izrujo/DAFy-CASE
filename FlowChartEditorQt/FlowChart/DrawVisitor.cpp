@@ -682,23 +682,48 @@ void DrawVisitor::Visit(NumberBox *numberBox) {
 	Long y = numberBox->GetY();
 	Long width = numberBox->GetWidth();
 	Long height = numberBox->GetHeight();
-
+	/*
 	QPoint points[4];
 	points[0] = QPoint(x, y);
 	points[1] = QPoint(x + width, y);
 	points[2] = QPoint(x + width, y + height);
 	points[3] = QPoint(x, y + height);
+	this->painter->DrawPolygon(points, 4);
+	*/
+	QtGObjectFactory factory;
+	GObject *brush = factory.MakeBrush(numberBox->GetBackGroundColor());
+	GObject *oldBrush = this->painter->SelectObject(*brush);
+	this->painter->Update();
 
-	this->painter->DrawPolygon(points, 5);
+	QRect rect(x, y, width, height);
+
+	this->painter->DrawRect(rect);
 
 	// 텍스트를 출력한다.
 	//정해진 폰트 사이즈임.
-	QtGObjectFactory factory;
-	GObject *font = factory.MakeFont("Malgun Gothic"/*관리중인 서체 가져오기*/, 5/*조정요망*/, 50, false);
+	GObject *pen = factory.MakePen(QBrush(numberBox->GetBorderColor()), 1);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	GObject *font = factory.MakeFont("Malgun Gothic"/*관리중인 서체 가져오기*/, 8/*조정요망*/, 50, false);
+	GObject *oldFont = this->painter->SelectObject(*font);
+	this->painter->Update();
 
 	String contents = numberBox->GetContents();
-	QRect rect(x, y, width, height);
 	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
+
+	//페인터 설정 복구
+	this->painter->SelectObject(*oldBrush);
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldFont);
+	this->painter->Update();
+	if (brush != 0) {
+		delete brush;
+	}
+	if (pen != 0) {
+		delete pen;
+	}
+	if (font != 0) {
+		delete font;
+	}
 }
 
 void DrawVisitor::Visit(A4Paper *a4Paper) {

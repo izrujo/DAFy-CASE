@@ -399,47 +399,61 @@ void FlowChartEditor::CreateActions() {
 
 	//==================== File Menu ====================
 	this->newAction = new QAction(QString::fromLocal8Bit(("새 파일(&N)")), this);
+	this->newAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
 	connect(this->newAction, &QAction::triggered, this, [=]() { this->CommandRange("New"); });
 
 	this->openAction = new QAction(QString::fromLocal8Bit(("열기(&O)")), this);
+	this->openAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_O));
 	connect(this->openAction, &QAction::triggered, this, [=]() { this->CommandRange("Open"); });
 
 	this->saveAction = new QAction(QString::fromLocal8Bit(("저장(&S)")), this);
+	this->saveAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_S));
 	connect(this->saveAction, &QAction::triggered, this, [=]() { this->CommandRange("Save"); });
 
 	this->saveAsAction = new QAction(QString::fromLocal8Bit(("다른 이름으로 저장(&A)...")), this);
+	this->saveAsAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_S));
 	connect(this->saveAsAction, &QAction::triggered, this, [=]() { this->CommandRange("SaveAs"); });
 
 	this->saveAsImageAction = new QAction(QString::fromLocal8Bit(("이미지(JPG)로 저장(&I)...")), this);
+	this->saveAsImageAction->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_I));
 	connect(this->saveAsImageAction, &QAction::triggered, this, [=]() { this->CommandRange("SaveAsImage"); });
 
 	this->printAction = new QAction(QString::fromLocal8Bit(("인쇄(&P)...")), this);
+	this->printAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_P));
 	connect(this->printAction, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
 
 	this->exitAction = new QAction(QString::fromLocal8Bit(("끝내기(&X)...")), this);
+	this->exitAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_F4));
 	connect(this->exitAction, &QAction::triggered, this, [=]() { this->CommandRange("Exit"); });
 	//==================== File Menu ====================
 
 	//==================== Edit Menu ====================
 	this->undoAction = new QAction(QString::fromLocal8Bit(("실행 취소(&U)")), this); //실행 취소(U) Ctrl + Z
+	this->undoAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Z));
 	connect(this->undoAction, &QAction::triggered, this, [=]() { this->CommandRange("Undo"); });
 
 	this->redoAction = new QAction(QString::fromLocal8Bit(("다시 실행(&R)")), this); //다시 실행(R) Ctrl + Y
+	this->redoAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Y));
 	connect(this->redoAction, &QAction::triggered, this, [=]() { this->CommandRange("Redo"); });
 
 	this->copyAction = new QAction(QString::fromLocal8Bit(("복사하기(&C)")), this); //복사하기(C) Ctrl + C
+	this->copyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
 	connect(this->copyAction, &QAction::triggered, this, [=]() { this->CommandRange("Copy"); });
 
 	this->pasteAction = new QAction(QString::fromLocal8Bit(("붙여넣기(&P)")), this); //붙여넣기(P) Ctrl + V
+	this->pasteAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
 	connect(this->pasteAction, &QAction::triggered, this, [=]() { this->CommandRange("Paste"); });
 
 	this->cutAction = new QAction(QString::fromLocal8Bit(("잘라내기(&T)")), this); //잘라내기(T) Ctrl + X
+	this->cutAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
 	connect(this->cutAction, &QAction::triggered, this, [=]() { this->CommandRange("Cut"); });
 
 	this->deleteAction = new QAction(QString::fromLocal8Bit(("삭제(&L)")), this); //삭제(L) Del
+	this->deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
 	connect(this->deleteAction, &QAction::triggered, this, [=]() { this->CommandRange("Delete"); });
 
 	this->selectAllAction = new QAction(QString::fromLocal8Bit(("모두 선택(&A)")), this); //모두 선택(A) Ctrl + A
+	this->selectAllAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_A));
 	connect(this->selectAllAction, &QAction::triggered, this, [=]() { this->CommandRange("SelectAll"); });
 
 	this->positionAction = new QAction(QString::fromLocal8Bit(("기호 위치 같게(&O)")), this); //기호 위치 같게(O)
@@ -462,9 +476,11 @@ void FlowChartEditor::CreateActions() {
 
 	//==================== Add Menu ====================
 	this->drawingModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드(&M)")), this); //그리기 모드(M) Ctrl + D
+	this->drawingModeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
 	connect(this->drawingModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingMode"); });
 
 	this->drawingUnModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드 해제(&U)")), this); //그리기 모드 해제 ESC
+	this->drawingUnModeAction->setShortcut(QKeySequence(Qt::Key_Escape));
 	connect(this->drawingUnModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingUnMode"); });
 
 	this->startTerminalSymbolAction = new QAction(QString::fromLocal8Bit(("시작 단말 기호(&S)")), this); //시작 단말 기호(S)
