@@ -3,6 +3,7 @@
 
 #include "Array.h"
 #include <qpoint.h>
+#include <qstring.h>
 class NShape;
 class FlowChartVisitor;
 
@@ -13,16 +14,20 @@ public:
 	~SketchBook();
 	SketchBook& operator=(const SketchBook& source);
 
-	Long Add(NShape *canvas, NShape *flowChart);
-	Long Insert(Long index, NShape *canvas, NShape *flowChart);
+	Long Add(NShape *canvas, NShape *flowChart, QString fileOpenPath = QString(""));
+	Long Insert(Long index, NShape *canvas, NShape *flowChart, QString fileOpenPath = QString(""));
 	Long Remove(Long index);
+	Long ModifyFileOpenPath(QString fileName);
 
 	NShape* GetCanvas(Long index);
 	NShape* GetFlowChart(Long index);
+	QString& GetFileOpenPath(Long index);
 
 	void Draw(FlowChartVisitor *visitor);
-	void Fold(QPoint point); //current canvas : blue , other canvases : gray 
+	Long Fold(QPoint point);
 	void Unfold(NShape *flowChart); //펼쳐져 있던 캔버스의 순서도를 저장하기.
+	void Update(); //current canvas : blue , other canvases : gray 
+	void Arrange(Long x);
 
 	Long GetCapacity() const;
 	Long GetLength() const;
@@ -31,6 +36,7 @@ public:
 private:
 	Array<NShape*> canvasList;
 	Array<NShape*> flowChartList; //관리만! 변경 없음.
+	Array<QString> fileOpenPathList;
 	Long capacity;
 	Long length;
 	Long current;

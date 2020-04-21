@@ -155,18 +155,7 @@ void FlowChartTemplate::paintEvent(QPaintEvent *event) {
 	this->windowPin->Accept(visitor);
 
 	//======================
-	pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 2);
-	oldPen = this->painter->SelectObject(*pen);
-	this->painter->Update();
-
-
 	this->painter->Render(&dc, 0, 0);
-
-	this->painter->SelectObject(*oldPen);
-	this->painter->Update();
-	if (pen != 0) {
-		delete pen;
-	}
 
 	if (visitor != 0) {
 		delete visitor;
@@ -220,6 +209,10 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 }
 
 void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
+	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
+	editor->windowClose->Paint(QColor(102, 204, 204), Qt::SolidLine, editor->windowClose->GetBorderColor());
+	editor->repaint();
+
 	//±‚»£µÈ
 	Long index = -1;
 

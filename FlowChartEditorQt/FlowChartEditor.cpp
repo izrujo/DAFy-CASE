@@ -11,10 +11,12 @@
 #include "FlowChart/WindowTitle.h"
 #include "FlowChart/FlowChartVisitor.h"
 #include "FlowChart/DrawVisitor.h"
+#include "FlowChart/WindowClose.h"
 
 #include <qmenubar.h>
 #include <qevent.h>
 #include <qpainter.h>
+#include <qmessagebox.h>
 
 FlowChartEditor::FlowChartEditor(QWidget *parent)
 	: QFrame(parent)
@@ -22,11 +24,12 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	ui.setupUi(this);
 
 	this->setMouseTracking(true);
-	
+	this->setFocusPolicy(Qt::StrongFocus);
+
 	this->menuBar = NULL;
 
 	QRect frameRect = this->frameRect();
-	
+
 	this->CreateActions();
 	this->CreateMenus();
 	this->menuBar->resize(frameRect.width(), this->menuBar->height());
@@ -45,15 +48,15 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	this->sketchBook = new SketchBook;
 
 	Long height = 26;
-	//임시
-	NShape *firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height-4, 186, height, QColor(102, 204, 204),
-		Qt::SolidLine, QColor(102, 204, 204), String(" 제목 없음"));
-	this->sketchBook->Add(firstTitle, drawingPaper->flowChart->Clone());
-	NShape *tempTitle = new WindowTitle(drawingPaper->x() + 186, drawingPaper->y() - height-4, 186, height, QColor(235, 235, 235),
-		Qt::SolidLine, QColor(235, 235, 235), String(" 임시"));
-	this->sketchBook->Add(tempTitle, drawingPaper->flowChart->Clone());
-	
+	NShape *firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height - 4, 186, height, QColor(102, 204, 204),
+		Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
+	Long current = this->sketchBook->Add(firstTitle, drawingPaper->flowChart->Clone());
 
+	firstTitle = this->sketchBook->GetCanvas(current);
+	Long windowCloseX = firstTitle->GetX() + firstTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	Long windowCloseY = firstTitle->GetY() + 4;
+	this->windowClose = new WindowClose(windowCloseX, windowCloseY, 26, 23, QColor(102, 204, 204),
+		Qt::SolidLine, QColor(255, 255, 255));
 
 	/*상태 표시줄
 	HINSTANCE hInstance = (HINSTANCE)::GetWindowLong(this->m_hWnd, GWL_HINSTANCE);
@@ -123,7 +126,7 @@ void FlowChartEditor::resizeEvent(QResizeEvent *event) {
 
 	this->windows[0]->resize(frameRect.width() - 200, frameRect.height() - this->menuBar->height() - 32 - 20);
 	this->windows[0]->repaint();
-	
+
 	this->windows[1]->resize(190, frameRect.height() - this->menuBar->height() - 20);
 	this->windows[1]->repaint();
 }
@@ -134,7 +137,7 @@ void FlowChartEditor::paintEvent(QPaintEvent *event) {
 	QRect frameRect = this->frameRect();
 
 	this->painter->Resize(frameRect.width(), frameRect.height(), QColor(235, 235, 235));
-	
+
 	DrawingPaper *canvas = dynamic_cast<DrawingPaper*>(this->windows[0]);
 	QColor windowBorderColor = canvas->windowBorderColor;
 	//=======창 테두리=========
@@ -143,8 +146,8 @@ void FlowChartEditor::paintEvent(QPaintEvent *event) {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	QPoint p1(canvas->x()+1, canvas->y()-2);
-	QPoint p2(canvas->x()+1 + canvas->width(), canvas->y()-2);
+	QPoint p1(canvas->x() + 1, canvas->y() - 2);
+	QPoint p2(canvas->x() + 1 + canvas->width(), canvas->y() - 2);
 	this->painter->DrawLine(p1, p2);
 
 	this->painter->SelectObject(*oldPen);
@@ -157,23 +160,70 @@ void FlowChartEditor::paintEvent(QPaintEvent *event) {
 	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
 
 	this->sketchBook->Draw(visitor);
+	//닫기
+	this->windowClose->Accept(visitor);
 
 	this->painter->Render(&painter, 0, 0);
 }
 
+void FlowChartEditor::mouseMoveEvent(QMouseEvent *event) {
+	//윈도우 핀
+	QRect pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
+	bool isContain = pinRect.contains(event->pos());
+	if (isContain == true) {
+		this->windowClose->Paint(QColor(102, 255, 255), Qt::SolidLine, this->windowClose->GetBorderColor());
+	}
+	else {
+		this->windowClose->Paint(QColor(102, 204, 204), Qt::SolidLine, this->windowClose->GetBorderColor());
+	}
+	this->repaint();
+}
+
 void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->windows[0]);
-	
-	//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
-	this->sketchBook->Unfold(canvas->flowChart->Clone());
-	
-	//스케치북을 펼친다 : 현재 캔버스의 쪽과 캔버스 타이틀 색깔 바꾸기
-	this->sketchBook->Fold(event->pos());
-	//스케치북을 펼친다 : 펼친 캔버스의 저장되어있던 순서도로 바꾼다.
-	canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
+	QRect pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
+	bool isContain = pinRect.contains(event->pos());
+	if (isContain == true) {
+		if (this->sketchBook->GetLength() > 1) { //두 개 이상일 때만 닫을 수 있음.
+			canvas->Close(); //현재 캔버스 저장하거나 안하거나 처리해줌. 순서도는 비어있는 상태.
 
+			//현재 캔버스 지우고/새로운 현재 설정해주고/닫기버튼 옮겨주기.
+			this->sketchBook->Remove(this->sketchBook->GetCurrent());
+
+			NShape *first = this->sketchBook->GetCanvas(0); //새로운 현재 : 맨 앞에꺼
+			this->sketchBook->Fold(QPoint(first->GetX(), first->GetY()));
+			this->sketchBook->Update();
+			canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
+
+			this->sketchBook->Arrange(canvas->x());
+
+			Long windowCloseX = first->GetX() + first->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			Long windowCloseY = first->GetY() + 4;
+			this->windowClose->Move(windowCloseX, windowCloseY);
+		}
+		else {
+			QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("경고"),
+				QString::fromLocal8Bit("모두 닫을 수 없습니다."), QMessageBox::Ok, this);
+			int ret = messageBox.exec();
+		}
+	}
+	else {
+		//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
+		this->sketchBook->Unfold(canvas->flowChart->Clone());
+		//스케치북을 펼친다 : 현재 캔버스의 쪽 바꾸기
+		Long current = this->sketchBook->Fold(event->pos());
+		//스케치북을 펼친다 : 색깔 바꿔주기.
+		this->sketchBook->Update();
+		//스케치북을 펼친다 : 펼친 캔버스의 저장되어있던 순서도로 바꾼다.
+		canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
+
+		NShape *currentTitle = this->sketchBook->GetCanvas(current);
+		Long windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+		Long windowCloseY = currentTitle->GetY() + 4;
+		this->windowClose->Move(windowCloseX, windowCloseY);
+	}
 	this->repaint();
-	canvas->repaint();
+	canvas->repaint();	
 }
 
 /*우클릭 메뉴인가?

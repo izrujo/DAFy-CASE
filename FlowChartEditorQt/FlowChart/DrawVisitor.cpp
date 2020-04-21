@@ -25,6 +25,7 @@
 #include "../GObject/QtGObjectFactory.h"
 #include "WindowTitle.h"
 #include "WindowPin.h"
+#include "WindowClose.h"
 
 #include <qfont.h>
 
@@ -851,7 +852,7 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 	//GObject 설정
 	GObject *oldFont = this->painter->CurrentObject("Font");
 	GObject *font = factory.MakeFont(oldFont->GetFamily(), 5, oldFont->GetWeight(), oldFont->GetItalic());
-	
+
 	//그리기
 	if (windowTitle->GetIsFocusedAndPinned()) {
 		pen = factory.MakePen(QBrush(QColor(255, 255, 255)), 2);
@@ -868,7 +869,7 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 		Long i = 1;
 		while (i < verticalContent.size()) {
 			verticalContent.insert(i, '\n');
-			i+=2;
+			i += 2;
 		}
 		rect.setX(rect.x() + 3);
 		this->painter->DrawTextQ(rect, 0, verticalContent);
@@ -949,6 +950,53 @@ void DrawVisitor::Visit(WindowPin *windowPin) {
 		point2 = QPointF(x + hhhWidth * 4, y + hhhHeight * 4);
 		this->painter->DrawLine(point1, point2);
 	}
+
+	this->painter->SelectObject(*oldPen);
+	this->painter->SelectObject(*oldBrush);
+	this->painter->Update();
+	if (pen != 0) {
+		delete pen;
+	}
+	if (brush != 0) {
+		delete brush;
+	}
+}
+
+void DrawVisitor::Visit(WindowClose *windowClose) {
+	Long x = windowClose->GetX();
+	Long y = windowClose->GetY();
+	Long width = windowClose->GetWidth();
+	Long height = windowClose->GetHeight();
+	float hhhWidth = width / 8.0; //half of half of half of width
+	float hhhHeight = height / 8.0;
+	QColor fillColor = windowClose->GetBackGroundColor();
+	QColor borderColor = windowClose->GetBorderColor();
+
+	QtGObjectFactory factory;
+
+	QRect fillRect(x, y, width, height);
+	GObject *brush = factory.MakeBrush(fillColor);
+	this->painter->FillRect(fillRect, *brush);
+	if (brush != 0) {
+		delete brush;
+	}
+
+	GObject *pen = factory.MakePen(QBrush(borderColor), 2);
+	GObject *oldPen = this->painter->SelectObject(*pen);
+	brush = factory.MakeBrush(borderColor);
+	GObject *oldBrush = this->painter->SelectObject(*brush);
+	this->painter->Update();
+
+	QPointF point1;
+	QPointF point2;
+
+	point1 = QPointF(x + hhhWidth * 2, y + hhhHeight * 2);
+	point2 = QPointF(x + hhhWidth * 6, y + hhhHeight * 6);
+	this->painter->DrawLine(point1, point2);
+
+	point1 = QPointF(x + hhhWidth * 6, y + hhhHeight * 2);
+	point2 = QPointF(x + hhhWidth * 2, y + hhhHeight * 6);
+	this->painter->DrawLine(point1, point2);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->SelectObject(*oldBrush);

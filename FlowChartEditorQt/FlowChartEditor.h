@@ -19,6 +19,7 @@ class QMenu;
 class QAction;
 class GObject;
 class SketchBook;
+class NShape;
 
 class FlowChartEditor : public QFrame
 {
@@ -32,9 +33,9 @@ private:
 public:
 	Array<QFrame*> windows;
 	QMenuBar *menuBar;
-	QString fileOpenPath;
 	GObject *painter;
 	SketchBook *sketchBook;
+	NShape *windowClose;
 	//bool isUnModeMenuEnabled; //메뉴 컨트롤 관련
 	//StatusBar *statusBar;
 	//ToolTip *toolTip;
@@ -44,6 +45,7 @@ protected:
 	void closeEvent(QCloseEvent *event);
 	void resizeEvent(QResizeEvent *event);
 	void paintEvent(QPaintEvent *event);
+	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
 	/* 해당하는 함수 찾기
 	BOOL PreTranslateMessage(MSG *pMsg);

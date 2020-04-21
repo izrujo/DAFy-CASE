@@ -243,6 +243,10 @@ void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 }
 
 void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
+	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
+	editor->windowClose->Paint(QColor(102, 204, 204), Qt::SolidLine, editor->windowClose->GetBorderColor());
+	editor->repaint();
+
 	if (this->hasMouseTracking() == false) { //마우스가 암거나 눌렸을 때
 		QPoint point = event->pos();
 		if (this->tool != NULL) {
@@ -253,6 +257,7 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 		//OnSetCursor 부분
 		QCursor cursor = this->GetCursor(event->pos());
 		this->setCursor(cursor);
+
 	}
 }
 
@@ -340,17 +345,24 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 }
 
 void DrawingPaper::resizeEvent(QResizeEvent *event) {
+	//========================캔버스 타이틀 들========================
 	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 	SketchBook *sketchBook = editor->sketchBook;
+	NShape *canvasTitle;
 	Long width = 0;
 	Long i = 0;
 	while (i < sketchBook->GetLength()) {
-		NShape *canvasTitle = sketchBook->GetCanvas(i);
+		canvasTitle = sketchBook->GetCanvas(i);
 		canvasTitle->Move(this->x() + width, canvasTitle->GetY());
 		width += canvasTitle->GetWidth();
 		i++;
 	}
+	NShape *currentTitle = sketchBook->GetCanvas(sketchBook->GetCurrent());
+	Long windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	Long windowCloseY = currentTitle->GetY() + 4;
+	editor->windowClose->Move(windowCloseX, windowCloseY);
 	editor->update();
+	//========================캔버스 타이틀 들========================
 
 	QRect frameRect = this->frameRect();
 	if (this->painter != NULL) {
@@ -857,41 +869,22 @@ void DrawingPaper::OnIntervalMakeMenuClick() {
 }
 
 void DrawingPaper::New() {
-	QString fileName;
-
 	FlowChartEditor *editor = static_cast<FlowChartEditor *>(this->parentWidget());
 
-	QMessageBox messageBox(QMessageBox::Question, QString::fromLocal8Bit("새로 만들기"),
-		QString::fromLocal8Bit("변경 내용을 저장하시겠습니까?"),
-		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
-	int ret = messageBox.exec();
-	if (ret == QMessageBox::Yes) {
-		//static char BASED_CODE szFilter[] = "txt Files (*.txt)|*.txt||";
-		//CFileDialog dlg(FALSE, "*.txt", "*.txt", OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT, szFilter, NULL);
-		//if (dlg.DoModal() == IDOK) {
+	editor->sketchBook->Unfold(this->flowChart);
 
-		fileName = QFileDialog::getSaveFileName((QWidget*)editor,
-			QObject::tr("Save File"),
-			NULL,
-			QObject::tr("Text files (*.txt)"));
+	NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetCurrent());
+	NShape *newTitle = new WindowTitle(previousTitle->GetX() + previousTitle->GetWidth(),
+		previousTitle->GetY(), 186, previousTitle->GetHeight(), QColor(102, 204, 204),
+		Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
+	editor->sketchBook->Add(newTitle, new FlowChart);
+	editor->sketchBook->Update();
 
-		QFile file(fileName);
-		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
-		if (isOpen == true) {
-			editor->fileOpenPath = fileName;
-			this->Save(editor->fileOpenPath.toLocal8Bit().data());
-		}
-		this->flowChart->Clear();
-		editor->setWindowTitle(QString::fromLocal8Bit("제목없음 - FlowChart"));
-		this->mode = IDLE;
-		this->indexOfSelected = -1;
-	}
-	else if (ret == QMessageBox::No) {
-		this->flowChart->Clear();
-		editor->setWindowTitle(QString::fromLocal8Bit("제목없음 - FlowChart"));
-		this->mode = IDLE;
-		this->indexOfSelected = -1;
-	}
+	Long windowCloseX = newTitle->GetX() + newTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	Long windowCloseY = newTitle->GetY() + 4;
+	editor->windowClose->Move(windowCloseX, windowCloseY);
+
+	editor->repaint();
 }
 
 Long DrawingPaper::Save(const char(*fileName)) {
@@ -902,4 +895,53 @@ Long DrawingPaper::Save(const char(*fileName)) {
 Long DrawingPaper::Load(const char(*fileName)) {
 	File file;
 	return file.Load(this, fileName);
+}
+
+void DrawingPaper::Close() {
+	QString fileName;
+
+	FlowChartEditor *editor = static_cast<FlowChartEditor *>(this->parentWidget());
+
+	QMessageBox messageBox(QMessageBox::Question, QString::fromLocal8Bit("새로 만들기"),
+		QString::fromLocal8Bit("변경 내용을 저장하시겠습니까?"),
+		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
+	int ret = messageBox.exec();
+	if (ret == QMessageBox::Yes) { //유저가 저장한다고 하면
+		QString fileOpenPath = editor->sketchBook->GetFileOpenPath(editor->sketchBook->GetCurrent());
+		if (fileOpenPath.isEmpty()) { //현재 순서도가 저장되어 있지 않다면 새로 저장한다.
+			fileName = QFileDialog::getSaveFileName((QWidget*)editor,
+				QObject::tr("Save File"),
+				NULL,
+				QObject::tr("Text files (*.txt)"));
+			//fileName은 fileOpenPath를 대체할 새로운 경로
+			QFile file(fileName);
+			bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+			if (isOpen == true) {
+				editor->sketchBook->ModifyFileOpenPath(fileName); //빈 경로를 다이어로그에서 가져와서 고침.
+				this->Save(fileName.toLocal8Bit().data());
+
+				Long length = fileName.length();
+				Long i = length - 1;
+				while (i >= 0 && fileName[i] != '/') {
+					length--;
+					i--;
+				}
+				fileName.remove(0, length);
+				fileName.remove(fileName.length() - 4, 4);
+				fileName.insert(0, ' ');
+
+				editor->sketchBook->GetCanvas(editor->sketchBook->GetCurrent())->Rewrite(fileName.toLocal8Bit().data());
+			}
+		}
+		else { //현재 순서도가 저장되어 있으면 그대로 똑같은 경로와 이름으로 저장한다.
+			this->Save(fileOpenPath.toLocal8Bit().data());
+		}
+	}
+
+	if (ret != QMessageBox::Cancel) { //유저가 한번 더 물어봐도 닫는 걸 선택함
+		//캔버스 윈도우를 비우다.
+		this->flowChart->Clear();
+		this->mode = IDLE;
+		this->indexOfSelected = -1;
+	}
 }

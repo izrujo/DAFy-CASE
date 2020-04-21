@@ -19,8 +19,8 @@ File::File() {}
 File::~File() {}
 
 Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
-	QFile file(fileName);
-	char (*line) = new char[513];
+	QFile file(QString::fromLocal8Bit(fileName));
+	char *line;
 
 	Long count = 0;
 
@@ -35,11 +35,11 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 	if (isOpen == true) {
 		QTextStream textStream(&file);
 		qContents = textStream.readLine();
-		line = const_cast<char*>(qContents.toLocal8Bit().constData());
+		line = qContents.toLocal8Bit().data();
 		canvas->zoom->Set(atoi(line));
 
 		qContents = textStream.readLine();
-		line = const_cast<char*>(qContents.toLocal8Bit().constData());
+		line = qContents.toLocal8Bit().data();
 		//file.getline(line, 512);
 		while (!textStream.atEnd()) {
 			tokenizer.Scan(line, '\t');
@@ -64,7 +64,7 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 
 			count++;
 			qContents = textStream.readLine();
-			line = const_cast<char*>(qContents.toLocal8Bit().constData());
+			line = qContents.toLocal8Bit().data();
 		}
 		file.close();
 	}
@@ -73,7 +73,7 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 }
 
 Long File::Save(DrawingPaper *canvas, const char(*fileName)) {
-	QFile file(fileName);
+	QFile file(QString::fromLocal8Bit(fileName));
 	Long i = 0;
 	Long end;
 	Long count = 0;

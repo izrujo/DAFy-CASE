@@ -90,10 +90,10 @@ void Terminal::GetRegion(QRegion *region) {
 
 
 void Terminal::GetRegion(Long thickness, QRegion *region) {
-	Long x = x - thickness;
-	Long y = y - thickness;
-	Long width = width + thickness * 2;
-	Long height = height + thickness * 2;
+	Long x = this->x - thickness;
+	Long y = this->y - thickness;
+	Long width = this->width + thickness * 2;
+	Long height = this->height + thickness * 2;
 	Long halfHeight = height / 2;
 
 	QRect ellipse;

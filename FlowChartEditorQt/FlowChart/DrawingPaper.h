@@ -55,6 +55,7 @@ public:
 	void New();
 	Long Save(const char(*fileName));
 	Long Load(const char(*fileName));
+	void Close();
 	QCursor GetCursor(QPoint point); //Ä¿¼­
 
 public:

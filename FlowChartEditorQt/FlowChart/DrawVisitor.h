@@ -31,6 +31,7 @@ protected:
 
 	virtual void Visit(WindowTitle *windowTitle);
 	virtual void Visit(WindowPin *windowPin);
+	virtual void Visit(WindowClose *windowClose);
 	//virtual void Visit(TutorialMark *tutorialMark);
 private:
 	GObject *painter;

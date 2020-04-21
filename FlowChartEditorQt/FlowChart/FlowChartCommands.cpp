@@ -15,11 +15,12 @@
 #include "Zoom.h"
 #include "Tool.h"
 #include "Shape.h"
-#include "../GObject/QtPainter.h"
+#include "SketchBook.h"
+#include "WindowTitle.h"
 
+#include "../GObject/QtPainter.h"
 #include "../GObject/QtGObjectFactory.h"
 #include "../GObject/GObject.h"
-#include "../GObject/QtPainter.h"
 
 #include <qfiledialog.h>
 #include <qtextstream.h>
@@ -70,27 +71,36 @@ SaveCommand& SaveCommand::operator =(const SaveCommand& source) {
 }
 
 void SaveCommand::Execute() {
-	if (this->editor->fileOpenPath.isEmpty()) {
-		QString fileName = this->editor->windowTitle();
-		QString fileName_;
-		sscanf(fileName.toLocal8Bit().data(), "%s - FlowChart", fileName_);
+	QString fileOpenPath = this->editor->sketchBook->GetFileOpenPath(this->editor->sketchBook->GetCurrent());
+	if (fileOpenPath.isEmpty()) {
+		NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+		QString fileName;
+		QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
+		fileName_.remove(0, 1);
 
 		fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
 			QObject::tr("Save File"),
 			fileName_,
 			QObject::tr("Text files (*.txt)"));
 
-		QFile file(fileName);
-		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
-		if (isOpen == true) {
-			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+		this->editor->sketchBook->ModifyFileOpenPath(fileName);
+		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
 
-			fileName_ = fileName + " - FlowChart";
-			this->editor->setWindowTitle(fileName_);
+		Long length = fileName.length();
+		Long i = length - 1;
+		while (i >= 0 && fileName[i] != '/') {
+			length--;
+			i--;
 		}
+		fileName.remove(0, length);
+		fileName.remove(fileName.length() - 4, 4);
+		fileName.insert(0, ' ');
+
+		canvasTitle->Rewrite(fileName.toLocal8Bit().data());
+
 	}
 	else {
-		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(this->editor->fileOpenPath.toLocal8Bit().data());
+		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileOpenPath.toLocal8Bit().data());
 	}
 }
 
@@ -115,23 +125,30 @@ SaveAsCommand& SaveAsCommand::operator =(const SaveAsCommand& source) {
 }
 
 void SaveAsCommand::Execute() {
-	QString fileName = this->editor->windowTitle();
-	QString fileName_;
-	sscanf(fileName.toLocal8Bit().data(), "%s - FlowChart", fileName_);
+	NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+	QString fileName;
+	QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
+	fileName_.remove(0, 1);
 
 	fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
 		QObject::tr("Save File"),
 		fileName_,
 		QObject::tr("Text files (*.txt)"));
 
-	QFile file(fileName);
-	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
-	if (isOpen == true) {
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+	this->editor->sketchBook->ModifyFileOpenPath(fileName);
+	(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
 
-		fileName_ = fileName + " - FlowChart";
-		this->editor->setWindowTitle(fileName_);
+	Long length = fileName.length();
+	Long i = length - 1;
+	while (i >= 0 && fileName[i] != '/') {
+		length--;
+		i--;
 	}
+	fileName.remove(0, length);
+	fileName.remove(fileName.length() - 4, 4);
+	fileName.insert(0, ' ');
+
+	canvasTitle->Rewrite(fileName.toLocal8Bit().data());
 }
 
 //OpenCommand
@@ -159,16 +176,49 @@ void OpenCommand::Execute() {
 		QObject::tr("Load"), "",
 		QObject::tr("(*.txt);;All Files (*)"));
 
-	QFile file(fileName);
-	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
-	if (isOpen == true) {
-		this->editor->fileOpenPath = fileName;
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(this->editor->fileOpenPath.toLocal8Bit().data());
-		fileName = this->editor->fileOpenPath + " - FlowChart";
-		this->editor->setWindowTitle(fileName);
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->setFocus(); //focus message 찾아서
-		this->editor->repaint();
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+
+	//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
+	this->editor->sketchBook->Unfold(canvas->flowChart->Clone());
+	//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
+	NShape *last = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetLength() - 1);
+	//열기
+	(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName.toLocal8Bit().data());
+	//경로를 포함한 파일이름을 수정해서 딱 파일이름만 남도록 처리
+	Long length = fileName.length();
+	Long i = length - 1;
+	while (i >= 0 && fileName[i] != '/') {
+		length--;
+		i--;
 	}
+	QString fileName_ = fileName;
+	fileName_.remove(0, length);
+	fileName_.remove(fileName_.length() - 4, 4);
+	fileName_.insert(0, ' ');
+	//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
+	Long width = 186;
+	if (fileName_.length() > 10) {
+		width = width + (fileName_.length() - 10) * 10;
+	}
+	//새로운 캔버스 타이틀 만들기
+	NShape *canvasTitle = new WindowTitle(last->GetX() + last->GetWidth(), last->GetY(),
+		width, last->GetHeight(),
+		QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), fileName_.toLocal8Bit().data());
+	NShape *flowChart = canvas->flowChart->Clone();
+	//새로운 캔버스 타이틀 맨 뒤에 추가하기
+	Long current = this->editor->sketchBook->Add(canvasTitle, flowChart, fileName);
+
+	//스케치북을 펼친다 : 현재 캔버스의 쪽과 캔버스 타이틀 색깔 바꾸기
+	this->editor->sketchBook->Fold(QPoint(canvasTitle->GetX(), canvasTitle->GetY()));
+	this->editor->sketchBook->Update();
+	//캔버스 닫는거 옮기기
+	Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	Long windowCloseY = canvasTitle->GetY() + 4;
+	editor->windowClose->Move(windowCloseX, windowCloseY);
+
+	canvas->setFocus(); //focus message 찾아서
+	this->editor->repaint();
+
 }
 
 //NewCommand
@@ -835,7 +885,7 @@ PageSetCommand& PageSetCommand::operator =(const PageSetCommand& source) {
 
 void PageSetCommand::Execute() {
 	//페이지 방향 설정 못하게 막는 방법 찾기
-	
+
 	QPageSetupDialog dlg((QWidget*)this->editor);
 	QPrinter *printer = dlg.printer();
 	printer->setFullPage(true); //must be before setmargin
@@ -860,7 +910,7 @@ void PageSetCommand::Execute() {
 
 		dynamic_cast<A4Paper*>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 	}
-	
+
 }
 
 //PositionCommand

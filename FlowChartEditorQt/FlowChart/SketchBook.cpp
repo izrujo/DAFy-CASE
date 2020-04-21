@@ -2,14 +2,16 @@
 #include "Shape.h"
 
 SketchBook::SketchBook(Long capacity)
-	: canvasList(capacity), flowChartList(capacity) {
+	: canvasList(capacity), flowChartList(capacity), 
+	fileOpenPathList(capacity) {
 	this->capacity = capacity;
 	this->length = 0;
 	this->current = 0;
 }
 
 SketchBook::SketchBook(const SketchBook& source)
-	: canvasList(source.canvasList), flowChartList(source.flowChartList) {
+	: canvasList(source.canvasList), flowChartList(source.flowChartList),
+	fileOpenPathList(source.fileOpenPathList) {
 	Long i = 0;
 	while (i < source.length) {
 		this->canvasList.Modify(i, (const_cast<SketchBook&>(source)).canvasList[i]->Clone());
@@ -53,6 +55,7 @@ SketchBook& SketchBook::operator=(const SketchBook& source) {
 
 	this->canvasList = source.canvasList;
 	this->flowChartList = source.flowChartList;
+	this->fileOpenPathList = source.fileOpenPathList;
 
 	i = 0;
 	while (i < source.GetLength()) {
@@ -70,14 +73,16 @@ SketchBook& SketchBook::operator=(const SketchBook& source) {
 	return *this;
 }
 
-Long SketchBook::Add(NShape *canvas, NShape *flowChart) {
+Long SketchBook::Add(NShape *canvas, NShape *flowChart, QString fileOpenPath) {
 	if (this->length < this->capacity) {
 		this->current = this->canvasList.Store(this->length, canvas);
 		this->flowChartList.Store(this->length, flowChart);
+		this->fileOpenPathList.Store(this->length, fileOpenPath);
 	}
 	else {
 		this->current = this->canvasList.AppendFromRear(canvas);
 		this->flowChartList.AppendFromRear(flowChart);
+		this->fileOpenPathList.AppendFromRear(fileOpenPath);
 		this->capacity++;
 	}
 	this->length++;
@@ -85,10 +90,11 @@ Long SketchBook::Add(NShape *canvas, NShape *flowChart) {
 	return this->current;
 }
 
-Long SketchBook::Insert(Long index, NShape *canvas, NShape *flowChart) {
+Long SketchBook::Insert(Long index, NShape *canvas, NShape *flowChart, QString fileOpenPath) {
 	this->current = -1;
 	this->current = this->canvasList.Insert(index, canvas);
-	this->current = this->flowChartList.Insert(index, flowChart);
+	this->flowChartList.Insert(index, flowChart);
+	this->fileOpenPathList.Insert(index, fileOpenPath);
 	if (this->length >= this->capacity) {
 		this->capacity += 128;
 	}
@@ -101,11 +107,19 @@ Long SketchBook::Remove(Long index) {
 	if (index >= 0 && index < this->GetLength()) {
 		delete this->canvasList[index];
 		this->current = this->canvasList.Delete(index);
+		
 		delete this->flowChartList[index];
 		this->flowChartList.Delete(index);
+		
+		this->fileOpenPathList.Delete(index);
+
 		this->length--;
 	}
 	return this->current;
+}
+
+Long SketchBook::ModifyFileOpenPath(QString fileName) {
+	return this->fileOpenPathList.Modify(this->current, fileName);
 }
 
 
@@ -117,6 +131,10 @@ NShape* SketchBook::GetFlowChart(Long index) {
 	return this->flowChartList.GetAt(index);
 }
 
+QString& SketchBook::GetFileOpenPath(Long index) {
+	return this->fileOpenPathList.GetAt(index);
+}
+
 void SketchBook::Draw(FlowChartVisitor *visitor) {
 	Long i = 0;
 	while (i< this->length) {
@@ -125,7 +143,7 @@ void SketchBook::Draw(FlowChartVisitor *visitor) {
 	}
 }
 
-void SketchBook::Fold(QPoint point) {
+Long SketchBook::Fold(QPoint point) {
 	Long i = 0;
 
 	while (i < this->length) {
@@ -135,16 +153,34 @@ void SketchBook::Fold(QPoint point) {
 		i++;
 	}
 
+	return this->current;
+}
+
+void SketchBook::Unfold(NShape *flowChart) {
+	this->flowChartList[this->current] = flowChart;
+}
+
+void SketchBook::Update() {
 	this->canvasList[this->current]->Paint(QColor(102, 204, 204), Qt::SolidLine, QColor(102, 204, 204));
-	i = 0;
+	Long i = 0;
 	while (i < this->length) {
 		if (i != this->current) {
 			this->canvasList[i]->Paint(QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235));
 		}
 		i++;
 	}
+
+
 }
 
-void SketchBook::Unfold(NShape *flowChart) {
-	this->flowChartList[this->current] = flowChart;
+void SketchBook::Arrange(Long x) {
+	NShape *current;
+	Long y = this->canvasList[0]->GetY();
+	Long i = 0;
+	while (i < this->length) {
+		current = this->canvasList[i];
+		current->Move(x, y);
+		x += current->GetWidth();
+		i++;
+	}
 }

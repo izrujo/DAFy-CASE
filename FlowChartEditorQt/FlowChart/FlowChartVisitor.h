@@ -25,6 +25,7 @@ class TextRegion;
 
 class WindowTitle;
 class WindowPin;
+class WindowClose;
 
 //class TutorialMark;
 
@@ -54,6 +55,7 @@ public:
 
 	virtual void Visit(WindowTitle *windowTitle) {};
 	virtual void Visit(WindowPin *windowPin) {};
+	virtual void Visit(WindowClose *windowclose) {};
 	//virtual void Visit(TutorialMark *tutorialMark) {};
 };
 

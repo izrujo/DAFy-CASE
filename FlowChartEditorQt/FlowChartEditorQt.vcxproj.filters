@@ -320,6 +320,9 @@
     <ClCompile Include="FlowChart\SketchBook.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\WindowClose.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -604,6 +607,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\SketchBook.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\WindowClose.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>
