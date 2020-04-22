@@ -161,7 +161,8 @@ void InputOutput::GetLine(char(*line)) {
 	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_INPUTOUTPUT, this->x, this->y, this->width, this->height, saveContents);
+	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+		ID_INPUTOUTPUT, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 
 bool InputOutput::IsStyle(Long style) {

@@ -350,7 +350,8 @@ void RightDownJoin::GetAttribute(Attribute *attribute) {
 
 void RightDownJoin::GetLine(char(*line)) {
 	sprintf(line, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n", 
-		ID_RIGHTDOWNJOIN, this->x, this->y, this->width, this->height, this->width2, this->height2, this->contents);
+		ID_RIGHTDOWNJOIN, this->x, this->y, this->width, this->height, this->width2, this->height2, 
+		this->contents.GetString());
 }
 
 bool RightDownJoin::IsStyle(Long style) {

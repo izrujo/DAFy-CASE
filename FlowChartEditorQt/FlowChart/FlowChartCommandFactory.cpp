@@ -112,6 +112,9 @@ FlowChartCommand* FlowChartCommandFactory::Make(string text) {
 	else if (text == "SelectionArchitecture") {
 		command = new SelectionCommand(this->editor);
 	}
+	else if (text == "Close") {
+		command = new CloseCommand(this->editor);
+	}
 
 	return command;
 }

@@ -164,7 +164,7 @@ void Preparation::GetLine(char(*line)) {
 	saveContents.Replace('\n', '\r');
 
 	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
-		ID_PREPARATION, this->x, this->y, this->width, this->height, saveContents);
+		ID_PREPARATION, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 
 

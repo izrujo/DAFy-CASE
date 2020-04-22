@@ -180,7 +180,7 @@ void Terminal::GetLine(char(*line)) {
 	saveContents.Replace('\n', '\r');
 
 	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
-		ID_TERMINAL, this->x, this->y, this->width, this->height, saveContents);
+		ID_TERMINAL, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 
 bool Terminal::IsStyle(Long style) {

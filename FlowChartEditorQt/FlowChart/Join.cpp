@@ -325,7 +325,7 @@ void Join::GetAttribute(Attribute *attribute) {
 
 void Join::GetLine(char(*line)) {
 	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t%d\t%s\n", 
-		ID_JOIN, this->x, this->y, this->width, this->height, this->height2, this->contents);
+		ID_JOIN, this->x, this->y, this->width, this->height, this->height2, this->contents.GetString());
 }
 
 

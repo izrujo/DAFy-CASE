@@ -20,7 +20,8 @@ File::~File() {}
 
 Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 	QFile file(QString::fromLocal8Bit(fileName));
-	char *line;
+	String lineRead;
+	//char line[513];
 
 	Long count = 0;
 
@@ -33,16 +34,16 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 	canvas->flowChart->Clear();
 	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
 	if (isOpen == true) {
+		//淋 贸府
 		QTextStream textStream(&file);
 		qContents = textStream.readLine();
-		line = qContents.toLocal8Bit().data();
-		canvas->zoom->Set(atoi(line));
-
-		qContents = textStream.readLine();
-		line = qContents.toLocal8Bit().data();
-		//file.getline(line, 512);
+		lineRead = qContents.toLocal8Bit().data();
+		canvas->zoom->Set(atoi(lineRead));
+		//郴侩 贸府
 		while (!textStream.atEnd()) {
-			tokenizer.Scan(line, '\t');
+			qContents = textStream.readLine();
+			lineRead = qContents.toLocal8Bit().data();
+			tokenizer.Scan(lineRead, '\t');
 			String contents(" ");
 			if (!(tokenizer.GetAt(7) == " ")) {
 				contents = String(tokenizer.GetAt(7));
@@ -63,8 +64,6 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 			//=========================================================
 
 			count++;
-			qContents = textStream.readLine();
-			line = qContents.toLocal8Bit().data();
 		}
 		file.close();
 	}

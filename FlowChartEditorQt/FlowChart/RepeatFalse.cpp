@@ -351,7 +351,8 @@ void RepeatFalse::GetAttribute(Attribute *attribute) {
 
 void RepeatFalse::GetLine(char(*line)) {
 	sprintf(line, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n", 
-		ID_REPEATFALSE, this->x, this->y, this->width, this->height, this->width2, this->height2, this->contents);
+		ID_REPEATFALSE, this->x, this->y, this->width, this->height, this->width2, this->height2, 
+		this->contents.GetString());
 }
 
 bool RepeatFalse::IsStyle(Long style) {

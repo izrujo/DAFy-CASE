@@ -12,6 +12,8 @@
 #include "FlowChart/FlowChartVisitor.h"
 #include "FlowChart/DrawVisitor.h"
 #include "FlowChart/WindowClose.h"
+#include "FlowChart/Memory.h"
+#include "FlowChart/MemoryController.h"
 
 #include <qmenubar.h>
 #include <qevent.h>
@@ -25,6 +27,7 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 
 	this->setMouseTracking(true);
 	this->setFocusPolicy(Qt::StrongFocus);
+	this->installEventFilter(this);
 
 	this->menuBar = NULL;
 
@@ -209,13 +212,18 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 	}
 	else {
 		//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
-		this->sketchBook->Unfold(canvas->flowChart->Clone());
+		this->sketchBook->Unfold(canvas->flowChart->Clone(),
+			new Memory(*canvas->memoryController->GetUndoMemory()),
+			new Memory(*canvas->memoryController->GetRedoMemory()));
 		//스케치북을 펼친다 : 현재 캔버스의 쪽 바꾸기
 		Long current = this->sketchBook->Fold(event->pos());
 		//스케치북을 펼친다 : 색깔 바꿔주기.
 		this->sketchBook->Update();
-		//스케치북을 펼친다 : 펼친 캔버스의 저장되어있던 순서도로 바꾼다.
+		//스케치북을 펼친다 : 펼친 캔버스의 저장되어있던 순서도로 바꾼다. 메모리도 갈아준다.
 		canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
+		Memory *undoMemory = new Memory(*this->sketchBook->GetUndoMemory(this->sketchBook->GetCurrent()));
+		Memory *redoMemory = new Memory(*this->sketchBook->GetRedoMemory(this->sketchBook->GetCurrent()));
+		canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
 
 		NShape *currentTitle = this->sketchBook->GetCanvas(current);
 		Long windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
@@ -224,6 +232,13 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 	}
 	this->repaint();
 	canvas->repaint();	
+}
+
+bool FlowChartEditor::eventFilter(QObject* o, QEvent* e) {
+	if (o == this && e->type() == QEvent::ShortcutOverride) {
+		e->accept();
+	}
+	return QFrame::eventFilter(o, e);
 }
 
 /*우클릭 메뉴인가?
@@ -470,7 +485,7 @@ void FlowChartEditor::CreateActions() {
 
 	this->exitAction = new QAction(QString::fromLocal8Bit(("끝내기(&X)...")), this);
 	this->exitAction->setShortcut(QKeySequence(Qt::ALT + Qt::Key_F4));
-	connect(this->exitAction, &QAction::triggered, this, [=]() { this->CommandRange("Exit"); });
+	connect(this->exitAction, &QAction::triggered, this, [=]() { this->CommandRange("Close"); });
 	//==================== File Menu ====================
 
 	//==================== Edit Menu ====================

@@ -29,6 +29,7 @@
 #include <qpixmap.h>
 #include <QtPrintSupport/qpagesetupdialog.h>
 #include <QtPrintSupport/qprinter.h>
+#include <qmessagebox.h>
 
 using namespace std;
 
@@ -83,21 +84,36 @@ void SaveCommand::Execute() {
 			fileName_,
 			QObject::tr("Text files (*.txt)"));
 
-		this->editor->sketchBook->ModifyFileOpenPath(fileName);
-		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+		QFile file(fileName);
+		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+		if (isOpen == true) {
+			this->editor->sketchBook->ModifyFileOpenPath(fileName);
+			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
 
-		Long length = fileName.length();
-		Long i = length - 1;
-		while (i >= 0 && fileName[i] != '/') {
-			length--;
-			i--;
+			Long length = fileName.length();
+			Long i = length - 1;
+			while (i >= 0 && fileName[i] != '/') {
+				length--;
+				i--;
+			}
+			fileName.remove(0, length);
+			fileName.remove(fileName.length() - 4, 4);
+			fileName.insert(0, ' ');
+
+			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
+			Long width = 186;
+			if (fileName.length() > 10) {
+				width = width + (fileName.length() - 10) * 10;
+				canvasTitle->ReSize(width, canvasTitle->GetHeight());
+				editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
+				//캔버스 닫는거 옮기기
+				Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+				Long windowCloseY = canvasTitle->GetY() + 4;
+				editor->windowClose->Move(windowCloseX, windowCloseY);
+			}
+
+			canvasTitle->Rewrite(fileName.toLocal8Bit().data());
 		}
-		fileName.remove(0, length);
-		fileName.remove(fileName.length() - 4, 4);
-		fileName.insert(0, ' ');
-
-		canvasTitle->Rewrite(fileName.toLocal8Bit().data());
-
 	}
 	else {
 		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileOpenPath.toLocal8Bit().data());
@@ -134,21 +150,36 @@ void SaveAsCommand::Execute() {
 		QObject::tr("Save File"),
 		fileName_,
 		QObject::tr("Text files (*.txt)"));
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+	if (isOpen == true) {
+		this->editor->sketchBook->ModifyFileOpenPath(fileName);
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
 
-	this->editor->sketchBook->ModifyFileOpenPath(fileName);
-	(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+		Long length = fileName.length();
+		Long i = length - 1;
+		while (i >= 0 && fileName[i] != '/') {
+			length--;
+			i--;
+		}
+		fileName.remove(0, length);
+		fileName.remove(fileName.length() - 4, 4);
+		fileName.insert(0, ' ');
 
-	Long length = fileName.length();
-	Long i = length - 1;
-	while (i >= 0 && fileName[i] != '/') {
-		length--;
-		i--;
+		//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
+		Long width = 186;
+		if (fileName.length() > 10) {
+			width = width + (fileName.length() - 10) * 10;
+			canvasTitle->ReSize(width, canvasTitle->GetHeight());
+			editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
+			//캔버스 닫는거 옮기기
+			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			Long windowCloseY = canvasTitle->GetY() + 4;
+			editor->windowClose->Move(windowCloseX, windowCloseY);
+		}
+
+		canvasTitle->Rewrite(fileName.toLocal8Bit().data());
 	}
-	fileName.remove(0, length);
-	fileName.remove(fileName.length() - 4, 4);
-	fileName.insert(0, ' ');
-
-	canvasTitle->Rewrite(fileName.toLocal8Bit().data());
 }
 
 //OpenCommand
@@ -175,50 +206,73 @@ void OpenCommand::Execute() {
 	QString fileName = QFileDialog::getOpenFileName((QWidget*)this->editor,
 		QObject::tr("Load"), "",
 		QObject::tr("(*.txt);;All Files (*)"));
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
+	if (isOpen == true) {
+		//너무 많이 열지 못하게 방지하는 기능
+		NShape *last = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetLength() - 1);
+		Long lastRight = last->GetX() + last->GetWidth();
 
-	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+		DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+		//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
+		Long right = canvas->x() + canvas->width();
+		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
+			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
+			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
+				new Memory(*canvas->memoryController->GetUndoMemory()),
+				new Memory(*canvas->memoryController->GetRedoMemory()));
+			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
+			//열기
+			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName.toLocal8Bit().data());
+			//경로를 포함한 파일이름을 수정해서 딱 파일이름만 남도록 처리
+			Long length = fileName.length();
+			Long i = length - 1;
+			while (i >= 0 && fileName[i] != '/') {
+				length--;
+				i--;
+			}
+			QString fileName_ = fileName;
+			fileName_.remove(0, length);
+			fileName_.remove(fileName_.length() - 4, 4);
+			fileName_.insert(0, ' ');
+			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
+			Long width = 186;
+			if (fileName_.length() > 10) {
+				width = width + (fileName_.length() - 10) * 10;
+			}
+			//새로운 캔버스 타이틀 만들기
+			NShape *canvasTitle = new WindowTitle(last->GetX() + last->GetWidth(), last->GetY(),
+				width, last->GetHeight(),
+				QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), fileName_.toLocal8Bit().data());
+			NShape *flowChart = canvas->flowChart->Clone();
+			//새로운 캔버스 타이틀 맨 뒤에 추가하기
+			Long current = this->editor->sketchBook->Add(canvasTitle, flowChart, fileName);
 
-	//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
-	this->editor->sketchBook->Unfold(canvas->flowChart->Clone());
-	//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
-	NShape *last = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetLength() - 1);
-	//열기
-	(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName.toLocal8Bit().data());
-	//경로를 포함한 파일이름을 수정해서 딱 파일이름만 남도록 처리
-	Long length = fileName.length();
-	Long i = length - 1;
-	while (i >= 0 && fileName[i] != '/') {
-		length--;
-		i--;
+			//스케치북을 펼친다 : 현재 캔버스의 쪽과 캔버스 타이틀 색깔 바꾸기
+			this->editor->sketchBook->Fold(QPoint(canvasTitle->GetX(), canvasTitle->GetY()));
+			this->editor->sketchBook->Update();
+			//캔버스 닫는거 옮기기
+			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			Long windowCloseY = canvasTitle->GetY() + 4;
+			editor->windowClose->Move(windowCloseX, windowCloseY);
+
+			//순서도는 Load()에 의해 이미 바뀌어 있음.
+			//메모리는 Add에 의해서 비어있는 메모리가 생성되는데 바로 그걸 가져와서 바꿔치기
+			Memory *undoMemory = new Memory(*this->editor->sketchBook->GetUndoMemory(current));
+			Memory *redoMemory = new Memory(*this->editor->sketchBook->GetRedoMemory(current));
+			canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
+
+			canvas->setFocus(); //focus message 찾아서
+			this->editor->repaint();
+		}
+		else {
+			//메시지 박스
+			QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("경고"),
+				QString::fromLocal8Bit("더 열 수 없습니다. 파일을 닫은 후 여십시오."),
+				QMessageBox::Ok, this->editor);
+			int ret = messageBox.exec();
+		}
 	}
-	QString fileName_ = fileName;
-	fileName_.remove(0, length);
-	fileName_.remove(fileName_.length() - 4, 4);
-	fileName_.insert(0, ' ');
-	//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-	Long width = 186;
-	if (fileName_.length() > 10) {
-		width = width + (fileName_.length() - 10) * 10;
-	}
-	//새로운 캔버스 타이틀 만들기
-	NShape *canvasTitle = new WindowTitle(last->GetX() + last->GetWidth(), last->GetY(),
-		width, last->GetHeight(),
-		QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), fileName_.toLocal8Bit().data());
-	NShape *flowChart = canvas->flowChart->Clone();
-	//새로운 캔버스 타이틀 맨 뒤에 추가하기
-	Long current = this->editor->sketchBook->Add(canvasTitle, flowChart, fileName);
-
-	//스케치북을 펼친다 : 현재 캔버스의 쪽과 캔버스 타이틀 색깔 바꾸기
-	this->editor->sketchBook->Fold(QPoint(canvasTitle->GetX(), canvasTitle->GetY()));
-	this->editor->sketchBook->Update();
-	//캔버스 닫는거 옮기기
-	Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-	Long windowCloseY = canvasTitle->GetY() + 4;
-	editor->windowClose->Move(windowCloseX, windowCloseY);
-
-	canvas->setFocus(); //focus message 찾아서
-	this->editor->repaint();
-
 }
 
 //NewCommand
@@ -1093,35 +1147,26 @@ void SelectionCommand::Execute() {
 	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->repaint();
 }
 
-/*
-//TutorialCommand
-TutorialCommand::TutorialCommand(FlowChartEditor *editor)
+//CloseCommand
+CloseCommand::CloseCommand(FlowChartEditor *editor)
 	: FlowChartCommand(editor) {
 
 }
 
-TutorialCommand::TutorialCommand(const TutorialCommand& source)
+CloseCommand::CloseCommand(const CloseCommand& source)
 	: FlowChartCommand(source) {
 
 }
 
-TutorialCommand::~TutorialCommand() {
+CloseCommand::~CloseCommand() {
 }
 
-TutorialCommand& TutorialCommand::operator =(const TutorialCommand& source) {
+CloseCommand& CloseCommand::operator =(const CloseCommand& source) {
 	FlowChartCommand::operator=(source);
 
 	return *this;
 }
 
-void TutorialCommand::Execute() {
-	this->editor->ShowWindow(SW_SHOWMAXIMIZED);
+void CloseCommand::Execute() {
 
-	CRect rect;
-	this->editor->GetWindowRect(&rect);
-
-	TutorialIntroForm *intro = new TutorialIntroForm;
-	intro->Create(NULL, NULL, WS_POPUP | WS_VISIBLE | WS_CHILD,
-		CRect(rect.left, rect.top, rect.Width(), rect.Height()), this->editor, NULL, WS_EX_LAYERED | WS_EX_CLIENTEDGE, NULL);
 }
-*/

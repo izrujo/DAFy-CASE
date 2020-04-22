@@ -227,3 +227,8 @@ void MemoryController::Quadrate() {
 	//2. redoMemory를 일치시킨다.
 	this->redoMemory->Quadrate(this->drawingPaper->flowChart);
 }
+
+void MemoryController::ChangeMemory(Memory *undoMemory, Memory *redoMemory) {
+	this->undoMemory = undoMemory;
+	this->redoMemory = redoMemory;
+}

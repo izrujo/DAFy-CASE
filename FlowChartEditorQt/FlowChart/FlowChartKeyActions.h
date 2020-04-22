@@ -257,4 +257,82 @@ public:
 
 	virtual void OnKeyDown();
 };
+
+//FCtrlNKeyAction
+class FCtrlNKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlNKeyAction(FlowChartEditor *editor = 0);
+	FCtrlNKeyAction(const FCtrlNKeyAction& source);
+	virtual	~FCtrlNKeyAction();
+	FCtrlNKeyAction& operator=(const FCtrlNKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//FCtrlOKeyAction
+class FCtrlOKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlOKeyAction(FlowChartEditor *editor = 0);
+	FCtrlOKeyAction(const FCtrlOKeyAction& source);
+	virtual	~FCtrlOKeyAction();
+	FCtrlOKeyAction& operator=(const FCtrlOKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//FCtrlSKeyAction
+class FCtrlSKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlSKeyAction(FlowChartEditor *editor = 0);
+	FCtrlSKeyAction(const FCtrlSKeyAction& source);
+	virtual	~FCtrlSKeyAction();
+	FCtrlSKeyAction& operator=(const FCtrlSKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//FCtrlAltSKeyAction
+class FCtrlAltSKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlAltSKeyAction(FlowChartEditor *editor = 0);
+	FCtrlAltSKeyAction(const FCtrlAltSKeyAction& source);
+	virtual	~FCtrlAltSKeyAction();
+	FCtrlAltSKeyAction& operator=(const FCtrlAltSKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//FCtrlAltIKeyAction
+class FCtrlAltIKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlAltIKeyAction(FlowChartEditor *editor = 0);
+	FCtrlAltIKeyAction(const FCtrlAltIKeyAction& source);
+	virtual	~FCtrlAltIKeyAction();
+	FCtrlAltIKeyAction& operator=(const FCtrlAltIKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//FCtrlPKeyAction
+class FCtrlPKeyAction : public FlowChartKeyAction {
+public:
+	FCtrlPKeyAction(FlowChartEditor *editor = 0);
+	FCtrlPKeyAction(const FCtrlPKeyAction& source);
+	virtual	~FCtrlPKeyAction();
+	FCtrlPKeyAction& operator=(const FCtrlPKeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
+//FAltF4KeyAction
+class FAltF4KeyAction : public FlowChartKeyAction {
+public:
+	FAltF4KeyAction(FlowChartEditor *editor = 0);
+	FAltF4KeyAction(const FAltF4KeyAction& source);
+	virtual	~FAltF4KeyAction();
+	FAltF4KeyAction& operator=(const FAltF4KeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
 #endif //_FLOWCHARTKEYACTIONS_H

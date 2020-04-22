@@ -345,17 +345,16 @@ public:
 
 	virtual void Execute();
 };
-/*
-//TutorialCommand
-class TutorialCommand : public FlowChartCommand {
+
+//CloseCommand
+class CloseCommand : public FlowChartCommand {
 public:
-	TutorialCommand(FlowChartEditor *editor = 0);
-	TutorialCommand(const TutorialCommand& source);
-	virtual ~TutorialCommand();
-	TutorialCommand& operator=(const TutorialCommand& source);
+	CloseCommand(FlowChartEditor *editor = 0);
+	CloseCommand(const CloseCommand& source);
+	virtual ~CloseCommand();
+	CloseCommand& operator=(const CloseCommand& source);
 
 	virtual void Execute();
 };
-*/
 
 #endif //_FLOWCHARTCOMMANDS_H

@@ -12,6 +12,17 @@
 #include "../GObject/Painter.h"
 #include "Clipboard.h"
 #include "Memory.h"
+#include "SketchBook.h"
+#include "WindowTitle.h"
+
+#include <qfiledialog.h>
+#include <qtextstream.h>
+#include <qfontdialog.h>
+#include <qstring.h>
+#include <qpixmap.h>
+#include <QtPrintSupport/qpagesetupdialog.h>
+#include <QtPrintSupport/qprinter.h>
+#include <qmessagebox.h>
 
 FlowChartKeyAction::FlowChartKeyAction(FlowChartEditor *editor) {
 	this->editor = editor;
@@ -824,4 +835,333 @@ void FCtrlYKeyAction::OnKeyDown() {
 		canvas->flowChart->AscendingSort();
 		canvas->memoryController->Quadrate();
 	}
+}
+
+//FCtrlNKeyAction
+FCtrlNKeyAction::FCtrlNKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FCtrlNKeyAction::FCtrlNKeyAction(const FCtrlNKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FCtrlNKeyAction::~FCtrlNKeyAction() {
+
+}
+
+FCtrlNKeyAction& FCtrlNKeyAction::operator=(const FCtrlNKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FCtrlNKeyAction::OnKeyDown() {
+	(static_cast<DrawingPaper *>(this->editor->windows[0]))->New();
+	(static_cast<DrawingPaper *>(this->editor->windows[0]))->setFocus();
+	this->editor->repaint();
+}
+
+//FCtrlOKeyAction
+FCtrlOKeyAction::FCtrlOKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FCtrlOKeyAction::FCtrlOKeyAction(const FCtrlOKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FCtrlOKeyAction::~FCtrlOKeyAction() {
+
+}
+
+FCtrlOKeyAction& FCtrlOKeyAction::operator=(const FCtrlOKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FCtrlOKeyAction::OnKeyDown() {
+	QString fileName = QFileDialog::getOpenFileName((QWidget*)this->editor,
+		QObject::tr("Load"), "",
+		QObject::tr("(*.txt);;All Files (*)"));
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
+	if (isOpen == true) {
+		NShape *last = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetLength() - 1);
+		Long lastRight = last->GetX() + last->GetWidth();
+
+		DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+		//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
+		Long right = canvas->x() + canvas->width();
+		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
+			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
+			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
+				new Memory(*canvas->memoryController->GetUndoMemory()),
+				new Memory(*canvas->memoryController->GetRedoMemory()));
+			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
+			//열기
+			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName.toLocal8Bit().data());
+			//경로를 포함한 파일이름을 수정해서 딱 파일이름만 남도록 처리
+			Long length = fileName.length();
+			Long i = length - 1;
+			while (i >= 0 && fileName[i] != '/') {
+				length--;
+				i--;
+			}
+			QString fileName_ = fileName;
+			fileName_.remove(0, length);
+			fileName_.remove(fileName_.length() - 4, 4);
+			fileName_.insert(0, ' ');
+			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
+			Long width = 186;
+			if (fileName_.length() > 10) {
+				width = width + (fileName_.length() - 10) * 10;
+			}
+			//새로운 캔버스 타이틀 만들기
+			NShape *canvasTitle = new WindowTitle(last->GetX() + last->GetWidth(), last->GetY(),
+				width, last->GetHeight(),
+				QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), fileName_.toLocal8Bit().data());
+			NShape *flowChart = canvas->flowChart->Clone();
+			//새로운 캔버스 타이틀 맨 뒤에 추가하기
+			Long current = this->editor->sketchBook->Add(canvasTitle, flowChart, fileName);
+
+			//스케치북을 펼친다 : 현재 캔버스의 쪽과 캔버스 타이틀 색깔 바꾸기
+			this->editor->sketchBook->Fold(QPoint(canvasTitle->GetX(), canvasTitle->GetY()));
+			this->editor->sketchBook->Update();
+			//캔버스 닫는거 옮기기
+			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			Long windowCloseY = canvasTitle->GetY() + 4;
+			editor->windowClose->Move(windowCloseX, windowCloseY);
+
+			//순서도는 Load()에 의해 이미 바뀌어 있음.
+			//메모리는 Add에 의해서 비어있는 메모리가 생성되는데 바로 그걸 가져와서 바꿔치기
+			Memory *undoMemory = new Memory(*this->editor->sketchBook->GetUndoMemory(current));
+			Memory *redoMemory = new Memory(*this->editor->sketchBook->GetRedoMemory(current));
+			canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
+
+			canvas->setFocus(); //focus message 찾아서
+			this->editor->repaint();
+		}
+		else {
+			//메시지 박스
+			QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("경고"),
+				QString::fromLocal8Bit("더 열 수 없습니다. 파일을 닫은 후 여십시오."),
+				QMessageBox::Ok, this->editor);
+			int ret = messageBox.exec();
+		}
+	}
+}
+
+//FCtrlSKeyAction
+FCtrlSKeyAction::FCtrlSKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FCtrlSKeyAction::FCtrlSKeyAction(const FCtrlSKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FCtrlSKeyAction::~FCtrlSKeyAction() {
+
+}
+
+FCtrlSKeyAction& FCtrlSKeyAction::operator=(const FCtrlSKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FCtrlSKeyAction::OnKeyDown() {
+	QString fileOpenPath = this->editor->sketchBook->GetFileOpenPath(this->editor->sketchBook->GetCurrent());
+	if (fileOpenPath.isEmpty()) {
+		NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+		QString fileName;
+		QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
+		fileName_.remove(0, 1);
+
+		fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
+			QObject::tr("Save File"),
+			fileName_,
+			QObject::tr("Text files (*.txt)"));
+
+		QFile file(fileName);
+		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+		if (isOpen == true) {
+			this->editor->sketchBook->ModifyFileOpenPath(fileName);
+			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+
+			Long length = fileName.length();
+			Long i = length - 1;
+			while (i >= 0 && fileName[i] != '/') {
+				length--;
+				i--;
+			}
+			fileName.remove(0, length);
+			fileName.remove(fileName.length() - 4, 4);
+			fileName.insert(0, ' ');
+
+			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
+			Long width = 186;
+			if (fileName.length() > 10) {
+				width = width + (fileName.length() - 10) * 10;
+				canvasTitle->ReSize(width, canvasTitle->GetHeight());
+				editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
+				//캔버스 닫는거 옮기기
+				Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+				Long windowCloseY = canvasTitle->GetY() + 4;
+				editor->windowClose->Move(windowCloseX, windowCloseY);
+			}
+
+			canvasTitle->Rewrite(fileName.toLocal8Bit().data());
+		}
+	}
+	else {
+		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileOpenPath.toLocal8Bit().data());
+	}
+}
+
+//FCtrlAltSKeyAction
+FCtrlAltSKeyAction::FCtrlAltSKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FCtrlAltSKeyAction::FCtrlAltSKeyAction(const FCtrlAltSKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FCtrlAltSKeyAction::~FCtrlAltSKeyAction() {
+
+}
+
+FCtrlAltSKeyAction& FCtrlAltSKeyAction::operator=(const FCtrlAltSKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FCtrlAltSKeyAction::OnKeyDown() {
+	NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+	QString fileName;
+	QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
+	fileName_.remove(0, 1);
+
+	fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
+		QObject::tr("Save File"),
+		fileName_,
+		QObject::tr("Text files (*.txt)"));
+
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+	if (isOpen == true) {
+		this->editor->sketchBook->ModifyFileOpenPath(fileName);
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+
+		Long length = fileName.length();
+		Long i = length - 1;
+		while (i >= 0 && fileName[i] != '/') {
+			length--;
+			i--;
+		}
+		fileName.remove(0, length);
+		fileName.remove(fileName.length() - 4, 4);
+		fileName.insert(0, ' ');
+
+		//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
+		Long width = 186;
+		if (fileName.length() > 10) {
+			width = width + (fileName.length() - 10) * 10;
+			canvasTitle->ReSize(width, canvasTitle->GetHeight());
+			editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
+			//캔버스 닫는거 옮기기
+			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			Long windowCloseY = canvasTitle->GetY() + 4;
+			editor->windowClose->Move(windowCloseX, windowCloseY);
+		}
+
+		canvasTitle->Rewrite(fileName.toLocal8Bit().data());
+	}
+}
+
+//FCtrlAltIKeyAction
+FCtrlAltIKeyAction::FCtrlAltIKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FCtrlAltIKeyAction::FCtrlAltIKeyAction(const FCtrlAltIKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FCtrlAltIKeyAction::~FCtrlAltIKeyAction() {
+
+}
+
+FCtrlAltIKeyAction& FCtrlAltIKeyAction::operator=(const FCtrlAltIKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FCtrlAltIKeyAction::OnKeyDown() {
+	//아직
+}
+
+//FCtrlPKeyAction
+FCtrlPKeyAction::FCtrlPKeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FCtrlPKeyAction::FCtrlPKeyAction(const FCtrlPKeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FCtrlPKeyAction::~FCtrlPKeyAction() {
+
+}
+
+FCtrlPKeyAction& FCtrlPKeyAction::operator=(const FCtrlPKeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FCtrlPKeyAction::OnKeyDown() {
+	//아직
+}
+
+//FAltF4KeyAction
+FAltF4KeyAction::FAltF4KeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FAltF4KeyAction::FAltF4KeyAction(const FAltF4KeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FAltF4KeyAction::~FAltF4KeyAction() {
+
+}
+
+FAltF4KeyAction& FAltF4KeyAction::operator=(const FAltF4KeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FAltF4KeyAction::OnKeyDown() {
+	//아직
 }

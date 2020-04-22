@@ -47,6 +47,7 @@ protected:
 	void paintEvent(QPaintEvent *event);
 	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
+	bool eventFilter(QObject* o, QEvent* e);
 	/* 해당하는 함수 찾기
 	BOOL PreTranslateMessage(MSG *pMsg);
 	afx_msg void OnDropFiles(HDROP hDropInfo);

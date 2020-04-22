@@ -23,6 +23,9 @@ public:
 
 	void Quadrate(); //memory들의 execution들이 가지고 있는 shape의 index인 position이 sort로 인해 실제 index와 달라지면 일치시켜줘야 함.
 
+	//200422 여러 개의 메모리 데이터를 관리할 필요가 있음.
+	void ChangeMemory(Memory *undoMemory, Memory *redoMemory);
+
 	Memory* GetUndoMemory() const;
 	Memory* GetRedoMemory() const;
 private:

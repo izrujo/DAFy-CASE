@@ -127,7 +127,7 @@ void Process::GetLine(char(*line)) {
 	saveContents.Replace('\n', '\r');
 
 	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
-		ID_PROCESS, this->x, this->y, this->width, this->height, saveContents);
+		ID_PROCESS, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 
 bool Process::IsStyle(Long style) {

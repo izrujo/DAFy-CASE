@@ -259,7 +259,7 @@ void LeftDown::GetAttribute(Attribute *attribute) {
 
 void LeftDown::GetLine(char(*line)) {
 	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_LEFTDOWN, 
-		this->x, this->y, this->width, this->height, this->contents);
+		this->x, this->y, this->width, this->height, this->contents.GetString());
 }
 
 bool LeftDown::IsStyle(Long style) {

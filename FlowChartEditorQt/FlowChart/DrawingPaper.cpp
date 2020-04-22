@@ -29,6 +29,7 @@
 #include "File.h"
 #include "WindowTitle.h"
 #include "SketchBook.h"
+#include "Memory.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -871,20 +872,43 @@ void DrawingPaper::OnIntervalMakeMenuClick() {
 void DrawingPaper::New() {
 	FlowChartEditor *editor = static_cast<FlowChartEditor *>(this->parentWidget());
 
-	editor->sketchBook->Unfold(this->flowChart);
+	NShape *last = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength() - 1);
+	Long lastRight = last->GetX() + last->GetWidth();
+	//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
+	Long right = this->x() + this->width();
+	if (lastRight + 186 < right) { //186은 캔버스 타이틀의 최소 너비
 
-	NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetCurrent());
-	NShape *newTitle = new WindowTitle(previousTitle->GetX() + previousTitle->GetWidth(),
-		previousTitle->GetY(), 186, previousTitle->GetHeight(), QColor(102, 204, 204),
-		Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
-	editor->sketchBook->Add(newTitle, new FlowChart);
-	editor->sketchBook->Update();
+		editor->sketchBook->Unfold(this->flowChart->Clone(),
+			new Memory(*this->memoryController->GetUndoMemory()),
+			new Memory(*this->memoryController->GetRedoMemory()));
 
-	Long windowCloseX = newTitle->GetX() + newTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-	Long windowCloseY = newTitle->GetY() + 4;
-	editor->windowClose->Move(windowCloseX, windowCloseY);
+		NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetCurrent());
+		NShape *newTitle = new WindowTitle(previousTitle->GetX() + previousTitle->GetWidth(),
+			previousTitle->GetY(), 186, previousTitle->GetHeight(), QColor(102, 204, 204),
+			Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
+		NShape *newFlowChart = new FlowChart;
+		editor->sketchBook->Add(newTitle, newFlowChart);
+		editor->sketchBook->Update();
 
-	editor->repaint();
+		//비어 있는  순서도, 비어 있는 메모리들(-Add에서 빈 거 생성한거 가져와서 다시 넣는거임)
+		this->flowChart = newFlowChart->Clone();
+		Memory *undoMemory = new Memory(*editor->sketchBook->GetUndoMemory(editor->sketchBook->GetCurrent()));
+		Memory *redoMemory = new Memory(*editor->sketchBook->GetRedoMemory(editor->sketchBook->GetCurrent()));
+		this->memoryController->ChangeMemory(undoMemory, redoMemory);
+
+		Long windowCloseX = newTitle->GetX() + newTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+		Long windowCloseY = newTitle->GetY() + 4;
+		editor->windowClose->Move(windowCloseX, windowCloseY);
+
+		editor->repaint();
+	}
+	else {
+		//메시지 박스
+		QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("경고"),
+			QString::fromLocal8Bit("더 열 수 없습니다. 파일을 닫은 후 여십시오."),
+			QMessageBox::Ok, editor);
+		int ret = messageBox.exec();
+	}
 }
 
 Long DrawingPaper::Save(const char(*fileName)) {

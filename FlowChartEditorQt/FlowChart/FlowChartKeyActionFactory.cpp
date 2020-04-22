@@ -3,6 +3,8 @@
 #include "DrawingPaper.h"
 #include "../FlowChartEditor.h"
 
+#include <windows.h>
+
 #include <qevent.h>
 
 FlowChartKeyActionFactory::FlowChartKeyActionFactory(FlowChartEditor *editor) {
@@ -26,12 +28,23 @@ FlowChartKeyActionFactory& FlowChartKeyActionFactory::operator=(const FlowChartK
 FlowChartKeyAction* FlowChartKeyActionFactory::Make(int modifiers, int key) {
 	FlowChartKeyAction* keyAction = 0;
 
-	bool isCtrl = false;
-	if (modifiers == Qt::ControlModifier) {
-		isCtrl = true;
+	SHORT isCtrl = GetKeyState(VK_CONTROL) & 0X8000;
+
+	bool isAlt = false;
+	if (modifiers == Qt::AltModifier) {
+		isAlt = true;
 	}
 
-	if (isCtrl && key == Qt::Key_A) { //Ctrl + A
+	if (isCtrl && isAlt && key == Qt::Key_S) { //Ctrl + Alt + S
+		keyAction = new FCtrlAltSKeyAction(this->editor);
+	}
+	else if (isCtrl && isAlt && key == Qt::Key_I) { //Ctrl + Alt + I
+		keyAction = new FCtrlAltIKeyAction(this->editor);
+	}
+	else if (isAlt && key == Qt::Key_F4) { //Alt + F4
+		keyAction = new FAltF4KeyAction(this->editor);
+	}
+	else if (isCtrl && key == Qt::Key_A) { //Ctrl + A
 		keyAction = new FCtrlAKeyAction(this->editor);
 	}
 	else if (isCtrl && key == Qt::Key_C) { //Ctrl + C
@@ -57,6 +70,18 @@ FlowChartKeyAction* FlowChartKeyActionFactory::Make(int modifiers, int key) {
 	}
 	else if (isCtrl&& key == Qt::Key_Minus) {
 		keyAction = new FCtrlMinusKeyAction(this->editor);
+	}
+	else if (isCtrl && key == Qt::Key_N) { //Ctrl + N
+		keyAction = new FCtrlNKeyAction(this->editor);
+	}
+	else if (isCtrl && key == Qt::Key_O) { //Ctrl + O
+		keyAction = new FCtrlOKeyAction(this->editor);
+	}
+	else if (isCtrl && key == Qt::Key_S) { //Ctrl + S
+		keyAction = new FCtrlSKeyAction(this->editor);
+	}
+	else if (isCtrl && key == Qt::Key_P) {
+		keyAction = new FCtrlPKeyAction(this->editor);
 	}
 	else if (key == Qt::Key_Delete) {
 		keyAction = new FDeleteKeyAction(this->editor);

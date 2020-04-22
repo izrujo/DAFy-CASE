@@ -198,7 +198,8 @@ void Arrow::GetAttribute(Attribute *attribute) {
 }
 
 void Arrow::GetLine(char(*line)) {
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_ARROW, this->x, this->y, this->width, this->height, this->contents);
+	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+		ID_ARROW, this->x, this->y, this->width, this->height, this->contents.GetString());
 }
 
 bool Arrow::IsStyle(Long style) {
