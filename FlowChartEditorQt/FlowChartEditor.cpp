@@ -14,11 +14,14 @@
 #include "FlowChart/WindowClose.h"
 #include "FlowChart/Memory.h"
 #include "FlowChart/MemoryController.h"
+#include "FlowChart/Zoom.h"
 
 #include <qmenubar.h>
 #include <qevent.h>
 #include <qpainter.h>
 #include <qmessagebox.h>
+#include <qstatusbar.h>
+#include <qlabel.h>
 
 FlowChartEditor::FlowChartEditor(QWidget *parent)
 	: QFrame(parent)
@@ -29,7 +32,13 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	this->setFocusPolicy(Qt::StrongFocus);
 	this->installEventFilter(this);
 
+	this->setStyleSheet("QStatusBar { background:rgb(102,204,204); }"
+						"QStatusBar QLabel { color:white;}"
+						"QStatusBar::item { border:None;}"
+	);
+
 	this->menuBar = NULL;
+	this->statusBar = NULL;
 
 	QRect frameRect = this->frameRect();
 
@@ -61,45 +70,7 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	this->windowClose = new WindowClose(windowCloseX, windowCloseY, 26, 23, QColor(102, 204, 204),
 		Qt::SolidLine, QColor(255, 255, 255));
 
-	/*상태 표시줄
-	HINSTANCE hInstance = (HINSTANCE)::GetWindowLong(this->m_hWnd, GWL_HINSTANCE);
-	this->GetClientRect(rect);
-	// Create the status bar.
-	HWND hWndStatusBar = ::CreateWindowEx(0, STATUSCLASSNAME, (PCTSTR)NULL, SBARS_SIZEGRIP | WS_CHILD | WS_VISIBLE | WS_BORDER,
-		0, 0, 0, 0, this->m_hWnd, (HMENU)3000, hInstance, NULL);
-
-	this->statusBar = new StatusBar(6, hWndStatusBar);
-
-	int statusBars[7];
-	statusBars[0] = rect.right - 700;
-	statusBars[1] = statusBars[0] + 100;
-	statusBars[2] = statusBars[1] + 100;
-	statusBars[3] = statusBars[2] + 100;
-	statusBars[4] = statusBars[3] + 100;
-	statusBars[5] = statusBars[4] + 200;
-	statusBars[6] = statusBars[5] + 100;
-	// Tell the status bar to create the window parts.
-	::SendMessage(this->statusBar->GetHandle(), SB_SETPARTS, (WPARAM)7, (LPARAM)statusBars);
-
-	this->statusBar->Add(0, String(""));
-
-	this->statusBar->Add(1, String(""));
-
-	this->statusBar->Add(2, String("X: "));
-	this->statusBar->Add(3, String("Y: "));
-	CString rate;
-	Long zoomRate = dynamic_cast<DrawingPaper*>(this->windows[0])->zoom->GetRate();
-	rate.Format("%d", zoomRate);
-	rate += "%";
-	this->statusBar->Add(4, String((LPCTSTR)rate));
-
-	this->statusBar->Add(5, String("문의 : 02)587-9424"));
-	this->statusBar->Add(6, String("나아 코칭"));
-	this->statusBar->Print();
-	*/
-
-	//파일처리에 관련된 것인듯
-	//DragAcceptFiles(TRUE);
+	this->CreateStatusBar();
 }
 
 void FlowChartEditor::closeEvent(QCloseEvent *event) {
@@ -110,6 +81,9 @@ void FlowChartEditor::closeEvent(QCloseEvent *event) {
 	if (ret == QMessageBox::Yes) {
 		if (this->menuBar != NULL) {
 			delete this->menuBar;
+		}
+		if (this->statusBar != NULL) {
+			delete this->statusBar;
 		}
 		if (this->painter != NULL) {
 			delete this->painter;
@@ -135,11 +109,13 @@ void FlowChartEditor::resizeEvent(QResizeEvent *event) {
 	QRect frameRect = this->frameRect();
 
 	this->menuBar->resize(frameRect.width(), this->menuBar->height());
+	this->statusBar->move(frameRect.x(), frameRect.bottom() - this->statusBar->height());
+	this->statusBar->resize(frameRect.width(), this->statusBar->height());
 
-	this->windows[0]->resize(frameRect.width() - 200, frameRect.height() - this->menuBar->height() - 32 - 20);
+	this->windows[0]->resize(frameRect.width() - 200, frameRect.height() - this->menuBar->height() - 32 - 20 - this->statusBar->height());
 	this->windows[0]->repaint();
 
-	this->windows[1]->resize(190, frameRect.height() - this->menuBar->height() - 20);
+	this->windows[1]->resize(190, frameRect.height() - 20 - this->menuBar->height() - this->statusBar->height());
 	this->windows[1]->repaint();
 }
 
@@ -240,7 +216,7 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 		this->windowClose->Move(windowCloseX, windowCloseY);
 	}
 	this->repaint();
-	canvas->repaint();	
+	canvas->repaint();
 }
 
 bool FlowChartEditor::eventFilter(QObject* o, QEvent* e) {
@@ -465,8 +441,6 @@ void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선
 }
 
 void FlowChartEditor::CreateActions() {
-	//this->fontSetAction->setStatusTip(tr("Set Font"));
-
 	//==================== File Menu ====================
 	this->newAction = new QAction(QString::fromLocal8Bit(("새 파일(&N)")), this);
 	this->newAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_N));
@@ -642,4 +616,33 @@ void FlowChartEditor::CreateMenus() {
 	this->controlArchitectureMenu->addAction(this->selectionArchitectureAction); //선택구조(E)
 
 	this->helpMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("도움말(&H)")));
+}
+
+void FlowChartEditor::CreateStatusBar() {
+	this->statusBar = new QStatusBar(this);
+
+	this->symbolStatus = new QLabel(QString::fromLocal8Bit(""));
+	this->statusBar->addPermanentWidget(this->symbolStatus, 5);
+	
+	this->modeStatus = new QLabel(QString::fromLocal8Bit(""));
+	this->statusBar->addPermanentWidget(this->modeStatus, 2);
+	
+	this->xStatus = new QLabel(QString::fromLocal8Bit("X: "));
+	this->statusBar->addPermanentWidget(this->xStatus, 2);
+	
+	this->yStatus = new QLabel(QString::fromLocal8Bit("Y: "));
+	this->statusBar->addPermanentWidget(this->yStatus, 2);
+
+	Long zoomRate = dynamic_cast<DrawingPaper*>(this->windows[0])->zoom->GetRate();
+	QString zoomString = QString::number(zoomRate);
+	zoomString += '%';
+	this->zoomStatus = new QLabel(zoomString);
+	this->statusBar->addPermanentWidget(this->zoomStatus, 2);
+	
+	this->adStatus1 = new QLabel(QString::fromLocal8Bit("나아 코칭"));
+	this->adStatus1->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+	this->statusBar->addPermanentWidget(this->adStatus1, 2);
+	
+	this->adStatus2 = new QLabel(QString::fromLocal8Bit("02)587-9424"));
+	this->statusBar->addPermanentWidget(this->adStatus2, 1);
 }

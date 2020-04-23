@@ -45,6 +45,8 @@
 #include <qpainter.h>
 #include <qevent.h>
 #include <qmenubar.h>
+#include <qlabel.h>
+#include <qstatusbar.h>
 
 FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	: QFrame(parent) {
@@ -160,13 +162,6 @@ void FlowChartTemplate::paintEvent(QPaintEvent *event) {
 	if (visitor != 0) {
 		delete visitor;
 	}
-	/*
-	bool ret;
-	if (editor->toolTip != NULL) {
-		this->ModifyStyle(0, WS_CLIPSIBLINGS);
-		ret = editor->toolTip->SetWindowPos(&CWnd::wndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-	}
-	*/
 }
 
 void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
@@ -182,24 +177,23 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 		this->shapeSelected = this->flowChartTemplate->GetAt(index);
 
 		static_cast<DrawingPaper*>(editor->windows[0])->mode = DrawingPaper::DRAWING;
-		/*
-			editor->statusBar->Modify(1, String("DRAWING"));
-			String style;
-			switch (this->shapeSelected->GetSymbolID()) {
-			case ID_TERMINAL:
-				style = "    단말 기호"; break;
-			case ID_PREPARATION:
-				style = "    준비 기호"; break;
-			case ID_INPUTOUTPUT:
-				style = "    입출력 기호"; break;
-			case ID_PROCESS:
-				style = "    처리 기호"; break;
-			case ID_DECISION:
-				style = "    판단 기호"; break;
-			}
-			editor->statusBar->Modify(0, style);
-			editor->statusBar->Print();
-		*/
+
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style;
+		switch (this->shapeSelected->GetSymbolID()) {
+		case ID_TERMINAL:
+			style = QString::fromLocal8Bit("    단말 기호"); break;
+		case ID_PREPARATION:
+			style = QString::fromLocal8Bit("    준비 기호"); break;
+		case ID_INPUTOUTPUT:
+			style = QString::fromLocal8Bit("    입출력 기호"); break;
+		case ID_PROCESS:
+			style = QString::fromLocal8Bit("    처리 기호"); break;
+		case ID_DECISION:
+			style = QString::fromLocal8Bit("    판단 기호"); break;
+		}
+		editor->symbolStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 	else {
 		this->shapeSelected = NULL;

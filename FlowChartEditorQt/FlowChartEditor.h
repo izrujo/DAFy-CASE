@@ -20,6 +20,8 @@ class QAction;
 class GObject;
 class SketchBook;
 class NShape;
+class QStatusBar;
+class QLabel;
 
 class FlowChartEditor : public QFrame
 {
@@ -36,6 +38,18 @@ public:
 	GObject *painter;
 	SketchBook *sketchBook;
 	NShape *windowClose;
+
+	//===Status Bar
+	QStatusBar *statusBar;
+	QLabel *symbolStatus;
+	QLabel *modeStatus;
+	QLabel *xStatus;
+	QLabel *yStatus;
+	QLabel *zoomStatus;
+	QLabel *adStatus1;
+	QLabel *adStatus2;
+	//===Status Bar
+
 	//bool isUnModeMenuEnabled; //메뉴 컨트롤 관련
 	//StatusBar *statusBar;
 	//ToolTip *toolTip;
@@ -119,6 +133,8 @@ private:
 	QAction *selectionArchitectureAction; //선택구조(E)
 
 	QMenu *helpMenu; //도움말(H)
+
+	void CreateStatusBar();
 };
 
 #endif _FLOWCHARTEDITOR_H
