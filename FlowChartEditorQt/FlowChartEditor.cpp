@@ -103,23 +103,32 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 }
 
 void FlowChartEditor::closeEvent(QCloseEvent *event) {
-	if (this->menuBar != NULL) {
-		delete this->menuBar;
-	}
-	if (this->painter != NULL) {
-		delete this->painter;
-	}
-	if (this->sketchBook != NULL) {
-		delete this->sketchBook;
-	}
+	QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("닫기"),
+		QString::fromLocal8Bit("데이터가 손실될 수 있습니다. 파일을 모두 저장했는지 확인하십시오. 정말로 종료하시겠습니까?"),
+		QMessageBox::Yes | QMessageBox::No, this);
+	int ret = messageBox.exec();
+	if (ret == QMessageBox::Yes) {
+		if (this->menuBar != NULL) {
+			delete this->menuBar;
+		}
+		if (this->painter != NULL) {
+			delete this->painter;
+		}
+		if (this->sketchBook != NULL) {
+			delete this->sketchBook;
+		}
 
-	Long i = 0;
-	while (i < 2) {
-		delete this->windows[i];
-		i++;
-	}
+		Long i = 0;
+		while (i < 2) {
+			delete this->windows[i];
+			i++;
+		}
 
-	QFrame::closeEvent(event);
+		QFrame::closeEvent(event);
+	}
+	else {
+		event->ignore();
+	}
 }
 
 void FlowChartEditor::resizeEvent(QResizeEvent *event) {

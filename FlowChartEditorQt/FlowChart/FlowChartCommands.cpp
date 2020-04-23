@@ -1168,5 +1168,5 @@ CloseCommand& CloseCommand::operator =(const CloseCommand& source) {
 }
 
 void CloseCommand::Execute() {
-
+	this->editor->close();
 }

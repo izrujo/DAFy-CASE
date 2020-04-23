@@ -1163,5 +1163,5 @@ FAltF4KeyAction& FAltF4KeyAction::operator=(const FAltF4KeyAction& source) {
 }
 
 void FAltF4KeyAction::OnKeyDown() {
-	//¾ÆÁ÷
+	this->editor->close();
 }
