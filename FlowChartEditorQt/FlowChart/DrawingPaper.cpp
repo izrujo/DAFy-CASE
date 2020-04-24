@@ -37,7 +37,8 @@
 #include <qmenu.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
-#include <qdebug.h>
+#include <qlabel.h>
+#include <qstatusbar.h>
 
 DrawingPaper::DrawingPaper(QWidget *parent)
 	: QFrame(parent) {
@@ -203,9 +204,8 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	if (zoomVisitor != NULL) {
 		delete zoomVisitor;
 	}
-
-	/* Status Bar
-	String mode;
+	/*
+	QString mode;
 	switch (this->mode) {
 	case IDLE:
 		mode = "IDLE"; break;
@@ -219,13 +219,8 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 		mode = "SIZING"; break;
 	default: break;
 	}
-	editor->statusBar->Modify(1, String(mode));
-	editor->statusBar->Print();
-
-	if (editor->toolTip != NULL) {
-		this->ModifyStyle(0, WS_CLIPSIBLINGS);
-		editor->toolTip->SetWindowPos(&CWnd::wndTop, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-	}
+	editor->modeStatus->setText(mode);
+	editor->statusBar->repaint();
 	*/
 }
 
@@ -234,6 +229,11 @@ void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 
 	QPoint point = event->pos();
 	this->tool = ToolFactory::Create(this, point);
+
+	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
+	QString mode = this->GetCurrentMode();
+	editor->modeStatus->setText(mode);
+	editor->statusBar->repaint();
 
 	if (this->tool != NULL) {
 		this->tool->OnLButtonDown(this, point);
@@ -248,8 +248,8 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 	editor->windowClose->Paint(QColor(102, 204, 204), Qt::SolidLine, editor->windowClose->GetBorderColor());
 	editor->repaint();
 
+	QPoint point = event->pos();
 	if (this->hasMouseTracking() == false) { //마우스가 암거나 눌렸을 때
-		QPoint point = event->pos();
 		if (this->tool != NULL) {
 			this->tool->OnMouseMove(this, point);
 		}
@@ -258,7 +258,17 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 		//OnSetCursor 부분
 		QCursor cursor = this->GetCursor(event->pos());
 		this->setCursor(cursor);
-
+		
+		QString x = "X: ";
+		QString xPoint = QString::number(point.x());
+		x += xPoint;
+		editor->xStatus->setText(x);
+		QString y = "Y: ";
+		QString yPoint = QString::number(point.y());
+		y += yPoint;
+		editor->yStatus->setText(y);
+		editor->statusBar->repaint();
+		
 	}
 }
 
@@ -269,6 +279,11 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 	if (this->tool != NULL) {
 		this->tool->OnLButtonUp(this, point);
 		ReleaseCapture();
+
+		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
+		QString mode = this->GetCurrentMode();
+		editor->modeStatus->setText(mode);
+		editor->statusBar->repaint();
 	}
 	if (this->scrollController != NULL) {
 		this->scrollController->Update();
@@ -333,15 +348,6 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 		if (indexes != 0) {
 			delete[] indexes;
 		}
-		/*
-		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
-		TutorialForm *tutorialForm = static_cast<TutorialForm*>(editor->windows[2]);
-		if (tutorialForm != NULL) {
-			tutorialForm->move(1230, 70);
-			tutorialForm->resize(660, 940);
-			tutorialForm->repaint();
-		}
-		*/
 	}
 }
 
@@ -401,26 +407,24 @@ void DrawingPaper::wheelEvent(QWheelEvent *event) {
 	if (isControlPressed && this->scrollController->GetScroll(0) != NULL) { //zoom
 		Long oldRate = this->zoom->GetRate();
 		Long rate;
-		//CString rateStatus;
+		QString rateStatus;
 		if (delta.y() > 0 && oldRate < 150) {
 			rate = oldRate + 10;
 			this->zoom->Set(rate);
-			/*
-			rateStatus.Format("%d", rate);
+			
+			rateStatus = QString::number(rate);
 			rateStatus += "%";
-			dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(4, String((LPCTSTR)rateStatus));
-			*/
+			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
 		}
 		else if (delta.y() < 0 && oldRate > 40) {
 			rate = oldRate - 10;
 			this->zoom->Set(rate);
-			/*
-			rateStatus.Format("%d", rate);
+			
+			rateStatus = QString::number(rate);
 			rateStatus += "%";
-			dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Modify(4, String((LPCTSTR)rateStatus));
-			*/
+			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
 		}
-		//dynamic_cast<FlowChartEditor*>(this->GetParent())->statusBar->Print();
+		dynamic_cast<FlowChartEditor*>(this->parentWidget())->statusBar->repaint();
 		this->scrollController->Update();
 	}
 	else {
@@ -438,6 +442,10 @@ void DrawingPaper::keyPressEvent(QKeyEvent *event) {
 	if (keyAction != 0) {
 		keyAction->OnKeyDown();
 		delete keyAction;
+
+		QString mode = this->GetCurrentMode();
+		editor->modeStatus->setText(mode);
+		editor->statusBar->repaint();
 	}
 	editor->windows[1]->repaint(); //왜?
 
@@ -882,7 +890,7 @@ void DrawingPaper::New() {
 			new Memory(*this->memoryController->GetUndoMemory()),
 			new Memory(*this->memoryController->GetRedoMemory()));
 
-		NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetCurrent());
+		NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength()-1);
 		NShape *newTitle = new WindowTitle(previousTitle->GetX() + previousTitle->GetWidth(),
 			previousTitle->GetY(), 186, previousTitle->GetHeight(), QColor(102, 204, 204),
 			Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
@@ -967,5 +975,39 @@ void DrawingPaper::Close() {
 		this->flowChart->Clear();
 		this->mode = IDLE;
 		this->indexOfSelected = -1;
+
+		//현재 캔버스 지우고/새로운 현재 설정해주고/닫기버튼 옮겨주기.
+		editor->sketchBook->Remove(editor->sketchBook->GetCurrent());
+
+		NShape *first = editor->sketchBook->GetCanvas(0); //새로운 현재 : 맨 앞에꺼
+		editor->sketchBook->Fold(QPoint(first->GetX(), first->GetY()));
+		editor->sketchBook->Update();
+		this->flowChart = editor->sketchBook->GetFlowChart(editor->sketchBook->GetCurrent())->Clone();
+
+		editor->sketchBook->Arrange(this->x());
+
+		Long windowCloseX = first->GetX() + first->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+		Long windowCloseY = first->GetY() + 4;
+		editor->windowClose->Move(windowCloseX, windowCloseY);
 	}
+}
+
+QString DrawingPaper::GetCurrentMode() {
+	QString mode;
+
+	switch (this->mode) {
+	case IDLE:
+		mode = "IDLE"; break;
+	case SELECT:
+		mode = "SELECT"; break;
+	case DRAWING:
+		mode = "DRAWING"; break;
+	case MOVING:
+		mode = "MOVING"; break;
+	case SIZING:
+		mode = "SIZING"; break;
+	default: break;
+	}
+
+	return mode;
 }

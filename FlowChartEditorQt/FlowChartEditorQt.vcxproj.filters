@@ -333,9 +333,6 @@
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="x64\Debug\uic\ui_FlowChartEditor.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\Array.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -603,23 +600,21 @@
     <ClInclude Include="FlowChart\WindowTitle.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="x64\Debug\uic\Notepad\ui_Notepad.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\SketchBook.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\WindowClose.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <QtUic Include="FlowChartEditor.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="Notepad\Notepad.ui">
-      <Filter>Notepad</Filter>
-    </QtUic>
+    <ClInclude Include="x64\Debug\uic\ui_FlowChartEditor.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="x64\Debug\uic\Notepad\ui_Notepad.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="x64\Debug\uic\ui_PreviewForm.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="FlowChartEditor.h">
@@ -643,5 +638,16 @@
     <QtMoc Include="Notepad\Notepad.h">
       <Filter>Notepad</Filter>
     </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="FlowChartEditor.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Notepad\Notepad.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="PreviewForm.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
 </Project>

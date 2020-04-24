@@ -85,8 +85,6 @@ FlowChartKeyAction* FlowChartKeyActionFactory::Make(int modifiers, int key) {
 	}
 	else if (key == Qt::Key_Delete) {
 		keyAction = new FDeleteKeyAction(this->editor);
-		static_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::IDLE;
-		static_cast<DrawingPaper*>(this->editor->windows[0])->indexOfSelected = -1;
 	}
 	else if (key == Qt::Key_Escape) {
 		keyAction = new FEscapeKeyAction(this->editor);

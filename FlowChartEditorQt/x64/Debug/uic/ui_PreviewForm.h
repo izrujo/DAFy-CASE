@@ -23,7 +23,7 @@ public:
     {
         if (PreviewFormClass->objectName().isEmpty())
 			PreviewFormClass->setObjectName(QString::fromUtf8("PreviewFormClass"));
-		PreviewFormClass->resize(400, 300);
+		PreviewFormClass->resize(1200, 875);
 
         retranslateUi(PreviewFormClass);
 

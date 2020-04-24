@@ -424,6 +424,7 @@ PreviewCommand& PreviewCommand::operator =(const PreviewCommand& source) {
 void PreviewCommand::Execute() {
 	NShape *flowChart = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Clone();
 	PreviewForm *previewForm = new PreviewForm(this->editor, flowChart);
+	previewForm->show();
 	//previewForm->Create(NULL, "인쇄 미리 보기", 13565952UL, CRect(0, 0, 1200, 875));
 	//previewForm->ShowWindow(SW_NORMAL);
 	//previewForm->UpdateWindow();
@@ -450,9 +451,10 @@ SaveAsImageCommand& SaveAsImageCommand::operator =(const SaveAsImageCommand& sou
 }
 
 void SaveAsImageCommand::Execute() {
-	QString fileName = this->editor->windowTitle();
-	QString fileName_;
-	sscanf(fileName.toLocal8Bit().data(), "%s - FlowChart", fileName_);
+	NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+	QString fileName;
+	QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
+	fileName_.remove(0, 1);
 
 	fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
 		QObject::tr("Save File"),
@@ -486,9 +488,6 @@ void SaveAsImageCommand::Execute() {
 		flowChart->Accept(&drawVisitor);
 
 		dynamic_cast<QtPainter*>(painter)->qPixmap->save(fileName, "png");
-
-		fileName_ = fileName + " - FlowChart";
-		this->editor->setWindowTitle(fileName_);
 
 		if (flowChart != NULL) {
 			delete flowChart;
@@ -635,7 +634,8 @@ PasteCommand& PasteCommand::operator =(const PasteCommand& source) {
 }
 
 void PasteCommand::Execute() {
-	dynamic_cast<DrawingPaper*>(this->editor->windows[0])->clipboard->Paste(dynamic_cast<DrawingPaper*>(this->editor->windows[0]));
+	DrawingPaper *drawingPaper = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	drawingPaper->clipboard->Paste(drawingPaper);
 }
 
 //CutCommand

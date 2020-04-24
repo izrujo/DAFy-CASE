@@ -57,6 +57,8 @@ public:
 	Long Load(const char(*fileName));
 	void Close();
 	QCursor GetCursor(QPoint point); //Ä¿¼­
+	
+	QString GetCurrentMode(); //200424 statusBar mode status
 
 public:
 	NShape *templateSelected;

@@ -149,17 +149,6 @@ void DrawingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	Long previousLength = canvas->flowChart->GetLength();
 
 	canvas->indexOfSelected = canvas->flowChart->Attach(canvas->templateSelected->Clone());
-	/*
-	Long currentLength = dynamic_cast<FlowChart*>(canvas->flowChart)->GetLength();
-	if (currentLength != previousLength && dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip != NULL) {
-		dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip->Destroy();
-		dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->toolTip = NULL;
-		TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(canvas->parentWidget())->windows[2];
-		if (tutorialForm != NULL) {
-			tutorialForm->tutorialController->Update();
-		}
-	}
-	*/
 
 	Long(*indexes) = new Long[canvas->flowChart->GetLength()];
 	indexes[0] = canvas->indexOfSelected;

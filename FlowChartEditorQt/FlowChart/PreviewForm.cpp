@@ -17,11 +17,19 @@
 #include "../GObject/QtGObjectFactory.h"
 
 #include <qpainter.h>
+#include <qtoolbar.h>
+#include <qdebug.h>
 
 PreviewForm::PreviewForm(QWidget *parent, NShape *flowChart) 
-	: QFrame(parent) {
-	this->editor = editor;
+	: QFrame() {
+	ui.setupUi(this);
+
+	this->editor = static_cast<FlowChartEditor*>(parent);
+
+	this->setWindowTitle(QString::fromLocal8Bit("인쇄 미리 보기"));
+
 	this->flowChart = flowChart;
+	Long length = this->flowChart->GetLength();
 
 	QRect rect = this->frameRect();
 	this->painter = new QtPainter(rect.width(), rect.height());
@@ -30,13 +38,15 @@ PreviewForm::PreviewForm(QWidget *parent, NShape *flowChart)
 	zoom.Set(300);
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(&zoom);
 
-	this->a4Paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper->Clone();
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	this->a4Paper = canvas->a4Paper->Clone();
 
 	this->a4Paper->Accept(zoomVisitor);
 	this->flowChart->Accept(zoomVisitor);
 
-	//this->toolBar.CreateEx(this);
-	//this->toolBar.LoadToolBar(IDR_TOOLBAR1);
+	this->toolBar = NULL;
+
+	this->CreateToolBar();
 }
 
 void PreviewForm::closeEvent(QCloseEvent *event) {
@@ -51,6 +61,10 @@ void PreviewForm::closeEvent(QCloseEvent *event) {
 
 	if (this->a4Paper != NULL) {
 		delete this->a4Paper;
+	}
+
+	if (this->toolBar != NULL) {
+		delete this->toolBar;
 	}
 }
 
@@ -134,6 +148,25 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 	if (zoomVisitor != NULL) {
 		delete zoomVisitor;
 	}
+}
+
+void PreviewForm::CommandRange(string text) {
+	if (text == "Print") {
+
+	}
+	else if (text == "Exit") {
+
+	}
+	qDebug() << QString::fromLocal8Bit(text.c_str());
+}
+
+void PreviewForm::CreateToolBar() {
+	this->toolBar = new QToolBar(this);
+
+	//this->print = this->toolBar->addAction("Print", this, [=]() { this->CommandRange("Print"); });
+	//connect(this->print, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
+	//this->exit = this->toolBar->addAction("Exit", this, &QAction::triggered);
+	//connect(this->exit, &QAction::triggered, this, [=]() { this->CommandRange("Exit"); });
 }
 
 /* 이거는 인쇄시 좌표 찾기 위해 임시 구현한 부분

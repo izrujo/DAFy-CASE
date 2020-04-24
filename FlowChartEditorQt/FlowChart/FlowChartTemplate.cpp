@@ -220,7 +220,6 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 		}
 		i++;
 	}
-
 	index = this->flowChartTemplate->Find(event->pos());
 
 	if (index != -1) {
@@ -386,6 +385,10 @@ void FlowChartTemplate::keyPressEvent(QKeyEvent *event) {
 	if (keyAction != 0) {
 		keyAction->OnKeyDown();
 		delete keyAction;
+
+		QString mode = static_cast<DrawingPaper*>(editor->windows[0])->GetCurrentMode();
+		editor->modeStatus->setText(mode);
+		editor->statusBar->repaint();
 	}
 	editor->windows[1]->repaint(); //¿Ö?
 

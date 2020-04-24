@@ -173,21 +173,7 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 	bool isContain = pinRect.contains(event->pos());
 	if (isContain == true) {
 		if (this->sketchBook->GetLength() > 1) { //두 개 이상일 때만 닫을 수 있음.
-			canvas->Close(); //현재 캔버스 저장하거나 안하거나 처리해줌. 순서도는 비어있는 상태.
-
-			//현재 캔버스 지우고/새로운 현재 설정해주고/닫기버튼 옮겨주기.
-			this->sketchBook->Remove(this->sketchBook->GetCurrent());
-
-			NShape *first = this->sketchBook->GetCanvas(0); //새로운 현재 : 맨 앞에꺼
-			this->sketchBook->Fold(QPoint(first->GetX(), first->GetY()));
-			this->sketchBook->Update();
-			canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
-
-			this->sketchBook->Arrange(canvas->x());
-
-			Long windowCloseX = first->GetX() + first->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-			Long windowCloseY = first->GetY() + 4;
-			this->windowClose->Move(windowCloseX, windowCloseY);
+			canvas->Close(); //현재 캔버스 저장하거나 안하거나 처리해줌.
 		}
 		else {
 			QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("경고"),
@@ -437,6 +423,11 @@ void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선
 		delete command;
 	}
 
+	DrawingPaper *drawingPaper = static_cast<DrawingPaper*>(this->windows[0]);
+	QString mode = drawingPaper->GetCurrentMode();
+	this->modeStatus->setText(mode);
+	this->statusBar->repaint();
+
 	this->repaint();
 }
 
@@ -624,7 +615,7 @@ void FlowChartEditor::CreateStatusBar() {
 	this->symbolStatus = new QLabel(QString::fromLocal8Bit(""));
 	this->statusBar->addPermanentWidget(this->symbolStatus, 5);
 	
-	this->modeStatus = new QLabel(QString::fromLocal8Bit(""));
+	this->modeStatus = new QLabel(QString::fromLocal8Bit("IDLE"));
 	this->statusBar->addPermanentWidget(this->modeStatus, 2);
 	
 	this->xStatus = new QLabel(QString::fromLocal8Bit("X: "));

@@ -23,6 +23,8 @@
 #include <QtPrintSupport/qpagesetupdialog.h>
 #include <QtPrintSupport/qprinter.h>
 #include <qmessagebox.h>
+#include <qlabel.h>
+#include <qstatusbar.h>
 
 FlowChartKeyAction::FlowChartKeyAction(FlowChartEditor *editor) {
 	this->editor = editor;
@@ -81,9 +83,8 @@ void FDeleteKeyAction::OnKeyDown() {
 		}
 		it--;
 	}
-	if (canvas->flowChart->GetLength() < 1) {
-		canvas->mode = DrawingPaper::IDLE;
-	}
+	canvas->mode = DrawingPaper::IDLE;
+	canvas->indexOfSelected = -1;
 
 	if (indexes != 0) {
 		delete[] indexes;
@@ -619,12 +620,12 @@ void FCtrlPlusKeyAction::OnKeyDown() {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->scrollController->Update();
-		/*
-		CString rateStatus;
-		rateStatus.Format("%d", rate);
+
+		QString rateStatus;
+		rateStatus = QString::number(rate);
 		rateStatus += "%";
-		this->editor->statusBar->Modify(4, String((LPCTSTR)rateStatus));
-		*/
+		dynamic_cast<FlowChartEditor*>(this->editor)->zoomStatus->setText(rateStatus);
+		dynamic_cast<FlowChartEditor*>(this->editor)->statusBar->repaint();
 	}
 }
 
@@ -658,12 +659,12 @@ void FCtrlMinusKeyAction::OnKeyDown() {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->zoom->Set(rate);
 
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->scrollController->Update();
-		/*
-		CString rateStatus;
-		rateStatus.Format("%d", rate);
+
+		QString rateStatus;
+		rateStatus = QString::number(rate);
 		rateStatus += "%";
-		this->editor->statusBar->Modify(4, String((LPCTSTR)rateStatus));
-		*/
+		dynamic_cast<FlowChartEditor*>(this->editor)->zoomStatus->setText(rateStatus);
+		dynamic_cast<FlowChartEditor*>(this->editor)->statusBar->repaint();
 	}
 }
 
