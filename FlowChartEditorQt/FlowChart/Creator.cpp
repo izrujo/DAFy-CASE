@@ -32,25 +32,25 @@ NShape* Creator::Create(Long shapeID, Long x, Long y, Long width, Long height, L
 		shape = new Decision(x, y, width, height, QColor(255, 153, 255), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_ARROW) {
-		shape = new Arrow(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), contents);
+		shape = new Arrow(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_LEFTDOWN) {
-		shape = new LeftDown(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), contents);
+		shape = new LeftDown(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_RIGHTDOWN) {
-		shape = new RightDown(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), contents);
+		shape = new RightDown(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_JOIN) {
-		shape = new Join(x, y, width, height, height2, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), contents);
+		shape = new Join(x, y, width, height, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_REPEATTRUE) {
-		shape = new RepeatTrue(x, y, width, height, width2, height2, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), contents);
+		shape = new RepeatTrue(x, y, width, height, width2, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_REPEATFALSE) {
-		shape = new RepeatFalse(x, y, width, height, width2, height2, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), contents);
+		shape = new RepeatFalse(x, y, width, height, width2, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_RIGHTDOWNJOIN) {
-		shape = new RightDownJoin(x, y, width, height, width2, height2, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), contents);
+		shape = new RightDownJoin(x, y, width, height, width2, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), contents);
 	}
 	else if (shapeID == ID_INPUTOUTPUT) {
 		shape = new InputOutput(x, y, width, height, QColor(255, 255, 153), Qt::SolidLine, QColor(0, 0, 0), contents);

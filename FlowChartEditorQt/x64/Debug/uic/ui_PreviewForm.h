@@ -22,8 +22,8 @@ public:
     void setupUi(QFrame *PreviewFormClass)
     {
         if (PreviewFormClass->objectName().isEmpty())
-			PreviewFormClass->setObjectName(QString::fromUtf8("PreviewFormClass"));
-		PreviewFormClass->resize(1200, 875);
+            PreviewFormClass->setObjectName(QString::fromUtf8("PreviewFormClass"));
+        PreviewFormClass->resize(1200, 875);
 
         retranslateUi(PreviewFormClass);
 
@@ -32,7 +32,7 @@ public:
 
     void retranslateUi(QFrame *PreviewFormClass)
     {
-		PreviewFormClass->setWindowTitle(QApplication::translate("PreviewFormClass", "PreviewForm", nullptr));
+        PreviewFormClass->setWindowTitle(QApplication::translate("PreviewFormClass", "PreviewForm", nullptr));
     } // retranslateUi
 
 };

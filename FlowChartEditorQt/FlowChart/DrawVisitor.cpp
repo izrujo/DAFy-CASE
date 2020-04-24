@@ -364,7 +364,7 @@ void DrawVisitor::Visit(LeftDown *element) {
 	painter->DrawLine(QPoint(x, y), QPoint(x + width, y));
 	painter->DrawLine(QPoint(x + width, y), QPoint(x + width, y + height - 4));
 
-	GObject *brush = factory.MakeBrush(QColor(166, 166, 166), Qt::SolidPattern);
+	GObject *brush = factory.MakeBrush(element->GetBorderColor(), Qt::SolidPattern);
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 

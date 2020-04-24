@@ -174,7 +174,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	tempLefts.GetAt(0)->GetAttribute(&attribute);
 	width = attribute.pointIn.x() - decisionAttribute.pointTrue.x();
 	height = attribute.pointIn.y() - decisionAttribute.pointTrue.y();
-	shape = new LeftDown(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String("TRUE"));
+	shape = new LeftDown(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("TRUE"));
 	shape->Select(true);
 	buffer.Attach(shape);
 
@@ -195,7 +195,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		width = attribute.pointIn.x() - decisionAttribute.pointFalse.x();
 		height = attribute.pointIn.y() - decisionAttribute.pointFalse.y();
 
-		shape = new RightDown(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String("FALSE"));
+		shape = new RightDown(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));
 		shape->Select(true);
 		buffer.Attach(shape);
 
@@ -218,7 +218,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		height = attribute.pointOut.y() - y;
 
 		(height >= 0) ? (height2 = height + 30) : (height2 = 30);
-		shape = new Join(x, y, width, height, height2, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String(" "));
+		shape = new Join(x, y, width, height, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String(" "));
 		shape->Select(true);
 		buffer.Attach(shape);
 	}
@@ -238,7 +238,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		height = attribute.pointOut.y() - y;
 		height2 = 30;
 
-		shape = new RightDownJoin(x, y, width, height, width2, height2, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String("FALSE"));
+		shape = new RightDownJoin(x, y, width, height, width2, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));
 		shape->Select(true);
 		buffer.Attach(shape);
 	}
@@ -252,7 +252,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 
 	width = 0;
 	height = 30;
-	shape = new Arrow(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String(" "));
+	shape = new Arrow(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String(" "));
 	shape->Select(true);
 	buffer.Attach(shape);
 

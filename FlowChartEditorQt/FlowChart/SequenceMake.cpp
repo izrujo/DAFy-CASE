@@ -65,7 +65,7 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 		width = 0;
 		height = buffer.GetAt(i + 1)->GetY() - attribute.pointOut.y();
 		if (height > 0) {
-			arrow = new Arrow(x, y, width, height, QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), String(" "));
+			arrow = new Arrow(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String(" "));
 			arrow->Select(true);
 			arrows.Attach(arrow);
 		}
