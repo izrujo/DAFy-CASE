@@ -17,7 +17,7 @@ class PreviewForm : public QFrame
 public:
 	PreviewForm(QWidget *parent = Q_NULLPTR, NShape *flowChart = 0);
 private:
-	Ui_PreviewForm::PreviewFormClass ui;
+	PreviewFormUi::Ui::PreviewFormClass ui;
 	
 protected:
 	void closeEvent(QCloseEvent *event);

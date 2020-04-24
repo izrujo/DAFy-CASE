@@ -30,7 +30,7 @@ class FlowChartEditor : public QFrame
 public:
 	FlowChartEditor(QWidget *parent = Q_NULLPTR);
 private:
-	Ui_FlowChartEditor::FlowChartEditorClass ui;
+	FlowChartEditorUi::Ui::FlowChartEditorClass ui;
 
 public:
 	Array<QFrame*> windows;

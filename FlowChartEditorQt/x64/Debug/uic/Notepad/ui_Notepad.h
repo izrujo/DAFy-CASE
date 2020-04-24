@@ -13,36 +13,38 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFrame>
 
-QT_BEGIN_NAMESPACE
+namespace NotepadUi {
 
 class Ui_NotepadClass
 {
 public:
 
-    void setupUi(QFrame *NotepadClass)
+    void setupUi(QFrame *NotepadUi__NotepadClass)
     {
-        if (NotepadClass->objectName().isEmpty())
-            NotepadClass->setObjectName(QString::fromUtf8("NotepadClass"));
-        NotepadClass->resize(600, 400);
-        NotepadClass->setStyleSheet(QString::fromUtf8("background-color: rgba(255, 255, 255, 0);\n"
+        if (NotepadUi__NotepadClass->objectName().isEmpty())
+            NotepadUi__NotepadClass->setObjectName(QString::fromUtf8("NotepadUi__NotepadClass"));
+        NotepadUi__NotepadClass->resize(600, 400);
+        NotepadUi__NotepadClass->setStyleSheet(QString::fromUtf8("background-color: rgba(255, 255, 255, 0);\n"
 "border-color: rgba(255, 255, 255, 0);"));
 
-        retranslateUi(NotepadClass);
+        retranslateUi(NotepadUi__NotepadClass);
 
-        QMetaObject::connectSlotsByName(NotepadClass);
+        QMetaObject::connectSlotsByName(NotepadUi__NotepadClass);
     } // setupUi
 
-    void retranslateUi(QFrame *NotepadClass)
+    void retranslateUi(QFrame *NotepadUi__NotepadClass)
     {
-        NotepadClass->setWindowTitle(QCoreApplication::translate("NotepadClass", "Notepad", nullptr));
+        NotepadUi__NotepadClass->setWindowTitle(QCoreApplication::translate("NotepadUi::NotepadClass", "Notepad", nullptr));
     } // retranslateUi
 
 };
 
-namespace Ui_Notepad {
+} // namespace NotepadUi
+
+namespace NotepadUi {
+namespace Ui {
     class NotepadClass: public Ui_NotepadClass {};
 } // namespace Ui
-
-QT_END_NAMESPACE
+} // namespace NotepadUi
 
 #endif // UI_NOTEPAD_H

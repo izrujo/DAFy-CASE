@@ -22,7 +22,7 @@ public:
 	Notepad(char *text, QWidget *parent = Q_NULLPTR);
 
 private:
-	Ui_Notepad::NotepadClass ui;
+	NotepadUi::Ui::NotepadClass ui;
 
 public:
 	Glyph *note;

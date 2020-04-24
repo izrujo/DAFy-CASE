@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'FlowChartEditor.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.6
+** Created by: Qt User Interface Compiler version 5.14.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -13,40 +13,42 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QWidget>
 
-QT_BEGIN_NAMESPACE
+namespace FlowChartEditorUi {
 
-class Ui_FlowChartEditorClass
-{
-public:
+	class Ui_FlowChartEditorClass
+	{
+	public:
 
-    void setupUi(QWidget *FlowChartEditorClass)
-    {
-        if (FlowChartEditorClass->objectName().isEmpty())
-            FlowChartEditorClass->setObjectName(QString::fromUtf8("FlowChartEditorClass"));
-		FlowChartEditorClass->setWindowState(Qt::WindowMaximized);
-        FlowChartEditorClass->setStyleSheet(QString::fromUtf8("QMenuBar {\n"
-"    background-color: white;\n"
-"    spacing: 3px; /* spacing between menu bar items */\n"
-"	border-bottom: 1px solid gray; \n"
-"}\n"
-"background-color: rgb(0, 0, 0);"));
+		void setupUi(QWidget *FlowChartEditorUi__FlowChartEditorClass)
+		{
+			if (FlowChartEditorUi__FlowChartEditorClass->objectName().isEmpty())
+				FlowChartEditorUi__FlowChartEditorClass->setObjectName(QString::fromUtf8("FlowChartEditorUi__FlowChartEditorClass"));
+			FlowChartEditorUi__FlowChartEditorClass->resize(600, 400);
+			FlowChartEditorUi__FlowChartEditorClass->setStyleSheet(QString::fromUtf8("QMenuBar {\n"
+				"    background-color: white;\n"
+				"    spacing: 3px; /* spacing between menu bar items */\n"
+				"	border-bottom: 1px solid gray; \n"
+				"}\n"
+				"background-color: rgb(0, 0, 0);"));
 
-        retranslateUi(FlowChartEditorClass);
+			retranslateUi(FlowChartEditorUi__FlowChartEditorClass);
 
-        QMetaObject::connectSlotsByName(FlowChartEditorClass);
-    } // setupUi
+			QMetaObject::connectSlotsByName(FlowChartEditorUi__FlowChartEditorClass);
+		} // setupUi
 
-    void retranslateUi(QWidget *FlowChartEditorClass)
-    {
-        FlowChartEditorClass->setWindowTitle(QCoreApplication::translate("FlowChartEditorClass", "FlowChartEditor", nullptr));
-    } // retranslateUi
+		void retranslateUi(QWidget *FlowChartEditorUi__FlowChartEditorClass)
+		{
+			FlowChartEditorUi__FlowChartEditorClass->setWindowTitle(QCoreApplication::translate("FlowChartEditorUi::FlowChartEditorClass", "FlowChartEditor", nullptr));
+		} // retranslateUi
 
-};
+	};
 
-namespace Ui_FlowChartEditor {
-    class FlowChartEditorClass: public Ui_FlowChartEditorClass {};
-} // namespace Ui
+} // namespace FlowChartEditorUi
 
-QT_END_NAMESPACE
+namespace FlowChartEditorUi {
+	namespace Ui {
+		class FlowChartEditorClass : public Ui_FlowChartEditorClass {};
+	} // namespace Ui
+} // namespace FlowChartEditorUi
 
 #endif // UI_FLOWCHARTEDITOR_H

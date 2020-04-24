@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'PreviewForm.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.6
+** Created by: Qt User Interface Compiler version 5.14.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -11,36 +11,38 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QFrame>
+#include <QtWidgets/QWidget>
 
-QT_BEGIN_NAMESPACE
+namespace PreviewFormUi {
 
 class Ui_PreviewFormClass
 {
 public:
 
-    void setupUi(QFrame *PreviewFormClass)
+    void setupUi(QWidget *PreviewFormUi__PreviewFormClass)
     {
-        if (PreviewFormClass->objectName().isEmpty())
-            PreviewFormClass->setObjectName(QString::fromUtf8("PreviewFormClass"));
-        PreviewFormClass->resize(1200, 875);
+        if (PreviewFormUi__PreviewFormClass->objectName().isEmpty())
+            PreviewFormUi__PreviewFormClass->setObjectName(QString::fromUtf8("PreviewFormUi__PreviewFormClass"));
+        PreviewFormUi__PreviewFormClass->resize(1200, 875);
 
-        retranslateUi(PreviewFormClass);
+        retranslateUi(PreviewFormUi__PreviewFormClass);
 
-        QMetaObject::connectSlotsByName(PreviewFormClass);
+        QMetaObject::connectSlotsByName(PreviewFormUi__PreviewFormClass);
     } // setupUi
 
-    void retranslateUi(QFrame *PreviewFormClass)
+    void retranslateUi(QWidget *PreviewFormUi__PreviewFormClass)
     {
-        PreviewFormClass->setWindowTitle(QApplication::translate("PreviewFormClass", "PreviewForm", nullptr));
+        PreviewFormUi__PreviewFormClass->setWindowTitle(QCoreApplication::translate("PreviewFormUi::PreviewFormClass", "Form", nullptr));
     } // retranslateUi
 
 };
 
-namespace Ui_PreviewForm {
-    class PreviewFormClass : public Ui_PreviewFormClass {};
-} // namespace Ui
+} // namespace PreviewFormUi
 
-QT_END_NAMESPACE
+namespace PreviewFormUi {
+namespace Ui {
+    class PreviewFormClass: public Ui_PreviewFormClass {};
+} // namespace Ui
+} // namespace PreviewFormUi
 
 #endif // UI_PREVIEWFORM_H

@@ -32,6 +32,8 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	this->setFocusPolicy(Qt::StrongFocus);
 	this->installEventFilter(this);
 
+	//this->setWindowState(Qt::WindowMaximized);
+
 	this->setStyleSheet("QStatusBar { background:rgb(102,204,204); }"
 						"QStatusBar QLabel { color:white;}"
 						"QStatusBar::item { border:None;}"
