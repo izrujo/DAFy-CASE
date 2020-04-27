@@ -45,6 +45,8 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 
 	this->setFocusPolicy(Qt::WheelFocus);
 
+	this->setContextMenuPolicy(Qt::CustomContextMenu);
+
 	this->windowBorderColor = QColor(102, 204, 204);
 
 	this->templateSelected = NULL;
@@ -157,6 +159,10 @@ DrawingPaper::~DrawingPaper() {
 	if (this->a4Paper != NULL) {
 		delete this->a4Paper;
 	}
+	if (this->popup != NULL) {
+		delete this->popup;
+		this->popup = NULL;
+	}
 }
 
 void DrawingPaper::paintEvent(QPaintEvent *event) {
@@ -181,7 +187,9 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 
 	if (this->templateSelected != NULL && this->templateSelected->IsSelected())
 	{
-		this->templateSelected->Accept(drawVisitor);
+		NShape *cloneSelected = this->templateSelected->Clone();
+		cloneSelected->Accept(zoomVisitor);
+		cloneSelected->Accept(drawVisitor);
 	}
 
 	if (this->drawSelectingAreaFlag == true) {
@@ -509,31 +517,13 @@ void DrawingPaper::OnContextMenu(const QPoint& pos) {
 			}
 		}
 	}
-	/*
-	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
-	TutorialForm *tutorialForm = static_cast<TutorialForm*>(editor->windows[2]);
-	if (tutorialForm != NULL) {
-		if (dynamic_cast<ContextMenuTutorial*>(tutorialForm->lastConcrete)) { //직전에 수행한 튜토리얼이 콘텍스트메뉴일 경우에만 다음걸 수행한다. 아니면 이 이벤트에서 시나리오 진행 안함.
-			tutorialForm->tutorialController->Update();
-		}
-	}
-	*/
 
 	if (indexes != 0)
 	{
 		delete[] indexes;
 	}
 
-	this->popup->popup(pos);
-	//::TrackPopupMenu(hPopup, TPM_LEFTALIGN, pos.x, pos.y, 0, pWnd->operator HWND(), NULL);
-
-	if (this->popup != NULL) {
-		delete this->popup;
-		this->popup = NULL;
-	}
-	//BOOL ret = ::DestroyMenu(hPopup);
-	//if (ret == TRUE) this->hPopup = NULL;
-
+	this->popup->popup(this->mapToGlobal(pos));
 }
 
 void DrawingPaper::DrawSelectingArea() {

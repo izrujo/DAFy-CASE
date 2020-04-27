@@ -31,9 +31,9 @@ public:
 
 	virtual NShape* Clone();
 
-	virtual void GetRegion(QRegion *region);
-	virtual void GetRegion(Long thickness, QRegion *region);
-	virtual void GetSelectionMarkerAllRegion(QRegion *region);
+	virtual QRegion GetRegion();
+	virtual QRegion GetRegion(Long thickness);
+	virtual QRegion GetSelectionMarkerAllRegion();
 
 	void ReSize(Long width, Long height, Long width2, Long height2);
 

@@ -74,7 +74,7 @@ NShape* InputOutput::Clone() {
 	return new InputOutput(*this);
 }
 
-void InputOutput::GetRegion(QRegion *region) {
+QRegion InputOutput::GetRegion() {
 	Long halfWidth = (Long)this->width / 2;
 	Long halfHeight = (Long)this->height / 2;
 
@@ -86,10 +86,12 @@ void InputOutput::GetRegion(QRegion *region) {
 	points.append(QPoint(this->x + halfHeight, this->y));
 	QPolygon polygon(points);
 	
-	*region += QRegion(polygon);
+	QRegion region(polygon);
+
+	return region;
 }
 
-void InputOutput::GetRegion(Long thickness, QRegion *region) {
+QRegion InputOutput::GetRegion(Long thickness) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
@@ -105,7 +107,9 @@ void InputOutput::GetRegion(Long thickness, QRegion *region) {
 	points.append(QPoint(this->x + halfHeight, this->y));
 	QPolygon polygon(points);
 
-	*region += QRegion(polygon);
+	QRegion region(polygon);
+
+	return region;
 }
 
 bool InputOutput::IsIncluded(QPoint point) {

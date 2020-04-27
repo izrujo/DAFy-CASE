@@ -90,44 +90,34 @@ void Join::DrawActiveShape(GObject *painter) {
 	painter->DrawPolyline(points, 4);
 }
 
-void Join::GetRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
+QRegion Join::GetRegion() {
+	QRect rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS, this->height2);
+	QRegion region(rect);
 
-	rect.setCoords(this->x - LINETHICKNESS, this->y,
-		this->x + LINETHICKNESS, this->y + this->height2);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x - LINETHICKNESS, this->y + this->height2 - LINETHICKNESS,
+		this->width + LINETHICKNESS, this->height2 + LINETHICKNESS);
+	region += QRegion(rect);
 
-	rect.setCoords(this->x - LINETHICKNESS, this->y + this->height2 - LINETHICKNESS,
-		this->x + this->width + LINETHICKNESS, this->y + this->height2 + LINETHICKNESS);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x + this->width - LINETHICKNESS, this->y + this->height2,
+		this->width + LINETHICKNESS, this->height);
+	region += QRegion(rect);
 
-	rect.setCoords(this->x + this->width - LINETHICKNESS, this->y + this->height2,
-		this->x + this->width + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	return region;
 }
 
-void Join::GetRegion(Long thickness, QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
+QRegion Join::GetRegion(Long thickness) {
+	QRect rect(this->x - thickness, this->y, thickness, this->height2);
+	QRegion region(rect);
 
-	rect.setCoords(this->x - thickness, this->y,
-		this->x + thickness, this->y + this->height2);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x - thickness, this->y + this->height2 - thickness,
-		this->x + this->width + thickness, this->y + this->height2 + thickness);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width - thickness, this->y + this->height2,
-		this->x + this->width + thickness, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x - thickness, this->y + this->height2 - thickness,
+		this->width + thickness, this->height2 + thickness);
+	region += QRegion(rect);
+	
+	rect = QRect(this->x + this->width - thickness, this->y + this->height2,
+		this->width + thickness, this->height);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 void Join::ReSize(Long width, Long height, Long height2) {
@@ -227,27 +217,23 @@ void Join::GetSelectionMarkerRect(int marker, QRect *rect) {
 	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
-void Join::GetSelectionMarkerAllRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
+QRegion Join::GetSelectionMarkerAllRegion() {
 	Long x = this->x;
 	Long y = this->y;
-	rect.setCoords(x - 5, y - 5, x + 6, y + 6);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	QRect rect(x - 5, y - 5, 6, 6);
+	QRegion region(rect);
 
 	x = this->x + this->width / 2;
 	y = this->y + this->height2;
-	rect.setCoords(x - 5, y - 5, x + 6, y + 6);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 5, y - 5, 6, 6);
+	region += QRegion(rect);
 
 	x = this->x + this->width;
 	y = this->y + this->height;
-	rect.setCoords(x - 5, y - 5, x + 6, y + 6);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 5, y - 5, 6, 6);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 int Join::GetHitCode(const QPoint& point, const QRegion& region) {

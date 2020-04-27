@@ -81,18 +81,22 @@ NShape* Arrow::Clone() {
 	return new Arrow(*this);
 }
 
-void Arrow::GetRegion(QRegion *region) {
-	QRect rect(this->x - LINETHICKNESS, this->y, this->x + LINETHICKNESS, this->y + this->height);
-	*region += QRegion(rect); //empty region에만 넣는 것이면 생성자가 맞겠지? 그런데 아니면?
+QRegion Arrow::GetRegion() {
+	QRect rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS, this->height);
+	QRegion region(rect);
+
+	return region;
 }
 
-void Arrow::GetRegion(Long thickness, QRegion *region) {
-	QRect rect(this->x - thickness, this->y, this->x + thickness, this->y + this->height);
-	*region += QRegion(rect);
+QRegion Arrow::GetRegion(Long thickness) {
+	QRect rect(this->x - thickness, this->y, thickness, this->height);
+	QRegion region(rect);
+
+	return region;
 }
 
 bool Arrow::IsIncluded(QPoint point) {
-	QRect rect(this->x - LINETHICKNESS, this->y, this->x + LINETHICKNESS, this->y + this->height);
+	QRect rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS, this->height);
 	QRegion region(rect);
 	bool ret;
 	ret = region.contains(point);
@@ -100,7 +104,7 @@ bool Arrow::IsIncluded(QPoint point) {
 }
 
 bool Arrow::IsIncluded(const QRect& rect) {
-	QRect regionRect(x - LINETHICKNESS, y, x + LINETHICKNESS, y + height);
+	QRect regionRect(x - LINETHICKNESS, y, LINETHICKNESS, height);
 	QRegion region(regionRect);
 	bool ret;
 	ret = region.contains(rect);
@@ -142,21 +146,21 @@ void Arrow::GetSelectionMarkerRect(int marker, QRect *rect) {
 	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
-void Arrow::GetSelectionMarkerAllRegion(QRegion *region) {
+QRegion Arrow::GetSelectionMarkerAllRegion() {
+	QRegion region;
 	QRect rect;
-	QRegion addRegion;
 
 	Long x = this->x;
 	Long y = this->y;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect.setCoords(x - 6, y - 6, 7, 7);
+	region = QRegion(rect);
 
 	x = this->x;
 	y = this->y + this->height;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect.setCoords(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 void Arrow::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {

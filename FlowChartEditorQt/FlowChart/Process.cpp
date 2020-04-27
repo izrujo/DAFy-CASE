@@ -70,23 +70,23 @@ NShape* Process::Clone() {
 	return new Process(*this);
 }
 
-void Process::GetRegion(QRegion *region) {
-	QRect rect;
-	rect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
-	QRegion addRegion(rect);
-	*region += addRegion;
+QRegion Process::GetRegion() {
+	QRect rect(this->x, this->y, this->width, this->height);
+	QRegion region(rect);
+	
+	return region;
 }
 
-void Process::GetRegion(Long thickness, QRegion *region) {
+QRegion Process::GetRegion(Long thickness) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
 	Long height = this->height + thickness * 2;
 
-	QRect rect;
-	rect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
-	QRegion addRegion(rect);
-	*region += addRegion;
+	QRect rect(this->x, this->y, width, height);
+	QRegion region(rect);
+	
+	return region;
 }
 
 bool Process::IsIncluded(QPoint point) {

@@ -210,10 +210,10 @@ public:
 	virtual NShape* Clone() = 0;
 
 	//마우스 드래그로 여러 도형 한번에 선택시 사용
-	virtual void GetRegion(QRegion *region) = 0;
-	virtual void GetRegion(Long thickness, QRegion *region) = 0;
+	virtual QRegion GetRegion() = 0;
+	virtual QRegion GetRegion(Long thickness) = 0;
 
-	virtual void GetSelectionMarkerAllRegion(QRegion *region);
+	virtual QRegion GetSelectionMarkerAllRegion();
 
 	virtual void GetAttribute(Attribute *Attribute) {};
 

@@ -102,54 +102,42 @@ NShape* RepeatTrue::Clone() {
 	return new RepeatTrue(*this);
 }
 
-void RepeatTrue::GetRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
+QRegion RepeatTrue::GetRegion() {
+	QRect rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS, this->height2);
+	QRegion region(rect);
 
-	rect.setCoords(this->x - LINETHICKNESS, this->y, 
-		this->x + LINETHICKNESS, this->y + this->height2);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x + 1, this->y + this->height2 - LINETHICKNESS,
+		this->width2, this->height2 + LINETHICKNESS);
+	region += QRegion(rect);
 
-	rect.setCoords(this->x + 1, this->y + this->height2 - LINETHICKNESS, 
-		this->x + this->width2, this->y + this->height2 + LINETHICKNESS);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-		
-	rect.setCoords(this->x + this->width2 - LINETHICKNESS, this->y + this->height2, 
-		this->x + this->width2 + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x + this->width2 - LINETHICKNESS, this->y + this->height2,
+		this->width2 + LINETHICKNESS, this->height);
+	region += QRegion(rect);
 
-	rect.setCoords(this->x + this->width2 - 1, this->y + this->height - LINETHICKNESS, 
-		this->x + this->width, this->y + this->height + LINETHICKNESS);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x + this->width2 - 1, this->y + this->height - LINETHICKNESS,
+		this->width, this->height + LINETHICKNESS);
+	region += QRegion(rect);
+
+	return region;
 }
 
-void RepeatTrue::GetRegion(Long thickness, QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
+QRegion RepeatTrue::GetRegion(Long thickness) {
+	QRect rect(this->x - thickness, this->y, thickness, this->height2);
+	QRegion region(rect);
+	
+	rect = QRect(this->x + 1, this->y + this->height2 - thickness, 
+		this->width2, this->height2 + thickness);
+	region += QRegion(rect);
+	
+	rect = QRect(this->x + this->width2 - thickness, this->y + this->height2, 
+		this->width2 + thickness, this->height);
+	region += QRegion(rect);
 
-	rect.setCoords(this->x - thickness, this->y, 
-		this->x + thickness, this->y + this->height2);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + 1, this->y + this->height2 - thickness, 
-		this->x + this->width2, this->y + this->height2 + thickness);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width2 - thickness, this->y + this->height2, 
-		this->x + this->width2 + thickness, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width2 - 1, this->y + this->height - thickness, 
-		this->x + this->width, this->y + this->height + thickness);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x + this->width2 - 1, this->y + this->height - thickness, 
+		this->width, this->height + thickness);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 void RepeatTrue::ReSize(Long width, Long height, Long width2, Long height2) {
@@ -261,27 +249,23 @@ void RepeatTrue::GetSelectionMarkerRect(int marker, QRect *rect) {
 	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
-void RepeatTrue::GetSelectionMarkerAllRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
+QRegion RepeatTrue::GetSelectionMarkerAllRegion() {
 	Long x = this->x;
 	Long y = this->y;
-	rect.setCoords(x - 5, y - 5, x + 6, y + 6);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
+	QRect rect(x - 5, y - 5, 6, 6);
+	QRegion region(rect);
+	
 	x = this->x + this->width2;
 	y = this->y + this->height2;
-	rect.setCoords(x - 5, y - 5, x + 6, y + 6);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
+	rect = QRect(x - 5, y - 5, 6, 6);
+	region += QRegion(rect);
+	
 	x = this->x + this->width;
 	y = this->y + this->height;
-	rect.setCoords(x - 5, y - 5, x + 6, y + 6);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 5, y - 5, 6, 6);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 int RepeatTrue::GetHitCode(const QPoint& point, const QRegion& region) {

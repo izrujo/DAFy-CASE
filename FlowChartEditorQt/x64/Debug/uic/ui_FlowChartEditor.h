@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'FlowChartEditor.ui'
 **
-** Created by: Qt User Interface Compiler version 5.14.2
+** Created by: Qt User Interface Compiler version 5.12.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -23,7 +23,6 @@ namespace FlowChartEditorUi {
 		{
 			if (FlowChartEditorUi__FlowChartEditorClass->objectName().isEmpty())
 				FlowChartEditorUi__FlowChartEditorClass->setObjectName(QString::fromUtf8("FlowChartEditorUi__FlowChartEditorClass"));
-			FlowChartEditorUi__FlowChartEditorClass->resize(600, 400);
 			FlowChartEditorUi__FlowChartEditorClass->setStyleSheet(QString::fromUtf8("QMenuBar {\n"
 				"    background-color: white;\n"
 				"    spacing: 3px; /* spacing between menu bar items */\n"
@@ -38,7 +37,7 @@ namespace FlowChartEditorUi {
 
 		void retranslateUi(QWidget *FlowChartEditorUi__FlowChartEditorClass)
 		{
-			FlowChartEditorUi__FlowChartEditorClass->setWindowTitle(QCoreApplication::translate("FlowChartEditorUi::FlowChartEditorClass", "FlowChartEditor", nullptr));
+			FlowChartEditorUi__FlowChartEditorClass->setWindowTitle(QApplication::translate("FlowChartEditorUi::FlowChartEditorClass", "FlowChartEditor", nullptr));
 		} // retranslateUi
 
 	};

@@ -71,7 +71,7 @@ void Decision::Accept(FlowChartVisitor *draw) {
 	draw->Visit(this);
 }
 
-void Decision::GetRegion(QRegion *region) {
+QRegion Decision::GetRegion() {
 	Long halfWidth = (Long)this->width / 2;
 	Long halfHeight = (Long)this->height / 2;
 	
@@ -83,10 +83,12 @@ void Decision::GetRegion(QRegion *region) {
 	points.append(QPoint(this->x + halfWidth, this->y));
 	QPolygon polygon(points);
 
-	*region += QRegion(polygon);
+	QRegion region(polygon);
+
+	return region;
 }
 
-void Decision::GetRegion(Long thickness, QRegion *region) {
+QRegion Decision::GetRegion(Long thickness) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
@@ -102,7 +104,9 @@ void Decision::GetRegion(Long thickness, QRegion *region) {
 	points.append(QPoint(x + halfWidth, y));
 	QPolygon polygon(points);
 
-	*region += QRegion(polygon);
+	QRegion region(polygon);
+
+	return region;
 }
 
 bool Decision::IsIncluded(QPoint point) {

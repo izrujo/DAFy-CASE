@@ -69,27 +69,25 @@ NShape* Terminal::Clone() {
 	return new Terminal(*this);
 }
 
-void Terminal::GetRegion(QRegion *region) {
+QRegion Terminal::GetRegion() {
 	Long halfHeight = (Long)this->height / 2;
 
 	QRect ellipse;
-	QRegion addRegion;
 
 	ellipse = QRect(this->x, this->y, this->height, this->height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	*region += addRegion;
-
+	QRegion region(ellipse, QRegion::Ellipse);
+	
 	ellipse = QRect(this->x + this->width - this->height, this->y, this->height, this->height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	*region += addRegion;
-
+	region += QRegion(ellipse, QRegion::Ellipse);
+	
 	QRect rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
-	addRegion = QRegion(rectangle, QRegion::Rectangle);
-	*region += addRegion;
+	region += QRegion(rectangle, QRegion::Rectangle);
+	
+	return region;
 }
 
 
-void Terminal::GetRegion(Long thickness, QRegion *region) {
+QRegion Terminal::GetRegion(Long thickness) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
@@ -97,19 +95,17 @@ void Terminal::GetRegion(Long thickness, QRegion *region) {
 	Long halfHeight = height / 2;
 
 	QRect ellipse;
-	QRegion addRegion;
 
 	ellipse = QRect(x, y, height, height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	*region += addRegion;
-
+	QRegion region(ellipse, QRegion::Ellipse);
+	
 	ellipse = QRect(x + width - height, y, height, height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	*region += addRegion;
-
+	region += QRegion(ellipse, QRegion::Ellipse);
+	
 	QRect rectangle(x + halfHeight, y, width - height, height);
-	addRegion = QRegion(rectangle, QRegion::Rectangle);
-	*region += addRegion;
+	region += QRegion(rectangle, QRegion::Rectangle);
+	
+	return region;
 }
 
 bool Terminal::IsIncluded(QPoint point) {

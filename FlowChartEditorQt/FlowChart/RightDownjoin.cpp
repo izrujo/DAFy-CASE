@@ -94,54 +94,44 @@ NShape* RightDownJoin::Clone() {
 	return new RightDownJoin(*this);
 }
 
-void RightDownJoin::GetRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
-	rect.setCoords(this->x, this->y - LINETHICKNESS, 
-		this->x + this->width2, this->y + LINETHICKNESS);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width2 - LINETHICKNESS, this->y, 
-		this->x + this->width2 + LINETHICKNESS, this->y + this->height + this->height2);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS, 
-		this->x + this->width - this->width2, this->y + this->height + this->height2 + LINETHICKNESS);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2, 
-		this->x + this->width + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+QRegion RightDownJoin::GetRegion() {
+	QRect rect(this->x, this->y - LINETHICKNESS, 
+		this->width2, LINETHICKNESS);
+	QRegion region(rect);
+	
+	rect = QRect(this->x + this->width2 - LINETHICKNESS, this->y, 
+		this->width2 + LINETHICKNESS, this->height + this->height2);
+	region += QRegion(rect);
+	
+	rect = QRect(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS, 
+		this->width - this->width2, this->height + this->height2 + LINETHICKNESS);
+	region += QRegion(rect);
+	
+	rect = QRect(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2, 
+		this->width + LINETHICKNESS, this->height);
+	region += QRegion(rect);
+	
+	return region;
 }
 
-void RightDownJoin::GetRegion(Long thickness, QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
-	rect.setCoords(this->x, this->y - thickness, 
-		this->x + this->width2, this->y + thickness);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width2 - thickness, this->y, 
-		this->x + this->width2 + thickness, this->y + this->height + this->height2);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width2, this->y + this->height + this->height2 - thickness, 
-		this->x + this->width - this->width2, this->y + this->height + this->height2 + thickness);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+QRegion RightDownJoin::GetRegion(Long thickness) {
+	QRect rect(this->x, this->y - thickness, 
+		this->width2, thickness);
+	QRegion region(rect);
 	
-	rect.setCoords(this->x + this->width - thickness, this->y + this->height + this->height2, 
-		this->x + this->width + thickness, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x + this->width2 - thickness, this->y, 
+		this->width2 + thickness, this->height + this->height2);
+	region += QRegion(rect);
+	
+	rect = QRect(this->x + this->width2, this->y + this->height + this->height2 - thickness, 
+		this->width - this->width2, this->height + this->height2 + thickness);
+	region += QRegion(rect);
+	
+	rect = QRect(this->x + this->width - thickness, this->y + this->height + this->height2, 
+		this->width + thickness, this->height);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 void RightDownJoin::ReSize(Long width, Long height, Long width2, Long height2) {
@@ -278,27 +268,23 @@ void RightDownJoin::GetSelectionMarkerRect(int marker, QRect *rect) {
 	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
-void RightDownJoin::GetSelectionMarkerAllRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
+QRegion RightDownJoin::GetSelectionMarkerAllRegion() {
 	Long x = this->x;
 	Long y = this->y;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
+	QRect rect(x - 6, y - 6, 7, 7);
+	QRegion region(rect);
+	
 	x = this->x + this->width2;
 	y = this->y + this->height + this->height2;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
+	
 	x = this->x + this->width;
 	y = this->y + this->height; 
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 void RightDownJoin::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {

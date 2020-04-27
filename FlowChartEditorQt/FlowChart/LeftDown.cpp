@@ -87,34 +87,26 @@ void LeftDown::DrawActiveShape(GObject *painter) {
 	painter->DrawPolygon(arrow, 3);
 }
 
-void LeftDown::GetRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
+QRegion LeftDown::GetRegion() {
+	QRect rect(this->x, this->y - LINETHICKNESS, this->width, LINETHICKNESS);
+	QRegion region(rect);
 
-	rect.setCoords(this->x, this->y - LINETHICKNESS, 
-		this->x + this->width, this->y + LINETHICKNESS);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(this->x + this->width - LINETHICKNESS, this->y, 
+		this->width + LINETHICKNESS, this->height);
+	region = QRegion(rect);
 
-	rect.setCoords(this->x + this->width - LINETHICKNESS, this->y, 
-		this->x + this->width + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	return region;
 }
 
-void LeftDown::GetRegion(Long thickness, QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
-	rect.setCoords(this->x, this->y - thickness,
-		this->x + this->width, this->y + thickness);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
-	rect.setCoords(this->x + this->width - thickness, this->y, 
-		this->x + this->width + thickness, this->y + this->height);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+QRegion LeftDown::GetRegion(Long thickness) {
+	QRect rect(this->x, this->y - thickness,this->width, thickness);
+	QRegion region(rect);
+	
+	rect = QRect(this->x + this->width - thickness, this->y, 
+		this->width + thickness, this->height);
+	region += QRegion(rect);
+	
+	return region;
 }
 
 bool LeftDown::IsIncluded(QPoint point) {
@@ -181,21 +173,18 @@ void LeftDown::GetSelectionMarkerRect(int marker, QRect *rect) {
 	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
-void LeftDown::GetSelectionMarkerAllRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
+QRegion LeftDown::GetSelectionMarkerAllRegion() {
 	Long x = this->x;
 	Long y = this->y;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
+	QRect rect(x - 6, y - 6, 7, 7);
+	QRegion region(rect);
+	
 	x = this->x + this->width;
 	y = this->y + this->height;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
+
+	return region;
 }
 
 int LeftDown::GetHitCode(const QPoint& point, const QRegion& region) {

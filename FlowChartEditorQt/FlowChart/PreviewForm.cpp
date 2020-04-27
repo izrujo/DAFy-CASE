@@ -163,10 +163,10 @@ void PreviewForm::CommandRange(string text) {
 void PreviewForm::CreateToolBar() {
 	this->toolBar = new QToolBar(this);
 
-	//this->print = this->toolBar->addAction("Print", this, [=]() { this->CommandRange("Print"); });
-	//connect(this->print, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
-	//this->exit = this->toolBar->addAction("Exit", this, &QAction::triggered);
-	//connect(this->exit, &QAction::triggered, this, [=]() { this->CommandRange("Exit"); });
+	this->print = this->toolBar->addAction("Print");
+	connect(this->print, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
+	this->exit = this->toolBar->addAction("Exit");
+	connect(this->exit, &QAction::triggered, this, [=]() { this->CommandRange("Exit"); });
 }
 
 /* 이거는 인쇄시 좌표 찾기 위해 임시 구현한 부분

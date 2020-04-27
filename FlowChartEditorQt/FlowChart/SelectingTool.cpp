@@ -102,20 +102,15 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 		}
 	}
 	else {
-		QRect rect(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY);
-
-		// 경계에 걸친 기호들을 빼기위한 영역		
-		QRect top(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY + 1);
-		QRect bottom(canvas->startX, canvas->currentY - 1, canvas->currentX, canvas->currentY);
-		QRect left(canvas->startX, canvas->startY, canvas->startX + 1, canvas->currentY);
-		QRect right(canvas->currentX - 1, canvas->startY, canvas->currentX, canvas->currentY);
+		QRect rect;
+		rect.setCoords(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY);
 
 		i = 0;
 		it = canvas->flowChart->GetLength();
 		for (i = 0; i < it; i++) {
 			shape = holdFlowChart->GetAt(i);
-			shape->GetRegion(&region);
-			if (region.contains(rect) && (region.contains(top) || region.contains(left) || region.contains(right) || region.contains(bottom)))
+			region = shape->GetRegion();
+			if (region.contains(rect))
 			{
 				canvas->flowChart->GetAt(i)->Select(true);
 			}

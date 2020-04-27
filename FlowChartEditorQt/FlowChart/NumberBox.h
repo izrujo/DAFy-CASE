@@ -18,8 +18,8 @@ public:
 
 	virtual NShape* Clone();
 
-	virtual void GetRegion(QRegion *region) {};
-	virtual void GetRegion(Long thickness, QRegion *region) {};
+	virtual QRegion GetRegion() { QRegion region; return region; };
+	virtual QRegion GetRegion(Long thickness) { QRegion region; return region; };
 };
 
 #endif //_NUMBERBOX_H

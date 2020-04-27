@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>FlowChartEditorUi::FlowChartEditorClass</class>
  <widget class="QWidget" name="FlowChartEditorUi::FlowChartEditorClass">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>600</width>
-    <height>400</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>FlowChartEditor</string>
   </property>

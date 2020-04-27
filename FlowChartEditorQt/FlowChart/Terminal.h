@@ -30,8 +30,8 @@ public:
 
 	virtual NShape* Clone();
 
-	virtual void GetRegion(QRegion *region);
-	virtual void GetRegion(Long thickness, QRegion *region);
+	virtual QRegion GetRegion();
+	virtual QRegion GetRegion(Long thickness);
 
 	virtual bool IsIncluded(QPoint point);
 	virtual bool IsIncluded(const QRect& rect);

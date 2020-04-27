@@ -21,8 +21,8 @@ public:
 
 	virtual NShape* Clone();		
 
-	virtual void GetRegion(QRegion *region){};
-	virtual void GetRegion(Long thickness, QRegion *region){};
+	virtual QRegion GetRegion(){ QRegion region; return region; };
+	virtual QRegion GetRegion(Long thickness){ QRegion region; return region; };
 };
 
 //Long CompareCoordinateForTemplate(void *one, void *other); //이건 왜있는걸까?

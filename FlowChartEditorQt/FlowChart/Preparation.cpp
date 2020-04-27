@@ -71,7 +71,7 @@ NShape* Preparation::Clone() {
 	return new Preparation(*this);
 }
 
-void Preparation::GetRegion(QRegion *region) {
+QRegion Preparation::GetRegion() {
 	Long halfHeight = (Long)this->height / 2;
 
 	QVector<QPoint> points(7);
@@ -84,10 +84,12 @@ void Preparation::GetRegion(QRegion *region) {
 	points.append(QPoint(this->x + halfHeight, this->y));
 	QPolygon polygon(points);
 
-	*region += QRegion(polygon);
+	QRegion region(polygon);
+
+	return region;
 }
 
-void Preparation::GetRegion(Long thickness, QRegion *region) {
+QRegion Preparation::GetRegion(Long thickness) {
 	Long x = this->x - thickness;
 	Long y = this->y - thickness;
 	Long width = this->width + thickness * 2;
@@ -104,7 +106,9 @@ void Preparation::GetRegion(Long thickness, QRegion *region) {
 	points.append(QPoint(this->x + halfHeight, this->y));
 	QPolygon polygon(points);
 
-	*region += QRegion(polygon);
+	QRegion region(polygon);
+
+	return region;
 }
 
 bool Preparation::IsIncluded(QPoint point) {

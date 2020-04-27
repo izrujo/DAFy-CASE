@@ -392,7 +392,7 @@ void DrawVisitor::Visit(LeftDown *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 
-	QRect rect(x - width, y - height, width, height);
+	QRect rect(x + width * 2, y - height, -width * 2, height);
 	this->painter->DrawTextQ(rect, Qt::AlignRight | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -448,7 +448,7 @@ void DrawVisitor::Visit(RightDown *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x, y - height, width, height);
+	QRect rect(x, y - height, width * 2, height);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -533,7 +533,7 @@ void DrawVisitor::Visit(RightDownJoin *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x, y - height2, width2, height2);
+	QRect rect(x, y - height2, width2-width, height2);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -658,7 +658,7 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x, y - height2, width2, height2);
+	QRect rect(x, y - height2, width2 - width, height2);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {

@@ -233,7 +233,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 
 		attribute = initAttribute;
 		i = tempLefts.GetLength() - 1;
-		//buffer.GetAt(i)->GetAttribute(&attribute);
+		tempLefts.GetAt(i)->GetAttribute(&attribute);
 		width = attribute.pointOut.x() - x;
 		height = attribute.pointOut.y() - y;
 		height2 = 30;

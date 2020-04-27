@@ -357,8 +357,7 @@ void NShape::Select(bool selected) {
 }
 
 int NShape::GetHitCode(QPoint point) {
-	QRegion region;
-	this->GetRegion(&region);
+	QRegion region = this->GetRegion();
 	return GetHitCode(point, region);
 }
 
@@ -446,58 +445,48 @@ void NShape::GetSelectionMarkerRect(int marker, QRect *rect)
 	rect->setCoords(x - 4, y - 4, x + 5, y + 5);
 }
 
-void NShape::GetSelectionMarkerAllRegion(QRegion *region) {
-	QRect rect;
-	QRegion addRegion;
-
+QRegion NShape::GetSelectionMarkerAllRegion() {
 	Long x = this->x;
 	Long y = this->y;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
+	QRect rect(x - 6, y - 6, 7, 7);
+	QRegion region(rect);
+	
 	x = this->x + this->width / 2;
 	y = this->y;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
-
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
 
 	x = this->x + this->width;
 	y = this->y;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
 
 	x = this->x;
 	y = this->y + this->height / 2;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
 
 	x = this->x + this->width;
 	y = this->y + this->height / 2;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
 
 	x = this->x;
 	y = this->y + this->height;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
 
 	x = this->x + this->width / 2;
 	y = this->y + this->height;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
 
 	x = this->x + this->width;
 	y = this->y + this->height;
-	rect.setCoords(x - 6, y - 6, x + 7, y + 7);
-	addRegion = QRegion(rect);
-	*region += addRegion;
+	rect = QRect(x - 6, y - 6, 7, 7);
+	region += QRegion(rect);
+
+	return region;
 }
 
 QCursor NShape::GetCursor(int hit) const {
