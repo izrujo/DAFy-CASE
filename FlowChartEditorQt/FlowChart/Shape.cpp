@@ -35,7 +35,7 @@ Attribute::Attribute() {
 	this->vertexTrue = ' ';
 	this->vertexFalse = ' ';
 
-	QPoint initPoint(0, 0);
+	QPointF initPoint(0.0F, 0.0F);
 	this->pointIn = initPoint;
 	this->pointOut = initPoint;
 	this->pointTrue = initPoint;
@@ -151,15 +151,15 @@ NShape::NShape()
 	: backGroundColor(QColor(255, 255, 255)),
 	borderColor(QColor(0, 0, 0)),
 	contents() {
-	this->x = 0;
-	this->y = 0;
-	this->width = 0;
-	this->height = 0;
+	this->x = 0.0F;
+	this->y = 0.0F;
+	this->width = 0.0F;
+	this->height = 0.0F;
 	this->borderLine = Qt::SolidLine;
 	this->isSelected = false;
 }
 
-NShape::NShape(Long x, Long y, Long width, Long height, QColor backGroundColor,
+NShape::NShape(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: backGroundColor(backGroundColor),
 	borderColor(borderColor),
@@ -321,12 +321,12 @@ bool NShape::operator !=(const NShape& other) {
 	return retVo;
 }
 
-void NShape::Move(Long x, Long y) {
+void NShape::Move(float x, float y) {
 	this->x = x;
 	this->y = y;
 }
 
-void NShape::ReSize(Long width, Long height) {
+void NShape::ReSize(float width, float height) {
 	this->width = width;
 	this->height = height;
 }
@@ -339,11 +339,11 @@ void NShape::Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borde
 
 
 void NShape::DrawActiveShape(GObject *painter) {
-	QPoint points[BOXVERTECIES];
-	points[0] = QPoint(this->x - LINETHICKNESS, this->y - LINETHICKNESS);
-	points[1] = QPoint(this->x + this->width + LINETHICKNESS, this->y - LINETHICKNESS);
-	points[2] = QPoint(this->x + this->width + LINETHICKNESS, this->y + this->height + LINETHICKNESS);
-	points[3] = QPoint(this->x - LINETHICKNESS, this->y + this->height + LINETHICKNESS);
+	QPointF points[BOXVERTECIES];
+	points[0] = QPointF(this->x - LINETHICKNESS, this->y - LINETHICKNESS);
+	points[1] = QPointF(this->x + this->width + LINETHICKNESS, this->y - LINETHICKNESS);
+	points[2] = QPointF(this->x + this->width + LINETHICKNESS, this->y + this->height + LINETHICKNESS);
+	points[3] = QPointF(this->x - LINETHICKNESS, this->y + this->height + LINETHICKNESS);
 
 	painter->DrawPolygon(points, BOXVERTECIES);
 }
@@ -356,18 +356,18 @@ void NShape::Select(bool selected) {
 	this->isSelected = selected;
 }
 
-int NShape::GetHitCode(QPoint point) {
+int NShape::GetHitCode(QPointF point) {
 	QRegion region = this->GetRegion();
 	return GetHitCode(point, region);
 }
 
-int NShape::GetHitCode(const QPoint& point, const QRegion& region) {
+int NShape::GetHitCode(const QPointF& point, const QRegion& region) {
 	int result = HIT_NONE;
-	if (region.contains(point)) {
+	if (region.contains(point.toPoint())) {
 		result = HIT_BODY;
 	}
 
-	QRect rectSelect;
+	QRectF rectSelect;
 	GetSelectionMarkerRect(HIT_TOPLEFT, &rectSelect);
 	if (rectSelect.contains(point)) {
 		result = HIT_TOPLEFT;
@@ -403,7 +403,7 @@ int NShape::GetHitCode(const QPoint& point, const QRegion& region) {
 	return result;
 }
 
-void NShape::GetSelectionMarkerRect(int marker, QRect *rect)
+void NShape::GetSelectionMarkerRect(int marker, QRectF *rect)
 {
 	int x;
 	int y;
@@ -446,45 +446,45 @@ void NShape::GetSelectionMarkerRect(int marker, QRect *rect)
 }
 
 QRegion NShape::GetSelectionMarkerAllRegion() {
-	Long x = this->x;
-	Long y = this->y;
-	QRect rect(x - 6, y - 6, 7, 7);
-	QRegion region(rect);
+	float x = this->x;
+	float y = this->y;
+	QRectF rect(x - 6, y - 6, 7, 7);
+	QRegion region(rect.toRect());
 	
 	x = this->x + this->width / 2;
 	y = this->y;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	x = this->x + this->width;
 	y = this->y;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	x = this->x;
 	y = this->y + this->height / 2;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	x = this->x + this->width;
 	y = this->y + this->height / 2;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	x = this->x;
 	y = this->y + this->height;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	x = this->x + this->width / 2;
 	y = this->y + this->height;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	x = this->x + this->width;
 	y = this->y + this->height;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	return region;
 }
@@ -540,7 +540,7 @@ void NShape::Copy(NShape *object) {
 
 void NShape::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController)
 {
-	QRect rectSelect;
+	QRectF rectSelect;
 
 	QtGObjectFactory factory;
 	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
@@ -596,11 +596,11 @@ void NShape::DrawSelectionMarkers(GObject *painter, ScrollController *scrollCont
 	}
 }
 
-void NShape::MakeRectToPoint(QPoint point, QRect *rect) {
-	Long left = point.x() - BOXSCOPE;
-	Long top = point.y() - BOXSCOPE;
-	Long right = point.x() + BOXSCOPE;
-	Long bottom = point.y() + BOXSCOPE;
+void NShape::MakeRectToPoint(QPointF point, QRectF *rect) {
+	float left = point.x() - BOXSCOPE;
+	float top = point.y() - BOXSCOPE;
+	float right = point.x() + BOXSCOPE;
+	float bottom = point.y() + BOXSCOPE;
 	rect->setCoords(left, top, right, bottom);
 }
 
@@ -685,15 +685,15 @@ Long NShape::Find(NShape* shape) {
 	return -1;
 }
 
-Long NShape::Find(QPoint point) {
+Long NShape::Find(QPointF point) {
 	return -1;
 }
 
-Long NShape::Find(Long x, Long y) {
+Long NShape::Find(float x, float y) {
 	return -1;
 }
 
-Long NShape::Find(QRect rect) {
+Long NShape::Find(QRectF rect) {
 	return -1;
 }
 

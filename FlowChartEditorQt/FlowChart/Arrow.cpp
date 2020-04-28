@@ -82,21 +82,21 @@ NShape* Arrow::Clone() {
 }
 
 QRegion Arrow::GetRegion() {
-	QRect rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS, this->height);
+	QRect rect(this->x - LINETHICKNESS*2, this->y, LINETHICKNESS*2, this->height);
 	QRegion region(rect);
 
 	return region;
 }
 
 QRegion Arrow::GetRegion(Long thickness) {
-	QRect rect(this->x - thickness, this->y, thickness, this->height);
+	QRect rect(this->x - thickness * 2, this->y, thickness * 2, this->height);
 	QRegion region(rect);
 
 	return region;
 }
 
 bool Arrow::IsIncluded(QPoint point) {
-	QRect rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS, this->height);
+	QRect rect(this->x - LINETHICKNESS * 2, this->y, LINETHICKNESS * 2, this->height);
 	QRegion region(rect);
 	bool ret;
 	ret = region.contains(point);
@@ -104,7 +104,7 @@ bool Arrow::IsIncluded(QPoint point) {
 }
 
 bool Arrow::IsIncluded(const QRect& rect) {
-	QRect regionRect(x - LINETHICKNESS, y, LINETHICKNESS, height);
+	QRect regionRect(x - LINETHICKNESS * 2, y, LINETHICKNESS * 2, height);
 	QRegion region(regionRect);
 	bool ret;
 	ret = region.contains(rect);

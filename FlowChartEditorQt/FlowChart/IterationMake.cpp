@@ -111,8 +111,8 @@ void IterationMake::Create(DrawingPaper *canvas) {
 
 	attribute = initAttribute;
 	top->GetAttribute(&attribute);
-	width = attribute.pointIn.x() - x;
-	height = attribute.pointIn.y() - y;
+	width = attribute.pointIn.x() - x - 10;
+	height = attribute.pointIn.y() - y - 10;
 
 	// 새로 만들 반복선의 범위를 구한다.
 	bufferRange = buffer.GetRange();

@@ -785,12 +785,6 @@ void DrawingPaper::OnSequenceMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnIterationMenuClick() {
@@ -801,12 +795,6 @@ void DrawingPaper::OnIterationMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnSelectionMenuClick() {
@@ -817,12 +805,6 @@ void DrawingPaper::OnSelectionMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnMoveMakeMenuClick() {
@@ -833,12 +815,6 @@ void DrawingPaper::OnMoveMakeMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnSizeMakeMenuClick() {
@@ -859,12 +835,6 @@ void DrawingPaper::OnIntervalMakeMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::New() {

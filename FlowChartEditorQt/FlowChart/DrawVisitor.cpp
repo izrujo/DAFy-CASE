@@ -560,8 +560,8 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	points[0] = QPoint(x, y);
 	points[1] = QPoint(x, y + height2);
 	points[2] = QPoint(x + width2, y + height2);
-	points[3] = QPoint(x + width2, y + height - 10);
-	points[4] = QPoint(x + width - 13, y + height - 10);
+	points[3] = QPoint(x + width2, y + height);
+	points[4] = QPoint(x + width, y + height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -579,10 +579,10 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	if (remainder >= 2) quotient++;
 	Long endLength = quotient;
 	QPoint arrow[4];
-	arrow[0] = QPoint(x + width - 13 - endLength, y + height - 10 - endLength / 2);
-	arrow[1] = QPoint(x + width - 13, y + height - 10);
-	arrow[2] = QPoint(x + width - 13 - endLength, y + height - 10 + endLength / 2);
-	arrow[3] = QPoint(x + width - 13 - endLength / 3, y + height - 10);
+	arrow[0] = QPoint(x + width - endLength, y + height - endLength / 2);
+	arrow[1] = QPoint(x + width, y + height);
+	arrow[2] = QPoint(x + width - endLength, y + height + endLength / 2);
+	arrow[3] = QPoint(x + width - endLength / 3, y + height);
 	painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);

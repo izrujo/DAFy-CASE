@@ -153,7 +153,11 @@ void Label::keyPressEvent(QKeyEvent *event) {
 			Long ret = drawingPaper->variableList->Find(variable);
 			character = *(line->GetAt(startIndex)->GetContent().c_str());
 			if (ret == -1 && (character != Qt::Key_Apostrophe && character != Qt::Key_QuoteDbl)) { //따옴표 뒤에 쓴 글자면 안함
-				this->current->Remove(this->current->GetCurrent() - 1);
+				Long removeIndex = this->current->GetCurrent() - 1;
+				if (removeIndex < 0) {
+					removeIndex = 0;
+				}
+				this->current->Remove(removeIndex);
 				BOOL result = PlaySound((LPCWSTR)"sound_button_wrong0.2.wav", NULL, SND_FILENAME);
 			}
 		}

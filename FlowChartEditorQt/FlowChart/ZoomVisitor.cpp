@@ -516,12 +516,12 @@ void ZoomVisitor::Visit(RepeatTrue *element) {
 
 	quotient = width * rate / 100;
 	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
+	if (remainder >= 50) quotient--;
 	width = quotient;
 
-	quotient = height * rate / 100;
+	quotient = height * (100 + 100 - rate) / 100; //À½¼ö : 0.4 -> 1.6
 	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
+	if (remainder >= 50) quotient--;
 	height = quotient;
 
 	quotient = width2 * rate / 100;

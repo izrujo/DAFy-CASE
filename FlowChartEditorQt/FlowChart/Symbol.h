@@ -12,7 +12,7 @@
 
 class Symbol : public NShape {
 	public:		
-		Symbol(Long x, Long y, Long width, Long height, 
+		Symbol(float x, float y, float width, float height,
 			QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 			QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 

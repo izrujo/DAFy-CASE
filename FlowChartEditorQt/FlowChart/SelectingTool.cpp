@@ -103,7 +103,27 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 	}
 	else {
 		QRect rect;
-		rect.setCoords(canvas->startX, canvas->startY, canvas->currentX, canvas->currentY);
+		Long sX;
+		Long lX;
+		if (canvas->startX < canvas->currentX) {
+			sX = canvas->startX;
+			lX = canvas->currentX;
+		}
+		else {
+			sX = canvas->currentX;
+			lX = canvas->startX;
+		}
+		Long sY;
+		Long lY;
+		if (canvas->startY < canvas->currentY) {
+			sY = canvas->startY;
+			lY = canvas->currentY;
+		}
+		else {
+			sY = canvas->currentY;
+			lY = canvas->startY;
+		}
+		rect.setCoords(sX, sY, lX, lY);
 
 		i = 0;
 		it = canvas->flowChart->GetLength();
