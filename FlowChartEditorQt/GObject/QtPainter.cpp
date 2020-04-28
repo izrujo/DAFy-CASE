@@ -26,6 +26,27 @@ QtPainter::QtPainter(Long width, Long height, QColor color, Long capacity)
 	font->SetObject(this->qPainter);
 }
 
+QtPainter::QtPainter(float width, float height, QColor color, Long capacity)
+	: Painter(capacity) {
+	this->qPixmap = new QPixmap(width, height);
+	this->qPixmap->fill(color);
+	this->qPainter = new QPainter(this->qPixmap);
+
+	QtGObjectFactory factory;
+
+	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 1.0f, Qt::SolidLine, Qt::SquareCap, Qt::BevelJoin);
+	this->objects.Store(this->length++, pen);
+	pen->SetObject(this->qPainter);
+
+	GObject *brush = factory.MakeBrush(color, Qt::SolidPattern);
+	this->objects.Store(this->length++, brush);
+	brush->SetObject(this->qPainter);
+
+	GObject *font = factory.MakeFont("Malgun Gothic", 10, 50, false);
+	this->objects.Store(this->length++, font);
+	font->SetObject(this->qPainter);
+}
+
 QtPainter::QtPainter(const QtPainter& source)
 	: Painter(source) {
 	this->qPixmap = source.qPixmap;

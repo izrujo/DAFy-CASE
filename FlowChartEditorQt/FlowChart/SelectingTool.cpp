@@ -35,7 +35,7 @@ void SelectingTool::Destroy() {
 	instance = 0;
 }
 
-void SelectingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
+void SelectingTool::OnLButtonDown(DrawingPaper *canvas, QPointF point) {
 	bool isControlPressed;
 	isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 	if (!isControlPressed) {
@@ -48,7 +48,7 @@ void SelectingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 	canvas->currentY = canvas->startY;
 }
 
-void SelectingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
+void SelectingTool::OnMouseMove(DrawingPaper *canvas, QPointF point) {
 	bool isMouseLButtonPressed;
 	isMouseLButtonPressed = ((::GetKeyState(VK_LBUTTON) & 0x8000) != 0);
 	
@@ -68,14 +68,12 @@ void SelectingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	}
 }
 
-void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
+void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPointF point) {
 	QRegion region;
 	NShape *shape;
 	Long i;
 	Long it;
 	Long index;
-	Long quotient;
-	Long remainder;
 
 	Long positionX = 0;
 	Long positionY = 0;
@@ -102,9 +100,9 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 		}
 	}
 	else {
-		QRect rect;
-		Long sX;
-		Long lX;
+		QRectF rect;
+		float sX;
+		float lX;
 		if (canvas->startX < canvas->currentX) {
 			sX = canvas->startX;
 			lX = canvas->currentX;
@@ -113,8 +111,8 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 			sX = canvas->currentX;
 			lX = canvas->startX;
 		}
-		Long sY;
-		Long lY;
+		float sY;
+		float lY;
 		if (canvas->startY < canvas->currentY) {
 			sY = canvas->startY;
 			lY = canvas->currentY;
@@ -130,7 +128,7 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
 		for (i = 0; i < it; i++) {
 			shape = holdFlowChart->GetAt(i);
 			region = shape->GetRegion();
-			if (region.contains(rect))
+			if (region.contains(rect.toRect()))
 			{
 				canvas->flowChart->GetAt(i)->Select(true);
 			}

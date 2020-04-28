@@ -57,19 +57,19 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	fTemplate->move(5, 5 + this->menuBar->height());
 	this->windows.Store(1, fTemplate);
 
-	this->painter = new QtPainter(frameRect.width(), frameRect.height(), QColor(235, 235, 235));
+	this->painter = new QtPainter((Long)frameRect.width(), (Long)frameRect.height(), QColor(235, 235, 235));
 
 	this->sketchBook = new SketchBook;
 
-	Long height = 26;
-	NShape *firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height - 4, 186, height, QColor(102, 204, 204),
+	float height = 26.0F;
+	NShape *firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height - 4, 186.0F, height, QColor(102, 204, 204),
 		Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
 	Long current = this->sketchBook->Add(firstTitle, drawingPaper->flowChart->Clone());
 
 	firstTitle = this->sketchBook->GetCanvas(current);
-	Long windowCloseX = firstTitle->GetX() + firstTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-	Long windowCloseY = firstTitle->GetY() + 4;
-	this->windowClose = new WindowClose(windowCloseX, windowCloseY, 26, 23, QColor(102, 204, 204),
+	float windowCloseX = firstTitle->GetX() + firstTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	float windowCloseY = firstTitle->GetY() + 4;
+	this->windowClose = new WindowClose(windowCloseX, windowCloseY, 26.0F, 23.0F, QColor(102, 204, 204),
 		Qt::SolidLine, QColor(255, 255, 255));
 
 	this->CreateStatusBar();
@@ -158,8 +158,8 @@ void FlowChartEditor::paintEvent(QPaintEvent *event) {
 
 void FlowChartEditor::mouseMoveEvent(QMouseEvent *event) {
 	//윈도우 핀
-	QRect pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
-	bool isContain = pinRect.contains(event->pos());
+	QRectF pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
+	bool isContain = pinRect.contains(event->localPos());
 	if (isContain == true) {
 		this->windowClose->Paint(QColor(102, 255, 255), Qt::SolidLine, this->windowClose->GetBorderColor());
 	}
@@ -171,8 +171,8 @@ void FlowChartEditor::mouseMoveEvent(QMouseEvent *event) {
 
 void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->windows[0]);
-	QRect pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
-	bool isContain = pinRect.contains(event->pos());
+	QRectF pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
+	bool isContain = pinRect.contains(event->localPos());
 	if (isContain == true) {
 		if (this->sketchBook->GetLength() > 1) { //두 개 이상일 때만 닫을 수 있음.
 			canvas->Close(); //현재 캔버스 저장하거나 안하거나 처리해줌.
@@ -199,8 +199,8 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 		canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
 
 		NShape *currentTitle = this->sketchBook->GetCanvas(current);
-		Long windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-		Long windowCloseY = currentTitle->GetY() + 4;
+		float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+		float windowCloseY = currentTitle->GetY() + 4;
 		this->windowClose->Move(windowCloseX, windowCloseY);
 	}
 	this->repaint();

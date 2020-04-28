@@ -10,7 +10,7 @@
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
-Decision::Decision(Long x, Long y, Long width, Long height, QColor backGroundColor,
+Decision::Decision(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
@@ -72,77 +72,77 @@ void Decision::Accept(FlowChartVisitor *draw) {
 }
 
 QRegion Decision::GetRegion() {
-	Long halfWidth = (Long)this->width / 2;
-	Long halfHeight = (Long)this->height / 2;
+	float halfWidth = this->width / 2;
+	float halfHeight = this->height / 2;
 	
-	QVector<QPoint> points(5);
-	points.append(QPoint(this->x + halfWidth, this->y));
-	points.append(QPoint(this->x + this->width, this->y + halfHeight));
-	points.append(QPoint(this->x + halfWidth, this->y + this->height));
-	points.append(QPoint(this->x, this->y + halfHeight));
-	points.append(QPoint(this->x + halfWidth, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(this->x + halfWidth, this->y));
+	points.append(QPointF(this->x + this->width, this->y + halfHeight));
+	points.append(QPointF(this->x + halfWidth, this->y + this->height));
+	points.append(QPointF(this->x, this->y + halfHeight));
+	points.append(QPointF(this->x + halfWidth, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
+	QRegion region(polygon.toPolygon());
 
 	return region;
 }
 
 QRegion Decision::GetRegion(Long thickness) {
-	Long x = this->x - thickness;
-	Long y = this->y - thickness;
-	Long width = this->width + thickness * 2;
-	Long height = this->height + thickness * 2;
-	Long halfWidth = width / 2;
-	Long halfHeight = height / 2;
+	float x = this->x - thickness;
+	float y = this->y - thickness;
+	float width = this->width + thickness * 2;
+	float height = this->height + thickness * 2;
+	float halfWidth = width / 2;
+	float halfHeight = height / 2;
 
-	QVector<QPoint> points(5);
-	points.append(QPoint(x + halfWidth, y));
-	points.append(QPoint(x + width, y + halfHeight));
-	points.append(QPoint(x + halfWidth, y + height));
-	points.append(QPoint(x, y + halfHeight));
-	points.append(QPoint(x + halfWidth, y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(x + halfWidth, y));
+	points.append(QPointF(x + width, y + halfHeight));
+	points.append(QPointF(x + halfWidth, y + height));
+	points.append(QPointF(x, y + halfHeight));
+	points.append(QPointF(x + halfWidth, y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
+	QRegion region(polygon.toPolygon());
 
 	return region;
 }
 
-bool Decision::IsIncluded(QPoint point) {
+bool Decision::IsIncluded(QPointF point) {
 	bool ret;
-	Long halfWidth = (Long)this->width / 2;
-	Long halfHeight = (Long)this->height / 2;
+	float halfWidth = this->width / 2;
+	float halfHeight = this->height / 2;
 
-	QVector<QPoint> points(5);
-	points.append(QPoint(this->x + halfWidth, this->y));
-	points.append(QPoint(this->x + this->width, this->y + halfHeight));
-	points.append(QPoint(this->x + halfWidth, this->y + this->height));
-	points.append(QPoint(this->x, this->y + halfHeight));
-	points.append(QPoint(this->x + halfWidth, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(this->x + halfWidth, this->y));
+	points.append(QPointF(this->x + this->width, this->y + halfHeight));
+	points.append(QPointF(this->x + halfWidth, this->y + this->height));
+	points.append(QPointF(this->x, this->y + halfHeight));
+	points.append(QPointF(this->x + halfWidth, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
-	ret = region.contains(point);
+	QRegion region(polygon.toPolygon());
+	ret = region.contains(point.toPoint());
 	
 	return ret;
 }
 
-bool Decision::IsIncluded(const QRect& rect) {
+bool Decision::IsIncluded(const QRectF& rect) {
 	bool ret;
-	Long halfWidth = (Long)this->width / 2;
-	Long halfHeight = (Long)this->height / 2;
+	float halfWidth = this->width / 2;
+	float halfHeight = this->height / 2;
 
-	QVector<QPoint> points(5);
-	points.append(QPoint(this->x + halfWidth, this->y));
-	points.append(QPoint(this->x + this->width, this->y + halfHeight));
-	points.append(QPoint(this->x + halfWidth, this->y + this->height));
-	points.append(QPoint(this->x, this->y + halfHeight));
-	points.append(QPoint(this->x + halfWidth, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(this->x + halfWidth, this->y));
+	points.append(QPointF(this->x + this->width, this->y + halfHeight));
+	points.append(QPointF(this->x + halfWidth, this->y + this->height));
+	points.append(QPointF(this->x, this->y + halfHeight));
+	points.append(QPointF(this->x + halfWidth, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
-	ret = region.contains(rect);
+	QRegion region(polygon.toPolygon());
+	ret = region.contains(rect.toRect());
 
 	return ret;
 }
@@ -170,7 +170,7 @@ void Decision::GetLine(char(*line)) {
 	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s\n", 
 		ID_DECISION, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 

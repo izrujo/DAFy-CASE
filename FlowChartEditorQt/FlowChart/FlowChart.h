@@ -30,7 +30,7 @@ public:
 	virtual QRegion GetRegion() { QRegion region; return region; };
 	virtual QRegion GetRegion(Long thickness) { QRegion region; return region; };
 
-	QRect GetRange();
+	QRectF GetRange();
 };
 
 //Long CompareShapeAddress(void *one, void *other);

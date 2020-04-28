@@ -24,13 +24,13 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	NShape *shape;
 	NShape *top, *repeatTrue;
 	Long topIndex = -1;
-	Long x, y, width, height, width2, height2;
+	float x, y, width, height, width2, height2;
 	Long i, j;
 	Long index = -1;
 	Long index_;
 	Attribute attribute, initAttribute;
-	QRect rect;
-	QRect bufferRange;
+	QRectF rect;
+	QRectF bufferRange;
 
 	
 

@@ -40,8 +40,8 @@ void IntervalMake::Create(DrawingPaper *canvas){
 
 	// 2. 도형들을 y 좌표를 기준으로 오름차순으로 정렬 한다. (삽입정렬)
 	NShape *temp;	
-	Long y;
-	Long y_;
+	float y;
+	float y_;
 	Long j;
 	Long k;
 	for( i = 1 ; i < count; i++){		
@@ -62,19 +62,19 @@ void IntervalMake::Create(DrawingPaper *canvas){
 	}
 
 	// 3. 도형간 간격을 구한다. 전체길이에서 도형들의 길이를 빼고 도형의 개수 - 1 으로 나눈다.
-	Long height = indexes[count-1]->GetY() - indexes[0]->GetY() - indexes[0]->GetHeight();
+	float height = indexes[count-1]->GetY() - indexes[0]->GetY() - indexes[0]->GetHeight();
 
 	i = 1;
 	while ( i < count-1 ){
 		height = height - indexes[i]->GetHeight();
 		i++;
 	}
-	Long interval = height/(count-1);
+	float interval = height/(count-1);
 
 	// 4. 도형을 재 배치 한다.
 	canvas->memoryController->RememberOther(positions, count);
 
-	Long previousHeight; // 이전까지의 길이
+	float previousHeight; // 이전까지의 길이
 	previousHeight = indexes[0]->GetY() + indexes[0]->GetHeight();
 	i = 1; // 첫번 째 도형은 위치 고정
 	while ( i < count ){

@@ -49,11 +49,11 @@ void DrawVisitor::Visit(Terminal *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	QRect rect(x, y, width, height);
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	QRectF rect(x, y, width, height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -62,7 +62,7 @@ void DrawVisitor::Visit(Terminal *element) {
 	GObject *oldBrush = this->painter->SelectObject(*brush);
 	this->painter->Update();
 
-	float radius = width / 5.0;
+	float radius = width / 5.0F;
 	this->painter->DrawRoundedRect(rect, radius, radius);
 
 	this->painter->SelectObject(*oldPen);
@@ -94,19 +94,19 @@ void DrawVisitor::Visit(Preparation *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long halfHeight = (Long)height / 2;
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float halfHeight = height / 2.0F;
 
-	QPoint points[6];
-	points[0] = QPoint(x, y + halfHeight);
-	points[1] = QPoint(x + halfHeight, y);
-	points[2] = QPoint(x + width - halfHeight, y);
-	points[3] = QPoint(x + width, y + halfHeight);
-	points[4] = QPoint(x + width - halfHeight, y + height);
-	points[5] = QPoint(x + halfHeight, y + height);
+	QPointF points[6];
+	points[0] = QPointF(x, y + halfHeight);
+	points[1] = QPointF(x + halfHeight, y);
+	points[2] = QPointF(x + width - halfHeight, y);
+	points[3] = QPointF(x + width, y + halfHeight);
+	points[4] = QPointF(x + width - halfHeight, y + height);
+	points[5] = QPointF(x + halfHeight, y + height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -131,7 +131,7 @@ void DrawVisitor::Visit(Preparation *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x + halfHeight, y, width - height, height);
+	QRectF rect(x + halfHeight, y, width - height, height);
 	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -147,17 +147,17 @@ void DrawVisitor::Visit(InputOutput *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long halfHeight = (Long)height / 2;
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float halfHeight = height / 2.0F;
 
-	QPoint points[4];
-	points[0] = QPoint(x + halfHeight, y);
-	points[1] = QPoint(x + width, y);
-	points[2] = QPoint(x + width - halfHeight, y + height);
-	points[3] = QPoint(x, y + height);
+	QPointF points[4];
+	points[0] = QPointF(x + halfHeight, y);
+	points[1] = QPointF(x + width, y);
+	points[2] = QPointF(x + width - halfHeight, y + height);
+	points[3] = QPointF(x, y + height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -182,7 +182,7 @@ void DrawVisitor::Visit(InputOutput *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x + halfHeight, y, width - height, height);
+	QRectF rect(x + halfHeight, y, width - height, height);
 	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -198,12 +198,12 @@ void DrawVisitor::Visit(Process *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 
-	QRect rect(x, y, width, height);
+	QRectF rect(x, y, width, height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -243,12 +243,12 @@ void DrawVisitor::Visit(Decision *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long halfWidth = width / 2;
-	Long halfHeight = height / 2;
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float halfWidth = width / 2.0F;
+	float halfHeight = height / 2.0F;
 
 	QPoint points[4];
 	points[0] = QPoint(x + halfWidth, y);
@@ -279,7 +279,7 @@ void DrawVisitor::Visit(Decision *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x + halfWidth / 2, y + halfHeight / 2, halfWidth, halfHeight);
+	QRectF rect(x + halfWidth / 2, y + halfHeight / 2, halfWidth, halfHeight);
 	this->painter->DrawTextQ(rect, Qt::AlignCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -295,31 +295,28 @@ void DrawVisitor::Visit(Arrow *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	this->painter->DrawLine(QPoint(x, y), QPoint(x, y + height - 4));
+	this->painter->DrawLine(QPointF(x, y), QPointF(x, y + height - 4));
 
 	GObject *brush = factory.MakeBrush(QColor(166, 166, 166));
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	Long quotient = height / 4;
-	Long remainder = height % 4;
-	if (remainder >= 2) quotient++;
-	Long endLength = quotient;
-	QPoint arrow[4];
-	arrow[0] = QPoint(x - endLength / 2, y + height - endLength);
-	arrow[1] = QPoint(x, y + height);
-	arrow[2] = QPoint(x + endLength / 2, y + height - endLength);
-	arrow[3] = QPoint(x, y + height - endLength / 3);
+	float endLength = height / 4.0F;
+	QPointF arrow[4];
+	arrow[0] = QPointF(x - endLength / 2.0F, y + height - endLength);
+	arrow[1] = QPointF(x, y + height);
+	arrow[2] = QPointF(x + endLength / 2.0F, y + height - endLength);
+	arrow[3] = QPointF(x, y + height - endLength / 3.0F);
 	this->painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
@@ -335,7 +332,7 @@ void DrawVisitor::Visit(Arrow *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 
-	QRect rect(x + endLength / 2, y, height * 2, height);
+	QRectF rect(x + endLength / 2.0F, y, height * 2.0F, height);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -351,32 +348,29 @@ void DrawVisitor::Visit(LeftDown *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	painter->DrawLine(QPoint(x, y), QPoint(x + width, y));
-	painter->DrawLine(QPoint(x + width, y), QPoint(x + width, y + height - 4));
+	painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
+	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 4));
 
 	GObject *brush = factory.MakeBrush(element->GetBorderColor(), Qt::SolidPattern);
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	Long quotient = height / 4;
-	Long remainder = height % 4;
-	if (remainder >= 2) quotient++;
-	Long endLength = quotient;
-	QPoint arrow[4];
-	arrow[0] = QPoint(x + width - endLength / 2, y + height - endLength);
-	arrow[1] = QPoint(x + width, y + height);
-	arrow[2] = QPoint(x + width + endLength / 2, y + height - endLength);
-	arrow[3] = QPoint(x + width, y + height - endLength / 3);
+	float endLength = height / 4.0F;
+	QPointF arrow[4];
+	arrow[0] = QPointF(x + width - endLength / 2.0F, y + height - endLength);
+	arrow[1] = QPointF(x + width, y + height);
+	arrow[2] = QPointF(x + width + endLength / 2.0F, y + height - endLength);
+	arrow[3] = QPointF(x + width, y + height - endLength / 3.0F);
 	painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
@@ -392,7 +386,7 @@ void DrawVisitor::Visit(LeftDown *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 
-	QRect rect(x + width * 2, y - height, -width * 2, height);
+	QRectF rect(x + width * 2.0F, y - height, -width * 2.0F, height);
 	this->painter->DrawTextQ(rect, Qt::AlignRight | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -408,32 +402,29 @@ void DrawVisitor::Visit(RightDown *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	painter->DrawLine(QPoint(x, y), QPoint(x + width, y));
-	painter->DrawLine(QPoint(x + width, y), QPoint(x + width, y + height - 4));
+	painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
+	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 4));
 
 	GObject *brush = factory.MakeBrush(QColor(166, 166, 166), Qt::SolidPattern);
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	Long quotient = height / 4;
-	Long remainder = height % 4;
-	if (remainder >= 2) quotient++;
-	Long endLength = quotient;
-	QPoint arrow[4];
-	arrow[0] = QPoint(x + width - endLength / 2, y + height - endLength);
-	arrow[1] = QPoint(x + width, y + height);
-	arrow[2] = QPoint(x + width + endLength / 2, y + height - endLength);
-	arrow[3] = QPoint(x + width, y + height - endLength / 3);
+	float endLength = height / 4.0F;
+	QPointF arrow[4];
+	arrow[0] = QPointF(x + width - endLength / 2.0F, y + height - endLength);
+	arrow[1] = QPointF(x + width, y + height);
+	arrow[2] = QPointF(x + width + endLength / 2.0F, y + height - endLength);
+	arrow[3] = QPointF(x + width, y + height - endLength / 3.0F);
 	painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
@@ -448,7 +439,7 @@ void DrawVisitor::Visit(RightDown *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x, y - height, width * 2, height);
+	QRectF rect(x, y - height, width * 2.0F, height);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -464,17 +455,17 @@ void DrawVisitor::Visit(Join *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long height2 = element->GetHeight2();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float height2 = element->GetHeight2();
 
-	QPoint points[4];
-	points[0] = QPoint(x, y);
-	points[1] = QPoint(x, y + height2);
-	points[2] = QPoint(x + width, y + height2);
-	points[3] = QPoint(x + width, y + height);
+	QPointF points[4];
+	points[0] = QPointF(x, y);
+	points[1] = QPointF(x, y + height2);
+	points[2] = QPointF(x + width, y + height2);
+	points[3] = QPointF(x + width, y + height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -504,19 +495,19 @@ void DrawVisitor::Visit(RightDownJoin *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long width2 = element->GetWidth2();
-	Long height2 = element->GetHeight2();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float width2 = element->GetWidth2();
+	float height2 = element->GetHeight2();
 
-	QPoint points[5];
-	points[0] = QPoint(x, y);
-	points[1] = QPoint(x + width2, y);
-	points[2] = QPoint(x + width2, y + height + height2);
-	points[3] = QPoint(x + width, y + height + height2);
-	points[4] = QPoint(x + width, y + height);
+	QPointF points[5];
+	points[0] = QPointF(x, y);
+	points[1] = QPointF(x + width2, y);
+	points[2] = QPointF(x + width2, y + height + height2);
+	points[3] = QPointF(x + width, y + height + height2);
+	points[4] = QPointF(x + width, y + height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -533,7 +524,7 @@ void DrawVisitor::Visit(RightDownJoin *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x, y - height2, width2-width, height2);
+	QRectF rect(x, y - height2, width2 - width, height2);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -549,19 +540,19 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long width2 = element->GetWidth2();
-	Long height2 = element->GetHeight2();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float width2 = element->GetWidth2();
+	float height2 = element->GetHeight2();
 
-	QPoint points[5];
-	points[0] = QPoint(x, y);
-	points[1] = QPoint(x, y + height2);
-	points[2] = QPoint(x + width2, y + height2);
-	points[3] = QPoint(x + width2, y + height);
-	points[4] = QPoint(x + width, y + height);
+	QPointF points[5];
+	points[0] = QPointF(x, y);
+	points[1] = QPointF(x, y + height2);
+	points[2] = QPointF(x + width2, y + height2);
+	points[3] = QPointF(x + width2, y + height);
+	points[4] = QPointF(x + width, y + height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -574,15 +565,12 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	Long quotient = height2 / 4;
-	Long remainder = height2 % 4;
-	if (remainder >= 2) quotient++;
-	Long endLength = quotient;
-	QPoint arrow[4];
-	arrow[0] = QPoint(x + width - endLength, y + height - endLength / 2);
-	arrow[1] = QPoint(x + width, y + height);
-	arrow[2] = QPoint(x + width - endLength, y + height + endLength / 2);
-	arrow[3] = QPoint(x + width - endLength / 3, y + height);
+	float endLength = height2/4.0F;
+	QPointF arrow[4];
+	arrow[0] = QPointF(x + width - endLength, y + height - endLength / 2.0F);
+	arrow[1] = QPointF(x + width, y + height);
+	arrow[2] = QPointF(x + width - endLength, y + height + endLength / 2.0F);
+	arrow[3] = QPointF(x + width - endLength / 3.0F, y + height);
 	painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
@@ -610,19 +598,19 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = element->GetX() - positionX;
-	Long y = element->GetY() - positionY;
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long width2 = element->GetWidth2();
-	Long height2 = element->GetHeight2();
+	float x = element->GetX() - positionX;
+	float y = element->GetY() - positionY;
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float width2 = element->GetWidth2();
+	float height2 = element->GetHeight2();
 
-	QPoint points[5];
-	points[0] = QPoint(x, y);
-	points[1] = QPoint(x + width2, y);
-	points[2] = QPoint(x + width2, y + height2);
-	points[3] = QPoint(x + width, y + height2);
-	points[4] = QPoint(x + width, y + height - 6);
+	QPointF points[5];
+	points[0] = QPointF(x, y);
+	points[1] = QPointF(x + width2, y);
+	points[2] = QPointF(x + width2, y + height2);
+	points[3] = QPointF(x + width, y + height2);
+	points[4] = QPointF(x + width, y + height - 6);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(element->GetBorderColor()), BORDERWIDTH, element->GetBorderLine());
@@ -635,15 +623,12 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	Long quotient = (height - height2) / 4;
-	Long remainder = (height - height2) % 4;
-	if (remainder >= 2) quotient++;
-	Long endLength = quotient;
-	QPoint arrow[4];
-	arrow[0] = QPoint(x + width - endLength / 2, y + height - endLength);
-	arrow[1] = QPoint(x + width, y + height);
-	arrow[2] = QPoint(x + width + endLength / 2, y + height - endLength);
-	arrow[3] = QPoint(x + width, y + height - endLength / 2);
+	float endLength = (height - height2) / 4.0F;
+	QPointF arrow[4];
+	arrow[0] = QPointF(x + width - endLength / 2.0F, y + height - endLength);
+	arrow[1] = QPointF(x + width, y + height);
+	arrow[2] = QPointF(x + width + endLength / 2.0F, y + height - endLength);
+	arrow[3] = QPointF(x + width, y + height - endLength / 2.0F);
 	painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
@@ -658,7 +643,7 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
-	QRect rect(x, y - height2, width2 - width, height2);
+	QRectF rect(x, y - height2, width2 - width, height2);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -679,10 +664,10 @@ void DrawVisitor::Visit(Template *element) {
 }
 
 void DrawVisitor::Visit(NumberBox *numberBox) {
-	Long x = numberBox->GetX();
-	Long y = numberBox->GetY();
-	Long width = numberBox->GetWidth();
-	Long height = numberBox->GetHeight();
+	float x = numberBox->GetX();
+	float y = numberBox->GetY();
+	float width = numberBox->GetWidth();
+	float height = numberBox->GetHeight();
 	/*
 	QPoint points[4];
 	points[0] = QPoint(x, y);
@@ -696,7 +681,7 @@ void DrawVisitor::Visit(NumberBox *numberBox) {
 	GObject *oldBrush = this->painter->SelectObject(*brush);
 	this->painter->Update();
 
-	QRect rect(x, y, width, height);
+	QRectF rect(x, y, width, height);
 
 	this->painter->DrawRect(rect);
 
@@ -737,11 +722,11 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 		positionY = this->scrollController->GetScroll(0)->value();
 	}
 
-	Long x = a4Paper->GetX() - positionX;
-	Long y = a4Paper->GetY() - positionY;
-	Long width = a4Paper->GetWidth();
-	Long height = a4Paper->GetHeight();
-	QRect rect(x, y, width, height);
+	float x = a4Paper->GetX() - positionX;
+	float y = a4Paper->GetY() - positionY;
+	float width = a4Paper->GetWidth();
+	float height = a4Paper->GetHeight();
+	QRectF rect(x, y, width, height);
 
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(a4Paper->GetBorderColor()), BORDERWIDTH, a4Paper->GetBorderLine());
@@ -770,20 +755,20 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 		oldPen = this->painter->SelectObject(*pen);
 		this->painter->Update();
 
-		Long startY = y + 2;
-		Long endY = y + height - 2;
-		Long interval = width / 20;
-		Long startX = x + interval;
+		float startY = y + 2;
+		float endY = y + height - 2;
+		float interval = width / 20;
+		float startX = x + interval;
 		while (startX < x + width) {
-			this->painter->DrawLine(QPoint(startX, startY), QPoint(startX, endY));
+			this->painter->DrawLine(QPointF(startX, startY), QPointF(startX, endY));
 			startX += interval;
 		}
 		startX = x + 2;
-		Long endX = x + width - 2;
+		float endX = x + width - 2;
 		interval = height / 40;
 		startY = y + interval;
 		while (startY < y + height) {
-			this->painter->DrawLine(QPoint(startX, startY), QPoint(endX, startY));
+			this->painter->DrawLine(QPointF(startX, startY), QPointF(endX, startY));
 			startY += interval;
 		}
 
@@ -799,15 +784,15 @@ void DrawVisitor::Visit(A4Paper *a4Paper) {
 	oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	Long leftMargin = a4Paper->GetLeftMargin();
-	Long rightMargin = a4Paper->GetRightMargin();
-	Long topMargin = a4Paper->GetTopMargin();
-	Long bottomMargin = a4Paper->GetBottomMargin();
+	float leftMargin = a4Paper->GetLeftMargin();
+	float rightMargin = a4Paper->GetRightMargin();
+	float topMargin = a4Paper->GetTopMargin();
+	float bottomMargin = a4Paper->GetBottomMargin();
 
-	painter->DrawLine(QPoint(x + leftMargin, y + 2), QPoint(x + leftMargin, y + height - 2));
-	painter->DrawLine(QPoint(x + 2, y + topMargin), QPoint(x + width - 2, y + topMargin));
-	painter->DrawLine(QPoint(x + width - rightMargin, y + 2), QPoint(x + width - rightMargin, y + height - 2));
-	painter->DrawLine(QPoint(x + 2, y + height - bottomMargin), QPoint(x + width - 2, y + height - bottomMargin));
+	painter->DrawLine(QPointF(x + leftMargin, y + 2), QPointF(x + leftMargin, y + height - 2));
+	painter->DrawLine(QPointF(x + 2, y + topMargin), QPointF(x + width - 2, y + topMargin));
+	painter->DrawLine(QPointF(x + width - rightMargin, y + 2), QPointF(x + width - rightMargin, y + height - 2));
+	painter->DrawLine(QPointF(x + 2, y + height - bottomMargin), QPointF(x + width - 2, y + height - bottomMargin));
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->Update();
@@ -820,10 +805,10 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 	QtGObjectFactory factory;
 
 	//====속성
-	Long x = windowTitle->GetX();
-	Long y = windowTitle->GetY();
-	Long width = windowTitle->GetWidth();
-	Long height = windowTitle->GetHeight();
+	float x = windowTitle->GetX();
+	float y = windowTitle->GetY();
+	float width = windowTitle->GetWidth();
+	float height = windowTitle->GetHeight();
 	Long borderWidth = 1;
 	QColor fillColor = windowTitle->GetBackGroundColor();
 	QColor borderColor = windowTitle->GetBorderColor();
@@ -838,7 +823,7 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 	this->painter->Update();
 
 	//그리기
-	QRect rect(x, y, width, height);
+	QRectF rect(x, y, width, height);
 	this->painter->DrawRect(rect);
 
 	//펜 복구
@@ -892,18 +877,18 @@ void DrawVisitor::Visit(WindowTitle *windowTitle) {
 }
 
 void DrawVisitor::Visit(WindowPin *windowPin) {
-	Long x = windowPin->GetX();
-	Long y = windowPin->GetY();
-	Long width = windowPin->GetWidth();
-	Long height = windowPin->GetHeight();
-	float hhhWidth = width / 8.0; //half of half of half of width
-	float hhhHeight = height / 8.0;
+	float x = windowPin->GetX();
+	float y = windowPin->GetY();
+	float width = windowPin->GetWidth();
+	float height = windowPin->GetHeight();
+	float hhhWidth = width / 8.0F; //half of half of half of width
+	float hhhHeight = height / 8.0F;
 	QColor fillColor = windowPin->GetBackGroundColor();
 	QColor borderColor = windowPin->GetBorderColor();
 
 	QtGObjectFactory factory;
 
-	QRect fillRect(x, y, width, height);
+	QRectF fillRect(x, y, width, height);
 	GObject *brush = factory.MakeBrush(fillColor);
 	this->painter->FillRect(fillRect, *brush);
 	if (brush != 0) {
@@ -963,18 +948,18 @@ void DrawVisitor::Visit(WindowPin *windowPin) {
 }
 
 void DrawVisitor::Visit(WindowClose *windowClose) {
-	Long x = windowClose->GetX();
-	Long y = windowClose->GetY();
-	Long width = windowClose->GetWidth();
-	Long height = windowClose->GetHeight();
-	float hhhWidth = width / 8.0; //half of half of half of width
-	float hhhHeight = height / 8.0;
+	float x = windowClose->GetX();
+	float y = windowClose->GetY();
+	float width = windowClose->GetWidth();
+	float height = windowClose->GetHeight();
+	float hhhWidth = width / 8.0F; //half of half of half of width
+	float hhhHeight = height / 8.0F;
 	QColor fillColor = windowClose->GetBackGroundColor();
 	QColor borderColor = windowClose->GetBorderColor();
 
 	QtGObjectFactory factory;
 
-	QRect fillRect(x, y, width, height);
+	QRectF fillRect(x, y, width, height);
 	GObject *brush = factory.MakeBrush(fillColor);
 	this->painter->FillRect(fillRect, *brush);
 	if (brush != 0) {

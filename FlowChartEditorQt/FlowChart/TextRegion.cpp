@@ -3,7 +3,7 @@
 #include "FlowChartVisitor.h"
 #include "../GObject/QtGObjectFactory.h"
 
-TextRegion::TextRegion(Long x, Long y, Long width, Long height,
+TextRegion::TextRegion(float x, float y, float width, float height,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: NShape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
@@ -46,13 +46,13 @@ NShape* TextRegion::Clone() {
 	return new TextRegion(*this);
 }
 
-bool TextRegion::IsIncluded(QPoint point) {
+bool TextRegion::IsIncluded(QPointF point) {
 	bool ret;
 
-	QRect rect(this->x, this->y, this->x + this->width, this->y + this->height);
-	QRegion region(rect);
+	QRectF rect(this->x, this->y, this->x + this->width, this->y + this->height);
+	QRegion region(rect.toRect());
 
-	ret = region.contains(point);
+	ret = region.contains(point.toPoint());
 	
 	return ret;
 }

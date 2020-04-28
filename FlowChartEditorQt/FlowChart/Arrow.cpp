@@ -15,7 +15,7 @@
 
 #include "../GObject/QtGObjectFactory.h"
 
-Arrow::Arrow(Long x, Long y, Long width, Long height, QColor backGroundColor,
+Arrow::Arrow(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	:Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
@@ -72,8 +72,8 @@ void Arrow::Accept(FlowChartVisitor *draw) {
 }
 
 void Arrow::DrawActiveShape(GObject *painter) {
-	QPoint point1(this->x, this->y);
-	QPoint point2(this->x + this->width, this->y + this->height);
+	QPointF point1(this->x, this->y);
+	QPointF point2(this->x + this->width, this->y + this->height);
 	painter->DrawLine(point1, point2);
 }
 
@@ -82,41 +82,41 @@ NShape* Arrow::Clone() {
 }
 
 QRegion Arrow::GetRegion() {
-	QRect rect(this->x - LINETHICKNESS*2, this->y, LINETHICKNESS*2, this->height);
-	QRegion region(rect);
+	QRectF rect(this->x - LINETHICKNESS*2, this->y, LINETHICKNESS*2, this->height);
+	QRegion region(rect.toRect());
 
 	return region;
 }
 
 QRegion Arrow::GetRegion(Long thickness) {
-	QRect rect(this->x - thickness * 2, this->y, thickness * 2, this->height);
-	QRegion region(rect);
+	QRectF rect(this->x - thickness * 2, this->y, thickness * 2, this->height);
+	QRegion region(rect.toRect());
 
 	return region;
 }
 
-bool Arrow::IsIncluded(QPoint point) {
-	QRect rect(this->x - LINETHICKNESS * 2, this->y, LINETHICKNESS * 2, this->height);
-	QRegion region(rect);
+bool Arrow::IsIncluded(QPointF point) {
+	QRectF rect(this->x - LINETHICKNESS * 2, this->y, LINETHICKNESS * 2, this->height);
+	QRegion region(rect.toRect());
 	bool ret;
-	ret = region.contains(point);
+	ret = region.contains(point.toPoint());
 	return ret;
 }
 
-bool Arrow::IsIncluded(const QRect& rect) {
-	QRect regionRect(x - LINETHICKNESS * 2, y, LINETHICKNESS * 2, height);
-	QRegion region(regionRect);
+bool Arrow::IsIncluded(const QRectF& rect) {
+	QRectF regionRect(x - LINETHICKNESS * 2, y, LINETHICKNESS * 2, height);
+	QRegion region(regionRect.toRect());
 	bool ret;
-	ret = region.contains(rect);
+	ret = region.contains(rect.toRect());
 	return ret;
 }
 
-int Arrow::GetHitCode(const QPoint& point, const QRegion& region) {
+int Arrow::GetHitCode(const QPointF& point, const QRegion& region) {
 	int result = HIT_NONE;
-	if (region.contains(point)) {
+	if (region.contains(point.toPoint())) {
 		result = HIT_BODY;
 	}
-	QRect rectSelect;
+	QRectF rectSelect;
 	this->GetSelectionMarkerRect(HIT_IN, &rectSelect);
 	if (rectSelect.contains(point)) {
 		result = HIT_IN;
@@ -128,7 +128,7 @@ int Arrow::GetHitCode(const QPoint& point, const QRegion& region) {
 	return result;
 }
 
-void Arrow::GetSelectionMarkerRect(int marker, QRect *rect) {
+void Arrow::GetSelectionMarkerRect(int marker, QRectF *rect) {
 	int x;
 	int y;
 
@@ -148,23 +148,23 @@ void Arrow::GetSelectionMarkerRect(int marker, QRect *rect) {
 
 QRegion Arrow::GetSelectionMarkerAllRegion() {
 	QRegion region;
-	QRect rect;
+	QRectF rect;
 
-	Long x = this->x;
-	Long y = this->y;
+	float x = this->x;
+	float y = this->y;
 	rect.setCoords(x - 6, y - 6, 7, 7);
-	region = QRegion(rect);
+	region = QRegion(rect.toRect());
 
 	x = this->x;
 	y = this->y + this->height;
 	rect.setCoords(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
 	return region;
 }
 
 void Arrow::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	QRect rectSelect;
+	QRectF rectSelect;
 
 	QtGObjectFactory factory;
 	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
@@ -202,7 +202,7 @@ void Arrow::GetAttribute(Attribute *attribute) {
 }
 
 void Arrow::GetLine(char(*line)) {
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s\n", 
 		ID_ARROW, this->x, this->y, this->width, this->height, this->contents.GetString());
 }
 

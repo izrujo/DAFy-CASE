@@ -15,7 +15,7 @@
 
 #include "../GObject/QtGObjectFactory.h"
 
-LeftDown::LeftDown(Long x, Long y, Long width, Long height, QColor backGroundColor,
+LeftDown::LeftDown(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
@@ -76,87 +76,74 @@ NShape* LeftDown::Clone() {
 }
 
 void LeftDown::DrawActiveShape(GObject *painter) {
-	painter->DrawLine(QPoint(this->x, this->y), QPoint(this->x + this->width, this->y));
-	painter->DrawLine(QPoint(this->x + this->width, this->y), 
-		QPoint(this->x + this->width, this->y + this->height - ARROW_SIZE));
+	painter->DrawLine(QPointF(this->x, this->y), QPointF(this->x + this->width, this->y));
+	painter->DrawLine(QPointF(this->x + this->width, this->y), 
+		QPointF(this->x + this->width, this->y + this->height - ARROW_SIZE));
 
-	QPoint arrow[3];
-	arrow[0] = QPoint(this->x + this->width, this->y + this->height);
-	arrow[1] = QPoint(this->x + this->width - ARROW_SIZE / 2, this->y + this->height - ARROW_SIZE);
-	arrow[2] = QPoint(this->x + this->width + ARROW_SIZE / 2, this->y + this->height - ARROW_SIZE);
+	QPointF arrow[3];
+	arrow[0] = QPointF(this->x + this->width, this->y + this->height);
+	arrow[1] = QPointF(this->x + this->width - ARROW_SIZE / 2.0F, this->y + this->height - ARROW_SIZE);
+	arrow[2] = QPointF(this->x + this->width + ARROW_SIZE / 2.0F, this->y + this->height - ARROW_SIZE);
 	painter->DrawPolygon(arrow, 3);
 }
 
 QRegion LeftDown::GetRegion() {
-	QRect rect(this->x, this->y - LINETHICKNESS, this->width, LINETHICKNESS);
-	QRegion region(rect);
+	QRectF rect(this->x, this->y - LINETHICKNESS, this->width, LINETHICKNESS);
+	QRegion region(rect.toRect());
 
-	rect = QRect(this->x + this->width - LINETHICKNESS, this->y, 
+	rect = QRectF(this->x + this->width - LINETHICKNESS, this->y, 
 		this->width + LINETHICKNESS, this->height);
-	region = QRegion(rect);
+	region = QRegion(rect.toRect());
 
 	return region;
 }
 
 QRegion LeftDown::GetRegion(Long thickness) {
-	QRect rect(this->x, this->y - thickness,this->width, thickness);
-	QRegion region(rect);
+	QRectF rect(this->x, this->y - thickness,this->width, thickness);
+	QRegion region(rect.toRect());
 	
-	rect = QRect(this->x + this->width - thickness, this->y, 
+	rect = QRectF(this->x + this->width - thickness, this->y, 
 		this->width + thickness, this->height);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
 	return region;
 }
 
-bool LeftDown::IsIncluded(QPoint point) {
+bool LeftDown::IsIncluded(QPointF point) {
 	bool ret;
 
-	QRegion region;
-	QRect regionRect;
-	QRegion addRegion;
+	QRectF regionRect(this->x, this->y - LINETHICKNESS,
+		this->width, LINETHICKNESS);
+	QRegion region(regionRect.toRect());
 
-	regionRect.setCoords(this->x, this->y - LINETHICKNESS,
-		this->x + this->width, this->y + LINETHICKNESS);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
+		this->width + LINETHICKNESS, this->height);
+	region += QRegion(regionRect.toRect());
 
-	regionRect.setCoords(this->x + this->width - LINETHICKNESS, this->y,
-		this->x + this->width + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
-
-	ret = region.contains(point);
+	ret = region.contains(point.toPoint());
 
 	return ret;
 }
 
-bool LeftDown::IsIncluded(const QRect& rect) {
-
+bool LeftDown::IsIncluded(const QRectF& rect) {
 	bool ret;
 
-	QRegion region;
-	QRect regionRect;
-	QRegion addRegion;
+	QRectF regionRect(this->x, this->y - LINETHICKNESS,
+		this->width, LINETHICKNESS);
+	QRegion region(regionRect.toRect());
 
-	regionRect.setCoords(this->x, this->y - LINETHICKNESS,
-		this->x + this->width, this->y + LINETHICKNESS);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
+		this->width + LINETHICKNESS, this->height);
+	region += QRegion(regionRect.toRect());
 
-	regionRect.setCoords(this->x + this->width - LINETHICKNESS, this->y,
-		this->x + this->width + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
-
-	ret = region.contains(rect);
+	ret = region.contains(rect.toRect());
 
 	return ret;
 }
 
-void LeftDown::GetSelectionMarkerRect(int marker, QRect *rect) {
-	int x;
-	int y;
+void LeftDown::GetSelectionMarkerRect(int marker, QRectF *rect) {
+	float x;
+	float y;
 
 	switch (marker) {
 	case HIT_IN:
@@ -174,27 +161,27 @@ void LeftDown::GetSelectionMarkerRect(int marker, QRect *rect) {
 }
 
 QRegion LeftDown::GetSelectionMarkerAllRegion() {
-	Long x = this->x;
-	Long y = this->y;
-	QRect rect(x - 6, y - 6, 7, 7);
-	QRegion region(rect);
+	float x = this->x;
+	float y = this->y;
+	QRectF rect(x - 6, y - 6, 7, 7);
+	QRegion region(rect.toRect());
 	
 	x = this->x + this->width;
 	y = this->y + this->height;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 
 	return region;
 }
 
-int LeftDown::GetHitCode(const QPoint& point, const QRegion& region) {
+int LeftDown::GetHitCode(const QPointF& point, const QRegion& region) {
 	int result = HIT_NONE;
 
-	if (region.contains(point)) {
+	if (region.contains(point.toPoint())) {
 		result = HIT_BODY;
 	}
 
-	QRect rectSelect;
+	QRectF rectSelect;
 	this->GetSelectionMarkerRect(HIT_IN, &rectSelect);
 	if (rectSelect.contains(point)) {
 		result = HIT_IN;
@@ -209,7 +196,7 @@ int LeftDown::GetHitCode(const QPoint& point, const QRegion& region) {
 }
 
 void LeftDown::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	QRect rectSelect;
+	QRectF rectSelect;
 
 	QtGObjectFactory factory;
 	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
@@ -247,7 +234,7 @@ void LeftDown::GetAttribute(Attribute *attribute) {
 }
 
 void LeftDown::GetLine(char(*line)) {
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", ID_LEFTDOWN, 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s\n", ID_LEFTDOWN, 
 		this->x, this->y, this->width, this->height, this->contents.GetString());
 }
 

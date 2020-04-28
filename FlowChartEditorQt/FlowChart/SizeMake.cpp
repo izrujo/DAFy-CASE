@@ -59,8 +59,8 @@ void SizeMake::Create(DrawingPaper *canvas) {
 	}
 
 	// 3. 상단의 기호의 크기를 기억한다.
-	Long width;
-	Long height;
+	float width;
+	float height;
 	width = indexes[index]->GetWidth();
 	height = indexes[index]->GetHeight();
 

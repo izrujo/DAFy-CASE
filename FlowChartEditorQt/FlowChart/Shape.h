@@ -234,7 +234,7 @@ public:
 
 	// 선택 관련 
 	virtual bool IsIncluded(QPointF point) { return false; };
-	virtual bool IsIncluded(const QRect& rect) { return false; };
+	virtual bool IsIncluded(const QRectF& rect) { return false; };
 
 	virtual void Select(bool selected);
 	virtual bool IsSelected() const;

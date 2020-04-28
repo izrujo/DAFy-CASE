@@ -140,7 +140,7 @@ Long Block::Find(NShape* shape) {
 	return index;
 }
 
-Long Block::Find(QPoint point) {
+Long Block::Find(QPointF point) {
 	Long index = -1;
 	Long i = 0;
 
@@ -153,7 +153,7 @@ Long Block::Find(QPoint point) {
 	return index;
 }
 
-Long Block::Find(Long x, Long y) {
+Long Block::Find(float x, float y) {
 	QPoint point(x, y);
 	Long index = -1;
 	Long i = 0;
@@ -167,7 +167,7 @@ Long Block::Find(Long x, Long y) {
 	return index;
 }
 
-Long Block::Find(QRect rect) {
+Long Block::Find(QRectF rect) {
 	Long i = 0;
 	while (i < this->length && !(this->shapes[i]->IsIncluded(rect))) {
 		i++;

@@ -146,14 +146,13 @@ NShape* FlowChart::Clone() {
 	return new FlowChart(*this);
 }
 
-QRect FlowChart::GetRange() {
-	QRect rect;
-	rect.setCoords(0, 0, 0, 0);
+QRectF FlowChart::GetRange() {
+	QRectF rect(0.0F, 0.0F, 0.0F, 0.0F);
 
-	Long top = 0;
-	Long bottom = 0;
-	Long left = 0;
-	Long right = 0;
+	float top = 0.0F;
+	float bottom = 0.0F;
+	float left = 0.0F;
+	float right = 0.0F;
 
 	Long i = 0;
 	while (i < this->GetLength()) {

@@ -7,7 +7,7 @@ class DrawingPaper;
 
 class ToolFactory {
 public:
-	static Tool* Create(DrawingPaper *canvas, QPoint point);
+	static Tool* Create(DrawingPaper *canvas, QPointF point);
 
 protected:
 	ToolFactory();

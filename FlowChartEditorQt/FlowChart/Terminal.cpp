@@ -10,7 +10,7 @@
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
-Terminal::Terminal(Long x, Long y, Long width, Long height,
+Terminal::Terminal(float x, float y, float width, float height,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 }
@@ -70,18 +70,18 @@ NShape* Terminal::Clone() {
 }
 
 QRegion Terminal::GetRegion() {
-	Long halfHeight = (Long)this->height / 2;
+	float halfHeight = this->height / 2.0F;
 
-	QRect ellipse;
+	QRectF ellipse;
 
-	ellipse = QRect(this->x, this->y, this->height, this->height);
-	QRegion region(ellipse, QRegion::Ellipse);
+	ellipse = QRectF(this->x, this->y, this->height, this->height);
+	QRegion region(ellipse.toRect(), QRegion::Ellipse);
 	
-	ellipse = QRect(this->x + this->width - this->height, this->y, this->height, this->height);
-	region += QRegion(ellipse, QRegion::Ellipse);
+	ellipse = QRectF(this->x + this->width - this->height, this->y, this->height, this->height);
+	region += QRegion(ellipse.toRect(), QRegion::Ellipse);
 	
-	QRect rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
-	region += QRegion(rectangle, QRegion::Rectangle);
+	QRectF rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
+	region += QRegion(rectangle.toRect(), QRegion::Rectangle);
 	
 	return region;
 }

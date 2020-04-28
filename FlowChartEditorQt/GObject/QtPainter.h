@@ -9,8 +9,10 @@ class QPainter;
 class QtPainter : public Painter {
 private:
 	friend class SaveAsImageCommand;
+	friend class FCtrlAltIKeyAction;
 public:
 	QtPainter(Long width, Long height, QColor backgroundColor = QColor(255, 255, 255), Long capacity = 3);
+	QtPainter(float width, float height, QColor backgroundColor = QColor(255, 255, 255), Long capacity = 3);
 	QtPainter(const QtPainter& source);
 	virtual ~QtPainter();
 	QtPainter& operator=(const QtPainter& source);

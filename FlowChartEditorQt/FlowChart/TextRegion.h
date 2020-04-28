@@ -5,7 +5,7 @@
 
 class TextRegion : public NShape {
 public:
-	TextRegion(Long x, Long y, Long width, Long height, 
+	TextRegion(float x, float y, float width, float height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 
@@ -22,7 +22,7 @@ public:
 	virtual QRegion GetRegion() { QRegion region; return region; };
 	virtual QRegion GetRegion(Long thickness) { QRegion region; return region; };
 
-	virtual bool IsIncluded(QPoint point);
+	virtual bool IsIncluded(QPointF point);
 };
 
 #endif //_TEXTREGION_H

@@ -50,10 +50,10 @@ Label* Label::Instance(QWidget *parent)
 
 Label::Label(QWidget *parent)
 	: Notepad(parent) {
-	this->x = 0;
-	this->y = 0;
-	this->width = 0;
-	this->height = 0;
+	this->x = 0.0F;
+	this->y = 0.0F;
+	this->width = 0.0F;
+	this->height = 0.0F;
 	this->sizeController = NULL;
 	this->color = QColor(255, 255, 255);
 
@@ -62,10 +62,10 @@ Label::Label(QWidget *parent)
 
 Label::Label(String *text, QColor color, QWidget *parent)
 	: Notepad(text, parent) {
-	this->x = 0;
-	this->y = 0;
-	this->width = 0;
-	this->height = 0;
+	this->x = 0.0F;
+	this->y = 0.0F;
+	this->width = 0.0F;
+	this->height = 0.0F;
 	this->sizeController = NULL;
 	this->color = color;
 
@@ -86,7 +86,7 @@ void Label::Destroy() {
 	instance = 0;
 }
 
-void Label::Open(Long x, Long y, Long width, Long height) {
+void Label::Open(float x, float y, float width, float height) {
 	this->x = x;
 	this->y = y;
 	this->width = width;

@@ -12,7 +12,7 @@
 #pragma warning (disable : 4996)
 
 
-Preparation::Preparation(Long x, Long y, Long width, Long height, QColor backGroundColor,
+Preparation::Preparation(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
@@ -72,82 +72,82 @@ NShape* Preparation::Clone() {
 }
 
 QRegion Preparation::GetRegion() {
-	Long halfHeight = (Long)this->height / 2;
+	float halfHeight = this->height / 2;
 
-	QVector<QPoint> points(7);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y + halfHeight));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + halfHeight));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(7);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y + halfHeight));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + halfHeight));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
+	QRegion region(polygon.toPolygon());
 
 	return region;
 }
 
 QRegion Preparation::GetRegion(Long thickness) {
-	Long x = this->x - thickness;
-	Long y = this->y - thickness;
-	Long width = this->width + thickness * 2;
-	Long height = this->height + thickness * 2;
-	Long halfHeight = this->height / 2;
+	float x = this->x - thickness;
+	float y = this->y - thickness;
+	float width = this->width + thickness * 2.0F;
+	float height = this->height + thickness * 2.0F;
+	float halfHeight = this->height / 2.0F;
 
-	QVector<QPoint> points(7);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y + halfHeight));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + halfHeight));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(7);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y + halfHeight));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + halfHeight));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
+	QRegion region(polygon.toPolygon());
 
 	return region;
 }
 
-bool Preparation::IsIncluded(QPoint point) {
+bool Preparation::IsIncluded(QPointF point) {
 	bool ret;
-	Long halfHeight = (Long)this->height / 2;
+	float halfHeight = this->height / 2;
 
-	QVector<QPoint> points(7);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y + halfHeight));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + halfHeight));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(7);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y + halfHeight));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + halfHeight));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
-	ret = region.contains(point);
+	QRegion region(polygon.toPolygon());
+	ret = region.contains(point.toPoint());
 
 	return ret;
 }
 
-bool Preparation::IsIncluded(const QRect& rect) {
+bool Preparation::IsIncluded(const QRectF& rect) {
 	bool ret;
-	Long halfHeight = (Long)this->height / 2;
+	float halfHeight = this->height / 2;
 
-	QVector<QPoint> points(7);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y + halfHeight));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + halfHeight));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(7);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y + halfHeight));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + halfHeight));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
+	QRegion region(polygon.toPolygon());
 
-	ret = region.contains(rect);
+	ret = region.contains(rect.toRect());
 
 	return ret;
 }
@@ -156,10 +156,10 @@ void Preparation::GetAttribute(Attribute *attribute) {
 	attribute->vertexIn = 'Y';
 	attribute->vertexOut = 'Y';
 
-	attribute->pointIn.setX(this->x + this->width / 2);
+	attribute->pointIn.setX(this->x + this->width / 2.0F);
 	attribute->pointIn.setY(this->y);
 
-	attribute->pointOut.setX(this->x + this->width / 2);
+	attribute->pointOut.setX(this->x + this->width / 2.0F);
 	attribute->pointOut.setY(this->y + this->height);
 }
 
@@ -167,7 +167,7 @@ void Preparation::GetLine(char(*line)) {
 	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s\n", 
 		ID_PREPARATION, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 

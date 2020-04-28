@@ -22,7 +22,7 @@
 ToolFactory::ToolFactory() {
 }
 
-Tool* ToolFactory::Create(DrawingPaper *canvas, QPoint point) {
+Tool* ToolFactory::Create(DrawingPaper *canvas, QPointF point) {
 	Tool *tool = 0;
 	NShape *shape;
 	FlowChartEditor* editor;
@@ -60,21 +60,11 @@ Tool* ToolFactory::Create(DrawingPaper *canvas, QPoint point) {
 			FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
 			holdA4Paper->Accept(zoomVisitor);
 
-			Long quotient;
-			Long remainder;
+			QPointF currentReal(point.x(), point.y());
+			QPointF currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
-			QPoint currentReal(point.x(), point.y());
-			QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
-
-			quotient = currentVirtual.x() * 100 / canvas->zoom->GetRate();
-			remainder = currentVirtual.x() * 100 % canvas->zoom->GetRate();
-			if (remainder >= 50) quotient++;
-			currentVirtual.setX(quotient);
-
-			quotient = currentVirtual.y() * 100 / canvas->zoom->GetRate();
-			remainder = currentVirtual.y() * 100 % canvas->zoom->GetRate();
-			if (remainder >= 50) quotient++;
-			currentVirtual.setY(quotient);
+			currentVirtual.setX(currentVirtual.x() * 100 / canvas->zoom->GetRate());
+			currentVirtual.setY(currentVirtual.y() * 100 / canvas->zoom->GetRate());
 
 			currentReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(currentVirtual);
 

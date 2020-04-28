@@ -18,8 +18,8 @@ File::File() {}
 
 File::~File() {}
 
-Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
-	QFile file(QString::fromLocal8Bit(fileName));
+Long File::Load(DrawingPaper *canvas, QString fileName) {
+	QFile file(fileName);
 	String lineRead;
 	//char line[513];
 
@@ -49,8 +49,8 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 				contents = String(tokenizer.GetAt(7));
 			}
 			contents.Replace('\r', '\n');
-			shape = creator.Create(atoi(tokenizer.GetAt(0)), atoi(tokenizer.GetAt(1)), atoi(tokenizer.GetAt(2)), atoi(tokenizer.GetAt(3)),
-				atoi(tokenizer.GetAt(4)), atoi(tokenizer.GetAt(5)), atoi(tokenizer.GetAt(6)), contents);
+			shape = creator.Create(atof(tokenizer.GetAt(0)), atof(tokenizer.GetAt(1)), atof(tokenizer.GetAt(2)), atof(tokenizer.GetAt(3)),
+				atof(tokenizer.GetAt(4)), atof(tokenizer.GetAt(5)), atof(tokenizer.GetAt(6)), contents);
 			canvas->flowChart->Attach(shape);
 
 			//=====================intellisense========================
@@ -71,8 +71,8 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 	return count;
 }
 
-Long File::Save(DrawingPaper *canvas, const char(*fileName)) {
-	QFile file(QString::fromLocal8Bit(fileName));
+Long File::Save(DrawingPaper *canvas, QString fileName) {
+	QFile file(fileName);
 	Long i = 0;
 	Long end;
 	Long count = 0;

@@ -8,9 +8,9 @@ public:
 	static MovingTool* Instance();
 	static void Destroy();
 
-	virtual void OnLButtonDown( DrawingPaper *canvas, QPoint point );
-	virtual void OnMouseMove( DrawingPaper *canvas, QPoint point );
-	virtual void OnLButtonUp( DrawingPaper *canvas, QPoint point );
+	virtual void OnLButtonDown( DrawingPaper *canvas, QPointF point );
+	virtual void OnMouseMove( DrawingPaper *canvas, QPointF point );
+	virtual void OnLButtonUp( DrawingPaper *canvas, QPointF point );
 
 protected:
 	MovingTool();

@@ -12,7 +12,7 @@
 
 class Join : public Line {
 public:
-	Join(Long x, Long y, Long width, Long height, Long height2,
+	Join(float x, float y, float width, float height, float height2,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~Join();
@@ -35,43 +35,43 @@ public:
 	virtual QRegion GetRegion(Long thickness);
 	virtual QRegion GetSelectionMarkerAllRegion();
 
-	void ReSize(Long width, Long height, Long height2);
+	void ReSize(float width, float height, float height2);
 
-	virtual bool IsIncluded(QPoint point);
-	virtual bool IsIncluded(const QRect& rect);
+	virtual bool IsIncluded(QPointF point);
+	virtual bool IsIncluded(const QRectF& rect);
 
-	Long GetHeight2() const;
+	float GetHeight2() const;
 
 	virtual void Copy(NShape *object);
-	virtual void GetSelectionMarkerRect(int marker, QRect *rect);
-	virtual int GetHitCode(const QPoint& point, const QRegion& region);
+	virtual void GetSelectionMarkerRect(int marker, QRectF *rect);
+	virtual int GetHitCode(const QPointF& point, const QRegion& region);
 
 	virtual void GetLine(char(*line));
 	virtual bool Identify(SHAPE identify);
 	virtual bool IsStyle(Long style);
 
-	virtual Long CenterOfGravityY() const;
-	virtual Long CenterOfGravityX() const;
+	virtual float CenterOfGravityY() const;
+	virtual float CenterOfGravityX() const;
 
 	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController);
 	void GetAttribute(Attribute *attribute);
 private:
-	Long height2;
+	float height2;
 };
 
 inline bool Join::Identify(SHAPE identify) {
 	return (identify == LINE || identify == JOIN) ? (true) : (false);
 }
 
-inline Long Join::GetHeight2() const {
+inline float Join::GetHeight2() const {
 	return this->height2;
 }
 
-inline Long Join::CenterOfGravityY() const {
+inline float Join::CenterOfGravityY() const {
 	return (this->height >= 0) ? (this->y + this->height) : (this->y);
 }
 
-inline Long Join::CenterOfGravityX() const {
+inline float Join::CenterOfGravityX() const {
 	//return ( height >= 0 )?( x ):( x + width);
 	return this->x + this->width / 2;
 }

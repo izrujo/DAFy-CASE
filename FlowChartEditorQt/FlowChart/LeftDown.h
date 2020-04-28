@@ -12,7 +12,7 @@
 
 class LeftDown : public Line {
 public:
-	LeftDown(Long x, Long y, Long width, Long height,
+	LeftDown(float x, float y, float width, float height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~LeftDown();
@@ -35,17 +35,17 @@ public:
 	virtual QRegion GetRegion(Long thickness);
 	virtual QRegion GetSelectionMarkerAllRegion();
 
-	virtual bool IsIncluded(QPoint point);
-	virtual bool IsIncluded(const QRect& rect);
+	virtual bool IsIncluded(QPointF point);
+	virtual bool IsIncluded(const QRectF& rect);
 
-	virtual void GetSelectionMarkerRect(int marker, QRect *rect);
-	virtual int GetHitCode(const QPoint& point, const QRegion& region);
+	virtual void GetSelectionMarkerRect(int marker, QRectF *rect);
+	virtual int GetHitCode(const QPointF& point, const QRegion& region);
 
 	virtual void GetLine(char(*line));
 	virtual bool Identify(SHAPE identify);
 	virtual bool IsStyle(Long style);
 
-	virtual Long CenterOfGravityX() const;
+	virtual float CenterOfGravityX() const;
 
 	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController);
 
@@ -56,7 +56,7 @@ inline bool LeftDown::Identify(SHAPE identify) {
 	return (identify == LINE || identify == LEFTDOWN) ? (true) : (false);
 }
 
-inline Long LeftDown::CenterOfGravityX() const {
+inline float LeftDown::CenterOfGravityX() const {
 	return this->x;
 }
 

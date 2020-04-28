@@ -12,7 +12,7 @@
 
 class RepeatFalse : public Line {
 public:
-	RepeatFalse(Long x, Long y, Long width, Long height, Long width2 = REPEATFALSE_WIDTH, Long height2 = REPEATFALSE_HEIGHT,
+	RepeatFalse(float x, float y, float width, float height, float width2 = REPEATFALSE_WIDTH, float height2 = REPEATFALSE_HEIGHT,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~RepeatFalse();
@@ -35,53 +35,53 @@ public:
 	virtual QRegion GetRegion(Long thickness);
 	virtual QRegion GetSelectionMarkerAllRegion();
 
-	void ReSize(Long width, Long height, Long width2, Long height2);
+	void ReSize(float width, float height, float width2, float height2);
 
-	virtual bool IsIncluded(QPoint point);
-	virtual bool IsIncluded(const QRect& rect);
+	virtual bool IsIncluded(QPointF point);
+	virtual bool IsIncluded(const QRectF& rect);
 
-	Long GetWidth2() const;
-	Long GetHeight2() const;
+	float GetWidth2() const;
+	float GetHeight2() const;
 
 	virtual void Copy(NShape *object);
-	virtual void GetSelectionMarkerRect(int marker, QRect *rect);
-	virtual int GetHitCode(const QPoint& point, const QRegion& region);
+	virtual void GetSelectionMarkerRect(int marker, QRectF *rect);
+	virtual int GetHitCode(const QPointF& point, const QRegion& region);
 
 	virtual void GetLine(char(*line));
 	virtual bool Identify(SHAPE identify);
 	virtual bool IsStyle(Long style);
 
-	virtual Long CenterOfGravityY() const;
-	virtual Long CenterOfGravityX() const;
+	virtual float CenterOfGravityY() const;
+	virtual float CenterOfGravityX() const;
 
 	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController);
 	void GetAttribute(Attribute *attribute);
 
 private:
-	Long width2;
-	Long height2;
+	float width2;
+	float height2;
 };
 
 inline bool RepeatFalse::Identify(SHAPE identify) {
 	return (identify == LINE || identify == REPEATFALSE) ? (true) : (false);
 }
 
-inline Long RepeatFalse::GetWidth2() const
+inline float RepeatFalse::GetWidth2() const
 {
 	return this->width2;
 }
 
-inline Long RepeatFalse::GetHeight2() const
+inline float RepeatFalse::GetHeight2() const
 {
 	return this->height2;
 }
 
-inline Long RepeatFalse::CenterOfGravityY() const
+inline float RepeatFalse::CenterOfGravityY() const
 {
-	return this->y + this->height2 / 2;
+	return this->y + this->height2 / 2.0F;
 }
 
-inline Long RepeatFalse::CenterOfGravityX() const {
+inline float RepeatFalse::CenterOfGravityX() const {
 	return this->x + this->width;
 }
 

@@ -88,7 +88,7 @@ void SaveCommand::Execute() {
 		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 		if (isOpen == true) {
 			this->editor->sketchBook->ModifyFileOpenPath(fileName);
-			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName);
 
 			Long length = fileName.length();
 			Long i = length - 1;
@@ -101,14 +101,14 @@ void SaveCommand::Execute() {
 			fileName.insert(0, ' ');
 
 			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-			Long width = 186;
+			float width = 186.0F;
 			if (fileName.length() > 10) {
 				width = width + (fileName.length() - 10) * 10;
 				canvasTitle->ReSize(width, canvasTitle->GetHeight());
 				editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
 				//캔버스 닫는거 옮기기
-				Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-				Long windowCloseY = canvasTitle->GetY() + 4;
+				float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+				float windowCloseY = canvasTitle->GetY() + 4;
 				editor->windowClose->Move(windowCloseX, windowCloseY);
 			}
 
@@ -154,7 +154,7 @@ void SaveAsCommand::Execute() {
 	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 	if (isOpen == true) {
 		this->editor->sketchBook->ModifyFileOpenPath(fileName);
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName);
 
 		Long length = fileName.length();
 		Long i = length - 1;
@@ -167,14 +167,14 @@ void SaveAsCommand::Execute() {
 		fileName.insert(0, ' ');
 
 		//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-		Long width = 186;
+		float width = 186.0F;
 		if (fileName.length() > 10) {
 			width = width + (fileName.length() - 10) * 10;
 			canvasTitle->ReSize(width, canvasTitle->GetHeight());
 			editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
 			//캔버스 닫는거 옮기기
-			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-			Long windowCloseY = canvasTitle->GetY() + 4;
+			float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			float windowCloseY = canvasTitle->GetY() + 4;
 			editor->windowClose->Move(windowCloseX, windowCloseY);
 		}
 
@@ -215,7 +215,6 @@ void OpenCommand::Execute() {
 
 		DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 		//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
-		Long right = canvas->x() + canvas->width();
 		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
 			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
 			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
@@ -223,7 +222,7 @@ void OpenCommand::Execute() {
 				new Memory(*canvas->memoryController->GetRedoMemory()));
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
-			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName.toLocal8Bit().data());
+			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
 			//경로를 포함한 파일이름을 수정해서 딱 파일이름만 남도록 처리
 			Long length = fileName.length();
 			Long i = length - 1;
@@ -236,7 +235,7 @@ void OpenCommand::Execute() {
 			fileName_.remove(fileName_.length() - 4, 4);
 			fileName_.insert(0, ' ');
 			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-			Long width = 186;
+			float width = 186.0F;
 			if (fileName_.length() > 10) {
 				width = width + (fileName_.length() - 10) * 10;
 			}
@@ -252,8 +251,8 @@ void OpenCommand::Execute() {
 			this->editor->sketchBook->Fold(QPoint(canvasTitle->GetX(), canvasTitle->GetY()));
 			this->editor->sketchBook->Update();
 			//캔버스 닫는거 옮기기
-			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-			Long windowCloseY = canvasTitle->GetY() + 4;
+			float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			float windowCloseY = canvasTitle->GetY() + 4;
 			editor->windowClose->Move(windowCloseX, windowCloseY);
 
 			//순서도는 Load()에 의해 이미 바뀌어 있음.
@@ -476,8 +475,8 @@ void SaveAsImageCommand::Execute() {
 		painter->SelectObject(*(font->Clone()));
 		painter->Update();
 
-		Long x;
-		Long y;
+		float x;
+		float y;
 		Long i;
 		for (i = 0; i < flowChart->GetLength(); i++) {
 			x = flowChart->GetAt(i)->GetX();
@@ -526,24 +525,24 @@ void DrawingModeCommand::Execute() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWON;
 
 		NShape *terminal = dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(0);
-		Long x = terminal->GetX() - 5;
-		Long y = terminal->GetY() - 5;
-		Long size = 20;
+		float x = terminal->GetX() - 5;
+		float y = terminal->GetY() - 5;
+		float size = 20.0F;
 		QColor backgroundColor(0, 0, 0);
 		QColor borderColor(255, 255, 255);
 
 		NShape *one = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("1"));
-		y += 70;
+		y += 70.0F;
 		NShape *two = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("2"));
-		y += 70;
+		y += 70.0F;
 		NShape *three = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("3"));
-		y += 70;
+		y += 70.0F;
 		NShape *four = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("4"));
-		y += 70;
+		y += 70.0F;
 		NShape *five = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("5"));
-		y += 70;
+		y += 70.0F;
 		NShape *six = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("6"));
-		y += 70;
+		y += 70.0F;
 		NShape *seven = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("7"));
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(one);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(two);
@@ -954,13 +953,13 @@ void PageSetCommand::Execute() {
 		//printer = dlg.printer(); //was passsed 라고 언급되어있음.
 		printer->getPageMargins(&left, &top, &right, &bottom, QPrinter::Millimeter);
 
-		Long paperWidth = a4Paper->GetWidth();
-		Long paperHeight = a4Paper->GetHeight();
+		float paperWidth = a4Paper->GetWidth();
+		float paperHeight = a4Paper->GetHeight();
 
-		Long leftMargin = left / 100 * paperWidth / 210;
-		Long rightMargin = right / 100 * paperWidth / 210;
-		Long topMargin = top / 100 * paperHeight / 297;
-		Long bottomMargin = bottom / 100 * paperHeight / 297;
+		float leftMargin = left / 100 * paperWidth / 210;
+		float rightMargin = right / 100 * paperWidth / 210;
+		float topMargin = top / 100 * paperHeight / 297;
+		float bottomMargin = bottom / 100 * paperHeight / 297;
 
 		dynamic_cast<A4Paper*>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 	}

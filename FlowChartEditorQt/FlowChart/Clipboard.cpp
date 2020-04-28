@@ -32,7 +32,7 @@ Long Clipboard::Paste(DrawingPaper *canvas) {
 	canvas->flowChart->UnSelectAll();
 	canvas->mode = DrawingPaper::IDLE;
 	for (Long i = 0; i < buffer->GetLength(); i++) {
-		Long x, y;
+		float x, y;
 		shape = buffer->GetAt(i);
 		x = shape->GetX();
 		y = shape->GetY();
