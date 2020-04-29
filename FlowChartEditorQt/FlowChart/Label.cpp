@@ -100,23 +100,7 @@ void Label::resizeEvent(QResizeEvent *event) {
 void Label::keyPressEvent(QKeyEvent *event) {
 	Notepad::keyPressEvent(event);
 	int nChar = event->key();
-	/* 한 칸 띄우기 없음
-	//특수문자면 한칸 띄우는데 예외들 : ' " > <  . !
-	if (((nChar >= 33 && nChar <= 47) || (nChar >= 58 && nChar <= 64)
-		|| (nChar >= 91 && nChar <= 96) || (nChar >= 123 && nChar <= 126))
-		&& (nChar != 34 && nChar != 39 && nChar != 60 && nChar != 62 && nChar != 33 /*&& nChar != 46)) { //여기가 예외인 특수기호들
-		GlyphFactory glyphFactory;
-		Glyph *glyph = glyphFactory.Make(" ");
-		Long index = this->current->GetCurrent();
 
-		if (index >= this->current->GetLength()) {
-			this->current->Add(glyph);
-		}
-		else {
-			this->current->Add(index, glyph);
-		}
-	}
-	*/
 	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
 	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);

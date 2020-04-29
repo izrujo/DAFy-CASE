@@ -120,8 +120,6 @@
     <ClCompile Include="FlowChart\RepeatFalse.cpp" />
     <ClCompile Include="FlowChart\RepeatTrue.cpp" />
     <ClCompile Include="FlowChart\ResizingTool.cpp" />
-    <ClCompile Include="FlowChart\ResolutionConverter.cpp" />
-    <ClCompile Include="FlowChart\ResolutionVisitor.cpp" />
     <ClCompile Include="FlowChart\RightDown.cpp" />
     <ClCompile Include="FlowChart\RightDownjoin.cpp" />
     <ClCompile Include="FlowChart\Scroll.cpp" />
@@ -255,8 +253,6 @@
     <ClInclude Include="FlowChart\RepeatFalse.h" />
     <ClInclude Include="FlowChart\RepeatTrue.h" />
     <ClInclude Include="FlowChart\ResizingTool.h" />
-    <ClInclude Include="FlowChart\ResolutionConverter.h" />
-    <ClInclude Include="FlowChart\ResolutionVisitor.h" />
     <ClInclude Include="FlowChart\RightDown.h" />
     <ClInclude Include="FlowChart\RightDownJoin.h" />
     <QtMoc Include="FlowChart\Scroll.h" />

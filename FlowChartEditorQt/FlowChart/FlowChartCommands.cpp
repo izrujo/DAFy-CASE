@@ -116,7 +116,7 @@ void SaveCommand::Execute() {
 		}
 	}
 	else {
-		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileOpenPath.toLocal8Bit().data());
+		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileOpenPath);
 	}
 }
 

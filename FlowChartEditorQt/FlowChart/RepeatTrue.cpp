@@ -141,8 +141,8 @@ QRegion RepeatTrue::GetRegion(Long thickness) {
 }
 
 void RepeatTrue::ReSize(float width, float height, float width2, float height2) {
-	width = width;
-	height = height;
+	this->width = width;
+	this->height = height;
 	this->width2 = width2;
 	this->height2 = height2;
 }
@@ -321,7 +321,7 @@ void RepeatTrue::GetAttribute(Attribute *attribute) {
 }
 
 void RepeatTrue::GetLine(char(*line)) {
-	sprintf(line, "%d\t%f\t%f\t%f\t%f\t%f\t%f\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t%f\t%f\t%s;\n", 
 		ID_REPEATTRUE, this->x, this->y, this->width, this->height, this->width2, this->height2, 
 		this->contents.GetString());
 }

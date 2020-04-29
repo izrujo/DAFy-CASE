@@ -238,7 +238,7 @@ void RightDown::GetAttribute(Attribute *attribute) {
 }
 
 void RightDown::GetLine(char(*line)) {
-	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", 
 		ID_RIGHTDOWN, this->x, this->y, this->width, this->height, this->contents.GetString());
 }
 

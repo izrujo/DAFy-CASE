@@ -60,13 +60,13 @@ void SizeController::Update() {
 
 	QRectF rect(shapeX - 5, shapeY - 5, shapeWidth + 5, shapeHeight + 5);
 	if (width > shapeWidth) {
-		rect.right = shapeX + width + 5;
+		rect.setRight(shapeX + width + 5);
 
 		realLabelWidth = width * 100 / rate;
 		realShape->ReSize(realHeight + realLabelWidth, realHeight);
 	}
 	if (height > shapeHeight) {
-		rect.bottom = shapeY + height + 5;
+		rect.setBottom(shapeY + height + 5);
 	
 		realLabelHeight = height * 100 / rate;
 		realShape->ReSize(realWidth, realLabelHeight);

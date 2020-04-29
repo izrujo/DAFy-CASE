@@ -21,10 +21,18 @@ public:
 	Line(const Line& source);
 	Line& operator =(const Line& source);
 
+	void ChangeArrowSize(float arrowSize);
+
 	virtual bool IsStyle(Long style);
+	float GetArrowSize() const;
+protected:
+	float arrowSize;
 };
 
 inline bool Line::IsStyle(Long style) {
 	return ((style >> 1) % 2) ? (true) : (false);
+}
+inline float Line::GetArrowSize() const {
+	return this->arrowSize;
 }
 #endif// _LINE_H

@@ -24,9 +24,9 @@ public:
 	void SizeMake(DrawingPaper *canvas);
 	void IntervalMake(DrawingPaper *canvas);
 
-	virtual void OnLButtonDown(DrawingPaper *canvas, QPoint point) = 0;
-	virtual void OnMouseMove(DrawingPaper *canvas, QPoint point) = 0;
-	virtual void OnLButtonUp(DrawingPaper *canvas, QPoint point) = 0;
+	virtual void OnLButtonDown(DrawingPaper *canvas, QPointF point) = 0;
+	virtual void OnMouseMove(DrawingPaper *canvas, QPointF point) = 0;
+	virtual void OnLButtonUp(DrawingPaper *canvas, QPointF point) = 0;
 
 protected:
 	Tool();

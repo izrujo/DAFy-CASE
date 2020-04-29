@@ -234,7 +234,7 @@ void LeftDown::GetAttribute(Attribute *attribute) {
 }
 
 void LeftDown::GetLine(char(*line)) {
-	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s\n", ID_LEFTDOWN, 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", ID_LEFTDOWN, 
 		this->x, this->y, this->width, this->height, this->contents.GetString());
 }
 

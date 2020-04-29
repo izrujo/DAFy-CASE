@@ -124,7 +124,7 @@ void Process::GetLine(char(*line)) {
 	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", 
 		ID_PROCESS, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 

@@ -129,7 +129,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	width = repeatTrue->GetX() - x;
 	width2 = bufferRange.right() - x + 20;
 	height2 = repeatTrue->GetY() + dynamic_cast<RepeatTrue *>(repeatTrue)->GetHeight2() - y + 35;
-	height = height2 + 20;
+	height = height2 + 40;
 
 	shape = new RepeatFalse(x, y, width, height, width2, height2, 
 		QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));

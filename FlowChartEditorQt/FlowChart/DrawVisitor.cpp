@@ -305,18 +305,18 @@ void DrawVisitor::Visit(Arrow *element) {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	this->painter->DrawLine(QPointF(x, y), QPointF(x, y + height - 4));
+	this->painter->DrawLine(QPointF(x, y), QPointF(x, y + height - 6));
 
 	GObject *brush = factory.MakeBrush(QColor(166, 166, 166));
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	float endLength = height / 4.0F;
+	float arrowSize = element->GetArrowSize();
 	QPointF arrow[4];
-	arrow[0] = QPointF(x - endLength / 2.0F, y + height - endLength);
+	arrow[0] = QPointF(x - arrowSize / 2.0F, y + height - arrowSize);
 	arrow[1] = QPointF(x, y + height);
-	arrow[2] = QPointF(x + endLength / 2.0F, y + height - endLength);
-	arrow[3] = QPointF(x, y + height - endLength / 3.0F);
+	arrow[2] = QPointF(x + arrowSize / 2.0F, y + height - arrowSize);
+	arrow[3] = QPointF(x, y + height - arrowSize / 3.0F);
 	this->painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
@@ -332,7 +332,7 @@ void DrawVisitor::Visit(Arrow *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 
-	QRectF rect(x + endLength / 2.0F, y, height * 2.0F, height);
+	QRectF rect(x + arrowSize / 2.0F, y, height * 2.0F, height);
 	this->painter->DrawTextQ(rect, Qt::AlignLeft | Qt::AlignVCenter, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
@@ -359,19 +359,19 @@ void DrawVisitor::Visit(LeftDown *element) {
 	this->painter->Update();
 
 	painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
-	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 4));
+	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 6));
 
-	GObject *brush = factory.MakeBrush(element->GetBorderColor(), Qt::SolidPattern);
+	GObject *brush = factory.MakeBrush(QColor(166, 166, 166));
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	float endLength = height / 4.0F;
+	float arrowSize = element->GetArrowSize();
 	QPointF arrow[4];
-	arrow[0] = QPointF(x + width - endLength / 2.0F, y + height - endLength);
+	arrow[0] = QPointF(x + width - arrowSize / 2.0F, y + height - arrowSize);
 	arrow[1] = QPointF(x + width, y + height);
-	arrow[2] = QPointF(x + width + endLength / 2.0F, y + height - endLength);
-	arrow[3] = QPointF(x + width, y + height - endLength / 3.0F);
-	painter->DrawPolygon(arrow, 4);
+	arrow[2] = QPointF(x + width + arrowSize / 2.0F, y + height - arrowSize);
+	arrow[3] = QPointF(x + width, y + height - arrowSize / 3.0F);
+	this->painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->SelectObject(*oldBrush);
@@ -413,19 +413,19 @@ void DrawVisitor::Visit(RightDown *element) {
 	this->painter->Update();
 
 	painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
-	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 4));
+	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 6));
 
 	GObject *brush = factory.MakeBrush(QColor(166, 166, 166), Qt::SolidPattern);
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	float endLength = height / 4.0F;
+	float arrowSize = element->GetArrowSize();
 	QPointF arrow[4];
-	arrow[0] = QPointF(x + width - endLength / 2.0F, y + height - endLength);
+	arrow[0] = QPointF(x + width - arrowSize / 2.0F, y + height - arrowSize);
 	arrow[1] = QPointF(x + width, y + height);
-	arrow[2] = QPointF(x + width + endLength / 2.0F, y + height - endLength);
-	arrow[3] = QPointF(x + width, y + height - endLength / 3.0F);
-	painter->DrawPolygon(arrow, 4);
+	arrow[2] = QPointF(x + width + arrowSize / 2.0F, y + height - arrowSize);
+	arrow[3] = QPointF(x + width, y + height - arrowSize / 3.0F);
+	this->painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->SelectObject(*oldBrush);
@@ -565,13 +565,13 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	float endLength = height2/4.0F;
+	float arrowSize = element->GetArrowSize();
 	QPointF arrow[4];
-	arrow[0] = QPointF(x + width - endLength, y + height - endLength / 2.0F);
+	arrow[0] = QPointF(x + width - arrowSize, y + height - arrowSize / 2.0F);
 	arrow[1] = QPointF(x + width, y + height);
-	arrow[2] = QPointF(x + width - endLength, y + height + endLength / 2.0F);
-	arrow[3] = QPointF(x + width - endLength / 3.0F, y + height);
-	painter->DrawPolygon(arrow, 4);
+	arrow[2] = QPointF(x + width - arrowSize, y + height + arrowSize / 2.0F);
+	arrow[3] = QPointF(x + width - arrowSize / 3.0F, y + height);
+	this->painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->SelectObject(*oldBrush);
@@ -623,13 +623,13 @@ void DrawVisitor::Visit(RepeatFalse *element) {
 	GObject *oldBrush = painter->SelectObject(*brush);
 	this->painter->Update();
 
-	float endLength = (height - height2) / 4.0F;
+	float arrowSize = element->GetArrowSize();
 	QPointF arrow[4];
-	arrow[0] = QPointF(x + width - endLength / 2.0F, y + height - endLength);
+	arrow[0] = QPointF(x + width - arrowSize / 2.0F, y + height - arrowSize);
 	arrow[1] = QPointF(x + width, y + height);
-	arrow[2] = QPointF(x + width + endLength / 2.0F, y + height - endLength);
-	arrow[3] = QPointF(x + width, y + height - endLength / 2.0F);
-	painter->DrawPolygon(arrow, 4);
+	arrow[2] = QPointF(x + width + arrowSize / 2.0F, y + height - arrowSize);
+	arrow[3] = QPointF(x + width, y + height - arrowSize / 2.0F);
+	this->painter->DrawPolygon(arrow, 4);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->SelectObject(*oldBrush);

@@ -12,7 +12,6 @@
 #include "RepeatFalse.h"
 #include "Join.h"
 #include "A4Paper.h"
-#include "ResolutionVisitor.h"
 #include "../GObject/QtPainter.h"
 #include "../GObject/QtGObjectFactory.h"
 
