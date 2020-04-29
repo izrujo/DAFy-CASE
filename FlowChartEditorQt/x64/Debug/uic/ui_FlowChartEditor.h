@@ -45,7 +45,7 @@ namespace FlowChartEditorUi {
 } // namespace FlowChartEditorUi
 
 namespace FlowChartEditorUi {
-	namespace Ui {
+	namespace Ui {	
 		class FlowChartEditorClass : public Ui_FlowChartEditorClass {};
 	} // namespace Ui
 } // namespace FlowChartEditorUi
