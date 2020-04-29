@@ -1,7 +1,7 @@
 #include "CoordinateConverter.h"
 
 CoordinateConverter::CoordinateConverter() {
-	this->zeroPoint = QPoint(0, 0);
+	this->zeroPoint = QPointF(0.0F, 0.0F);
 }
 
 CoordinateConverter::CoordinateConverter(const CoordinateConverter& source) {
@@ -19,25 +19,25 @@ CoordinateConverter& CoordinateConverter::operator=(const CoordinateConverter& s
 }
 
 void CoordinateConverter::Update(NShape *a4Paper) {
-	Long x = a4Paper->GetX();
-	Long y = a4Paper->GetY();
-	Long width = a4Paper->GetWidth();
-	Long height = a4Paper->GetHeight();
+	float x = a4Paper->GetX();
+	float y = a4Paper->GetY();
+	float width = a4Paper->GetWidth();
+	float height = a4Paper->GetHeight();
 
 	this->zeroPoint.setX(x + width / 2);
 	this->zeroPoint.setY(y + height / 2);
 }
 
-QPoint CoordinateConverter::ConvertVirtual(QPoint realPoint) {
-	QPoint virtualPoint;
+QPointF CoordinateConverter::ConvertVirtual(QPointF realPoint) {
+	QPointF virtualPoint;
 	virtualPoint.setX(realPoint.x() - this->zeroPoint.x());
 	virtualPoint.setY((realPoint.y() - this->zeroPoint.y()) * -1);
 
 	return virtualPoint;
 }
 
-QPoint CoordinateConverter::ConvertReal(QPoint virtualPoint) {
-	QPoint realPoint;
+QPointF CoordinateConverter::ConvertReal(QPointF virtualPoint) {
+	QPointF realPoint;
 	realPoint.setX(virtualPoint.x() + this->zeroPoint.x());
 	realPoint.setY(virtualPoint.y() * -1 + this->zeroPoint.y());
 

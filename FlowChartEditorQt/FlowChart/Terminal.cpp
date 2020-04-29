@@ -10,7 +10,7 @@
 #include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
-Terminal::Terminal(Long x, Long y, Long width, Long height,
+Terminal::Terminal(float x, float y, float width, float height,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 }
@@ -70,92 +70,78 @@ NShape* Terminal::Clone() {
 }
 
 QRegion Terminal::GetRegion() {
-	Long halfHeight = (Long)this->height / 2;
+	float halfHeight = this->height / 2.0F;
 
-	QRect ellipse;
+	QRectF ellipse;
 
-	ellipse = QRect(this->x, this->y, this->height, this->height);
-	QRegion region(ellipse, QRegion::Ellipse);
+	ellipse = QRectF(this->x, this->y, this->height, this->height);
+	QRegion region(ellipse.toRect(), QRegion::Ellipse);
 	
-	ellipse = QRect(this->x + this->width - this->height, this->y, this->height, this->height);
-	region += QRegion(ellipse, QRegion::Ellipse);
+	ellipse = QRectF(this->x + this->width - this->height, this->y, this->height, this->height);
+	region += QRegion(ellipse.toRect(), QRegion::Ellipse);
 	
-	QRect rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
-	region += QRegion(rectangle, QRegion::Rectangle);
+	QRectF rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
+	region += QRegion(rectangle.toRect(), QRegion::Rectangle);
 	
 	return region;
 }
 
 
 QRegion Terminal::GetRegion(Long thickness) {
-	Long x = this->x - thickness;
-	Long y = this->y - thickness;
-	Long width = this->width + thickness * 2;
-	Long height = this->height + thickness * 2;
-	Long halfHeight = height / 2;
+	float x = this->x - thickness;
+	float y = this->y - thickness;
+	float width = this->width + thickness * 2;
+	float height = this->height + thickness * 2;
+	float halfHeight = height / 2;
 
-	QRect ellipse;
+	QRectF ellipse;
 
-	ellipse = QRect(x, y, height, height);
-	QRegion region(ellipse, QRegion::Ellipse);
+	ellipse = QRectF(x, y, height, height);
+	QRegion region(ellipse.toRect(), QRegion::Ellipse);
 	
-	ellipse = QRect(x + width - height, y, height, height);
-	region += QRegion(ellipse, QRegion::Ellipse);
+	ellipse = QRectF(x + width - height, y, height, height);
+	region += QRegion(ellipse.toRect(), QRegion::Ellipse);
 	
-	QRect rectangle(x + halfHeight, y, width - height, height);
-	region += QRegion(rectangle, QRegion::Rectangle);
+	QRectF rectangle(x + halfHeight, y, width - height, height);
+	region += QRegion(rectangle.toRect(), QRegion::Rectangle);
 	
 	return region;
 }
 
-bool Terminal::IsIncluded(QPoint point) {
+bool Terminal::IsIncluded(QPointF point) {
 	bool ret;
 	
-	Long halfHeight = (Long)this->height / 2;
+	float halfHeight = this->height / 2;
 
-	QRect ellipse;
-	QRegion addRegion;
-	QRegion region;
+	QRectF ellipse(this->x, this->y, this->height, this->height);
+	QRegion region(ellipse.toRect(), QRegion::Ellipse);
 
-	ellipse = QRect(this->x, this->y, this->height, this->height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	region += addRegion;
+	ellipse = QRectF(this->x + this->width - this->height, this->y, this->height, this->height);
+	region += QRegion(ellipse.toRect(), QRegion::Ellipse);
 
-	ellipse = QRect(this->x + this->width - this->height, this->y, this->height, this->height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	region += addRegion;
+	QRectF rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
+	region += QRegion(rectangle.toRect(), QRegion::Rectangle);
 
-	QRect rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
-	addRegion = QRegion(rectangle, QRegion::Rectangle);
-	region += addRegion;
-
-	ret = region.contains(point);
+	ret = region.contains(point.toPoint());
 
 	return ret;
 }
 
-bool Terminal::IsIncluded(const QRect& rect) {
+bool Terminal::IsIncluded(const QRectF& rect) {
 	bool ret;
 
-	Long halfHeight = (Long)this->height / 2;
+	float halfHeight = this->height / 2;
 
-	QRect ellipse;
-	QRegion addRegion;
-	QRegion region;
+	QRectF ellipse(this->x, this->y, this->height, this->height);
+	QRegion region(ellipse.toRect(), QRegion::Ellipse);
 
-	ellipse = QRect(this->x, this->y, this->height, this->height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	region += addRegion;
+	ellipse = QRectF(this->x + this->width - this->height, this->y, this->height, this->height);
+	region += QRegion(ellipse.toRect(), QRegion::Ellipse);
 
-	ellipse = QRect(this->x + this->width - this->height, this->y, this->height, this->height);
-	addRegion = QRegion(ellipse, QRegion::Ellipse);
-	region += addRegion;
+	QRectF rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
+	region += QRegion(rectangle.toRect(), QRegion::Rectangle);
 
-	QRect rectangle(this->x + halfHeight, this->y, this->width - this->height, this->height);
-	addRegion = QRegion(rectangle, QRegion::Rectangle);
-	region += addRegion;
-
-	ret = region.contains(rect);
+	ret = region.contains(rect.toRect());
  
 	return ret;
 }
@@ -175,7 +161,7 @@ void Terminal::GetLine(char(*line)) {
 	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", 
 		ID_TERMINAL, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 

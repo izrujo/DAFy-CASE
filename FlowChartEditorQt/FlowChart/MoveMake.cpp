@@ -45,11 +45,11 @@ void MoveMake::Create(DrawingPaper *canvas){
 	canvas->memoryController->RememberOther(positions, count);
 
 	// 2. 가장 상단의 기호를 찾는다.	
-	Long y = 0;
+	float y = 0;
 	Long index;
 	i = 0;
 	while ( i < count ){
-		if( indexes[i]->GetY() < y || y == 0 ){
+		if( indexes[i]->GetY() < y || y == 0.0F ){
 			y = indexes[i]->GetY();
 			index = i;
 		}
@@ -57,10 +57,10 @@ void MoveMake::Create(DrawingPaper *canvas){
 	}
 
 	// 3. 상단의 위치를 기억한다.
-	Long x;	
+	float x;
 	Attribute attribute;
 	Attribute attribute2;
-	Long distance;
+	float distance;
 	indexes[index]->GetAttribute(&attribute);	
 
 	// 4. 선택된 기호들을 기준에 맞게 이동한다.

@@ -33,7 +33,7 @@ void MovingTool::Destroy() {
 MovingTool::~MovingTool() {
 }
 
-void MovingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
+void MovingTool::OnLButtonDown(DrawingPaper *canvas, QPointF point) {
 	canvas->currentX = point.x();
 	canvas->currentY = point.y();
 
@@ -46,14 +46,14 @@ void MovingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 	}
 }
 
-void MovingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
+void MovingTool::OnMouseMove(DrawingPaper *canvas, QPointF point) {
 	Long i;
 	Long count;
 	Long(*indexes);
-	Long x;
-	Long y;
-	int cx;
-	int cy;
+	float x;
+	float y;
+	float cx;
+	float cy;
 
 	if (canvas->mode == DrawingPaper::MOVING) {
 		cx = point.x() - canvas->currentX;
@@ -80,7 +80,7 @@ void MovingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	}
 }
 
-void MovingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
+void MovingTool::OnLButtonUp(DrawingPaper *canvas, QPointF point) {
 	canvas->mode = DrawingPaper::SELECT;
 	canvas->tool = SelectingTool::Instance();
 	canvas->repaint();

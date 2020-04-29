@@ -1,7 +1,7 @@
 #include "WindowTitle.h"
 #include "FlowChartVisitor.h"
 
-WindowTitle::WindowTitle(Long x, Long y, Long width, Long height, QColor backGroundColor,
+WindowTitle::WindowTitle(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: NShape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->isFocusedAndPinned = true;
@@ -35,13 +35,12 @@ void WindowTitle::SetIsFocusedAndPinned(bool isFocusedAndPinned) {
 	this->isFocusedAndPinned = isFocusedAndPinned;
 }
 
-bool WindowTitle::IsIncluded(QPoint point) {
+bool WindowTitle::IsIncluded(QPointF point) {
 	bool ret;
 
-	QRect regionRect;
-	regionRect.setCoords(this->x, this->y, this->x + this->width, this->y + this->height);
-	QRegion region(regionRect);
-	ret = region.contains(point);
+	QRectF regionRect(this->x, this->y, this->width, this->height);
+	QRegion region(regionRect.toRect());
+	ret = region.contains(point.toPoint());
 
 	return ret;
 }

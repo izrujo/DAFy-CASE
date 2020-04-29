@@ -219,9 +219,9 @@ void SketchBook::Update() {
 	}
 }
 
-void SketchBook::Arrange(Long x) {
+void SketchBook::Arrange(float x) {
 	NShape *current;
-	Long y = this->canvasList[0]->GetY();
+	float y = this->canvasList[0]->GetY();
 	Long i = 0;
 	while (i < this->length) {
 		current = this->canvasList[i];

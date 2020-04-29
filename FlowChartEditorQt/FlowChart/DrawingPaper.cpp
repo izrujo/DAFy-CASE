@@ -56,11 +56,11 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 	this->label = NULL;
 	this->painter = NULL;
 
-	this->startX = 0;
-	this->startY = 0;
+	this->startX = 0.0F;
+	this->startY = 0.0F;
 
-	this->currentX = 0;
-	this->currentY = 0;
+	this->currentX = 0.0F;
+	this->currentY = 0.0F;
 
 	this->tool = NULL;
 
@@ -212,30 +212,12 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	if (zoomVisitor != NULL) {
 		delete zoomVisitor;
 	}
-	/*
-	QString mode;
-	switch (this->mode) {
-	case IDLE:
-		mode = "IDLE"; break;
-	case SELECT:
-		mode = "SELECT"; break;
-	case DRAWING:
-		mode = "DRAWING"; break;
-	case MOVING:
-		mode = "MOVING"; break;
-	case SIZING:
-		mode = "SIZING"; break;
-	default: break;
-	}
-	editor->modeStatus->setText(mode);
-	editor->statusBar->repaint();
-	*/
 }
 
 void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 	//this->setFocus();
 
-	QPoint point = event->pos();
+	QPointF point = event->localPos();
 	this->tool = ToolFactory::Create(this, point);
 
 	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
@@ -256,7 +238,7 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 	editor->windowClose->Paint(QColor(102, 204, 204), Qt::SolidLine, editor->windowClose->GetBorderColor());
 	editor->repaint();
 
-	QPoint point = event->pos();
+	QPointF point = event->localPos();
 	if (this->hasMouseTracking() == false) { //마우스가 암거나 눌렸을 때
 		if (this->tool != NULL) {
 			this->tool->OnMouseMove(this, point);
@@ -283,7 +265,7 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 	this->flowChart->AscendingSort();
 
-	QPoint point = event->pos();
+	QPointF point = event->localPos();
 	if (this->tool != NULL) {
 		this->tool->OnLButtonUp(this, point);
 		ReleaseCapture();
@@ -305,10 +287,10 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 	// 상태 패턴 : 텍스트 조작자 Manipulator
 	NShape *shape;
-	Long left, top, right, bottom, halfHeight;
+	float left, top, right, bottom, halfHeight;
 
-	QRect rect = this->frameRect();
-	QPoint point = event->pos();
+	QRectF rect = this->frameRect();
+	QPointF point = event->localPos();
 	Long positionX;
 	Long positionY;
 	if (this->scrollController != NULL) {
@@ -364,7 +346,7 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 	SketchBook *sketchBook = editor->sketchBook;
 	NShape *canvasTitle;
-	Long width = 0;
+	float width = 0;
 	Long i = 0;
 	while (i < sketchBook->GetLength()) {
 		canvasTitle = sketchBook->GetCanvas(i);
@@ -373,8 +355,8 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 		i++;
 	}
 	NShape *currentTitle = sketchBook->GetCanvas(sketchBook->GetCurrent());
-	Long windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-	Long windowCloseY = currentTitle->GetY() + 4;
+	float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	float windowCloseY = currentTitle->GetY() + 4;
 	editor->windowClose->Move(windowCloseX, windowCloseY);
 	editor->update();
 	//========================캔버스 타이틀 들========================
@@ -535,20 +517,20 @@ void DrawingPaper::DrawSelectingArea() {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	Long x = this->startX;
-	Long width = this->currentX - this->startX;
+	float x = this->startX;
+	float width = this->currentX - this->startX;
 	if (this->startX > this->currentX) {
 		x = this->currentX;
 		width = this->startX - this->currentX;
 	}
-	Long y = this->startY;
-	Long height = this->currentY - this->startY;
+	float y = this->startY;
+	float height = this->currentY - this->startY;
 	if (this->startY > this->currentY) {
 		y = this->currentY;
 		height = this->startY - this->currentY;
 	}
 
-	QRect drawRect(x, y, width, height);
+	QRectF drawRect(x, y, width, height);
 	this->painter->DrawRect(drawRect);
 
 	this->painter->SelectObject(*oldPen);
@@ -737,21 +719,11 @@ QCursor DrawingPaper::GetCursor(QPoint point) {
 		FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
 		holdA4Paper->Accept(zoomVisitor);
 
-		Long quotient;
-		Long remainder;
+		QPointF currentReal(point.x(), point.y());
+		QPointF currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
 
-		QPoint currentReal(point.x(), point.y());
-		QPoint currentVirtual = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertVirtual(currentReal);
-
-		quotient = currentVirtual.x() * 100 / this->zoom->GetRate();
-		remainder = currentVirtual.x() * 100 % this->zoom->GetRate();
-		if (remainder >= 50) quotient++;
-		currentVirtual.setX(quotient);
-
-		quotient = currentVirtual.y() * 100 / this->zoom->GetRate();
-		remainder = currentVirtual.y() * 100 % this->zoom->GetRate();
-		if (remainder >= 50) quotient++;
-		currentVirtual.setY(quotient);
+		currentVirtual.setX(currentVirtual.x() * 100 / this->zoom->GetRate());
+		currentVirtual.setY(currentVirtual.y() * 100 / this->zoom->GetRate());
 
 		currentReal = dynamic_cast<ZoomVisitor*>(zoomVisitor)->converter->ConvertReal(currentVirtual);
 
@@ -785,12 +757,6 @@ void DrawingPaper::OnSequenceMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnIterationMenuClick() {
@@ -801,12 +767,6 @@ void DrawingPaper::OnIterationMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnSelectionMenuClick() {
@@ -817,12 +777,6 @@ void DrawingPaper::OnSelectionMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnMoveMakeMenuClick() {
@@ -833,12 +787,6 @@ void DrawingPaper::OnMoveMakeMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::OnSizeMakeMenuClick() {
@@ -859,21 +807,15 @@ void DrawingPaper::OnIntervalMakeMenuClick() {
 	this->zoom->Set(rate);
 
 	this->repaint();
-	/*
-	TutorialForm *tutorialForm = (TutorialForm*)dynamic_cast<FlowChartEditor*>(this->parentWidget())->windows[2];
-	if (tutorialForm != NULL) {
-		tutorialForm->tutorialController->Update();
-	}
-	*/
 }
 
 void DrawingPaper::New() {
 	FlowChartEditor *editor = static_cast<FlowChartEditor *>(this->parentWidget());
 
 	NShape *last = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength() - 1);
-	Long lastRight = last->GetX() + last->GetWidth();
+	float lastRight = last->GetX() + last->GetWidth();
 	//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
-	Long right = this->x() + this->width();
+	float right = this->x() + this->width();
 	if (lastRight + 186 < right) { //186은 캔버스 타이틀의 최소 너비
 
 		editor->sketchBook->Unfold(this->flowChart->Clone(),
@@ -882,7 +824,7 @@ void DrawingPaper::New() {
 
 		NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength()-1);
 		NShape *newTitle = new WindowTitle(previousTitle->GetX() + previousTitle->GetWidth(),
-			previousTitle->GetY(), 186, previousTitle->GetHeight(), QColor(102, 204, 204),
+			previousTitle->GetY(), 186.0F, previousTitle->GetHeight(), QColor(102, 204, 204),
 			Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
 		NShape *newFlowChart = new FlowChart;
 		editor->sketchBook->Add(newTitle, newFlowChart);
@@ -894,8 +836,8 @@ void DrawingPaper::New() {
 		Memory *redoMemory = new Memory(*editor->sketchBook->GetRedoMemory(editor->sketchBook->GetCurrent()));
 		this->memoryController->ChangeMemory(undoMemory, redoMemory);
 
-		Long windowCloseX = newTitle->GetX() + newTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-		Long windowCloseY = newTitle->GetY() + 4;
+		float windowCloseX = newTitle->GetX() + newTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+		float windowCloseY = newTitle->GetY() + 4;
 		editor->windowClose->Move(windowCloseX, windowCloseY);
 
 		editor->repaint();
@@ -909,12 +851,12 @@ void DrawingPaper::New() {
 	}
 }
 
-Long DrawingPaper::Save(const char(*fileName)) {
+Long DrawingPaper::Save(QString fileName) {
 	File file;
 	return file.Save(this, fileName);
 }
 
-Long DrawingPaper::Load(const char(*fileName)) {
+Long DrawingPaper::Load(QString fileName) {
 	File file;
 	return file.Load(this, fileName);
 }
@@ -976,8 +918,8 @@ void DrawingPaper::Close() {
 
 		editor->sketchBook->Arrange(this->x());
 
-		Long windowCloseX = first->GetX() + first->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-		Long windowCloseY = first->GetY() + 4;
+		float windowCloseX = first->GetX() + first->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+		float windowCloseY = first->GetY() + 4;
 		editor->windowClose->Move(windowCloseX, windowCloseY);
 	}
 }

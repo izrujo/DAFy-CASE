@@ -43,216 +43,137 @@ ZoomVisitor& ZoomVisitor::operator=(const ZoomVisitor& source) {
 }
 
 void ZoomVisitor::Visit(Terminal *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
+	float centerX = x + width / 2;
+	float centerY = y + height / 2;
 
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPointF realPoint(centerX, centerY);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	y = realPoint.y() - height / 2;
+	x = realPoint.x() - width / 2.0F;
+	y = realPoint.y() - height / 2.0F;
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(Preparation *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
+	float centerX = x + width / 2;
+	float centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPointF realPoint(centerX, centerY);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	y = realPoint.y() - height / 2;
+	x = realPoint.x() - width / 2.0F;
+	y = realPoint.y() - height / 2.0F;
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(InputOutput *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
+	float centerX = x + width / 2.0F;
+	float centerY = y + height / 2.0F;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPointF realPoint(centerX, centerY);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	y = realPoint.y() - height / 2;
+	x = realPoint.x() - width / 2.0F;
+	y = realPoint.y() - height / 2.0F;
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(Process *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
+	float centerX = x + width / 2;
+	float centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPointF realPoint(centerX, centerY);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	y = realPoint.y() - height / 2;
+	x = realPoint.x() - width / 2.0F;
+	y = realPoint.y() - height / 2.0F;
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(Decision *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
+	float centerX = x + width / 2.0F;
+	float centerY = y + height / 2.0F;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	QPointF realPoint(centerX, centerY);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
@@ -263,352 +184,262 @@ void ZoomVisitor::Visit(Decision *element) {
 }
 
 void ZoomVisitor::Visit(Arrow *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
+	//float centerX = x + width / 2;
+	//float centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
+	
+	float arrowSize = element->GetArrowSize();
+	arrowSize = arrowSize * rate / 100;
+	element->ChangeArrowSize(arrowSize);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	//QPointF realPoint(centerX, centerY);
+	QPointF realPoint(x, y);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	y = realPoint.y() - height / 2;
+	//x = realPoint.x() - width / 2;
+	x = realPoint.x();
+	//y = realPoint.y() - height / 2;
+	y = realPoint.y();
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(LeftDown *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
+	//float centerX = x + width / 2;
+	//float centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
+	
+	float arrowSize = element->GetArrowSize();
+	arrowSize = arrowSize * rate / 100;
+	element->ChangeArrowSize(arrowSize);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	//QPointF realPoint(centerX, centerY);
+	QPointF realPoint(x, y);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	y = realPoint.y() - height / 2;
+	//x = realPoint.x() - width / 2;
+	x = realPoint.x();
+	//y = realPoint.y() - height / 2;
+	y = realPoint.y();
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(RightDown *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY = y + height / 2;
+	//float centerX = x + width / 2;
+	//float centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
+	
+	float arrowSize = element->GetArrowSize();
+	arrowSize = arrowSize * rate / 100;
+	element->ChangeArrowSize(arrowSize);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	//QPointF realPoint(centerX, centerY);
+	QPointF realPoint(x, y);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
-
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	y = realPoint.y() - height / 2;
+	//x = realPoint.x() - width / 2;
+	x = realPoint.x();
+	//y = realPoint.y() - height / 2;
+	y = realPoint.y();
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(Join *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long height2 = element->GetHeight2();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float height2 = element->GetHeight2();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width / 2;
-	Long centerY;
-	(height < 0) ? (centerY = y + height + (height2 - height) / 2) : (centerY = y + height2 / 2);
+	//float centerX = x + width / 2;
+	//float centerY;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
+	//(height < 0) ? (centerY = y + height + (height2 - height) / 2) : (centerY = y + height2 / 2);
 
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
-
-	quotient = height2 * rate / 100;
-	remainder = height2 * rate % 100;
-	if (remainder >= 50) quotient++;
-	height2 = quotient;
+	width = width * rate / 100;
+	(height > 0) ? (height = height * rate / 100) : (height = height * rate / 100);
+	height2 = height2 * rate / 100;
 
 	element->ReSize(width, height, height2);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	float arrowSize = element->GetArrowSize();
+	arrowSize = arrowSize * rate / 100;
+	element->ChangeArrowSize(arrowSize);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
+	//QPointF realPoint(centerX, centerY);
+	QPointF realPoint(x, y);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width / 2;
-	(height < 0) ? (y = realPoint.y() - (height2 - height) / 2 - height) : (y = realPoint.y() - height2 / 2);
+	//x = realPoint.x() - width / 2;
+	x = realPoint.x();
+	//(height < 0) ? (y = realPoint.y() - (height2 - height) / 2 - height) : (y = realPoint.y() - height2 / 2);
+	y = realPoint.y();
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(RightDownJoin *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long width2 = element->GetWidth2();
-	Long height2 = element->GetHeight2();
-	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width2 - (width2 - width) / 2;
-	Long centerY = y + (height + height2) / 2;
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float width2 = element->GetWidth2();
+	float height2 = element->GetHeight2();
+	Long rate = this->zoom->GetRate();\
+	//float centerX = x + width2 - (width2 - width) / 2;
+	//float centerY = y + (height + height2) / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
-
-	quotient = width2 * rate / 100;
-	remainder = width2 * rate % 100;
-	if (remainder >= 50) quotient++;
-	width2 = quotient;
-
-	quotient = height2 * rate / 100;
-	remainder = height2 * rate % 100;
-	if (remainder >= 50) quotient++;
-	height2 = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
+	width2 = width2 * rate / 100;
+	height2 = height2 * rate / 100;
 
 	element->ReSize(width, height, width2, height2);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	float arrowSize = element->GetArrowSize();
+	arrowSize = arrowSize * rate / 100;
+	element->ChangeArrowSize(arrowSize);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
+	//QPointF realPoint(centerX, centerY);
+	QPointF realPoint(x, y);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() + (width2 - width) / 2 - width2;
-	y = realPoint.y() - (height + height2) / 2;
+	//x = realPoint.x() + (width2 - width) / 2 - width2;
+	x = realPoint.x();
+	//y = realPoint.y() - (height + height2) / 2;
+	y = realPoint.y();
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(RepeatTrue *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long width2 = element->GetWidth2();
-	Long height2 = element->GetHeight2();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float width2 = element->GetWidth2();
+	float height2 = element->GetHeight2();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width2 / 2;
-	Long centerY = y + height2 + height / 2;
+	//float centerX = x + width2 / 2;
+	//float centerY = y + height2 + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
-
-	quotient = width2 * rate / 100;
-	remainder = width2 * rate % 100;
-	if (remainder >= 50) quotient++;
-	width2 = quotient;
-
-	quotient = height2 * rate / 100;
-	remainder = height2 * rate % 100;
-	if (remainder >= 50) quotient++;
-	height2 = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
+	width2 = width2 * rate / 100;
+	height2 = height2 * rate / 100;
 
 	element->ReSize(width, height, width2, height2);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	float arrowSize = element->GetArrowSize();
+	arrowSize = arrowSize * rate / 100;
+	element->ChangeArrowSize(arrowSize);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
+	//QPointF realPoint(centerX, centerY);
+	QPointF realPoint(x, y);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() - width2 / 2;
-	y = realPoint.y() - height / 2 - height2;
+	//x = realPoint.x() - width2 / 2;
+	x = realPoint.x();
+	//y = realPoint.y() - height / 2 - height2;
+	y = realPoint.y();
 
 	element->Move(x, y);
 }
 
 void ZoomVisitor::Visit(RepeatFalse *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
-	Long width2 = element->GetWidth2();
-	Long height2 = element->GetHeight2();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
+	float width2 = element->GetWidth2();
+	float height2 = element->GetHeight2();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = x + width2 - (width2 - width) / 2;
-	Long centerY = y + height / 2;
+	//float centerX = x + width2 - (width2 - width) / 2;
+	//float centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
-
-	quotient = width2 * rate / 100;
-	remainder = width2 * rate % 100;
-	if (remainder >= 50) quotient++;
-	width2 = quotient;
-
-	quotient = height2 * rate / 100;
-	remainder = height2 * rate % 100;
-	if (remainder >= 50) quotient++;
-	height2 = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
+	width2 = width2 * rate / 100;
+	height2 = height2 * rate / 100;
 
 	element->ReSize(width, height, width2, height2);
 
-	QPoint realPoint(centerX, centerY);
-	QPoint virtualPoint = this->converter->ConvertVirtual(realPoint);
+	float arrowSize = element->GetArrowSize();
+	arrowSize = arrowSize * rate / 100;
+	element->ChangeArrowSize(arrowSize);
 
-	quotient = virtualPoint.x() * rate / 100;
-	remainder = virtualPoint.x() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setX(quotient);
+	//QPointF realPoint(centerX, centerY);
+	QPointF realPoint(x, y);
+	QPointF virtualPoint = this->converter->ConvertVirtual(realPoint);
 
-	quotient = virtualPoint.y() * rate / 100;
-	remainder = virtualPoint.y() * rate % 100;
-	if (remainder >= 50) quotient++;
-	virtualPoint.setY(quotient);
+	virtualPoint.setX(virtualPoint.x() * rate / 100);
+	virtualPoint.setY(virtualPoint.y() * rate / 100);
 
 	realPoint = this->converter->ConvertReal(virtualPoint);
 
-	x = realPoint.x() + (width2 - width) / 2 - width2;
-	y = realPoint.y() - height / 2;
+	//x = realPoint.x() + (width2 - width) / 2 - width2;
+	x = realPoint.x();
+	//y = realPoint.y() - height / 2;
+	y = realPoint.y();
 
 	element->Move(x, y);
 }
@@ -626,25 +457,16 @@ void ZoomVisitor::Visit(Template *element) {
 }
 
 void ZoomVisitor::Visit(A4Paper *element) {
-	Long x = element->GetX();
-	Long y = element->GetY();
-	Long width = element->GetWidth();
-	Long height = element->GetHeight();
+	float x = element->GetX();
+	float y = element->GetY();
+	float width = element->GetWidth();
+	float height = element->GetHeight();
 	Long rate = this->zoom->GetRate();
-	Long quotient;
-	Long remainder;
-	Long centerX = element->CenterOfGravityX();
-	Long centerY = y + height / 2;
+	float centerX = element->CenterOfGravityX();
+	float centerY = y + height / 2;
 
-	quotient = width * rate / 100;
-	remainder = width * rate % 100;
-	if (remainder >= 50) quotient++;
-	width = quotient;
-
-	quotient = height * rate / 100;
-	remainder = height * rate % 100;
-	if (remainder >= 50) quotient++;
-	height = quotient;
+	width = width * rate / 100;
+	height = height * rate / 100;
 
 	element->ReSize(width, height);
 
@@ -653,30 +475,15 @@ void ZoomVisitor::Visit(A4Paper *element) {
 
 	element->Move(x, y);
 
-	Long leftMargin = element->GetLeftMargin();
-	Long topMargin = element->GetTopMargin();
-	Long rightMargin = element->GetRightMargin();
-	Long bottomMargin = element->GetBottomMargin();
+	float leftMargin = element->GetLeftMargin();
+	float topMargin = element->GetTopMargin();
+	float rightMargin = element->GetRightMargin();
+	float bottomMargin = element->GetBottomMargin();
 
-	quotient = leftMargin * rate / 100;
-	remainder = leftMargin * rate % 100;
-	if (remainder >= 50) quotient++;
-	leftMargin = quotient;
-
-	quotient = topMargin * rate / 100;
-	remainder = topMargin * rate % 100;
-	if (remainder >= 50) quotient++;
-	topMargin = quotient;
-
-	quotient = rightMargin * rate / 100;
-	remainder = rightMargin * rate % 100;
-	if (remainder >= 50) quotient++;
-	rightMargin = quotient;
-
-	quotient = bottomMargin * rate / 100;
-	remainder = bottomMargin * rate % 100;
-	if (remainder >= 50) quotient++;
-	bottomMargin = quotient;
+	leftMargin = leftMargin * rate / 100;
+	topMargin = topMargin * rate / 100;
+	rightMargin = rightMargin * rate / 100;
+	bottomMargin = bottomMargin * rate / 100;
 
 	element->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 

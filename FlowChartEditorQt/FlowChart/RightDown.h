@@ -12,7 +12,7 @@
 
 class RightDown : public Line {
 public:
-	RightDown(Long x, Long y, Long width, Long height,
+	RightDown(float x, float y, float width, float height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~RightDown();
@@ -36,18 +36,18 @@ public:
 	virtual QRegion GetRegion(Long thickness);
 	virtual QRegion GetSelectionMarkerAllRegion();
 
-	virtual bool IsIncluded(QPoint point);
-	virtual bool IsIncluded(const QRect& rect);
+	virtual bool IsIncluded(QPointF point);
+	virtual bool IsIncluded(const QRectF& rect);
 
-	virtual void GetSelectionMarkerRect(int marker, QRect *rect);
+	virtual void GetSelectionMarkerRect(int marker, QRectF *rect);
 
-	virtual int GetHitCode(const QPoint& point, const QRegion& region);
+	virtual int GetHitCode(const QPointF& point, const QRegion& region);
 
 	virtual void GetLine(char(*line));
 	virtual bool Identify(SHAPE identify);
 	virtual bool IsStyle(Long style);
 
-	virtual Long CenterOfGravityX() const;
+	virtual float CenterOfGravityX() const;
 
 	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController);
 	void GetAttribute(Attribute *attribute);
@@ -57,7 +57,7 @@ inline bool RightDown::Identify(SHAPE identify) {
 	return (identify == LINE || identify == RIGHTDOWN) ? (true) : (false);
 }
 
-inline Long RightDown::CenterOfGravityX() const {
+inline float RightDown::CenterOfGravityX() const {
 	return x;
 }
 #endif //_RIGHTDOWN_H

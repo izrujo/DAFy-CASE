@@ -15,7 +15,7 @@
 
 #include "../GObject/QtGObjectFactory.h"
 
-RightDownJoin::RightDownJoin(Long x, Long y, Long width, Long height, Long width2, Long height2, 
+RightDownJoin::RightDownJoin(float x, float y, float width, float height, float width2, float height2,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents) 
 	: Line(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->width2 = width2;
@@ -81,12 +81,12 @@ void RightDownJoin::Accept(FlowChartVisitor *draw) {
 }
 
 void RightDownJoin::DrawActiveShape(GObject *painter) {
-	QPoint points[5];
-	points[0] = QPoint(this->x, this->y);
-	points[1] = QPoint(this->x + this->width2, this->y);
-	points[2] = QPoint(this->x + this->width2, this->y + this->height + this->height2);
-	points[3] = QPoint(this->x + this->width, this->y + this->height + this->height2);
-	points[4] = QPoint(this->x + this->width, this->y + this->height);
+	QPointF points[5];
+	points[0] = QPointF(this->x, this->y);
+	points[1] = QPointF(this->x + this->width2, this->y);
+	points[2] = QPointF(this->x + this->width2, this->y + this->height + this->height2);
+	points[3] = QPointF(this->x + this->width, this->y + this->height + this->height2);
+	points[4] = QPointF(this->x + this->width, this->y + this->height);
 	painter->DrawPolyline(points, 5);
 }
 
@@ -95,123 +95,107 @@ NShape* RightDownJoin::Clone() {
 }
 
 QRegion RightDownJoin::GetRegion() {
-	QRect rect(this->x, this->y - LINETHICKNESS, 
+	QRectF rect(this->x, this->y - LINETHICKNESS, 
 		this->width2, LINETHICKNESS);
-	QRegion region(rect);
+	QRegion region(rect.toRect());
 	
-	rect = QRect(this->x + this->width2 - LINETHICKNESS, this->y, 
+	rect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y, 
 		this->width2 + LINETHICKNESS, this->height + this->height2);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
-	rect = QRect(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS, 
+	rect = QRectF(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS, 
 		this->width - this->width2, this->height + this->height2 + LINETHICKNESS);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
-	rect = QRect(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2, 
+	rect = QRectF(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2, 
 		this->width + LINETHICKNESS, this->height);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
 	return region;
 }
 
 QRegion RightDownJoin::GetRegion(Long thickness) {
-	QRect rect(this->x, this->y - thickness, 
+	QRectF rect(this->x, this->y - thickness, 
 		this->width2, thickness);
-	QRegion region(rect);
+	QRegion region(rect.toRect());
 	
-	rect = QRect(this->x + this->width2 - thickness, this->y, 
+	rect = QRectF(this->x + this->width2 - thickness, this->y, 
 		this->width2 + thickness, this->height + this->height2);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
-	rect = QRect(this->x + this->width2, this->y + this->height + this->height2 - thickness, 
+	rect = QRectF(this->x + this->width2, this->y + this->height + this->height2 - thickness, 
 		this->width - this->width2, this->height + this->height2 + thickness);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
-	rect = QRect(this->x + this->width - thickness, this->y + this->height + this->height2, 
+	rect = QRectF(this->x + this->width - thickness, this->y + this->height + this->height2, 
 		this->width + thickness, this->height);
-	region += QRegion(rect);
+	region += QRegion(rect.toRect());
 	
 	return region;
 }
 
-void RightDownJoin::ReSize(Long width, Long height, Long width2, Long height2) {
+void RightDownJoin::ReSize(float width, float height, float width2, float height2) {
 	this->width = width;
 	this->height = height;
 	this->width2 = width2;
 	this->height2 = height2;
 }
 
-bool RightDownJoin::IsIncluded(QPoint point) {
+bool RightDownJoin::IsIncluded(QPointF point) {
 	bool ret;
-
-	QRegion region;
-	QRect regionRect;
-	QRegion addRegion;
-
-	regionRect.setCoords(this->x, this->y - LINETHICKNESS,
-		this->x + this->width2, this->y + LINETHICKNESS);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
 	
-	regionRect.setCoords(this->x + this->width2 - LINETHICKNESS, this->y,
-		this->x + this->width2 + LINETHICKNESS, this->y + this->height + this->height2);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	QRectF regionRect(this->x, this->y - LINETHICKNESS,
+		this->width2, LINETHICKNESS);
+	QRegion region(regionRect.toRect());
+	
+	regionRect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y,
+		this->width2 + LINETHICKNESS, this->height + this->height2);
+	region += QRegion(regionRect.toRect());
 
-	regionRect.setCoords(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS,
-		this->x + this->width - this->width2, this->y + this->height + this->height2 + LINETHICKNESS);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	regionRect = QRectF(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS,
+		this->width - this->width2, this->height + this->height2 + LINETHICKNESS);
+	region += QRegion(regionRect.toRect());
 
-	regionRect.setCoords(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2,
-		this->x + this->width + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2,
+		this->width + LINETHICKNESS, this->height);
+	region += QRegion(regionRect.toRect());
 
-	ret = region.contains(point);
+	ret = region.contains(point.toPoint());
 
 	return ret;
 }
 
-bool RightDownJoin::IsIncluded(const QRect& rect) {
+bool RightDownJoin::IsIncluded(const QRectF& rect) {
 	bool ret;
 
-	QRegion region;
-	QRect regionRect;
-	QRegion addRegion;
+	QRectF regionRect(this->x, this->y - LINETHICKNESS,
+		this->width2, LINETHICKNESS);
+	QRegion region(regionRect.toRect());
 
-	regionRect.setCoords(this->x, this->y - LINETHICKNESS,
-		this->x + this->width2, this->y + LINETHICKNESS);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	regionRect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y,
+		this->width2 + LINETHICKNESS, this->height + this->height2);
+	region += QRegion(regionRect.toRect());
 
-	regionRect.setCoords(this->x + this->width2 - LINETHICKNESS, this->y,
-		this->x + this->width2 + LINETHICKNESS, this->y + this->height + this->height2);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	regionRect = QRectF(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS,
+		this->width - this->width2, this->height + this->height2 + LINETHICKNESS);
+	region += QRegion(regionRect.toRect());
 
-	regionRect.setCoords(this->x + this->width2, this->y + this->height + this->height2 - LINETHICKNESS,
-		this->x + this->width - this->width2, this->y + this->height + this->height2 + LINETHICKNESS);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
+	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2,
+		this->width + LINETHICKNESS, this->height);
+	region += QRegion(regionRect.toRect());
 
-	regionRect.setCoords(this->x + this->width - LINETHICKNESS, this->y + this->height + this->height2,
-		this->x + this->width + LINETHICKNESS, this->y + this->height);
-	addRegion = QRegion(regionRect);
-	region += addRegion;
-
-	ret = region.contains(rect);
+	ret = region.contains(rect.toRect());
 
 	return ret;
 }
 
-int RightDownJoin::GetHitCode(const QPoint& point, const QRegion& region) {
+int RightDownJoin::GetHitCode(const QPointF& point, const QRegion& region) {
 	int result = HIT_NONE;
-	if (region.contains(point)) {
+	if (region.contains(point.toPoint())) {
 		result = HIT_BODY;
 	}
 
-	QRect rectSelect;
+	QRectF rectSelect;
 	GetSelectionMarkerRect(HIT_FALSE, &rectSelect);
 	if (rectSelect.contains(point)) {
 		result = HIT_FALSE;
@@ -244,9 +228,9 @@ void RightDownJoin::Copy(NShape *object) {
 	this->isSelected = object->IsSelected();
 }
 
-void RightDownJoin::GetSelectionMarkerRect(int marker, QRect *rect) {
-	int x;
-	int y;
+void RightDownJoin::GetSelectionMarkerRect(int marker, QRectF *rect) {
+	float x;
+	float y;
 
 	switch (marker) {
 	case HIT_FALSE:
@@ -269,26 +253,26 @@ void RightDownJoin::GetSelectionMarkerRect(int marker, QRect *rect) {
 }
 
 QRegion RightDownJoin::GetSelectionMarkerAllRegion() {
-	Long x = this->x;
-	Long y = this->y;
-	QRect rect(x - 6, y - 6, 7, 7);
-	QRegion region(rect);
+	float x = this->x;
+	float y = this->y;
+	QRectF rect(x - 6, y - 6, 7, 7);
+	QRegion region(rect.toRect());
 	
 	x = this->x + this->width2;
 	y = this->y + this->height + this->height2;
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 	
 	x = this->x + this->width;
 	y = this->y + this->height; 
-	rect = QRect(x - 6, y - 6, 7, 7);
-	region += QRegion(rect);
+	rect = QRectF(x - 6, y - 6, 7, 7);
+	region += QRegion(rect.toRect());
 	
 	return region;
 }
 
 void RightDownJoin::DrawSelectionMarkers(GObject *painter, ScrollController *scrollController) {
-	QRect rectSelect;
+	QRectF rectSelect;
 
 	QtGObjectFactory factory;
 	GObject *brush = factory.MakeBrush(QColor(0, 0, 255), Qt::SolidPattern);
@@ -330,12 +314,12 @@ void RightDownJoin::GetAttribute(Attribute *attribute) {
 	attribute->pointTrue.setX(this->x + this->width);
 	attribute->pointTrue.setY(this->y + this->height);
 
-	attribute->pointOut.setX(this->x + (this->width + this->width2) / 2);
+	attribute->pointOut.setX(this->x + (this->width + this->width2) / 2.0F);
 	attribute->pointOut.setY(this->y + this->height + this->height2);
 }
 
 void RightDownJoin::GetLine(char(*line)) {
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t%f\t%f\t%s;\n", 
 		ID_RIGHTDOWNJOIN, this->x, this->y, this->width, this->height, this->width2, this->height2, 
 		this->contents.GetString());
 }

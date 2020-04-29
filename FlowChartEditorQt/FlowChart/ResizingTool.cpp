@@ -41,7 +41,7 @@ void ResizingTool::Destroy() {
 	}
 }
 
-void ResizingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
+void ResizingTool::OnLButtonDown(DrawingPaper *canvas, QPointF point) {
 	canvas->currentX = point.x();
 	canvas->currentY = point.y();
 
@@ -54,8 +54,8 @@ void ResizingTool::OnLButtonDown(DrawingPaper *canvas, QPoint point) {
 	}
 }
 
-void ResizingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
-	Long x, y, width, height, width2, height2;
+void ResizingTool::OnMouseMove(DrawingPaper *canvas, QPointF point) {
+	float x, y, width, height, width2, height2;
 	NShape *shape;
 	shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
 	
@@ -120,7 +120,7 @@ void ResizingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 			height = shape->GetBottom() + point.y() - canvas->currentY - y;
 			break;
 		}
-		if (width >= 150 && height >= 50) {
+		if (width >= 150.0F && height >= 50.0F) {
 			shape->Move(x, y);
 			shape->ReSize(width, height);
 		}
@@ -306,7 +306,7 @@ void ResizingTool::OnMouseMove(DrawingPaper *canvas, QPoint point) {
 	}
 }
 
-void ResizingTool::OnLButtonUp(DrawingPaper *canvas, QPoint point) {
+void ResizingTool::OnLButtonUp(DrawingPaper *canvas, QPointF point) {
 	// 20160720 도형 크기 변경시 삽입하는 방식으로 수정
 	canvas->mode = DrawingPaper::SELECT;
 	canvas->tool = SelectingTool::Instance();

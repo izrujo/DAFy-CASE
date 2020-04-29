@@ -125,20 +125,20 @@ public:
 	char GetVertexOut() const;
 	char GetVertexTrue() const;
 	char GetVertexFalse() const;
-	QPoint GetPointIn() const;
-	QPoint GetPointOut() const;
-	QPoint GetPointTrue() const;
-	QPoint GetPointFalse() const;
+	QPointF GetPointIn() const;
+	QPointF GetPointOut() const;
+	QPointF GetPointTrue() const;
+	QPointF GetPointFalse() const;
 
 public:
 	char vertexIn;
 	char vertexOut;
 	char vertexTrue;
 	char vertexFalse;
-	QPoint pointIn;
-	QPoint pointOut;
-	QPoint pointTrue;
-	QPoint pointFalse;
+	QPointF pointIn;
+	QPointF pointOut;
+	QPointF pointTrue;
+	QPointF pointFalse;
 };
 
 inline char Attribute::GetVertexIn() const {
@@ -157,26 +157,26 @@ inline char Attribute::GetVertexFalse() const {
 	return this->vertexFalse;
 }
 
-inline QPoint Attribute::GetPointIn() const {
+inline QPointF Attribute::GetPointIn() const {
 	return this->pointIn;
 }
 
-inline QPoint Attribute::GetPointOut() const {
+inline QPointF Attribute::GetPointOut() const {
 	return this->pointOut;
 }
 
-inline QPoint Attribute::GetPointTrue() const {
+inline QPointF Attribute::GetPointTrue() const {
 	return this->pointTrue;
 }
 
-inline QPoint Attribute::GetPointFalse() const {
+inline QPointF Attribute::GetPointFalse() const {
 	return this->pointFalse;
 }
 
 class NShape {
 public:
 	NShape();
-	NShape(Long x, Long y, Long width, Long height,
+	NShape(float x, float y, float width, float height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 
@@ -196,8 +196,8 @@ public:
 	virtual bool operator ==(const NShape& other);
 	virtual bool operator !=(const NShape& other);
 
-	void Move(Long x, Long y);
-	virtual void ReSize(Long width, Long height);
+	void Move(float x, float y);
+	virtual void ReSize(float width, float height);
 	void Rewrite(char(*text));
 
 	void Paint(QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor); //색깔 속성 변경
@@ -217,30 +217,30 @@ public:
 
 	virtual void GetAttribute(Attribute *Attribute) {};
 
-	Long GetX() const;
-	Long GetY() const;
-	Long GetWidth() const;
-	Long GetHeight() const;
+	float GetX() const;
+	float GetY() const;
+	float GetWidth() const;
+	float GetHeight() const;
 	QColor& GetBackGroundColor() const;
 	Qt::PenStyle GetBorderLine() const;
 	QColor& GetBorderColor() const;
 
 	String& GetContents() const;
 
-	Long GetLeft() const;
-	Long GetTop() const;
-	Long GetRight() const;
-	Long GetBottom() const;
+	float GetLeft() const;
+	float GetTop() const;
+	float GetRight() const;
+	float GetBottom() const;
 
 	// 선택 관련 
-	virtual bool IsIncluded(QPoint point) { return false; };
-	virtual bool IsIncluded(const QRect& rect) { return false; };
+	virtual bool IsIncluded(QPointF point) { return false; };
+	virtual bool IsIncluded(const QRectF& rect) { return false; };
 
 	virtual void Select(bool selected);
 	virtual bool IsSelected() const;
 
-	virtual int GetHitCode(QPoint point);
-	virtual int GetHitCode(const QPoint& point, const QRegion& region);
+	virtual int GetHitCode(QPointF point);
+	virtual int GetHitCode(const QPointF& point, const QRegion& region);
 
 	virtual QCursor GetCursor(int hit) const; //QCursor class 존재
 
@@ -248,8 +248,8 @@ public:
 
 	virtual void GetLine(char(*line)) {};
 
-	virtual Long CenterOfGravityY() const;
-	virtual Long CenterOfGravityX() const;
+	virtual float CenterOfGravityY() const;
+	virtual float CenterOfGravityX() const;
 
 	virtual bool Identify(SHAPE identify) { return false; };
 	virtual bool IsStyle(Long style);
@@ -257,11 +257,11 @@ public:
 	int GetSymbolID(); //190903 DrawingPaper.LButtonDown에서 Creator.Create 사용하기 위함
 	int GetLineID(); //191227 Interpreter pattern 적용 중
 public:
-	static void MakeRectToPoint(QPoint point, QRect *rect);
+	static void MakeRectToPoint(QPointF point, QRectF *rect);
 
 protected:
 	virtual void DrawSelectionMarkers(GObject *painter, ScrollController *scrollController); //painter, scroll 수정 후 고치기
-	virtual void GetSelectionMarkerRect(int marker, QRect *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
+	virtual void GetSelectionMarkerRect(int marker, QRectF *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
 
 public: //Block virtual 선언
 	virtual Long Attach(NShape *shape);
@@ -272,9 +272,9 @@ public: //Block virtual 선언
 	virtual NShape* GetAt(Long index);
 
 	virtual Long Find(NShape* shape);
-	virtual Long Find(QPoint point);
-	virtual Long Find(Long x, Long y);
-	virtual Long Find(QRect rect);
+	virtual Long Find(QPointF point);
+	virtual Long Find(float x, float y);
+	virtual Long Find(QRectF rect);
 	virtual Long Find(SHAPE identify);
 	virtual Long Find(Long fromIndex, SHAPE identify);
 	virtual void Find(Long styles, Long* (*indexes), Long *count);
@@ -294,10 +294,10 @@ public: //Block virtual 선언
 	virtual Long GetLength() const;
 	virtual Long GetCurrent() const;
 protected:
-	Long x;
-	Long y;
-	Long width;
-	Long height;
+	float x;
+	float y;
+	float width;
+	float height;
 	QColor backGroundColor;
 	Qt::PenStyle borderLine;
 	QColor borderColor;
@@ -306,19 +306,19 @@ protected:
 	bool isSelected;
 };
 
-inline Long NShape::GetX() const {
+inline float NShape::GetX() const {
 	return this->x;
 }
 
-inline Long NShape::GetY() const {
+inline float NShape::GetY() const {
 	return this->y;
 }
 
-inline Long NShape::GetWidth() const {
+inline float NShape::GetWidth() const {
 	return this->width;
 }
 
-inline Long NShape::GetHeight() const {
+inline float NShape::GetHeight() const {
 	return this->height;
 }
 
@@ -338,18 +338,18 @@ inline String& NShape::GetContents() const {
 	return const_cast<String&>(this->contents);
 }
 
-inline Long NShape::GetLeft() const {
+inline float NShape::GetLeft() const {
 	return this->x;
 }
-inline Long NShape::GetTop() const {
+inline float NShape::GetTop() const {
 	return this->y;
 }
 
-inline Long NShape::GetRight() const {
+inline float NShape::GetRight() const {
 	return (this->x + this->width);
 }
 
-inline Long NShape::GetBottom() const {
+inline float NShape::GetBottom() const {
 	return (this->y + this->height);
 }
 
@@ -357,12 +357,12 @@ inline bool NShape::IsSelected() const {
 	return this->isSelected;
 }
 
-inline Long NShape::CenterOfGravityY() const {
-	return this->y + this->height / 2;
+inline float NShape::CenterOfGravityY() const {
+	return this->y + this->height / 2.0f;
 }
 
-inline Long NShape::CenterOfGravityX() const {
-	return this->x + this->width / 2;
+inline float NShape::CenterOfGravityX() const {
+	return this->x + this->width / 2.0f;
 }
 
 inline bool NShape::IsStyle(Long style) {

@@ -13,7 +13,7 @@
 
 #pragma warning (disable : 4996)
 
-InputOutput::InputOutput(Long x, Long y, Long width, Long height, QColor backGroundColor,
+InputOutput::InputOutput(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: Symbol(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 
@@ -75,77 +75,77 @@ NShape* InputOutput::Clone() {
 }
 
 QRegion InputOutput::GetRegion() {
-	Long halfWidth = (Long)this->width / 2;
-	Long halfHeight = (Long)this->height / 2;
+	float halfWidth = this->width / 2.0F;
+	float halfHeight = this->height / 2.0F;
 
-	QVector<QPoint> points(5);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 	
-	QRegion region(polygon);
+	QRegion region(polygon.toPolygon());
 
 	return region;
 }
 
 QRegion InputOutput::GetRegion(Long thickness) {
-	Long x = this->x - thickness;
-	Long y = this->y - thickness;
-	Long width = this->width + thickness * 2;
-	Long height = this->height + thickness * 2;
-	Long halfWidth = this->width / 2;
-	Long halfHeight = this->height / 2;
+	float x = this->x - thickness;
+	float y = this->y - thickness;
+	float width = this->width + thickness * 2.0F;
+	float height = this->height + thickness * 2.0F;
+	float halfWidth = this->width / 2.0F;
+	float halfHeight = this->height / 2.0F;
 
-	QVector<QPoint> points(5);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
+	QRegion region(polygon.toPolygon());
 
 	return region;
 }
 
-bool InputOutput::IsIncluded(QPoint point) {
+bool InputOutput::IsIncluded(QPointF point) {
 	bool ret;
-	Long halfWidth = (Long)this->width / 2;
-	Long halfHeight = (Long)this->height / 2;
+	float halfWidth = this->width / 2.0F;
+	float halfHeight = this->height / 2.0F;
 
-	QVector<QPoint> points(5);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
-	ret = region.contains(point);
+	QRegion region(polygon.toPolygon());
+	ret = region.contains(point.toPoint());
 
 	return ret;
 }
 
-bool InputOutput::IsIncluded(const QRect& rect) {
+bool InputOutput::IsIncluded(const QRectF& rect) {
 	bool ret;
-	Long halfWidth = (Long)this->width / 2;
-	Long halfHeight = (Long)this->height / 2;
+	float halfWidth = this->width / 2.0F;
+	float halfHeight = this->height / 2.0F;
 
-	QVector<QPoint> points(5);
-	points.append(QPoint(this->x + halfHeight, this->y));
-	points.append(QPoint(this->x + this->width, this->y));
-	points.append(QPoint(this->x + this->width - halfHeight, this->y + this->height));
-	points.append(QPoint(this->x, this->y + this->height));
-	points.append(QPoint(this->x + halfHeight, this->y));
-	QPolygon polygon(points);
+	QVector<QPointF> points(5);
+	points.append(QPointF(this->x + halfHeight, this->y));
+	points.append(QPointF(this->x + this->width, this->y));
+	points.append(QPointF(this->x + this->width - halfHeight, this->y + this->height));
+	points.append(QPointF(this->x, this->y + this->height));
+	points.append(QPointF(this->x + halfHeight, this->y));
+	QPolygonF polygon(points);
 
-	QRegion region(polygon);
-	ret = region.contains(rect);
+	QRegion region(polygon.toPolygon());
+	ret = region.contains(rect.toRect());
 
 	return ret;
 }
@@ -154,10 +154,10 @@ void InputOutput::GetAttribute(Attribute *attribute) {
 	attribute->vertexIn = 'Y';
 	attribute->vertexOut = 'Y';
 
-	attribute->pointIn.setX(this->x + this->width / 2);
+	attribute->pointIn.setX(this->x + this->width / 2.0F);
 	attribute->pointIn.setY(this->y);
 
-	attribute->pointOut.setX(this->x + this->width / 2);
+	attribute->pointOut.setX(this->x + this->width / 2.0F);
 	attribute->pointOut.setY(this->y + this->height);
 }
 
@@ -165,7 +165,7 @@ void InputOutput::GetLine(char(*line)) {
 	String saveContents(this->contents);
 	saveContents.Replace('\n', '\r');
 
-	sprintf(line, "%d\t%d\t%d\t%d\t%d\t\t\t%s\n", 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", 
 		ID_INPUTOUTPUT, this->x, this->y, this->width, this->height, saveContents.GetString());
 }
 

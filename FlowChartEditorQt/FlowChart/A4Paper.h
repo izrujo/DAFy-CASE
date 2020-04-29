@@ -6,7 +6,7 @@
 
 class A4Paper : public NShape {
 public:
-	A4Paper(Long x, Long y, Long width, Long height,
+	A4Paper(float x, float y, float width, float height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	virtual ~A4Paper();
@@ -25,36 +25,36 @@ public:
 	void SetIsMarking(bool isMarking);
 	bool GetIsMarking() const;
 
-	void ChangeMargin(Long leftmargin, Long topMargin, Long rightMargin, Long bottomMargin);
-	Long GetLeftMargin() const;
-	Long GetTopMargin() const;
-	Long GetRightMargin() const;
-	Long GetBottomMargin() const;
+	void ChangeMargin(float leftmargin, float topMargin, float rightMargin, float bottomMargin);
+	float GetLeftMargin() const;
+	float GetTopMargin() const;
+	float GetRightMargin() const;
+	float GetBottomMargin() const;
 private:
 	bool isMarking;
-	Long leftMargin;
-	Long topMargin;
-	Long rightMargin;
-	Long bottomMargin;
+	float leftMargin;
+	float topMargin;
+	float rightMargin;
+	float bottomMargin;
 };
 
 inline bool A4Paper::GetIsMarking() const {
 	return this->isMarking;
 }
 
-inline Long A4Paper::GetLeftMargin() const {
+inline float A4Paper::GetLeftMargin() const {
 	return this->leftMargin;
 }
 
-inline Long A4Paper::GetTopMargin() const {
+inline float A4Paper::GetTopMargin() const {
 	return this->topMargin;
 }
 
-inline Long A4Paper::GetRightMargin() const {
+inline float A4Paper::GetRightMargin() const {
 	return this->rightMargin;
 }
 
-inline Long A4Paper::GetBottomMargin() const {
+inline float A4Paper::GetBottomMargin() const {
 	return this->bottomMargin;
 }
 

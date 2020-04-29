@@ -13,13 +13,14 @@
 
 #include <qfile.h>
 #include <qtextstream.h>
+#include <qdebug.h>
 
 File::File() {}
 
 File::~File() {}
 
-Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
-	QFile file(QString::fromLocal8Bit(fileName));
+Long File::Load(DrawingPaper *canvas, QString fileName) {
+	QFile file(fileName);
 	String lineRead;
 	//char line[513];
 
@@ -29,7 +30,7 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 
 	Creator creator;
 	Tokenizer tokenizer;
-	QString qContents;
+	QString qContents("");
 
 	canvas->flowChart->Clear();
 	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -37,20 +38,25 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 		//줌 처리
 		QTextStream textStream(&file);
 		qContents = textStream.readLine();
+		//qDebug() << qContents;
 		lineRead = qContents.toLocal8Bit().data();
 		canvas->zoom->Set(atoi(lineRead));
 		//내용 처리
 		while (!textStream.atEnd()) {
 			qContents = textStream.readLine();
+			while (qContents.at(qContents.length() - 1) != ';') {
+				qContents += '\n';
+				qContents += textStream.readLine();
+			}
 			lineRead = qContents.toLocal8Bit().data();
 			tokenizer.Scan(lineRead, '\t');
 			String contents(" ");
 			if (!(tokenizer.GetAt(7) == " ")) {
 				contents = String(tokenizer.GetAt(7));
 			}
-			contents.Replace('\r', '\n');
-			shape = creator.Create(atoi(tokenizer.GetAt(0)), atoi(tokenizer.GetAt(1)), atoi(tokenizer.GetAt(2)), atoi(tokenizer.GetAt(3)),
-				atoi(tokenizer.GetAt(4)), atoi(tokenizer.GetAt(5)), atoi(tokenizer.GetAt(6)), contents);
+			contents.Remove(';');
+			shape = creator.Create(atof(tokenizer.GetAt(0)), atof(tokenizer.GetAt(1)), atof(tokenizer.GetAt(2)), atof(tokenizer.GetAt(3)),
+				atof(tokenizer.GetAt(4)), atof(tokenizer.GetAt(5)), atof(tokenizer.GetAt(6)), contents);
 			canvas->flowChart->Attach(shape);
 
 			//=====================intellisense========================
@@ -71,8 +77,8 @@ Long File::Load(DrawingPaper *canvas, const char(*fileName)) {
 	return count;
 }
 
-Long File::Save(DrawingPaper *canvas, const char(*fileName)) {
-	QFile file(QString::fromLocal8Bit(fileName));
+Long File::Save(DrawingPaper *canvas, QString fileName) {
+	QFile file(fileName);
 	Long i = 0;
 	Long end;
 	Long count = 0;
@@ -90,7 +96,7 @@ Long File::Save(DrawingPaper *canvas, const char(*fileName)) {
 		while (i < end) {
 			shape = canvas->flowChart->GetAt(i);
 			shape->GetLine(line);
-			textStream << line; //개행문자 ?
+			textStream << QString::fromLocal8Bit(line); //개행문자 ?
 			count++;
 			i++;
 		}

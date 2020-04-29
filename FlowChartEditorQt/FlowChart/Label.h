@@ -22,12 +22,12 @@ public:
 	static Label* Instance(QWidget *parent = Q_NULLPTR);
 	static Label* Instance(String *text, QColor color = QColor(255, 255, 255), QWidget *parent = Q_NULLPTR);
 	static void Destroy();
-	void Open(Long x, Long y, Long width, Long height);
+	void Open(float x, float y, float width, float height);
 
-	Long GetX() const;
-	Long GetY() const;
-	Long GetWidth() const;
-	Long GetHeight() const;
+	float GetX() const;
+	float GetY() const;
+	float GetWidth() const;
+	float GetHeight() const;
 
 protected:
 	Label(QWidget *parent = Q_NULLPTR);
@@ -38,10 +38,10 @@ public:
 	SizeController *sizeController;
 private:
 	// 위치와 크기
-	Long x;
-	Long y;
-	Long width;
-	Long height;
+	float x;
+	float y;
+	float width;
+	float height;
 
 	QColor color;
 private:
@@ -57,16 +57,16 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 };
 
-inline Long Label::GetX() const {
+inline float Label::GetX() const {
 	return this->x;
 }
-inline Long Label::GetY() const {
+inline float Label::GetY() const {
 	return this->y;
 }
-inline Long Label::GetWidth() const {
+inline float Label::GetWidth() const {
 	return this->width;
 }
-inline Long Label::GetHeight() const {
+inline float Label::GetHeight() const {
 	return this->height;
 }
 

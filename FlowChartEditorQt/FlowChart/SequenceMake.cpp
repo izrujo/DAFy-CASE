@@ -27,7 +27,7 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 	Long length;
 	NShape *shape;
 	NShape *arrow;
-	Long x, y, width, height;
+	float x, y, width, height;
 	Long i, j, k;
 	Long index = -1;
 

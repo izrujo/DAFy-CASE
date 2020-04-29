@@ -12,7 +12,7 @@
 
 class Terminal : public Symbol {
 public:
-	Terminal(Long x, Long y, Long width, Long height,
+	Terminal(float x, float y, float width, float height,
 		QColor backGroundColor = QColor(255, 255, 255), Qt::PenStyle borderLine = Qt::SolidLine,
 		QColor borderColor = QColor(0, 0, 0), String contents = static_cast<String>(""));
 	~Terminal();
@@ -33,8 +33,8 @@ public:
 	virtual QRegion GetRegion();
 	virtual QRegion GetRegion(Long thickness);
 
-	virtual bool IsIncluded(QPoint point);
-	virtual bool IsIncluded(const QRect& rect);
+	virtual bool IsIncluded(QPointF point);
+	virtual bool IsIncluded(const QRectF& rect);
 
 	void GetAttribute(Attribute *attribute);
 

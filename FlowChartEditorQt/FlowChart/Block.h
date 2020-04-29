@@ -28,9 +28,9 @@ public:
 	virtual NShape* GetAt(Long index);
 
 	virtual Long Find(NShape* shape);
-	virtual Long Find(QPoint point);
-	virtual Long Find(Long x, Long y);
-	virtual Long Find(QRect rect);
+	virtual Long Find(QPointF point);
+	virtual Long Find(float x, float y);
+	virtual Long Find(QRectF rect);
 	virtual Long Find(SHAPE identify);
 	virtual Long Find(Long fromIndex, SHAPE identify);
 	virtual void Find(Long styles, Long* (*indexes), Long *count);

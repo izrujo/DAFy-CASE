@@ -24,13 +24,13 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	NShape *shape;
 	NShape *top, *repeatTrue;
 	Long topIndex = -1;
-	Long x, y, width, height, width2, height2;
+	float x, y, width, height, width2, height2;
 	Long i, j;
 	Long index = -1;
 	Long index_;
 	Attribute attribute, initAttribute;
-	QRect rect;
-	QRect bufferRange;
+	QRectF rect;
+	QRectF bufferRange;
 
 	
 
@@ -111,8 +111,8 @@ void IterationMake::Create(DrawingPaper *canvas) {
 
 	attribute = initAttribute;
 	top->GetAttribute(&attribute);
-	width = attribute.pointIn.x() - x;
-	height = attribute.pointIn.y() - y;
+	width = attribute.pointIn.x() - x - 10;
+	height = attribute.pointIn.y() - y - 10;
 
 	// 새로 만들 반복선의 범위를 구한다.
 	bufferRange = buffer.GetRange();
@@ -129,7 +129,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	width = repeatTrue->GetX() - x;
 	width2 = bufferRange.right() - x + 20;
 	height2 = repeatTrue->GetY() + dynamic_cast<RepeatTrue *>(repeatTrue)->GetHeight2() - y + 35;
-	height = height2 + 20;
+	height = height2 + 40;
 
 	shape = new RepeatFalse(x, y, width, height, width2, height2, 
 		QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));

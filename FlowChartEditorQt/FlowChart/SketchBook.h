@@ -38,7 +38,7 @@ public:
 	void Draw(FlowChartVisitor *visitor); //draw canvas title
 
 	void Update(); //set color - current canvas : blue , other canvases : gray 
-	void Arrange(Long x); //move - x : x of canvas window
+	void Arrange(float x); //move - x : x of canvas window
 
 	Long GetCapacity() const;
 	Long GetLength() const;

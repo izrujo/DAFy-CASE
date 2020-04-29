@@ -53,8 +53,8 @@ public:
 
 	//void Move(Long xDistance, Long yDistance); //원래 정의 없었음.
 	void New();
-	Long Save(const char(*fileName));
-	Long Load(const char(*fileName));
+	Long Save(QString fileName);
+	Long Load(QString fileName);
 	void Close();
 	QCursor GetCursor(QPoint point); //커서
 	
@@ -70,12 +70,12 @@ public:
 
 	/////////////////////////////////////////////////////
 	// 마우스 시작
-	Long startX;
-	Long startY;
+	float startX;
+	float startY;
 
 	// 계속 움직일 때
-	Long currentX;
-	Long currentY;
+	float currentX;
+	float currentY;
 	/////////////////////////////////////////////////////
 	Long indexOfSelected;
 

@@ -59,30 +59,30 @@ FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	this->windowBorderColor = QColor(255, 255, 255);
 
 	QRect rect = this->frameRect();
-	Long width = 150;
-	Long height = 50;
-	Long x = (190 - width) / 2;
-	Long y = 50;
+	float width = 150.0F;
+	float height = 50.0F;
+	float x = (190.0F - width) / 2.0F;
+	float y = 50.0F;
 
 	this->flowChartTemplate = new Template;
 	NShape *template1 = new Terminal(x, y, width, height, QColor(255, 153, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("START"));
-	y += 70;
+	y += 70.0F;
 	NShape *template2 = new Preparation(x, y, width, height, QColor(153, 153, 255),
 		Qt::SolidLine, QColor(0, 0, 0), String("Preparation"));
-	y += 70;
+	y += 70.0F;
 	NShape *template3 = new InputOutput(x, y, width, height, QColor(255, 255, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("READ "));
-	y += 70;
+	y += 70.0F;
 	NShape *template4 = new Process(x, y, width, height, QColor(153, 255, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("Process"));
-	y += 70;
+	y += 70.0F;
 	NShape *template5 = new Decision(x, y, width, height, QColor(255, 153, 255),
 		Qt::SolidLine, QColor(0, 0, 0), String("Decision"));
-	y += 70;
+	y += 70.0F;
 	NShape *template6 = new InputOutput(x, y, width, height, QColor(255, 255, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("PRINT "));
-	y += 70;
+	y += 70.0F;
 	NShape *template7 = new Terminal(x, y, width, height, QColor(255, 153, 153),
 		Qt::SolidLine, QColor(0, 0, 0), String("STOP"));
 
@@ -94,14 +94,14 @@ FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	this->flowChartTemplate->Attach(template6);
 	this->flowChartTemplate->Attach(template7);
 
-	this->windowTitle = new WindowTitle(2, 2, 186, 30, QColor(235, 235, 235),
+	this->windowTitle = new WindowTitle(2.0F, 2.0F, 186.0F, 30.0F, QColor(235, 235, 235),
 		Qt::SolidLine, QColor(255, 255, 255), String(" 기호 상자")); //x, y는 창 테두리 두께 5와 타이틀 두께 1의 기시감? 해결
-	Long windowPinX = this->windowTitle->GetX() + this->windowTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-	Long windowPinY = this->windowTitle->GetY() + 4;
+	float windowPinX = this->windowTitle->GetX() + this->windowTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+	float windowPinY = this->windowTitle->GetY() + 4;
 	this->windowPin = new WindowPin(windowPinX, windowPinY, 26, 23, QColor(235, 235, 235),
 		Qt::SolidLine, QColor(255, 255, 255));
 
-	this->painter = new QtPainter(rect.width(), rect.height());
+	this->painter = new QtPainter((Long)rect.width(), (Long)rect.height());
 
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(static_cast<FlowChartEditor*>(this->parentWidget())->windows[0]);
 	GObject *font = canvas->painter->CurrentObject("Font");
@@ -171,7 +171,7 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 
 	Long index = -1;
 
-	index = this->flowChartTemplate->Find(event->pos());
+	index = this->flowChartTemplate->Find(event->localPos());
 	if (index != -1) {
 
 		this->shapeSelected = this->flowChartTemplate->GetAt(index);
@@ -220,7 +220,7 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 		}
 		i++;
 	}
-	index = this->flowChartTemplate->Find(event->pos());
+	index = this->flowChartTemplate->Find(event->localPos());
 
 	if (index != -1) {
 		shape = this->flowChartTemplate->GetAt(index);
@@ -229,8 +229,8 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 	}
 
 	//윈도우 핀
-	QRect pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
-	bool isContain = pinRect.contains(event->pos());
+	QRectF pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
+	bool isContain = pinRect.contains(event->localPos());
 	if (isContain == true && this->hasFocus()) {
 		this->windowPin->Paint(QColor(102, 255, 255), Qt::SolidLine, this->windowPin->GetBorderColor());
 	}
@@ -247,8 +247,8 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 	//고정 해제된 기호 상자 윈도우 타이틀에 마우스 올렸을 때
 	bool isFocusedAndPinned = dynamic_cast<WindowTitle*>(this->windowTitle)->GetIsFocusedAndPinned();
 	if (isFocusedAndPinned == false) {
-		QRect titleRect(this->x(), this->y(), this->width(), this->height());
-		isContain = titleRect.contains(event->pos());
+		QRectF titleRect(this->x(), this->y(), this->width(), this->height());
+		isContain = titleRect.contains(event->localPos());
 		if (isContain == true && this->hasFocus()) {
 			this->windowTitle->Paint(QColor(102, 204, 204), this->windowTitle->GetBorderLine(), QColor(102, 204, 204));
 			this->windowBorderColor = this->windowTitle->GetBorderColor();
@@ -260,8 +260,8 @@ void FlowChartTemplate::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void FlowChartTemplate::mouseReleaseEvent(QMouseEvent *event) {
-	QRect pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
-	bool isContain = pinRect.contains(event->pos());
+	QRectF pinRect(this->windowPin->GetX(), this->windowPin->GetY(), this->windowPin->GetWidth(), this->windowPin->GetHeight());
+	bool isContain = pinRect.contains(event->localPos());
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
 	bool previousIsPinned = isPinned;
 	if (isContain == true) {

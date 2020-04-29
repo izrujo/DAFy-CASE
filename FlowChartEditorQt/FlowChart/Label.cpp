@@ -50,10 +50,10 @@ Label* Label::Instance(QWidget *parent)
 
 Label::Label(QWidget *parent)
 	: Notepad(parent) {
-	this->x = 0;
-	this->y = 0;
-	this->width = 0;
-	this->height = 0;
+	this->x = 0.0F;
+	this->y = 0.0F;
+	this->width = 0.0F;
+	this->height = 0.0F;
 	this->sizeController = NULL;
 	this->color = QColor(255, 255, 255);
 
@@ -62,10 +62,10 @@ Label::Label(QWidget *parent)
 
 Label::Label(String *text, QColor color, QWidget *parent)
 	: Notepad(text, parent) {
-	this->x = 0;
-	this->y = 0;
-	this->width = 0;
-	this->height = 0;
+	this->x = 0.0F;
+	this->y = 0.0F;
+	this->width = 0.0F;
+	this->height = 0.0F;
 	this->sizeController = NULL;
 	this->color = color;
 
@@ -86,7 +86,7 @@ void Label::Destroy() {
 	instance = 0;
 }
 
-void Label::Open(Long x, Long y, Long width, Long height) {
+void Label::Open(float x, float y, float width, float height) {
 	this->x = x;
 	this->y = y;
 	this->width = width;
@@ -100,23 +100,7 @@ void Label::resizeEvent(QResizeEvent *event) {
 void Label::keyPressEvent(QKeyEvent *event) {
 	Notepad::keyPressEvent(event);
 	int nChar = event->key();
-	/* 한 칸 띄우기 없음
-	//특수문자면 한칸 띄우는데 예외들 : ' " > <  . !
-	if (((nChar >= 33 && nChar <= 47) || (nChar >= 58 && nChar <= 64)
-		|| (nChar >= 91 && nChar <= 96) || (nChar >= 123 && nChar <= 126))
-		&& (nChar != 34 && nChar != 39 && nChar != 60 && nChar != 62 && nChar != 33 /*&& nChar != 46)) { //여기가 예외인 특수기호들
-		GlyphFactory glyphFactory;
-		Glyph *glyph = glyphFactory.Make(" ");
-		Long index = this->current->GetCurrent();
 
-		if (index >= this->current->GetLength()) {
-			this->current->Add(glyph);
-		}
-		else {
-			this->current->Add(index, glyph);
-		}
-	}
-	*/
 	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
 	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
@@ -153,7 +137,11 @@ void Label::keyPressEvent(QKeyEvent *event) {
 			Long ret = drawingPaper->variableList->Find(variable);
 			character = *(line->GetAt(startIndex)->GetContent().c_str());
 			if (ret == -1 && (character != Qt::Key_Apostrophe && character != Qt::Key_QuoteDbl)) { //따옴표 뒤에 쓴 글자면 안함
-				this->current->Remove(this->current->GetCurrent() - 1);
+				Long removeIndex = this->current->GetCurrent() - 1;
+				if (removeIndex < 0) {
+					removeIndex = 0;
+				}
+				this->current->Remove(removeIndex);
 				BOOL result = PlaySound((LPCWSTR)"sound_button_wrong0.2.wav", NULL, SND_FILENAME);
 			}
 		}

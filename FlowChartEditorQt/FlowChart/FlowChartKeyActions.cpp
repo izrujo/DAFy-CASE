@@ -14,6 +14,8 @@
 #include "Memory.h"
 #include "SketchBook.h"
 #include "WindowTitle.h"
+#include "../GObject/QtPainter.h"
+#include "DrawVisitor.h"
 
 #include <qfiledialog.h>
 #include <qtextstream.h>
@@ -25,6 +27,7 @@
 #include <qmessagebox.h>
 #include <qlabel.h>
 #include <qstatusbar.h>
+#include <qpixmap.h>
 
 FlowChartKeyAction::FlowChartKeyAction(FlowChartEditor *editor) {
 	this->editor = editor;
@@ -183,8 +186,8 @@ void FLeftKeyAction::OnKeyDown() {
 	Long i;
 	for (i = 0; i < count; i++) {
 		NShape *shape = canvas->flowChart->GetAt(indexes[i]);
-		Long x = shape->GetX();
-		Long y = shape->GetY();
+		float x = shape->GetX();
+		float y = shape->GetY();
 
 		shape->Move(x - MOVEDISTANCE, y);
 	}
@@ -227,8 +230,8 @@ void FRightKeyAction::OnKeyDown() {
 	Long i;
 	for (i = 0; i < count; i++) {
 		NShape *shape = canvas->flowChart->GetAt(indexes[i]);
-		Long x = shape->GetX();
-		Long y = shape->GetY();
+		float x = shape->GetX();
+		float y = shape->GetY();
 
 		shape->Move(x + MOVEDISTANCE, y);
 	}
@@ -269,8 +272,8 @@ void FUpKeyAction::OnKeyDown() {
 	Long i;
 	for (i = 0; i < count; i++) {
 		NShape *shape = canvas->flowChart->GetAt(indexes[i]);
-		Long x = shape->GetX();
-		Long y = shape->GetY();
+		float x = shape->GetX();
+		float y = shape->GetY();
 
 		shape->Move(x, y - MOVEDISTANCE);
 	}
@@ -313,8 +316,8 @@ void FDownKeyAction::OnKeyDown() {
 	for (i = 0; i < count; i++) {
 		NShape *shape = canvas->flowChart->GetAt(indexes[i]);
 
-		Long x = shape->GetX();
-		Long y = shape->GetY();
+		float x = shape->GetX();
+		float y = shape->GetY();
 
 		shape->Move(x, y + MOVEDISTANCE);
 	}
@@ -351,24 +354,24 @@ void FCtrlDKeyAction::OnKeyDown() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWON;
 
 		NShape *terminal = dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(0);
-		Long x = terminal->GetX() - 5;
-		Long y = terminal->GetY() - 5;
-		Long size = 20;
+		float x = terminal->GetX() - 5;
+		float y = terminal->GetY() - 5;
+		float size = 20.0F;
 		QColor backgroundColor(235, 235, 235);
 		QColor borderColor(0, 0, 0);
 
 		NShape *one = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("1"));
-		y += 70;
+		y += 70.0F;
 		NShape *two = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("2"));
-		y += 70;
+		y += 70.0F;
 		NShape *three = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("3"));
-		y += 70;
+		y += 70.0F;
 		NShape *four = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("4"));
-		y += 70;
+		y += 70.0F;
 		NShape *five = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("5"));
-		y += 70;
+		y += 70.0F;
 		NShape *six = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("6"));
-		y += 70;
+		y += 70.0F;
 		NShape *seven = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("7"));
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(one);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(two);
@@ -894,11 +897,10 @@ void FCtrlOKeyAction::OnKeyDown() {
 	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
 	if (isOpen == true) {
 		NShape *last = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetLength() - 1);
-		Long lastRight = last->GetX() + last->GetWidth();
+		float lastRight = last->GetX() + last->GetWidth();
 
 		DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 		//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
-		Long right = canvas->x() + canvas->width();
 		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
 			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
 			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
@@ -906,7 +908,7 @@ void FCtrlOKeyAction::OnKeyDown() {
 				new Memory(*canvas->memoryController->GetRedoMemory()));
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
-			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName.toLocal8Bit().data());
+			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
 			//경로를 포함한 파일이름을 수정해서 딱 파일이름만 남도록 처리
 			Long length = fileName.length();
 			Long i = length - 1;
@@ -919,7 +921,7 @@ void FCtrlOKeyAction::OnKeyDown() {
 			fileName_.remove(fileName_.length() - 4, 4);
 			fileName_.insert(0, ' ');
 			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-			Long width = 186;
+			float width = 186.0F;
 			if (fileName_.length() > 10) {
 				width = width + (fileName_.length() - 10) * 10;
 			}
@@ -935,8 +937,8 @@ void FCtrlOKeyAction::OnKeyDown() {
 			this->editor->sketchBook->Fold(QPoint(canvasTitle->GetX(), canvasTitle->GetY()));
 			this->editor->sketchBook->Update();
 			//캔버스 닫는거 옮기기
-			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-			Long windowCloseY = canvasTitle->GetY() + 4;
+			float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			float windowCloseY = canvasTitle->GetY() + 4;
 			editor->windowClose->Move(windowCloseX, windowCloseY);
 
 			//순서도는 Load()에 의해 이미 바뀌어 있음.
@@ -996,7 +998,7 @@ void FCtrlSKeyAction::OnKeyDown() {
 		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 		if (isOpen == true) {
 			this->editor->sketchBook->ModifyFileOpenPath(fileName);
-			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+			(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileName);
 
 			Long length = fileName.length();
 			Long i = length - 1;
@@ -1009,14 +1011,14 @@ void FCtrlSKeyAction::OnKeyDown() {
 			fileName.insert(0, ' ');
 
 			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-			Long width = 186;
+			float width = 186.0F;
 			if (fileName.length() > 10) {
 				width = width + (fileName.length() - 10) * 10;
 				canvasTitle->ReSize(width, canvasTitle->GetHeight());
 				editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
 				//캔버스 닫는거 옮기기
-				Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-				Long windowCloseY = canvasTitle->GetY() + 4;
+				float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+				float windowCloseY = canvasTitle->GetY() + 4;
 				editor->windowClose->Move(windowCloseX, windowCloseY);
 			}
 
@@ -1024,7 +1026,7 @@ void FCtrlSKeyAction::OnKeyDown() {
 		}
 	}
 	else {
-		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileOpenPath.toLocal8Bit().data());
+		(static_cast<DrawingPaper*>(this->editor->windows[0]))->Save(fileOpenPath);
 	}
 }
 
@@ -1064,7 +1066,7 @@ void FCtrlAltSKeyAction::OnKeyDown() {
 	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 	if (isOpen == true) {
 		this->editor->sketchBook->ModifyFileOpenPath(fileName);
-		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName.toLocal8Bit().data());
+		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName);
 
 		Long length = fileName.length();
 		Long i = length - 1;
@@ -1077,14 +1079,14 @@ void FCtrlAltSKeyAction::OnKeyDown() {
 		fileName.insert(0, ' ');
 
 		//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-		Long width = 186;
+		float width = 186.0F;
 		if (fileName.length() > 10) {
 			width = width + (fileName.length() - 10) * 10;
 			canvasTitle->ReSize(width, canvasTitle->GetHeight());
 			editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
 			//캔버스 닫는거 옮기기
-			Long windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-			Long windowCloseY = canvasTitle->GetY() + 4;
+			float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			float windowCloseY = canvasTitle->GetY() + 4;
 			editor->windowClose->Move(windowCloseX, windowCloseY);
 		}
 
@@ -1114,7 +1116,54 @@ FCtrlAltIKeyAction& FCtrlAltIKeyAction::operator=(const FCtrlAltIKeyAction& sour
 }
 
 void FCtrlAltIKeyAction::OnKeyDown() {
-	//아직
+	NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+	QString fileName;
+	QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
+	fileName_.remove(0, 1);
+
+	fileName = QFileDialog::getSaveFileName((QWidget*)this->editor,
+		QObject::tr("Save File"),
+		fileName_,
+		QObject::tr("Image files (*.jpg)"));
+
+	QFile file(fileName);
+	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
+	if (isOpen == true && fileName.length() > 0) {
+		NShape *flowChart = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->flowChart->Clone();
+		NShape *paper = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->a4Paper->Clone();
+
+		flowChart->UnSelectAll();
+
+		GObject *painter = new QtPainter(paper->GetWidth(), paper->GetHeight());
+		DrawVisitor drawVisitor(painter);
+
+		GObject *font = dynamic_cast<DrawingPaper*>(this->editor->windows[0])->painter->CurrentObject("Font");
+		painter->SelectObject(*(font->Clone()));
+		painter->Update();
+
+		float x;
+		float y;
+		Long i;
+		for (i = 0; i < flowChart->GetLength(); i++) {
+			x = flowChart->GetAt(i)->GetX();
+			y = flowChart->GetAt(i)->GetY();
+			flowChart->GetAt(i)->Move(x - paper->GetX(), y - paper->GetY());
+		}
+
+		flowChart->Accept(&drawVisitor);
+
+		dynamic_cast<QtPainter*>(painter)->qPixmap->save(fileName, "png");
+
+		if (flowChart != NULL) {
+			delete flowChart;
+		}
+		if (paper != NULL) {
+			delete paper;
+		}
+		if (painter != NULL) {
+			delete painter;
+		}
+	}
 }
 
 //FCtrlPKeyAction

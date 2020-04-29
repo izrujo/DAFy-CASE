@@ -27,11 +27,11 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	Long(*indexes) = 0;
 	Long length;
 	NShape *shape, *top;
-	Long x, y, width, height, width2, height2;
+	float x, y, width, height, width2, height2;
 	Long index = -1, index_ = -1;
 	Long i, j;
 	Attribute attribute, decisionAttribute, initAttribute;
-	QRect rect, rect2, bufferRange;
+	QRectF rect, rect2, bufferRange;
 
 	FlowChart temp(canvas->flowChart->GetCapacity());
 	FlowChart lefts(canvas->flowChart->GetCapacity());

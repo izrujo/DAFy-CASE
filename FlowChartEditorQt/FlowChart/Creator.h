@@ -10,8 +10,8 @@ class Creator
 public:
 	Creator();
 	~Creator();	
-	NShape* Create(Long shapeID, Long x, Long y, Long width, Long height, 
-		Long width2, Long height2, char (*contents)); // FactoryMethod 
+	NShape* Create(Long shapeID, float x, float y, float width, float height,
+		float width2, float height2, char (*contents)); // FactoryMethod 
 	
 };
 #endif // CREATOR_H

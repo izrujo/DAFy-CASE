@@ -46,43 +46,35 @@ void SizeController::Update() {
 	}
 
 	NShape *realShape= drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
-	Long realWidth = realShape->GetWidth();
-	Long realHeight = realShape->GetHeight();
+	float realWidth = realShape->GetWidth();
+	float realHeight = realShape->GetHeight();
 	Long realLabelWidth;
 	Long realLabelHeight;
 	Long rate = drawingPaper->zoom->GetRate();
-	Long quotient;
-	Long remainder;
 
-	Long shapeX = this->label->GetX();
-	Long shapeY = this->label->GetY();
-	Long shapeWidth = shape->GetWidth();
-	Long shapeHeight = shape->GetHeight();
-	Long newY = shapeY + shapeHeight / 2 - height / 2;
+	float shapeX = this->label->GetX();
+	float shapeY = this->label->GetY();
+	float shapeWidth = shape->GetWidth();
+	float shapeHeight = shape->GetHeight();
+	float newY = shapeY + shapeHeight / 2 - height / 2;
 
-	RECT rect = { shapeX - 5, shapeY - 5, shapeX + shapeWidth + 5, shapeY + shapeHeight + 5 };
+	QRectF rect(shapeX - 5, shapeY - 5, shapeWidth + 5, shapeHeight + 5);
 	if (width > shapeWidth) {
-		rect.right = shapeX + width + 5;
+		rect.setRight(shapeX + width + 5);
 
-		quotient = width * 100 / rate;
-		remainder = width * 100 % rate;
-		if (remainder >= 50) quotient++;
-		realLabelWidth = quotient;
+		realLabelWidth = width * 100 / rate;
 		realShape->ReSize(realHeight + realLabelWidth, realHeight);
 	}
 	if (height > shapeHeight) {
-		rect.bottom = shapeY + height + 5;
-		
-		quotient = height * 100 / rate;
-		remainder = height * 100 % rate;
-		if (remainder >= 50) quotient++;
-		realLabelHeight = quotient;
+		rect.setBottom(shapeY + height + 5);
+	
+		realLabelHeight = height * 100 / rate;
 		realShape->ReSize(realWidth, realLabelHeight);
 	}
 
 	this->label->move(this->label->GetX(), newY);
 	this->label->resize(width, height);
-	this->label->parentWidget()->repaint(rect.left, rect.top, rect.right, rect.bottom);
+	this->label->parentWidget()->repaint(rect.left(), rect.top(), rect.right(), rect.bottom());
 }
 
 SizeController& SizeController::operator=(const SizeController& source) {

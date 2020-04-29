@@ -14,15 +14,15 @@ public:
 	CoordinateConverter& operator=(const CoordinateConverter& source);
 
 	void Update(NShape *a4Paper);
-	QPoint ConvertVirtual(QPoint realPoint);
-	QPoint ConvertReal(QPoint virtualPoint);
+	QPointF ConvertVirtual(QPointF realPoint);
+	QPointF ConvertReal(QPointF virtualPoint);
 
-	QPoint GetZeroPoint() const;
+	QPointF GetZeroPoint() const;
 private:
-	QPoint zeroPoint;
+	QPointF zeroPoint;
 };
 
-inline QPoint CoordinateConverter::GetZeroPoint() const {
+inline QPointF CoordinateConverter::GetZeroPoint() const {
 	return this->zeroPoint;
 }
 
