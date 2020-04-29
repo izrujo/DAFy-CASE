@@ -100,7 +100,7 @@ void Label::resizeEvent(QResizeEvent *event) {
 void Label::keyPressEvent(QKeyEvent *event) {
 	Notepad::keyPressEvent(event);
 	int nChar = event->key();
-
+#if 0
 	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
 	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
@@ -146,6 +146,7 @@ void Label::keyPressEvent(QKeyEvent *event) {
 			}
 		}
 	}
+#endif
 }
 
 void Label::inputMethodEvent(QInputMethodEvent *event) {

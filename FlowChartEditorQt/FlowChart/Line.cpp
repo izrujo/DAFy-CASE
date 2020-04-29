@@ -10,7 +10,7 @@
 Line::Line(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: NShape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
-	this->arrowSize = 20;
+	this->arrowSize = 5;
 }
 
 Line::~Line() {
