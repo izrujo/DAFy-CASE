@@ -26,10 +26,10 @@ class ScrollController;
 
 class MemoryController;
 
-class VariableList;
-
 class Zoom;
 class QMenu;
+
+class RuleKeeper;
 
 class DrawingPaper : public QFrame
 {
@@ -86,7 +86,6 @@ public:
 
 	MemoryController *memoryController;
 
-	VariableList *variableList;
 	Clipboard *clipboard;
 	Zoom *zoom;
 	NShape *a4Paper;
@@ -96,6 +95,8 @@ public:
 	bool drawSelectingAreaFlag;
 
 	QColor windowBorderColor;
+
+	RuleKeeper *ruleKeeper;
 private:
 	friend class Label;
 	friend class FlowChartTemplate;

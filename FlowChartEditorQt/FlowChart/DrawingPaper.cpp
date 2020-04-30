@@ -30,6 +30,7 @@
 #include "WindowTitle.h"
 #include "SketchBook.h"
 #include "Memory.h"
+#include "RuleKeeper.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -75,7 +76,6 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 
 	this->memoryController = NULL;
 
-	this->variableList = NULL;
 
 	this->zoom = NULL;
 
@@ -93,12 +93,12 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 
 	this->memoryController = new MemoryController(this);
 
-	this->variableList = new VariableList;
-
 	this->zoom = new Zoom(100);
 
 	this->a4Paper = new A4Paper(444, 615, 1653, 2338);
 	this->zoom->Set(40);
+
+	this->ruleKeeper = new RuleKeeper;
 
 	connect(this, &QWidget::customContextMenuRequested, this, &DrawingPaper::OnContextMenu);
 
@@ -148,10 +148,6 @@ DrawingPaper::~DrawingPaper() {
 		delete this->memoryController;
 	}
 
-	if (this->variableList != NULL) {
-		delete this->variableList;
-	}
-
 	if (this->zoom != NULL) {
 		delete this->zoom;
 	}
@@ -162,6 +158,10 @@ DrawingPaper::~DrawingPaper() {
 	if (this->popup != NULL) {
 		delete this->popup;
 		this->popup = NULL;
+	}
+
+	if (this->ruleKeeper != NULL) {
+		delete this->ruleKeeper;
 	}
 }
 

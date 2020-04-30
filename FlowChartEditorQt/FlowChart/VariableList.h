@@ -13,6 +13,7 @@ public:
 
 	Long Add(String contents); //기호의 내용을 입력받아 해당 기호의 변수 목록을 만드는 연산
 	Long Find(String contents);
+	void SetKeywords();
 
 	String& GetAt(Long index);
 	Long GetCapacity() const;

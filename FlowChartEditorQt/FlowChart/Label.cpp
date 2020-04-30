@@ -23,6 +23,7 @@
 #include "Preparation.h"
 #include "../Notepad/GlyphFactory.h"
 #include "../GObject/Font.h"
+#include "RuleKeeper.h"
 
 #include <qevent.h>
 #include <windows.h>
@@ -98,9 +99,35 @@ void Label::resizeEvent(QResizeEvent *event) {
 }
 
 void Label::keyPressEvent(QKeyEvent *event) {
-	Notepad::keyPressEvent(event);
-	int nChar = event->key();
+	SHORT isCtrl = GetKeyState(VK_CONTROL) & 0X8000;
+	SHORT isShift = GetKeyState(VK_SHIFT) & 0X8000;
+
+	int key = event->key();
+
+	bool isKeyAct = false;
+	if ((isShift && isCtrl && key == Qt::Key_Left) || (isShift && isCtrl && key == Qt::Key_Right) ||
+		(isShift && isCtrl && key == Qt::Key_Home) || (isShift && isCtrl && key == Qt::Key_End) ||
+		(isShift && key == Qt::Key_Left) || (isShift && key == Qt::Key_Right) ||
+		(isShift && key == Qt::Key_Up) || (isShift && key == Qt::Key_Down) ||
+		(isShift && key == Qt::Key_Home) || (isShift && key == Qt::Key_End) ||
+		(isCtrl && key == Qt::Key_Left) || (isCtrl && key == Qt::Key_Right) ||
+		(isCtrl && key == Qt::Key_Home) || (isCtrl && key == Qt::Key_End) ||
+		(isCtrl && key == Qt::Key_A) || (isCtrl && key == Qt::Key_C) || 
+		(isCtrl && key == Qt::Key_V) || (isCtrl && key == Qt::Key_X) ||
+		(key == Qt::Key_Left) || (key == Qt::Key_Right) ||
+		(key == Qt::Key_Up) || (key == Qt::Key_Down) ||
+		(key == Qt::Key_Home) || (key == Qt::Key_End) ||
+		(key == Qt::Key_Delete) || (key == Qt::Key_Backspace)) {
+		isKeyAct = true;
+	}
+
+	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
+	char character = event->text().at(0).combiningClass();
+	if (drawingPaper->ruleKeeper->IsAllowed(character) == true  || isKeyAct == true) {
+		Notepad::keyPressEvent(event);
+	}
 #if 0
+	int nChar = event->key();
 	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
 	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
 	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
@@ -173,8 +200,6 @@ void Label::focusOutEvent(QFocusEvent *event) {
 	String contents(content);
 
 	NShape *shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
-
-	shape->Rewrite(contents);
 	//=====================intellisense========================
 	if (dynamic_cast<Preparation*>(shape)) {
 		if (canvas->variableList != NULL) {
@@ -184,6 +209,8 @@ void Label::focusOutEvent(QFocusEvent *event) {
 		canvas->variableList->Add(shape->GetContents());
 	}
 	//=========================================================
+
+	shape->Rewrite(contents);
 
 	this->Destroy();
 }

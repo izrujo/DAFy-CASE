@@ -317,6 +317,9 @@
     <ClCompile Include="FlowChart\WindowClose.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\RuleKeeper.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -602,6 +605,9 @@
     </ClInclude>
     <ClInclude Include="x64\Debug\uic\ui_PreviewForm.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\RuleKeeper.h">
+      <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
