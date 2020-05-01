@@ -38,7 +38,7 @@ void SelectingTool::Destroy() {
 void SelectingTool::OnLButtonDown(DrawingPaper *canvas, QPointF point) {
 	bool isControlPressed;
 	isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
-	if (!isControlPressed) {
+	if (!isControlPressed && canvas->label == NULL) {
 		canvas->flowChart->UnSelectAll();
 	}
 

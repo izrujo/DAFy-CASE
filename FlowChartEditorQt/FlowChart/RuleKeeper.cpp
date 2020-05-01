@@ -1,16 +1,14 @@
 #include "RuleKeeper.h"
 #include "VariableList.h"
 
-#include <qchar.h>
-
 RuleKeeper::RuleKeeper()
 	: variableList() {
-	// ! " ' ( ) * + , - . / 0~9 < = > A~Z ^ _ a~z
+	//공백 ! " ' ( ) * + , - . / 0~9 < = > A~Z ^ _ a~z
 	char buffer;
-	Long number = 33;
+	Long number = 32;
 	Long i = 0;
 	while (number <= 122) {
-		if ((number >= 33 && number <= 34) || (number >= 39 && number <= 57) || // ! ~ " OR ' ~ 9 OR
+		if ((number >= 32 && number <= 34) || (number >= 39 && number <= 57) || // 공백문자 ~ " OR ' ~ 9 OR
 			(number >= 60 && number <= 62) || (number >= 65 && number <= 90) || // < ~ > OR A ~ Z OR
 			(number >= 94 && number <= 95) || (number >= 97 && number <= 122)) { // ^ ~ _ OR a ~ z
 			buffer = number;
@@ -25,7 +23,7 @@ RuleKeeper::RuleKeeper()
 RuleKeeper::RuleKeeper(const RuleKeeper& source)
 	: variableList(source.variableList) {
 	Long i = 0;
-	while (i < 78) {
+	while (i < ALLOWEDKEYCOUNT) {
 		this->allowedKeys[i] = source.allowedKeys[i];
 		i++;
 	}
@@ -43,7 +41,7 @@ RuleKeeper& RuleKeeper::operator=(const RuleKeeper& source) {
 	this->variableList = source.variableList;
 
 	Long i = 0;
-	while (i < 78) {
+	while (i < ALLOWEDKEYCOUNT) {
 		this->allowedKeys[i] = source.allowedKeys[i];
 		i++;
 	}
@@ -57,12 +55,16 @@ bool RuleKeeper::IsAllowed(char key) {
 	bool isAllowed = true;
 	if (this->isQuotes == false) {
 		Long i = 0;
-		while (i < 77 && key != this->allowedKeys[i]) {
+		while (i < ALLOWEDKEYCOUNT && key != this->allowedKeys[i]) {
 			i++;
 		}
-		if (i >= 77) {
+		if (key == 34 || key == 39) {
+			this->isQuotes = true;
+		}
+		else if (i >= ALLOWEDKEYCOUNT) {
 			isAllowed = false;
 		}
+		
 	}
 
 	return isAllowed;
@@ -83,6 +85,7 @@ bool RuleKeeper::IsKeptVariableRule(String allContents) {
 	//임시 변수 목록을 만든다.
 	Long i = 0;
 	while (i < contentsLength) {
+		variable.RemoveFrom(0);
 		character = allContents.GetAt(i);
 		while (character != ',' && character != '=' && i < contentsLength) {
 			variable.Store(variable.GetLength(), character);
@@ -108,7 +111,7 @@ bool RuleKeeper::IsKeptVariableRule(String allContents) {
 		}
 		//현재 변수의 첫 번째 글자가 영문 대문자이면 모두 대문자가 아니면 규칙에 어긋난다.(기호상수)
 		Long k = 1;
-		while (k < variable.GetLength() && (character >= 97 && character <= 122)) {
+		while (k < variable.GetLength() && (character >= 65 && character <= 90)) {
 			character = variable.GetAt(k);
 			k++;
 		}

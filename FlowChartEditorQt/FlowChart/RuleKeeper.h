@@ -3,6 +3,8 @@
 
 #include "String.h"
 
+#define ALLOWEDKEYCOUNT 79
+
 class VariableList;
 
 class RuleKeeper {
@@ -19,10 +21,11 @@ public:
 
 	VariableList* GetVariableList();
 	char GetAllowedKey(Long index);
+	bool GetIsQuotes() const;
 
 private:
 	VariableList *variableList;
-	char allowedKeys[77];
+	char allowedKeys[ALLOWEDKEYCOUNT];
 	bool isQuotes;
 };
 
@@ -31,6 +34,9 @@ inline VariableList* RuleKeeper::GetVariableList() {
 }
 inline char RuleKeeper::GetAllowedKey(Long index) {
 	return this->allowedKeys[index];
+}
+inline bool RuleKeeper::GetIsQuotes() const {
+	return this->isQuotes;
 }
 
 #endif //_RULEKEEPER_H

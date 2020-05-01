@@ -60,13 +60,7 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 			canvas->flowChart->Attach(shape);
 
 			//=====================intellisense========================
-			if (dynamic_cast<Preparation*>(shape)) {
-				if (canvas->variableList != NULL) {
-					delete canvas->variableList;
-				}
-				canvas->variableList = new VariableList;
-				canvas->variableList->Add(shape->GetContents());
-			}
+			
 			//=========================================================
 
 			count++;

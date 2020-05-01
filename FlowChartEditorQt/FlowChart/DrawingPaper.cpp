@@ -291,8 +291,8 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 
 	QRectF rect = this->frameRect();
 	QPointF point = event->localPos();
-	Long positionX;
-	Long positionY;
+	Long positionX = 0;
+	Long positionY = 0;
 	if (this->scrollController != NULL) {
 		positionX = this->scrollController->GetScroll(1)->value();
 		positionY = this->scrollController->GetScroll(0)->value();
