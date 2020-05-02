@@ -12,7 +12,7 @@
 
 CaretController::CaretController(Notepad *notepad) {
 	this->notepad = notepad;
-	this->caret = 0;
+	this->caret = new Caret(this->notepad);
 	this->notepad->AttachObserver(this);
 }
 

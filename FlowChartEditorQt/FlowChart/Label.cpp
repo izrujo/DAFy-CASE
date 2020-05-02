@@ -195,6 +195,9 @@ void Label::focusOutEvent(QFocusEvent *event) {
 	string content = this->note->GetContent();
 	String contents(content);
 
+	bool isKeptVariableRule = false;
+	Long index = -1;
+	bool isOkOperator = false;
 	NShape *shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
 	//=====================intellisense========================
 	if (dynamic_cast<Preparation *>(shape)) {
@@ -205,9 +208,31 @@ void Label::focusOutEvent(QFocusEvent *event) {
 		isOkOperator = canvas->ruleKeeper->CorrectOperator(contents);
 	}
 
-	shape->Rewrite(contents);
+	if (isKeptVariableRule == true && index != -1 && isOkOperator == true) {
+		shape->Rewrite(contents);
+		this->Destroy();
+	}
+	else {
+		if (this->highlight == NULL) {
+			this->highlight = new Highlight;
+			this->editor->selector = new Selector(this);
 
-	this->Destroy();
+			Long index = this->note->Last();
+			this->current = this->note->GetAt(index);
+			this->current->Last();
+			
+			Long i = 0;
+			while (i <= index) {
+				Glyph *line = this->note->GetAt(i);
+				Long startColumn = 0;
+				Long endColumn = line->GetLength();
+				this->editor->selector->Right(i, startColumn, endColumn);
+				i++;
+			}
+		}
+		this->setFocus();
+	}
+	//=========================================================
 }
 
 void Label::mousePressEvent(QMouseEvent *event) {
