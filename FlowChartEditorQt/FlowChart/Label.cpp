@@ -24,13 +24,18 @@
 #include "../Notepad/GlyphFactory.h"
 #include "../GObject/Font.h"
 #include "RuleKeeper.h"
+#include "../Notepad/Highlight.h"
+#include "../Notepad/Editor.h"
+#include "../Notepad/Selector.h"
+#include "../Notepad/KeyActionFactory.h"
+#include "../Notepad/KeyActions.h"
 
 #include <qevent.h>
 #include <windows.h>
 
-Label* Label::instance = 0;
+Label *Label::instance = 0;
 
-Label* Label::Instance(String *text, QColor color, QWidget *parent)
+Label *Label::Instance(String *text, QColor color, QWidget *parent)
 {
 	if (instance == 0)
 	{
@@ -39,7 +44,7 @@ Label* Label::Instance(String *text, QColor color, QWidget *parent)
 	return instance;
 }
 
-Label* Label::Instance(QWidget *parent)
+Label *Label::Instance(QWidget *parent)
 {
 	if (instance == 0)
 	{
@@ -99,40 +104,27 @@ void Label::resizeEvent(QResizeEvent *event) {
 }
 
 void Label::keyPressEvent(QKeyEvent *event) {
-	SHORT isCtrl = GetKeyState(VK_CONTROL) & 0X8000;
-	SHORT isShift = GetKeyState(VK_SHIFT) & 0X8000;
-
 	int key = event->key();
 
-	bool isKeyAct = false;
-	if ((isShift && isCtrl && key == Qt::Key_Left) || (isShift && isCtrl && key == Qt::Key_Right) ||
-		(isShift && isCtrl && key == Qt::Key_Home) || (isShift && isCtrl && key == Qt::Key_End) ||
-		(isShift && key == Qt::Key_Left) || (isShift && key == Qt::Key_Right) ||
-		(isShift && key == Qt::Key_Up) || (isShift && key == Qt::Key_Down) ||
-		(isShift && key == Qt::Key_Home) || (isShift && key == Qt::Key_End) ||
-		(isCtrl && key == Qt::Key_Left) || (isCtrl && key == Qt::Key_Right) ||
-		(isCtrl && key == Qt::Key_Home) || (isCtrl && key == Qt::Key_End) ||
-		(isCtrl && key == Qt::Key_A) || (isCtrl && key == Qt::Key_C) || 
-		(isCtrl && key == Qt::Key_V) || (isCtrl && key == Qt::Key_X) ||
-		(key == Qt::Key_Left) || (key == Qt::Key_Right) ||
-		(key == Qt::Key_Up) || (key == Qt::Key_Down) ||
-		(key == Qt::Key_Home) || (key == Qt::Key_End) ||
-		(key == Qt::Key_Delete) || (key == Qt::Key_Backspace)) {
-		isKeyAct = true;
-	}
+	KeyActionFactory keyActionFactory(this);
+	KeyAction *keyAction = keyActionFactory.Make(key);
 
-	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
-	char character = event->text().at(0).combiningClass();
-	if (drawingPaper->ruleKeeper->IsAllowed(character) == true  || isKeyAct == true) {
+	DrawingPaper *drawingPaper = (DrawingPaper *)this->parentWidget();
+	String text = event->text().toStdString();
+	char *character = text;
+	if (drawingPaper->ruleKeeper->IsAllowed(*character) == true || keyAction != 0 || key == Qt::Key_Return) {
 		Notepad::keyPressEvent(event);
+		if (keyAction != 0) {
+			delete keyAction;
+		}
 	}
 #if 0
 	int nChar = event->key();
 	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
-	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
+	DrawingPaper *drawingPaper = (DrawingPaper *)this->parentWidget();
 	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
 	//준비기호가 아닐 때 처리한다.
-	if (!(dynamic_cast<Preparation*>(shape)) && !isControlPressed) {
+	if (!(dynamic_cast<Preparation *>(shape)) && !isControlPressed) {
 		bool isMustCheck = false;
 		//영문이 입력되면 무조건 처리한다.
 		if ((nChar >= Qt::Key_A && nChar <= Qt::Key_Z) /*|| (nChar >= 97 && nChar <= 122)*/) {
@@ -177,7 +169,11 @@ void Label::keyPressEvent(QKeyEvent *event) {
 }
 
 void Label::inputMethodEvent(QInputMethodEvent *event) {
-	Notepad::inputMethodEvent(event);
+	DrawingPaper *drawingPaper = (DrawingPaper *)this->parentWidget();
+	bool isQuotes = drawingPaper->ruleKeeper->GetIsQuotes();
+	if (isQuotes == true) {
+		Notepad::inputMethodEvent(event);
+	}
 }
 
 void Label::paintEvent(QPaintEvent *event) {
@@ -194,24 +190,23 @@ void Label::focusOutEvent(QFocusEvent *event) {
 	Notepad::focusOutEvent(event);
 
 	//19.09.03 Label의 (편집된)내용을 기호 안의 실제 데이터로 넣는 처리==================
-	DrawingPaper *canvas = (DrawingPaper*)this->parentWidget();
+	DrawingPaper *canvas = (DrawingPaper *)this->parentWidget();
 
 	string content = this->note->GetContent();
 	String contents(content);
-	
+
 	NShape *shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
 	//=====================intellisense========================
-	if (dynamic_cast<Preparation*>(shape)) {
-		if (canvas->variableList != NULL) {
-			delete canvas->variableList;
-		}
-		canvas->variableList = new VariableList;
-		canvas->variableList->Add(shape->GetContents());
+	if (dynamic_cast<Preparation *>(shape)) {
+		isKeptVariableRule = canvas->ruleKeeper->IsKeptVariableRule(contents);
 	}
-	//=========================================================
+	else {
+		index = canvas->ruleKeeper->FindVariable(contents);
+		isOkOperator = canvas->ruleKeeper->CorrectOperator(contents);
+	}
 
 	shape->Rewrite(contents);
-	
+
 	this->Destroy();
 }
 
