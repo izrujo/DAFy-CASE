@@ -198,7 +198,7 @@ void Label::focusOutEvent(QFocusEvent *event) {
 
 	string content = this->note->GetContent();
 	String contents(content);
-
+	
 	NShape *shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
 	//=====================intellisense========================
 	if (dynamic_cast<Preparation*>(shape)) {
@@ -211,7 +211,7 @@ void Label::focusOutEvent(QFocusEvent *event) {
 	//=========================================================
 
 	shape->Rewrite(contents);
-
+	
 	this->Destroy();
 }
 
