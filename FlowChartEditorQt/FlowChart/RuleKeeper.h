@@ -14,29 +14,9 @@ public:
 	~RuleKeeper();
 	RuleKeeper& operator=(const RuleKeeper& source);
 
-	bool IsAllowed(char key);
-	bool IsKeptVariableRule(String allContents);
-	Long FindVariable(String allContents);
-	bool CorrectOperator(String allContents);
-
-	VariableList* GetVariableList();
-	char GetAllowedKey(Long index);
-	bool GetIsQuotes() const;
-
-private:
-	VariableList *variableList;
-	char allowedKeys[ALLOWEDKEYCOUNT];
-	bool isQuotes;
+	VariableList* CheckVariableNamingRule(Array<String*> variables);
+	bool CheckVariableUsingRule(Array<String*> variables, VariableList *variableList);
+	bool CheckOperatorRule(Array<String*> operators);
 };
-
-inline VariableList* RuleKeeper::GetVariableList() {
-	return this->variableList;
-}
-inline char RuleKeeper::GetAllowedKey(Long index) {
-	return this->allowedKeys[index];
-}
-inline bool RuleKeeper::GetIsQuotes() const {
-	return this->isQuotes;
-}
 
 #endif //_RULEKEEPER_H

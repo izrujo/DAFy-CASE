@@ -11,15 +11,14 @@ public:
 	~VariableList();
 	VariableList& operator=(const VariableList& source);
 
-	Long Add(String contents); //기호의 내용을 입력받아 해당 기호의 변수 목록을 만드는 연산
-	Long Find(String contents);
-	void SetKeywords();
+	Long Add(String *contents);
+	Long Find(String *contents);
 
-	String& GetAt(Long index);
+	String* GetAt(Long index);
 	Long GetCapacity() const;
 	Long GetLength() const;
 private:
-	Array<String> variables;
+	Array<String*> variables;
 	Long capacity;
 	Long length;
 };

@@ -320,6 +320,9 @@
     <ClCompile Include="FlowChart\RuleKeeper.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\ContentsAnalyzer.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -607,6 +610,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\RuleKeeper.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\ContentsAnalyzer.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>

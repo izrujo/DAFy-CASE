@@ -9,6 +9,8 @@
 
 #include "../Notepad/Notepad.h"
 
+#define ALLOWEDKEYCOUNT 79
+
 typedef signed long int Long;
 typedef unsigned long int ULong;
 
@@ -23,6 +25,8 @@ public:
 	static Label* Instance(String *text, QColor color = QColor(255, 255, 255), QWidget *parent = Q_NULLPTR);
 	static void Destroy();
 	void Open(float x, float y, float width, float height);
+
+	bool IsAllowed(char key);
 
 	float GetX() const;
 	float GetY() const;
@@ -44,6 +48,9 @@ private:
 	float height;
 
 	QColor color;
+
+	char allowedKeys[ALLOWEDKEYCOUNT];
+	bool isQuotes;
 private:
 	static Label *instance;
 protected:

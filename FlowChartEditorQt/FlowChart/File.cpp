@@ -10,6 +10,7 @@
 #include "VariableList.h"
 #include "Zoom.h"
 #include "../GObject/Painter.h"
+#include "RuleKeeper.h"
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -60,7 +61,10 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 			canvas->flowChart->Attach(shape);
 
 			//=====================intellisense========================
-			
+			if (dynamic_cast<Preparation*>(shape)) {
+				//이미 규칙에 맞게 준비기호에 내용이 들어가 있으므로 규칙을 지켰는지 확인할 필요는 없다.
+				canvas->ruleKeeper->IsKeptVariableRule(contents);
+			}
 			//=========================================================
 
 			count++;

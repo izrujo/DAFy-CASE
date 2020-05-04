@@ -29,6 +29,7 @@
 #include "../Notepad/Selector.h"
 #include "../Notepad/KeyActionFactory.h"
 #include "../Notepad/KeyActions.h"
+#include "InputOutput.h"
 
 #include <qevent.h>
 #include <windows.h>
@@ -64,6 +65,22 @@ Label::Label(QWidget *parent)
 	this->color = QColor(255, 255, 255);
 
 	this->sizeController = new SizeController(this);
+
+	//공백 ! " ' ( ) * + , - . / 0~9 < = > A~Z ^ _ a~z
+	char buffer;
+	Long number = 32;
+	Long i = 0;
+	while (number <= 122) {
+		if ((number >= 32 && number <= 34) || (number >= 39 && number <= 57) || // 공백문자 ~ " OR ' ~ 9 OR
+			(number >= 60 && number <= 62) || (number >= 65 && number <= 90) || // < ~ > OR A ~ Z OR
+			(number >= 94 && number <= 95) || (number >= 97 && number <= 122)) { // ^ ~ _ OR a ~ z
+			buffer = number;
+			this->allowedKeys[i++] = buffer;
+		}
+		number++;
+	}
+
+	this->isQuotes = false;
 }
 
 Label::Label(String *text, QColor color, QWidget *parent)
@@ -76,6 +93,22 @@ Label::Label(String *text, QColor color, QWidget *parent)
 	this->color = color;
 
 	this->sizeController = new SizeController(this);
+
+	//공백 ! " ' ( ) * + , - . / 0~9 < = > A~Z ^ _ a~z
+	char buffer;
+	Long number = 32;
+	Long i = 0;
+	while (number <= 122) {
+		if ((number >= 32 && number <= 34) || (number >= 39 && number <= 57) || // 공백문자 ~ " OR ' ~ 9 OR
+			(number >= 60 && number <= 62) || (number >= 65 && number <= 90) || // < ~ > OR A ~ Z OR
+			(number >= 94 && number <= 95) || (number >= 97 && number <= 122)) { // ^ ~ _ OR a ~ z
+			buffer = number;
+			this->allowedKeys[i++] = buffer;
+		}
+		number++;
+	}
+
+	this->isQuotes = false;
 }
 
 Label::~Label() {
@@ -112,7 +145,7 @@ void Label::keyPressEvent(QKeyEvent *event) {
 	DrawingPaper *drawingPaper = (DrawingPaper *)this->parentWidget();
 	String text = event->text().toStdString();
 	char *character = text;
-	if (drawingPaper->ruleKeeper->IsAllowed(*character) == true || keyAction != 0 || key == Qt::Key_Return) {
+	if (this->IsAllowed(*character) == true || keyAction != 0 || key == Qt::Key_Return) {
 		Notepad::keyPressEvent(event);
 		if (keyAction != 0) {
 			delete keyAction;
@@ -199,18 +232,25 @@ void Label::focusOutEvent(QFocusEvent *event) {
 	Long index = -1;
 	bool isOkOperator = false;
 	NShape *shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
+	
 	//=====================intellisense========================
 	if (dynamic_cast<Preparation *>(shape)) {
 		isKeptVariableRule = canvas->ruleKeeper->IsKeptVariableRule(contents);
 	}
 	else {
+		if (dynamic_cast<InputOutput*>(shape)) {
+			//Read든 Print든 5개 지우면 됨 : 
+			//Read면 Read뒤에 공백까지, Print는 Print만 지우면 되기 때문.
+			contents.Delete(0, 5);
+		}
 		index = canvas->ruleKeeper->FindVariable(contents);
 		isOkOperator = canvas->ruleKeeper->CorrectOperator(contents);
 	}
 
-	if (isKeptVariableRule == true && index != -1 && isOkOperator == true) {
+	if (isKeptVariableRule == true || (index != -1 && isOkOperator == true)) {
 		shape->Rewrite(contents);
 		this->Destroy();
+		canvas->label = NULL;
 	}
 	else {
 		if (this->highlight == NULL) {
@@ -250,4 +290,23 @@ void Label::mousePressEvent(QMouseEvent *event) {
 
 void Label::mouseMoveEvent(QMouseEvent *event) {
 	Notepad::mouseMoveEvent(event);
+}
+
+bool Label::IsAllowed(char key) {
+	bool isAllowed = true;
+	if (this->isQuotes == false) {
+		Long i = 0;
+		while (i < ALLOWEDKEYCOUNT && key != this->allowedKeys[i]) {
+			i++;
+		}
+		if (key == 34 || key == 39) {
+			this->isQuotes = true;
+		}
+		else if (i >= ALLOWEDKEYCOUNT) {
+			isAllowed = false;
+		}
+
+	}
+
+	return isAllowed;
 }
