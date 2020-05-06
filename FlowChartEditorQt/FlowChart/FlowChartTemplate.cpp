@@ -192,7 +192,7 @@ void FlowChartTemplate::mousePressEvent(QMouseEvent *event) {
 		case ID_DECISION:
 			style = QString::fromLocal8Bit("    판단 기호"); break;
 		}
-		editor->symbolStatus->setText(style);
+		editor->messageStatus->setText(style);
 		editor->statusBar->repaint();
 	}
 	else {

@@ -17,6 +17,7 @@
 #include "Shape.h"
 #include "SketchBook.h"
 #include "WindowTitle.h"
+#include "VariableList.h"
 
 #include "../GObject/QtPainter.h"
 #include "../GObject/QtGObjectFactory.h"
@@ -30,6 +31,9 @@
 #include <QtPrintSupport/qpagesetupdialog.h>
 #include <QtPrintSupport/qprinter.h>
 #include <qmessagebox.h>
+#include <qlabel.h>
+#include <qstatusbar.h>
+#include <qaction.h>
 
 using namespace std;
 
@@ -219,7 +223,8 @@ void OpenCommand::Execute() {
 			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
 			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
 				new Memory(*canvas->memoryController->GetUndoMemory()),
-				new Memory(*canvas->memoryController->GetRedoMemory()));
+				new Memory(*canvas->memoryController->GetRedoMemory()),
+				new VariableList(*canvas->variableList));
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
 			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
@@ -260,6 +265,7 @@ void OpenCommand::Execute() {
 			Memory *undoMemory = new Memory(*this->editor->sketchBook->GetUndoMemory(current));
 			Memory *redoMemory = new Memory(*this->editor->sketchBook->GetRedoMemory(current));
 			canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
+			//변수 목록은 Load()에 의해 바뀐다.
 
 			canvas->setFocus(); //focus message 찾아서
 			this->editor->repaint();
@@ -1168,4 +1174,59 @@ CloseCommand& CloseCommand::operator =(const CloseCommand& source) {
 
 void CloseCommand::Execute() {
 	this->editor->close();
+}
+
+//RuleKeepCommand
+RuleKeepCommand::RuleKeepCommand(FlowChartEditor *editor)
+	: FlowChartCommand(editor) {
+
+}
+
+RuleKeepCommand::RuleKeepCommand(const RuleKeepCommand& source)
+	: FlowChartCommand(source) {
+
+}
+
+RuleKeepCommand::~RuleKeepCommand() {
+}
+
+RuleKeepCommand& RuleKeepCommand::operator =(const RuleKeepCommand& source) {
+	FlowChartCommand::operator=(source);
+
+	return *this;
+}
+
+void RuleKeepCommand::Execute() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	if (canvas->variableList != NULL) {
+		if (canvas->flowChart->GetLength() > 0) {
+			QString message = QString::fromLocal8Bit("    규칙 검사를 사용 해제할 수 없습니다. 빈 파일이어야 합니다.");
+			this->editor->messageStatus->setText(message);
+			this->editor->statusBar->repaint();
+			this->editor->ruleKeepAction->setChecked(true);
+		}
+		else {
+			if (canvas->variableList != NULL) {
+				delete canvas->variableList;
+				canvas->variableList = NULL;
+			}
+			QString message = QString::fromLocal8Bit("    규칙 검사 사용 해제");
+			this->editor->messageStatus->setText(message);
+			this->editor->statusBar->repaint();
+		}
+	}
+	else {
+		if (canvas->flowChart->GetLength() > 0) {
+			QString message = QString::fromLocal8Bit("    규칙 검사를 사용할 수 없습니다. 빈 파일이어야 합니다.");
+			this->editor->messageStatus->setText(message);
+			this->editor->statusBar->repaint();
+			this->editor->ruleKeepAction->setChecked(false);
+		}
+		else {
+			canvas->variableList = new VariableList;
+			QString message = QString::fromLocal8Bit("    규칙 검사 사용 설정");
+			this->editor->messageStatus->setText(message);
+			this->editor->statusBar->repaint();
+		}
+	}
 }

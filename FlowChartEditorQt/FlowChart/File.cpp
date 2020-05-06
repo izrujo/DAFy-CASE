@@ -11,6 +11,7 @@
 #include "Zoom.h"
 #include "../GObject/Painter.h"
 #include "RuleKeeper.h"
+#include "ContentsAnalyzer.h"
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -39,9 +40,20 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 		//줌 처리
 		QTextStream textStream(&file);
 		qContents = textStream.readLine();
-		//qDebug() << qContents;
 		lineRead = qContents.toLocal8Bit().data();
 		canvas->zoom->Set(atoi(lineRead));
+		//변수 목록
+		qContents = textStream.readLine();
+		lineRead = qContents.toLocal8Bit().data();
+		if (lineRead == "TRUE") {
+			canvas->variableList = new VariableList;
+		}
+		else {
+			if (canvas->variableList != NULL) {
+				delete canvas->variableList;
+				canvas->variableList = NULL;
+			}
+		}
 		//내용 처리
 		while (!textStream.atEnd()) {
 			qContents = textStream.readLine();
@@ -61,9 +73,15 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 			canvas->flowChart->Attach(shape);
 
 			//=====================intellisense========================
-			if (dynamic_cast<Preparation*>(shape)) {
-				//이미 규칙에 맞게 준비기호에 내용이 들어가 있으므로 규칙을 지켰는지 확인할 필요는 없다.
-				canvas->ruleKeeper->IsKeptVariableRule(contents);
+			if (canvas->variableList != NULL && dynamic_cast<Preparation*>(shape)) {
+				if (canvas->variableList != NULL) {
+					delete canvas->variableList;
+					canvas->variableList = NULL;
+				}
+				ContentsAnalyzer analyzer;
+				RuleKeeper ruleKeeper;
+				Array<String> variables = analyzer.MakeVariables(contents);
+				canvas->variableList = ruleKeeper.CheckVariableNamingRule(variables);
 			}
 			//=========================================================
 
@@ -81,15 +99,21 @@ Long File::Save(DrawingPaper *canvas, QString fileName) {
 	Long end;
 	Long count = 0;
 	char line[256];
+	char(*variableList);
 	NShape *shape;
 	Long rate;
 	// 3. 저장한다.
 	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 	if (isOpen == true) {
 		QTextStream textStream(&file);
-
+		//줌
 		rate = canvas->zoom->GetRate();
 		textStream << rate << "\n"; //개행문자 실험 요망
+
+		//변수 목록
+		(canvas->variableList != NULL) ? (variableList = "TRUE") : (variableList = "FALSE");
+		textStream << QString::fromLocal8Bit(variableList) << "\n";
+
 		end = canvas->flowChart->GetLength();
 		while (i < end) {
 			shape = canvas->flowChart->GetAt(i);

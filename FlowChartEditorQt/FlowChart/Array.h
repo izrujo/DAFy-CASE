@@ -95,7 +95,7 @@ Long Array<T>::Insert(Long index,T object){
 	T (*temp);
 
 	if( this->length >= this->capacity ){
-		temp = new T[this->capacity + 128];
+		temp = new T[this->capacity + 1];
 
 		memcpy( temp, this->front, sizeof(T)*(this->length) );
 		//memcpy(temp, this->front, sizeof(T)*(index-1));
@@ -105,7 +105,7 @@ Long Array<T>::Insert(Long index,T object){
 			this->front = 0;
 		}
 		this->front = temp;	
-		this->capacity += 128;
+		this->capacity += 1;
 	}
 
 	if( index < this->length ){
@@ -123,7 +123,7 @@ Long Array<T>::AppendFromFront(T object){
 	Long index= 0;
 	T (*temp);
 
-	temp = new T[this->capacity + 128];
+	temp = new T[this->capacity + 1];
 	
 	if( this->length > 0 ){
 		memcpy( temp + 1, this->front, sizeof(T)*(this->length));
@@ -134,7 +134,7 @@ Long Array<T>::AppendFromFront(T object){
 	}
 	
 	this->front = temp;
-	this->capacity += 128;	
+	this->capacity += 1;	
 	
 	memcpy(this->front + index, &object, sizeof(T));
 	this->length++;

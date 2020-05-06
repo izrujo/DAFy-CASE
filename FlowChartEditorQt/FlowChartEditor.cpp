@@ -15,6 +15,7 @@
 #include "FlowChart/Memory.h"
 #include "FlowChart/MemoryController.h"
 #include "FlowChart/Zoom.h"
+#include "FlowChart/VariableList.h"
 
 #include <qmenubar.h>
 #include <qevent.h>
@@ -187,7 +188,8 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 		//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
 		this->sketchBook->Unfold(canvas->flowChart->Clone(),
 			new Memory(*canvas->memoryController->GetUndoMemory()),
-			new Memory(*canvas->memoryController->GetRedoMemory()));
+			new Memory(*canvas->memoryController->GetRedoMemory()),
+			new VariableList(*canvas->variableList));
 		//스케치북을 펼친다 : 현재 캔버스의 쪽 바꾸기
 		Long current = this->sketchBook->Fold(event->pos());
 		//스케치북을 펼친다 : 색깔 바꿔주기.
@@ -197,6 +199,7 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 		Memory *undoMemory = new Memory(*this->sketchBook->GetUndoMemory(this->sketchBook->GetCurrent()));
 		Memory *redoMemory = new Memory(*this->sketchBook->GetRedoMemory(this->sketchBook->GetCurrent()));
 		canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
+		canvas->variableList = new VariableList(*this->sketchBook->GetVariableList(this->sketchBook->GetCurrent()));
 
 		NShape *currentTitle = this->sketchBook->GetCanvas(current);
 		float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
@@ -501,6 +504,11 @@ void FlowChartEditor::CreateActions() {
 
 	this->intervalAction = new QAction(QString::fromLocal8Bit(("기호 같격 같게(&I)")), this); //기호 간격 같게(I)
 	connect(this->intervalAction, &QAction::triggered, this, [=]() { this->CommandRange("Interval"); });
+
+	this->ruleKeepAction = new QAction(QString::fromLocal8Bit(("규칙 검사(&K)")), this); //규칙 검사(K)
+	this->ruleKeepAction->setCheckable(true);
+	this->ruleKeepAction->setChecked(true);
+	connect(this->ruleKeepAction, &QAction::triggered, this, [=]() { this->CommandRange("RuleKeep"); });
 	//==================== Edit Menu ====================
 
 	//==================== Format Menu ====================
@@ -586,6 +594,8 @@ void FlowChartEditor::CreateMenus() {
 	this->editMenu->addAction(this->positionAction); //기호 위치 같게(O)
 	this->editMenu->addAction(this->sizeAction); //기호 크기 같게(S)
 	this->editMenu->addAction(this->intervalAction); //기호 간격 같게(I)
+	this->editMenu->addSeparator(); //구분선
+	this->editMenu->addAction(this->ruleKeepAction); //규칙 검사(K)
 
 	this->formatMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("서식(&O)")));
 	this->formatMenu->addAction(this->fontSetAction); //글꼴(F)...
@@ -614,8 +624,8 @@ void FlowChartEditor::CreateMenus() {
 void FlowChartEditor::CreateStatusBar() {
 	this->statusBar = new QStatusBar(this);
 
-	this->symbolStatus = new QLabel(QString::fromLocal8Bit(""));
-	this->statusBar->addPermanentWidget(this->symbolStatus, 5);
+	this->messageStatus = new QLabel(QString::fromLocal8Bit(""));
+	this->statusBar->addPermanentWidget(this->messageStatus, 5);
 	
 	this->modeStatus = new QLabel(QString::fromLocal8Bit("IDLE"));
 	this->statusBar->addPermanentWidget(this->modeStatus, 2);

@@ -16,6 +16,7 @@
 #include "WindowTitle.h"
 #include "../GObject/QtPainter.h"
 #include "DrawVisitor.h"
+#include "VariableList.h"
 
 #include <qfiledialog.h>
 #include <qtextstream.h>
@@ -905,7 +906,8 @@ void FCtrlOKeyAction::OnKeyDown() {
 			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
 			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
 				new Memory(*canvas->memoryController->GetUndoMemory()),
-				new Memory(*canvas->memoryController->GetRedoMemory()));
+				new Memory(*canvas->memoryController->GetRedoMemory()),
+				new VariableList(*canvas->variableList));
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
 			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
@@ -946,6 +948,7 @@ void FCtrlOKeyAction::OnKeyDown() {
 			Memory *undoMemory = new Memory(*this->editor->sketchBook->GetUndoMemory(current));
 			Memory *redoMemory = new Memory(*this->editor->sketchBook->GetRedoMemory(current));
 			canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
+			//변수 목록은 Load()에 의해 이미 바뀌어 있음.
 
 			canvas->setFocus(); //focus message 찾아서
 			this->editor->repaint();

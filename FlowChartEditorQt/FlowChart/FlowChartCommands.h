@@ -357,4 +357,15 @@ public:
 	virtual void Execute();
 };
 
+//RuleKeepCommand
+class RuleKeepCommand : public FlowChartCommand {
+public:
+	RuleKeepCommand(FlowChartEditor *editor = 0);
+	RuleKeepCommand(const RuleKeepCommand& source);
+	virtual ~RuleKeepCommand();
+	RuleKeepCommand& operator=(const RuleKeepCommand& source);
+
+	virtual void Execute();
+};
+
 #endif //_FLOWCHARTCOMMANDS_H

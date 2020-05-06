@@ -3,7 +3,6 @@
 #include "FlowChart.h"
 #include "Clipboard.h"
 #include "MemoryController.h"
-#include "VariableList.h"
 #include "Zoom.h"
 #include "A4Paper.h"
 #include "../GObject/QtPainter.h"
@@ -30,7 +29,7 @@
 #include "WindowTitle.h"
 #include "SketchBook.h"
 #include "Memory.h"
-#include "RuleKeeper.h"
+#include "VariableList.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -98,7 +97,7 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 	this->a4Paper = new A4Paper(444, 615, 1653, 2338);
 	this->zoom->Set(40);
 
-	this->ruleKeeper = new RuleKeeper;
+	this->variableList = new VariableList;
 
 	connect(this, &QWidget::customContextMenuRequested, this, &DrawingPaper::OnContextMenu);
 
@@ -160,8 +159,8 @@ DrawingPaper::~DrawingPaper() {
 		this->popup = NULL;
 	}
 
-	if (this->ruleKeeper != NULL) {
-		delete this->ruleKeeper;
+	if (this->variableList != NULL) {
+		delete this->variableList;
 	}
 }
 
@@ -248,7 +247,7 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 		//OnSetCursor 부분
 		QCursor cursor = this->GetCursor(event->pos());
 		this->setCursor(cursor);
-		
+
 		QString x = "X: ";
 		QString xPoint = QString::number(point.x());
 		x += xPoint;
@@ -258,7 +257,7 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 		y += yPoint;
 		editor->yStatus->setText(y);
 		editor->statusBar->repaint();
-		
+
 	}
 }
 
@@ -266,14 +265,44 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 	this->flowChart->AscendingSort();
 
 	QPointF point = event->localPos();
-	if (this->tool != NULL) {
-		this->tool->OnLButtonUp(this, point);
-		ReleaseCapture();
 
+
+	if (this->tool != NULL) {
 		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
-		QString mode = this->GetCurrentMode();
-		editor->modeStatus->setText(mode);
-		editor->statusBar->repaint();
+		//기호를 그리는 것이면
+		if (this->variableList != NULL && dynamic_cast<DrawingTool*>(this->tool)) {
+			//준비기호를 찾는다.
+			Long index = this->flowChart->Find(SHAPE::PREPARATION);
+			//준비기호를 찾았거나 단말 기호 또는 준비기호를 그리려는 것이면 그린다.
+			if (index != -1 || 
+				(this->templateSelected->GetSymbolID() == ID_TERMINAL ||
+				this->templateSelected->GetSymbolID() == ID_PREPARATION)) {
+				this->tool->OnLButtonUp(this, point);
+				ReleaseCapture();
+
+				QString mode = this->GetCurrentMode();
+				editor->modeStatus->setText(mode);
+				editor->statusBar->repaint();
+			}
+			//준비 기호를 못찾았고 단말 기호나 준비 기호를 그리려는 것도 아니면 그리지 않는다.
+			else {
+				if (this->templateSelected != NULL) {
+					delete this->templateSelected;
+					this->templateSelected = NULL;
+				}
+				QString message = QString::fromLocal8Bit("    준비 기호를 그리십시오.");
+				editor->messageStatus->setText(message);
+				editor->statusBar->repaint();
+			}
+		}
+		else {
+			this->tool->OnLButtonUp(this, point);
+			ReleaseCapture();
+
+			QString mode = this->GetCurrentMode();
+			editor->modeStatus->setText(mode);
+			editor->statusBar->repaint();
+		}
 	}
 	if (this->scrollController != NULL) {
 		this->scrollController->Update();
@@ -401,7 +430,7 @@ void DrawingPaper::wheelEvent(QWheelEvent *event) {
 		if (delta.y() > 0 && oldRate < 150) {
 			rate = oldRate + 10;
 			this->zoom->Set(rate);
-			
+
 			rateStatus = QString::number(rate);
 			rateStatus += "%";
 			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
@@ -409,7 +438,7 @@ void DrawingPaper::wheelEvent(QWheelEvent *event) {
 		else if (delta.y() < 0 && oldRate > 40) {
 			rate = oldRate - 10;
 			this->zoom->Set(rate);
-			
+
 			rateStatus = QString::number(rate);
 			rateStatus += "%";
 			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
@@ -820,9 +849,10 @@ void DrawingPaper::New() {
 
 		editor->sketchBook->Unfold(this->flowChart->Clone(),
 			new Memory(*this->memoryController->GetUndoMemory()),
-			new Memory(*this->memoryController->GetRedoMemory()));
+			new Memory(*this->memoryController->GetRedoMemory()),
+			new VariableList(*this->variableList));
 
-		NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength()-1);
+		NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength() - 1);
 		NShape *newTitle = new WindowTitle(previousTitle->GetX() + previousTitle->GetWidth(),
 			previousTitle->GetY(), 186.0F, previousTitle->GetHeight(), QColor(102, 204, 204),
 			Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
@@ -835,6 +865,7 @@ void DrawingPaper::New() {
 		Memory *undoMemory = new Memory(*editor->sketchBook->GetUndoMemory(editor->sketchBook->GetCurrent()));
 		Memory *redoMemory = new Memory(*editor->sketchBook->GetRedoMemory(editor->sketchBook->GetCurrent()));
 		this->memoryController->ChangeMemory(undoMemory, redoMemory);
+		this->variableList = new VariableList;
 
 		float windowCloseX = newTitle->GetX() + newTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 		float windowCloseY = newTitle->GetY() + 4;

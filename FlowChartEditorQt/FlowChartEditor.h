@@ -41,7 +41,7 @@ public:
 
 	//===Status Bar
 	QStatusBar *statusBar;
-	QLabel *symbolStatus;
+	QLabel *messageStatus;
 	QLabel *modeStatus;
 	QLabel *xStatus;
 	QLabel *yStatus;
@@ -49,6 +49,9 @@ public:
 	QLabel *adStatus1;
 	QLabel *adStatus2;
 	//===Status Bar
+
+	//===Menu Bar - checkable action
+	QAction *ruleKeepAction; //규칙 검사(K)
 
 	//bool isUnModeMenuEnabled; //메뉴 컨트롤 관련
 	//StatusBar *statusBar;

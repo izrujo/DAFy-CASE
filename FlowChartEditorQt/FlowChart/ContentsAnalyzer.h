@@ -1,19 +1,17 @@
 #ifndef _CONTENTSANALYZER_H
 #define _CONTENTSANALYZER_H
 
-#include "Array.h"
+#include "../Notepad/Array.h"
 #include "String.h"
 
 class ContentsAnalyzer {
 public:
-	ContentsAnalyzer(String contents = static_cast<String>(""));
+	ContentsAnalyzer();
 	~ContentsAnalyzer();
 
-	Array<String*> MakeOperators();
-	Array<String*> MakeVariables();
-	String CorrectOperators();
-private:
-	String contents;
+	Array<String> MakeOperators(String contents);
+	Array<String> MakeVariables(String contents);
+	String CorrectOperators(String contents);
 };
 
 #endif //_CONTENTSANALYZER_H

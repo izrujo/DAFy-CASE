@@ -1,7 +1,7 @@
 #ifndef _VARIABLELIST_H
 #define _VARIABLELIST_H
 
-#include "Array.h"
+#include "../Notepad/Array.h"
 #include "String.h"
 
 class VariableList {
@@ -11,14 +11,16 @@ public:
 	~VariableList();
 	VariableList& operator=(const VariableList& source);
 
-	Long Add(String *contents);
-	Long Find(String *contents);
+	Long Add(String contents);
+	Long Find(String contents);
+	Long Remove(Long index);
+	void RemoveAll();
 
-	String* GetAt(Long index);
+	String& GetAt(Long index);
 	Long GetCapacity() const;
 	Long GetLength() const;
 private:
-	Array<String*> variables;
+	Array<String> variables;
 	Long capacity;
 	Long length;
 };

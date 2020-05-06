@@ -1,10 +1,12 @@
 #include "SketchBook.h"
 #include "Shape.h"
 #include "Memory.h"
+#include "VariableList.h"
 
 SketchBook::SketchBook(Long capacity)
 	: canvasList(capacity), flowChartList(capacity),
-	fileOpenPathList(capacity), undoMemoryList(capacity), redoMemoryList(capacity) {
+	fileOpenPathList(capacity), undoMemoryList(capacity), redoMemoryList(capacity),
+	variableListList(capacity) {
 	this->capacity = capacity;
 	this->length = 0;
 	this->current = 0;
@@ -13,13 +15,15 @@ SketchBook::SketchBook(Long capacity)
 SketchBook::SketchBook(const SketchBook& source)
 	: canvasList(source.canvasList), flowChartList(source.flowChartList),
 	fileOpenPathList(source.fileOpenPathList), 
-	undoMemoryList(source.undoMemoryList), redoMemoryList(source.redoMemoryList) {
+	undoMemoryList(source.undoMemoryList), redoMemoryList(source.redoMemoryList),
+	variableListList(source.variableListList) {
 	Long i = 0;
 	while (i < source.length) {
 		this->canvasList.Modify(i, (const_cast<SketchBook&>(source)).canvasList[i]->Clone());
 		this->flowChartList.Modify(i, (const_cast<SketchBook&>(source)).flowChartList[i]->Clone());
 		this->undoMemoryList.Modify(i, new Memory(*const_cast<SketchBook&>(source).undoMemoryList[i]));
 		this->redoMemoryList.Modify(i, new Memory(*const_cast<SketchBook&>(source).redoMemoryList[i]));
+		this->variableListList.Modify(i, new VariableList(*const_cast<SketchBook&>(source).variableListList[i]));
 		i++;
 	}
 	this->capacity = source.capacity;
@@ -42,6 +46,9 @@ SketchBook::~SketchBook() {
 		if (this->redoMemoryList[i] != 0) {
 			delete this->redoMemoryList[i];
 		}
+		if (this->variableListList[i] != 0) {
+			delete this->variableListList[i];
+		}
 		i++;
 	}
 }
@@ -51,6 +58,7 @@ SketchBook& SketchBook::operator=(const SketchBook& source) {
 	NShape *flowChart;
 	Memory *undoMemory;
 	Memory *redoMemory;
+	VariableList *variableList;
 
 	Long i = 0;
 	while (i < this->length) {
@@ -70,6 +78,10 @@ SketchBook& SketchBook::operator=(const SketchBook& source) {
 		if (redoMemory != 0) {
 			delete redoMemory;
 		}
+		variableList = this->variableListList.GetAt(i);
+		if (variableList != 0) {
+			delete variableList;
+		}
 		i++;
 	}
 
@@ -78,6 +90,7 @@ SketchBook& SketchBook::operator=(const SketchBook& source) {
 	this->fileOpenPathList = source.fileOpenPathList;
 	this->undoMemoryList = source.undoMemoryList;
 	this->redoMemoryList = source.redoMemoryList;
+	this->variableListList = source.variableListList;
 
 	i = 0;
 	while (i < source.GetLength()) {
@@ -89,6 +102,8 @@ SketchBook& SketchBook::operator=(const SketchBook& source) {
 		this->undoMemoryList.Modify(i, undoMemory);
 		redoMemory = new Memory(*const_cast<SketchBook&>(source).redoMemoryList.GetAt(i));
 		this->redoMemoryList.Modify(i, redoMemory);
+		variableList = new VariableList(*const_cast<SketchBook&>(source).variableListList.GetAt(i));
+		this->variableListList.Modify(i, variableList);
 		i++;
 	}
 
@@ -106,6 +121,7 @@ Long SketchBook::Add(NShape *canvas, NShape *flowChart, QString fileOpenPath) {
 		this->fileOpenPathList.Store(this->length, fileOpenPath);
 		this->undoMemoryList.Store(this->length, new Memory);
 		this->redoMemoryList.Store(this->length, new Memory);
+		this->variableListList.Store(this->length, new VariableList);
 	}
 	else {
 		this->current = this->canvasList.AppendFromRear(canvas);
@@ -113,6 +129,7 @@ Long SketchBook::Add(NShape *canvas, NShape *flowChart, QString fileOpenPath) {
 		this->fileOpenPathList.AppendFromRear(fileOpenPath);
 		this->undoMemoryList.AppendFromRear(new Memory);
 		this->redoMemoryList.AppendFromRear(new Memory);
+		this->variableListList.AppendFromRear(new VariableList);
 		this->capacity++;
 	}
 	this->length++;
@@ -127,8 +144,9 @@ Long SketchBook::Insert(Long index, NShape *canvas, NShape *flowChart, QString f
 	this->fileOpenPathList.Insert(index, fileOpenPath);
 	this->undoMemoryList.Insert(index, new Memory);
 	this->redoMemoryList.Insert(index, new Memory);
+	this->variableListList.Insert(index, new VariableList);
 	if (this->length >= this->capacity) {
-		this->capacity += 128;
+		this->capacity += 1;
 	}
 	this->length++;
 
@@ -150,6 +168,9 @@ Long SketchBook::Remove(Long index) {
 
 		delete this->redoMemoryList[index];
 		this->redoMemoryList.Delete(index);
+
+		delete this->variableListList[index];
+		this->variableListList.Delete(index);
 
 		this->length--;
 	}
@@ -181,6 +202,10 @@ Memory* SketchBook::GetRedoMemory(Long index) {
 	return this->redoMemoryList.GetAt(index);
 }
 
+VariableList* SketchBook::GetVariableList(Long index) {
+	return this->variableListList.GetAt(index);
+}
+
 void SketchBook::Draw(FlowChartVisitor *visitor) {
 	Long i = 0;
 	while (i < this->length) {
@@ -202,10 +227,11 @@ Long SketchBook::Fold(QPoint point) {
 	return this->current;
 }
 
-void SketchBook::Unfold(NShape *flowChart, Memory *undoMemory, Memory *redoMemory) {
+void SketchBook::Unfold(NShape *flowChart, Memory *undoMemory, Memory *redoMemory, VariableList *variableList) {
 	this->flowChartList[this->current] = flowChart;
 	this->undoMemoryList[this->current] = undoMemory;
 	this->redoMemoryList[this->current] = redoMemory;
+	this->variableListList[this->current] = variableList;
 }
 
 void SketchBook::Update() {

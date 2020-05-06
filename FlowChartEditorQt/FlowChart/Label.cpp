@@ -19,11 +19,12 @@
 #include "Process.h"
 #include "Creator.h"
 #include "SizeController.h"
-#include "VariableList.h"
 #include "Preparation.h"
 #include "../Notepad/GlyphFactory.h"
 #include "../GObject/Font.h"
 #include "RuleKeeper.h"
+#include "ContentsAnalyzer.h"
+#include "VariableList.h"
 #include "../Notepad/Highlight.h"
 #include "../Notepad/Editor.h"
 #include "../Notepad/Selector.h"
@@ -33,6 +34,8 @@
 
 #include <qevent.h>
 #include <windows.h>
+#include <qlabel.h>
+#include <qstatusbar.h>
 
 Label *Label::instance = 0;
 
@@ -137,75 +140,42 @@ void Label::resizeEvent(QResizeEvent *event) {
 }
 
 void Label::keyPressEvent(QKeyEvent *event) {
-	int key = event->key();
-
-	KeyActionFactory keyActionFactory(this);
-	KeyAction *keyAction = keyActionFactory.Make(key);
-
 	DrawingPaper *drawingPaper = (DrawingPaper *)this->parentWidget();
-	String text = event->text().toStdString();
-	char *character = text;
-	if (this->IsAllowed(*character) == true || keyAction != 0 || key == Qt::Key_Return) {
+	if (drawingPaper->variableList == NULL) {
 		Notepad::keyPressEvent(event);
-		if (keyAction != 0) {
-			delete keyAction;
-		}
 	}
-#if 0
-	int nChar = event->key();
-	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
-	DrawingPaper *drawingPaper = (DrawingPaper *)this->parentWidget();
-	NShape *shape = drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
-	//준비기호가 아닐 때 처리한다.
-	if (!(dynamic_cast<Preparation *>(shape)) && !isControlPressed) {
-		bool isMustCheck = false;
-		//영문이 입력되면 무조건 처리한다.
-		if ((nChar >= Qt::Key_A && nChar <= Qt::Key_Z) /*|| (nChar >= 97 && nChar <= 122)*/) {
-			isMustCheck = true;
-		}
-		//숫자가 입력되면 원래 한 글자 이상이 입력되어 있었어야 하고 그 원래 글자가 영문이면 처리한다.
-		else if ((nChar >= Qt::Key_0 && nChar <= Qt::Key_9) && this->current->GetCurrent() > 1) {
-			char previous = *(this->current->GetAt(this->current->GetCurrent() - 2)->GetContent().c_str());
-			if ((previous >= Qt::Key_A && previous <= Qt::Key_Z) /*|| (previous >= 97 && previous <= 122)*/) {
-				isMustCheck = true;
-			}
-		}
-		if (isMustCheck == true) {
-			//현재 위치에 해당하는 단어만 추출하기
-			String variable;
+	else {
+		int key = event->key();
 
-			Glyph *line = this->current->Clone();
-			Long startIndex = line->MovePreviousWord();
-			Long endIndex = line->MoveNextWord();
-			Long i = startIndex;
-			char character = *(line->GetAt(i++)->GetContent().c_str());
-			variable += character;
-			while (i < endIndex && ((character >= Qt::Key_A && character <= Qt::Key_Z) /*|| (character >= 97 && character <= 122)*/ ||
-				(variable.GetLength() > 0 && (character >= Qt::Key_0 && character <= Qt::Key_9)))) {
-				character = *(line->GetAt(i)->GetContent().c_str());
-				variable += character;
-				i++;
-			}
-			Long ret = drawingPaper->variableList->Find(variable);
-			character = *(line->GetAt(startIndex)->GetContent().c_str());
-			if (ret == -1 && (character != Qt::Key_Apostrophe && character != Qt::Key_QuoteDbl)) { //따옴표 뒤에 쓴 글자면 안함
-				Long removeIndex = this->current->GetCurrent() - 1;
-				if (removeIndex < 0) {
-					removeIndex = 0;
-				}
-				this->current->Remove(removeIndex);
-				BOOL result = PlaySound((LPCWSTR)"sound_button_wrong0.2.wav", NULL, SND_FILENAME);
+		KeyActionFactory keyActionFactory(this);
+		KeyAction *keyAction = keyActionFactory.Make(key);
+
+		FlowChartEditor *editor = (FlowChartEditor*)drawingPaper->parentWidget();
+		String text = event->text().toStdString();
+		char *character = text;
+		if (this->IsAllowed(*character) == true || keyAction != 0 || key == Qt::Key_Return) {
+			Notepad::keyPressEvent(event);
+			if (keyAction != 0) {
+				delete keyAction;
 			}
 		}
+		else {
+			QString message = QString::fromLocal8Bit("    입력할 수 없는 문자입니다.");
+			editor->messageStatus->setText(message);
+			editor->statusBar->repaint();
+		}
 	}
-#endif
 }
 
 void Label::inputMethodEvent(QInputMethodEvent *event) {
-	DrawingPaper *drawingPaper = (DrawingPaper *)this->parentWidget();
-	bool isQuotes = drawingPaper->ruleKeeper->GetIsQuotes();
-	if (isQuotes == true) {
+	DrawingPaper *drawingPaper = (DrawingPaper*)this->parentWidget();
+	if (drawingPaper->variableList == NULL) {
 		Notepad::inputMethodEvent(event);
+	}
+	else {
+		if (this->isQuotes == true) {
+			Notepad::inputMethodEvent(event);
+		}
 	}
 }
 
@@ -228,49 +198,80 @@ void Label::focusOutEvent(QFocusEvent *event) {
 	string content = this->note->GetContent();
 	String contents(content);
 
-	bool isKeptVariableRule = false;
-	Long index = -1;
-	bool isOkOperator = false;
 	NShape *shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
-	
-	//=====================intellisense========================
-	if (dynamic_cast<Preparation *>(shape)) {
-		isKeptVariableRule = canvas->ruleKeeper->IsKeptVariableRule(contents);
-	}
-	else {
-		if (dynamic_cast<InputOutput*>(shape)) {
-			//Read든 Print든 5개 지우면 됨 : 
-			//Read면 Read뒤에 공백까지, Print는 Print만 지우면 되기 때문.
-			contents.Delete(0, 5);
-		}
-		index = canvas->ruleKeeper->FindVariable(contents);
-		isOkOperator = canvas->ruleKeeper->CorrectOperator(contents);
-	}
 
-	if (isKeptVariableRule == true || (index != -1 && isOkOperator == true)) {
+	//=====================intellisense========================
+	if (canvas->variableList == NULL) {
 		shape->Rewrite(contents);
 		this->Destroy();
 		canvas->label = NULL;
 	}
 	else {
-		if (this->highlight == NULL) {
-			this->highlight = new Highlight;
-			this->editor->selector = new Selector(this);
+		FlowChartEditor *editor = (FlowChartEditor*)canvas->parentWidget();
+		QString message;
 
-			Long index = this->note->Last();
-			this->current = this->note->GetAt(index);
-			this->current->Last();
-			
-			Long i = 0;
-			while (i <= index) {
-				Glyph *line = this->note->GetAt(i);
-				Long startColumn = 0;
-				Long endColumn = line->GetLength();
-				this->editor->selector->Right(i, startColumn, endColumn);
-				i++;
+		bool isKeptVariableRule = true;
+		bool isKeptOperatorRule = true;
+
+		ContentsAnalyzer analyzer;
+		RuleKeeper ruleKeeper;
+		Array<String> variables = analyzer.MakeVariables(contents);
+		Array<String> operators = analyzer.MakeOperators(contents);
+
+		if (dynamic_cast<Preparation *>(shape)) {
+			if (canvas->variableList != NULL) {
+				delete canvas->variableList;
+				canvas->variableList = NULL;
+			}
+			canvas->variableList = ruleKeeper.CheckVariableNamingRule(variables);
+			isKeptVariableRule = (canvas->variableList->GetLength() > 0);
+		}
+		else {
+			isKeptVariableRule = ruleKeeper.CheckVariableUsingRule(variables, canvas->variableList);
+			if (dynamic_cast<InputOutput*>(shape)) {
+				isKeptOperatorRule = (operators.GetLength() < 1);
+			}
+			else {
+				isKeptOperatorRule = ruleKeeper.CheckOperatorRule(operators);
+				contents = analyzer.CorrectOperators(contents);
 			}
 		}
-		this->setFocus();
+
+		if (isKeptVariableRule == true && isKeptOperatorRule == true) {
+			shape->Rewrite(contents);
+			this->Destroy();
+			canvas->label = NULL;
+			message = QString::fromLocal8Bit("");
+		}
+		else {
+			if (dynamic_cast<Preparation *>(shape)) {
+				message = QString::fromLocal8Bit("    변수 선언이 잘못됐습니다.");
+			}
+			else {
+				message = QString::fromLocal8Bit("    잘못된 변수 또는 연산자입니다.");
+			}
+
+			if (this->highlight == NULL) {
+				this->highlight = new Highlight;
+				this->editor->selector = new Selector(this);
+
+				Long index = this->note->Last();
+				this->current = this->note->GetAt(index);
+				this->current->Last();
+
+				Long i = 0;
+				while (i <= index) {
+					Glyph *line = this->note->GetAt(i);
+					Long startColumn = 0;
+					Long endColumn = line->GetLength();
+					this->editor->selector->Right(i, startColumn, endColumn);
+					i++;
+				}
+			}
+			this->setFocus();
+		}
+		editor->messageStatus->setText(message);
+		editor->statusBar->repaint();
 	}
 	//=========================================================
 }

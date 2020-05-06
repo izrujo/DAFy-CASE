@@ -29,7 +29,7 @@ class MemoryController;
 class Zoom;
 class QMenu;
 
-class RuleKeeper;
+class VariableList;
 
 class DrawingPaper : public QFrame
 {
@@ -96,7 +96,7 @@ public:
 
 	QColor windowBorderColor;
 
-	RuleKeeper *ruleKeeper;
+	VariableList *variableList;
 private:
 	friend class Label;
 	friend class FlowChartTemplate;

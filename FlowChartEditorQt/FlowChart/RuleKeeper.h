@@ -1,6 +1,7 @@
 #ifndef _RULEKEEPER_H
 #define _RULEKEEPER_H
 
+#include "../Notepad/Array.h"
 #include "String.h"
 
 #define ALLOWEDKEYCOUNT 79
@@ -14,9 +15,9 @@ public:
 	~RuleKeeper();
 	RuleKeeper& operator=(const RuleKeeper& source);
 
-	VariableList* CheckVariableNamingRule(Array<String*> variables);
-	bool CheckVariableUsingRule(Array<String*> variables, VariableList *variableList);
-	bool CheckOperatorRule(Array<String*> operators);
+	VariableList* CheckVariableNamingRule(Array<String> variables);
+	bool CheckVariableUsingRule(Array<String> variables, VariableList *variableList);
+	bool CheckOperatorRule(Array<String> operators);
 };
 
 #endif //_RULEKEEPER_H

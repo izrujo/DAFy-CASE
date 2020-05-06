@@ -7,6 +7,7 @@
 class NShape;
 class FlowChartVisitor;
 class Memory;
+class VariableList;
 
 class SketchBook {
 public:
@@ -26,7 +27,7 @@ public:
 
 	Long Fold(QPoint point); //set current
 	
-	void Unfold(NShape *flowChart, Memory *undoMemory, Memory *redoMemory); //backup flowchart and memories on canvas window
+	void Unfold(NShape *flowChart, Memory *undoMemory, Memory *redoMemory, VariableList *variableList); //backup flowchart and memories on canvas window
 	Long ModifyFileOpenPath(QString fileName); //set full file path name
 
 	NShape* GetCanvas(Long index);
@@ -34,6 +35,7 @@ public:
 	QString& GetFileOpenPath(Long index);
 	Memory* GetUndoMemory(Long index);
 	Memory* GetRedoMemory(Long index);
+	VariableList* GetVariableList(Long index);
 
 	void Draw(FlowChartVisitor *visitor); //draw canvas title
 
@@ -49,6 +51,7 @@ private:
 	Array<QString> fileOpenPathList;
 	Array<Memory*> undoMemoryList; //包府父.
 	Array<Memory*> redoMemoryList; //包府父.
+	Array<VariableList*> variableListList; //包府父.
 	Long capacity;
 	Long length;
 	Long current;
