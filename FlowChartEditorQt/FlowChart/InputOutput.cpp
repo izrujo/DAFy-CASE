@@ -163,7 +163,6 @@ void InputOutput::GetAttribute(Attribute *attribute) {
 
 void InputOutput::GetLine(char(*line)) {
 	String saveContents(this->contents);
-	saveContents.Replace('\n', '\r');
 
 	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", 
 		ID_INPUTOUTPUT, this->x, this->y, this->width, this->height, saveContents.GetString());

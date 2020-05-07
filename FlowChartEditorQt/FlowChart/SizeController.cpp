@@ -44,6 +44,7 @@ void SizeController::Update() {
 		}
 		i++;
 	}
+	width++;
 
 	NShape *realShape= drawingPaper->flowChart->GetAt(drawingPaper->indexOfSelected);
 	float realWidth = realShape->GetWidth();

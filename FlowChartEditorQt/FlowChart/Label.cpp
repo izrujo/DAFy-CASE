@@ -67,6 +67,9 @@ Label::Label(QWidget *parent)
 	this->sizeController = NULL;
 	this->color = QColor(255, 255, 255);
 
+	this->note->Last();
+	this->current->Last();
+
 	this->sizeController = new SizeController(this);
 
 	//ฐ๘น้ ! " ' ( ) * + , - . / 0~9 < = > A~Z ^ _ a~z
@@ -94,6 +97,9 @@ Label::Label(String *text, QColor color, QWidget *parent)
 	this->height = 0.0F;
 	this->sizeController = NULL;
 	this->color = color;
+
+	this->note->Last();
+	this->current->Last();
 
 	this->sizeController = new SizeController(this);
 

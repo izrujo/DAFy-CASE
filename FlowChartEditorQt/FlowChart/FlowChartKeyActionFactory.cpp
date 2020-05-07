@@ -122,6 +122,9 @@ FlowChartKeyAction* FlowChartKeyActionFactory::Make(int modifiers, int key) {
 	else if (key == Qt::Key_7) { //7
 		keyAction = new FSevenKeyAction(this->editor);
 	}
+	else if (key == Qt::Key_F2) {
+		keyAction = new FF2KeyAction(this->editor);
+	}
 
 	return keyAction;
 }

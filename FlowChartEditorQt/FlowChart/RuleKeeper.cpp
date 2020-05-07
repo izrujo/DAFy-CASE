@@ -37,7 +37,7 @@ VariableList* RuleKeeper::CheckVariableNamingRule(Array<String> variables) {
 		}
 		//2.3. 글자가 대문자인 동안 그리고 글자 개수만큼 반복한다.
 		j = 1;
-		while (j < variable.GetLength() && (character >= 65 && character <= 90)) {
+		while (j < variable.GetLength() && ((character >= 65 && character <= 90) || character == 95)) {
 			//2.3.1. 글자를 가져오다.
 			character = variable.GetAt(++j);
 		}

@@ -75,7 +75,7 @@ Array<String> ContentsAnalyzer::MakeVariables(String contents) {
 		//1.4. 영문자가 아닌 동안 또는 따옴표 안인 동안 반복하다.
 		// (따옴표 안이라면 영문자여도 반복한다.)
 		while (((!((character >= 65 && character <= 90) ||
-			(character >= 97 && character <= 122))) ||
+			(character >= 97 && character <= 122) || character == 95)) ||
 			isQuotes == true) &&
 			character != '\0') {
 			if (isQuotes == false && (character == 34 || character == 39)) { //따옴표를 다시 만나면 지금부터 따옴표 밖임.
@@ -90,6 +90,9 @@ Array<String> ContentsAnalyzer::MakeVariables(String contents) {
 			i--;
 		}
 		i++;
+	}
+	if (isQuotes == true) { //닫는 따옴표가 없을 때
+		variables.Insert(0, String("ThereisMistake")); //규칙검사를 통과하지 못하도록 이상한 변수를 넣는다.
 	}
 	//2. 변수들을 출력하다.
 	return variables;

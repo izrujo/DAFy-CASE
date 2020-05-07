@@ -30,6 +30,7 @@
 #include "SketchBook.h"
 #include "Memory.h"
 #include "VariableList.h"
+#include "Line.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -273,10 +274,16 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 		if (this->variableList != NULL && dynamic_cast<DrawingTool*>(this->tool)) {
 			//준비기호를 찾는다.
 			Long index = this->flowChart->Find(SHAPE::PREPARATION);
-			//준비기호를 찾았거나 단말 기호 또는 준비기호를 그리려는 것이면 그린다.
-			if (index != -1 || 
-				(this->templateSelected->GetSymbolID() == ID_TERMINAL ||
-				this->templateSelected->GetSymbolID() == ID_PREPARATION)) {
+			
+			//준비기호가 있으면 준비기호를 그릴 수 없고 준비기호가 없으면 준비기호만 그릴 수가 있다.
+			//위에서 단말 기호는 예외이다. 준비 기호가 있거나 없거나 상관 없다.
+			//준비기호를 찾았고 준비 기호를 그리는 것이 아니거나(준비 기호는 하나만)
+			//준비기호를 못찾았고 준비기호를 그리려는 것이거나
+			//단말 기호를 그리려는 것이면
+			if ((index != -1 && this->templateSelected->GetSymbolID() != ID_PREPARATION) ||
+				(index == -1 && this->templateSelected->GetSymbolID() == ID_PREPARATION) ||
+				this->templateSelected->GetSymbolID() == ID_TERMINAL) {
+
 				this->tool->OnLButtonUp(this, point);
 				ReleaseCapture();
 
@@ -284,15 +291,24 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 				editor->modeStatus->setText(mode);
 				editor->statusBar->repaint();
 			}
-			//준비 기호를 못찾았고 단말 기호나 준비 기호를 그리려는 것도 아니면 그리지 않는다.
+			//준비 기호를 못찾았거나 준비기호를 그리려는 것이고
+			//준비기호를 찾았거나 준비기호를 그리려는 것이 아니고
+			//단말 기호를 그리려는 것이 아니면
 			else {
+				QString message;
+				if (this->templateSelected->GetSymbolID() != ID_PREPARATION) {
+					message = QString::fromLocal8Bit("    준비 기호를 그리십시오.");
+				}
+				else {
+					message = QString::fromLocal8Bit("    준비 기호는 하나만 그릴 수 있습니다.");
+				}
+				editor->messageStatus->setText(message);
+				editor->statusBar->repaint();
 				if (this->templateSelected != NULL) {
 					delete this->templateSelected;
 					this->templateSelected = NULL;
 				}
-				QString message = QString::fromLocal8Bit("    준비 기호를 그리십시오.");
-				editor->messageStatus->setText(message);
-				editor->statusBar->repaint();
+				this->mode = IDLE;
 			}
 		}
 		else {
@@ -338,7 +354,8 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 
 	shape = holdFlowChart->GetAt(this->indexOfSelected);
 
-	if (this->indexOfSelected != -1 &&
+	if (this->indexOfSelected != -1 && 
+		(shape->GetSymbolID() != ID_TERMINAL && !dynamic_cast<Line*>(shape)) &&
 		((point.x() > shape->GetX() + 5 && point.x() < shape->GetX() + shape->GetWidth() - 5) ||
 		(point.y() > shape->GetY() + 5 && point.y() < shape->GetY() + shape->GetHeight() - 5))) {
 

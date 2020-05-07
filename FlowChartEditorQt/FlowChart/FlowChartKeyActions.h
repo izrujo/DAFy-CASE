@@ -335,4 +335,15 @@ public:
 	virtual void OnKeyDown();
 };
 
+//FF2KeyAction
+class FF2KeyAction : public FlowChartKeyAction {
+public:
+	FF2KeyAction(FlowChartEditor *editor = 0);
+	FF2KeyAction(const FF2KeyAction& source);
+	virtual	~FF2KeyAction();
+	FF2KeyAction& operator=(const FF2KeyAction& source);
+
+	virtual void OnKeyDown();
+};
+
 #endif //_FLOWCHARTKEYACTIONS_H

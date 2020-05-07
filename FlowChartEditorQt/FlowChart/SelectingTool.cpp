@@ -97,6 +97,7 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPointF point) {
 		if (index > -1) {
 			shape = canvas->flowChart->GetAt(index);
 			(shape->IsSelected()) ? (shape->Select(false)) : (shape->Select(true));
+			canvas->indexOfSelected = index;
 		}
 	}
 	else {

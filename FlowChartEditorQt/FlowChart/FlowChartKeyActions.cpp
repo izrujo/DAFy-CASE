@@ -17,6 +17,10 @@
 #include "../GObject/QtPainter.h"
 #include "DrawVisitor.h"
 #include "VariableList.h"
+#include "Scroll.h"
+#include "ZoomVisitor.h"
+#include "Label.h"
+#include "Line.h"
 
 #include <qfiledialog.h>
 #include <qtextstream.h>
@@ -1217,4 +1221,77 @@ FAltF4KeyAction& FAltF4KeyAction::operator=(const FAltF4KeyAction& source) {
 
 void FAltF4KeyAction::OnKeyDown() {
 	this->editor->close();
+}
+
+//FF2KeyAction
+FF2KeyAction::FF2KeyAction(FlowChartEditor *editor)
+	: FlowChartKeyAction(editor) {
+
+}
+
+FF2KeyAction::FF2KeyAction(const FF2KeyAction& source)
+	: FlowChartKeyAction(source) {
+
+}
+
+FF2KeyAction::~FF2KeyAction() {
+
+}
+
+FF2KeyAction& FF2KeyAction::operator=(const FF2KeyAction& source) {
+	FlowChartKeyAction::operator=(source);
+
+	return *this;
+}
+
+void FF2KeyAction::OnKeyDown() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	
+	NShape *shape;
+	float left, top, right, bottom, halfHeight;
+
+	QRectF rect = canvas->frameRect();
+	Long positionX = 0;
+	Long positionY = 0;
+	if (canvas->scrollController != NULL) {
+		positionX = canvas->scrollController->GetScroll(1)->value();
+		positionY = canvas->scrollController->GetScroll(0)->value();
+	}
+	NShape *holdA4Paper = canvas->a4Paper->Clone();
+	NShape *holdFlowChart = canvas->flowChart->Clone();
+	FlowChartVisitor *zoomVisitor = new ZoomVisitor(canvas->zoom);
+	holdA4Paper->Accept(zoomVisitor);
+	holdFlowChart->Accept(zoomVisitor);
+
+	shape = holdFlowChart->GetAt(canvas->indexOfSelected);
+
+	if (canvas->indexOfSelected != -1 &&
+		(shape->GetSymbolID() != ID_TERMINAL && !dynamic_cast<Line*>(shape))) {
+
+		canvas->clearFocus();
+
+		QColor color = shape->GetBackGroundColor();
+		canvas->label = Label::Instance(&(shape->GetContents()), color, canvas);
+
+		halfHeight = shape->GetHeight() / 2;
+		left = shape->GetX() + halfHeight - positionX;
+		top = shape->GetY() + 1 - positionY;
+		right = shape->GetX() + shape->GetWidth() - halfHeight + 5 - positionX;
+		bottom = shape->GetY() + shape->GetHeight() - 1 - positionY;
+
+		canvas->label->Open(left, top, right - left, bottom - top);
+		canvas->label->show();
+
+		Long(*indexes) = new Long[canvas->flowChart->GetLength()];
+		indexes[0] = canvas->indexOfSelected;
+		canvas->memoryController->RememberOther(indexes, 1);
+
+		shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
+		shape->Rewrite(String(""));
+		canvas->label->setFocus();
+
+		if (indexes != 0) {
+			delete[] indexes;
+		}
+	}
 }

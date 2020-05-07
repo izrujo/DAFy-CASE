@@ -159,7 +159,6 @@ void Terminal::GetAttribute(Attribute *attribute) {
 
 void Terminal::GetLine(char(*line)) {
 	String saveContents(this->contents);
-	saveContents.Replace('\n', '\r');
 
 	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", 
 		ID_TERMINAL, this->x, this->y, this->width, this->height, saveContents.GetString());
