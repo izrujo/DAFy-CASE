@@ -12,8 +12,6 @@ using namespace std;
 
 class DrawingPaper;
 class FlowChartTemplate;
-//class StatusBar;
-//class ToolTip;
 class QMenuBar;
 class QMenu;
 class QAction;
@@ -51,13 +49,8 @@ public:
 	//===Status Bar
 
 	//===Menu Bar - checkable action
+	QAction *drawingModeAction; //그리기 모드(M) Ctrl + D
 	QAction *ruleKeepAction; //규칙 검사(K)
-
-	//bool isUnModeMenuEnabled; //메뉴 컨트롤 관련
-	//StatusBar *statusBar;
-	//ToolTip *toolTip;
-private:
-	//HACCEL hAccel; //Accelerator 단축키
 protected:
 	void closeEvent(QCloseEvent *event);
 	void resizeEvent(QResizeEvent *event);
@@ -65,15 +58,7 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
 	bool eventFilter(QObject* o, QEvent* e);
-	/* 해당하는 함수 찾기
-	BOOL PreTranslateMessage(MSG *pMsg);
-	afx_msg void OnDropFiles(HDROP hDropInfo);
-	afx_msg void OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu);
-	afx_msg void OnCommandRange(UINT uID);
-	*/
 	/* 메뉴 컨트롤에 관한 처리
-	afx_msg void OnUpdateDrawingUnModeCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateDrawingModeCommand(CCmdUI *cCmdUI);
 	afx_msg void OnUpdateCopyCutDeleteCommand(CCmdUI *cCmdUI);
 	afx_msg void OnUpdatePasteCommand(CCmdUI *cCmdUI);
 	afx_msg void OnUpdateUndoCommand(CCmdUI *cCmdUI);
@@ -89,6 +74,7 @@ protected:
 	//메뉴
 private slots:
 	void CommandRange(string text);
+	void UpdateEditMenu();
 
 private:
 	void CreateActions();
@@ -120,8 +106,6 @@ private:
 	QAction *pageSetAction; //페이지 설정(U)...
 
 	QMenu *addMenu; //삽입(A)
-	QAction *drawingModeAction; //그리기 모드(M) Ctrl + D
-	QAction *drawingUnModeAction; //그리기 모드 해제 ESC
 	QAction *startTerminalSymbolAction; //시작 단말 기호(S)
 	QAction *preparationSymbolAction; //준비 기호(P)
 	QAction *inputSymbolAction; //입력 기호(I)

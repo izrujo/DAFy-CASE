@@ -33,6 +33,7 @@
 #include <qlabel.h>
 #include <qstatusbar.h>
 #include <qpixmap.h>
+#include <qaction.h>
 
 FlowChartKeyAction::FlowChartKeyAction(FlowChartEditor *editor) {
 	this->editor = editor;
@@ -133,16 +134,6 @@ void FEscapeKeyAction::OnKeyDown() {
 	}
 
 	FlowChartTemplate *flowChartTemplate = static_cast<FlowChartTemplate*>(this->editor->windows[1]);
-
-	if (flowChartTemplate->mode == FlowChartTemplate::DRAWON && canvas->mode != DrawingPaper::DRAWING) {
-		flowChartTemplate->mode = FlowChartTemplate::DRAWOFF;
-		Long i = flowChartTemplate->flowChartTemplate->GetLength() - 1;
-		while (i >= 7) { //numberBox만 없애기
-			flowChartTemplate->flowChartTemplate->Detach(i);
-			i--;
-		}
-		//editor->isUnModeMenuEnabled = FALSE;
-	}
 
 	if (canvas->mode == DrawingPaper::DRAWING) {
 		canvas->templateSelected = NULL;
@@ -362,8 +353,8 @@ void FCtrlDKeyAction::OnKeyDown() {
 		float x = terminal->GetX() - 5;
 		float y = terminal->GetY() - 5;
 		float size = 20.0F;
-		QColor backgroundColor(235, 235, 235);
-		QColor borderColor(0, 0, 0);
+		QColor backgroundColor(0, 0, 0);
+		QColor borderColor(255, 255, 255);
 
 		NShape *one = new NumberBox(x, y, size, size, backgroundColor, Qt::SolidLine, borderColor, String("1"));
 		y += 70.0F;
@@ -386,7 +377,17 @@ void FCtrlDKeyAction::OnKeyDown() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(six);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(seven);
 
-		//this->editor->isUnModeMenuEnabled = TRUE;
+		this->editor->drawingModeAction->setChecked(true);
+	}
+	else {
+		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWOFF;
+		Long i = dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetLength() - 1;
+		while (i >= 7) { //numberBox만 없애기
+			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Detach(i);
+			i--;
+		}
+
+		this->editor->drawingModeAction->setChecked(false);
 	}
 }
 

@@ -125,17 +125,6 @@ public:
 	virtual void Execute();
 };
 
-//DrawingUnModeCommand
-class DrawingUnModeCommand : public FlowChartCommand {
-public:
-	DrawingUnModeCommand(FlowChartEditor *editor = 0);
-	DrawingUnModeCommand(const DrawingUnModeCommand& source);
-	virtual ~DrawingUnModeCommand();
-	DrawingUnModeCommand& operator=(const DrawingUnModeCommand& source);
-
-	virtual void Execute();
-};
-
 //CopyCommand
 class CopyCommand : public FlowChartCommand {
 public:

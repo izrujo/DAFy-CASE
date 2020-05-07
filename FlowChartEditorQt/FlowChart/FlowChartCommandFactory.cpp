@@ -52,9 +52,6 @@ FlowChartCommand* FlowChartCommandFactory::Make(string text) {
 	else if (text == "DrawingMode") {
 		command = new DrawingModeCommand(this->editor);
 	}
-	else if (text == "DrawingUnMode") {
-		command = new DrawingUnModeCommand(this->editor);
-	}
 	else if (text == "Copy") {
 		command = new CopyCommand(this->editor);
 	}

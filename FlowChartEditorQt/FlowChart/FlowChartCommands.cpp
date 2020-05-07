@@ -558,39 +558,17 @@ void DrawingModeCommand::Execute() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(six);
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Attach(seven);
 
-		//this->editor->isUnModeMenuEnabled = TRUE; //모드가 설정되었으므로 모드 해제 메뉴를 활성화하고 모드 설정 모드를 비활성화한다.
+		this->editor->drawingModeAction->setChecked(true);
 	}
-}
-
-//DrawingUnModeCommand
-DrawingUnModeCommand::DrawingUnModeCommand(FlowChartEditor *editor)
-	: FlowChartCommand(editor) {
-
-}
-
-DrawingUnModeCommand::DrawingUnModeCommand(const DrawingUnModeCommand& source)
-	: FlowChartCommand(source) {
-
-}
-
-DrawingUnModeCommand::~DrawingUnModeCommand() {
-}
-
-DrawingUnModeCommand& DrawingUnModeCommand::operator =(const DrawingUnModeCommand& source) {
-	FlowChartCommand::operator=(source);
-
-	return *this;
-}
-
-void DrawingUnModeCommand::Execute() {
-	if (dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode == FlowChartTemplate::DRAWON) {
+	else {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->mode = FlowChartTemplate::DRAWOFF;
 		Long i = dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetLength() - 1;
 		while (i >= 7) { //numberBox만 없애기
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->Detach(i);
 			i--;
 		}
-		//this->editor->isUnModeMenuEnabled = FALSE; //모드가 해제되었으므로 모드 해제 메뉴를 비활성화하고 모드 설정 메뉴를 활성화한다.
+
+		this->editor->drawingModeAction->setChecked(false);
 	}
 }
 

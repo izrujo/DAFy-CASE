@@ -217,74 +217,7 @@ bool FlowChartEditor::eventFilter(QObject* o, QEvent* e) {
 	return QFrame::eventFilter(o, e);
 }
 
-/*우클릭 메뉴인가?
-void FlowChartEditor::OnMenuSelect(UINT nItemID, UINT nFlags, HMENU hSysMenu) {
-	CWnd::OnMenuSelect(nItemID, nFlags, hSysMenu);
-}
-*/
-
-/*메뉴 커맨드
-void FlowChartEditor::OnCommandRange(UINT uID) {
-	FlowChartCommandFactory commandFactory(this);
-	FlowChartCommand *command = commandFactory.Make(uID);
-	if (command != NULL) {
-		command->Execute();
-		delete command;
-	}
-	this->Invalidate();
-}
-*/
-
-/*Accelerators
-BOOL FlowChartEditor::PreTranslateMessage(MSG *pMsg) {
-	if (this->hAccel != NULL) {
-		if (::TranslateAccelerator(*(AfxGetMainWnd()), this->hAccel, pMsg)) {
-			return TRUE;
-		}
-	}
-	return CWnd::PreTranslateMessage(pMsg);
-}
-*/
-
-/* 파일 로드 했을 때의 처리 내용 함수인듯
-void FlowChartEditor::OnDropFiles(HDROP hDropInfo) {
-	char filePath[256];
-	CString fileName;
-	int count;
-	(static_cast<DrawingPaper *>(this->windows[0]))->New();
-
-	count = ::DragQueryFile(hDropInfo, 0xFFFFFFFF, NULL, 0);
-	if (count > 0) {
-		DragQueryFile(hDropInfo, 0, filePath, 255);
-		this->fileOpenPath = filePath;
-		(static_cast<DrawingPaper *>(this->windows[0]))->Load(this->fileOpenPath);
-		fileName = this->fileOpenPath + " - FlowChart";
-		this->SetWindowText(fileName);
-		(static_cast<DrawingPaper *>(this->windows[0]))->SetFocus();
-		this->RedrawWindow();
-	}
-}
-*/
-
 /* 메뉴 컨트롤
-void FlowChartEditor::OnUpdateDrawingUnModeCommand(CCmdUI *cCmdUI) {
-	if (this->isUnModeMenuEnabled == FALSE) { //해제가 비활성화되어야 하면
-		cCmdUI->Enable(FALSE); //해제를 비활성화한다.
-	}
-	else {
-		cCmdUI->Enable(TRUE); //해제를 활성화한다.
-	}
-}
-
-void FlowChartEditor::OnUpdateDrawingModeCommand(CCmdUI *cCmdUI) {
-	if (this->isUnModeMenuEnabled == FALSE) { //해제가 비활성화되어야 하면
-		cCmdUI->Enable(TRUE); //설정을 활성화한다.
-	}
-	else {
-		cCmdUI->Enable(FALSE); //설정을 비활성화한다.
-	}
-}
-
 void FlowChartEditor::OnUpdateCopyCutDeleteCommand(CCmdUI *cCmdUI) {
 	if (dynamic_cast<DrawingPaper*>(this->windows[0])->mode != DrawingPaper::SELECT) { //선택 상태가 아니면 비활성화한다.
 		cCmdUI->Enable(FALSE);
@@ -436,6 +369,19 @@ void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선
 	this->repaint();
 }
 
+void FlowChartEditor::UpdateEditMenu() {
+	if (dynamic_cast<DrawingPaper*>(this->windows[0])->mode != DrawingPaper::SELECT) { //선택 상태가 아니면 비활성화한다.
+		this->copyAction->setEnabled(false);
+		this->cutAction->setEnabled(false);
+		this->deleteAction->setEnabled(false);
+	}
+	else { //선택 상태면 활성화한다.
+		this->copyAction->setEnabled(true);
+		this->cutAction->setEnabled(true);
+		this->deleteAction->setEnabled(true);
+	}
+}
+
 void FlowChartEditor::CreateActions() {
 	//==================== File Menu ====================
 	this->newAction = new QAction(QString::fromLocal8Bit(("새 파일(&N)")), this);
@@ -478,18 +424,22 @@ void FlowChartEditor::CreateActions() {
 
 	this->copyAction = new QAction(QString::fromLocal8Bit(("복사하기(&C)")), this); //복사하기(C) Ctrl + C
 	this->copyAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_C));
+	this->copyAction->setEnabled(false);
 	connect(this->copyAction, &QAction::triggered, this, [=]() { this->CommandRange("Copy"); });
 
 	this->pasteAction = new QAction(QString::fromLocal8Bit(("붙여넣기(&P)")), this); //붙여넣기(P) Ctrl + V
 	this->pasteAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_V));
+	this->pasteAction->setEnabled(false);
 	connect(this->pasteAction, &QAction::triggered, this, [=]() { this->CommandRange("Paste"); });
 
 	this->cutAction = new QAction(QString::fromLocal8Bit(("잘라내기(&T)")), this); //잘라내기(T) Ctrl + X
 	this->cutAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_X));
+	this->cutAction->setEnabled(false);
 	connect(this->cutAction, &QAction::triggered, this, [=]() { this->CommandRange("Cut"); });
 
 	this->deleteAction = new QAction(QString::fromLocal8Bit(("삭제(&L)")), this); //삭제(L) Del
 	this->deleteAction->setShortcut(QKeySequence(Qt::Key_Delete));
+	this->deleteAction->setEnabled(false);
 	connect(this->deleteAction, &QAction::triggered, this, [=]() { this->CommandRange("Delete"); });
 
 	this->selectAllAction = new QAction(QString::fromLocal8Bit(("모두 선택(&A)")), this); //모두 선택(A) Ctrl + A
@@ -522,11 +472,9 @@ void FlowChartEditor::CreateActions() {
 	//==================== Add Menu ====================
 	this->drawingModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드(&M)")), this); //그리기 모드(M) Ctrl + D
 	this->drawingModeAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_D));
+	this->drawingModeAction->setCheckable(true);
+	this->drawingModeAction->setChecked(false);
 	connect(this->drawingModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingMode"); });
-
-	this->drawingUnModeAction = new QAction(QString::fromLocal8Bit(("그리기 모드 해제(&U)")), this); //그리기 모드 해제 ESC
-	this->drawingUnModeAction->setShortcut(QKeySequence(Qt::Key_Escape));
-	connect(this->drawingUnModeAction, &QAction::triggered, this, [=]() { this->CommandRange("DrawingUnMode"); });
 
 	this->startTerminalSymbolAction = new QAction(QString::fromLocal8Bit(("시작 단말 기호(&S)")), this); //시작 단말 기호(S)
 	connect(this->startTerminalSymbolAction, &QAction::triggered, this, [=]() { this->CommandRange("StartTerminalSymbol"); });
@@ -596,6 +544,7 @@ void FlowChartEditor::CreateMenus() {
 	this->editMenu->addAction(this->intervalAction); //기호 간격 같게(I)
 	this->editMenu->addSeparator(); //구분선
 	this->editMenu->addAction(this->ruleKeepAction); //규칙 검사(K)
+	connect(this->editMenu, &QMenu::aboutToShow, this, [=]() { this->UpdateEditMenu(); });
 
 	this->formatMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("서식(&O)")));
 	this->formatMenu->addAction(this->fontSetAction); //글꼴(F)...
@@ -603,7 +552,6 @@ void FlowChartEditor::CreateMenus() {
 
 	this->addMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("삽입(&A)")));
 	this->addMenu->addAction(this->drawingModeAction); //그리기 모드(M) Ctrl + D
-	this->addMenu->addAction(this->drawingUnModeAction); //그리기 모드 해제 ESC
 	this->addMenu->addSeparator(); //구분선
 	this->addMenu->addAction(this->startTerminalSymbolAction); //시작 단말 기호(S)
 	this->addMenu->addAction(this->preparationSymbolAction); //준비 기호(P)
