@@ -42,6 +42,8 @@ FlowChartEditor::FlowChartEditor(QWidget* parent)
 		"QStatusBar::item { border:None;}"
 	);
 
+	this->setWindowTitle("DAFy CASE");
+
 	this->menuBar = NULL;
 	this->statusBar = NULL;
 

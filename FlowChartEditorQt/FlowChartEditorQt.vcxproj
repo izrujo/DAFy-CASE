@@ -224,12 +224,13 @@
     <ClInclude Include="GObject\QtPainter.h" />
     <ClInclude Include="GObject\QtPen.h" />
     <ClInclude Include="x64\Debug\uic\Notepad\ui_Notepad.h" />
+    <ClInclude Include="x64\Debug\uic\ui_EditorIntroForm.h" />
     <ClInclude Include="x64\Debug\uic\ui_FlowChartEditor.h" />
     <ClInclude Include="x64\Debug\uic\ui_PreviewForm.h" />
     <QtMoc Include="FlowChart\DrawingPaper.h" />
     <ClInclude Include="FlowChart\DrawingTool.h" />
     <ClInclude Include="FlowChart\DrawVisitor.h" />
-    <ClInclude Include="FlowChart\EditorIntroForm.h" />
+    <QtMoc Include="FlowChart\EditorIntroForm.h" />
     <ClInclude Include="FlowChart\Executions.h" />
     <ClInclude Include="FlowChart\File.h" />
     <ClInclude Include="FlowChart\FlowChart.h" />
@@ -300,6 +301,7 @@
     <ClInclude Include="Notepad\Subject.h" />
   </ItemGroup>
   <ItemGroup>
+    <QtUic Include="EditorIntroForm.ui" />
     <QtUic Include="FlowChartEditor.ui" />
     <QtUic Include="Notepad\Notepad.ui" />
     <QtUic Include="PreviewForm.ui" />

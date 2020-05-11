@@ -495,9 +495,6 @@
     <ClInclude Include="FlowChart\Block.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\EditorIntroForm.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\Label.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -615,6 +612,9 @@
     <ClInclude Include="FlowChart\ContentsAnalyzer.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
+    <ClInclude Include="x64\Debug\uic\ui_EditorIntroForm.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="FlowChartEditor.h">
@@ -638,6 +638,9 @@
     <QtMoc Include="Notepad\Notepad.h">
       <Filter>Notepad</Filter>
     </QtMoc>
+    <QtMoc Include="FlowChart\EditorIntroForm.h">
+      <Filter>FlowChart</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="FlowChartEditor.ui">
@@ -647,6 +650,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="PreviewForm.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="EditorIntroForm.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

@@ -23,7 +23,8 @@ public:
     {
         if (EditorIntroFormUi__EditorIntroFormClass->objectName().isEmpty())
             EditorIntroFormUi__EditorIntroFormClass->setObjectName(QString::fromUtf8("EditorIntroFormUi__EditorIntroFormClass"));
-        EditorIntroFormUi__EditorIntroFormClass->resize(400, 300);
+        EditorIntroFormUi__EditorIntroFormClass->setWindowModality(Qt::NonModal);
+        EditorIntroFormUi__EditorIntroFormClass->resize(650, 400);
 
         retranslateUi(EditorIntroFormUi__EditorIntroFormClass);
 
@@ -32,7 +33,7 @@ public:
 
     void retranslateUi(QWidget *EditorIntroFormUi__EditorIntroFormClass)
     {
-        EditorIntroFormUi__EditorIntroFormClass->setWindowTitle(QCoreApplication::translate("EditorIntroFormUi::EditorIntroFormClass", "Form", nullptr));
+        EditorIntroFormUi__EditorIntroFormClass->setWindowTitle(QCoreApplication::translate("EditorIntroFormUi::EditorIntroFormClass", "EditorIntroForm", nullptr));
     } // retranslateUi
 
 };
