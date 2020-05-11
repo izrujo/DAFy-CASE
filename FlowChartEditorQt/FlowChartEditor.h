@@ -75,6 +75,7 @@ protected:
 private slots:
 	void CommandRange(string text);
 	void UpdateEditMenu();
+	void UpdateControlArchitectureMenu();
 
 private:
 	void CreateActions();
