@@ -26,7 +26,7 @@
 #include <qstatusbar.h>
 #include <qlabel.h>
 
-FlowChartEditor::FlowChartEditor(QWidget* parent)
+FlowChartEditor::FlowChartEditor(QWidget *parent)
 	: QFrame(parent)
 {
 	ui.setupUi(this);
@@ -54,11 +54,11 @@ FlowChartEditor::FlowChartEditor(QWidget* parent)
 	this->menuBar->resize(frameRect.width(), this->menuBar->height());
 
 	//자식 윈도우 생성 - 위치와 크기, 스타일 지정
-	DrawingPaper* drawingPaper = new DrawingPaper(this);
+	DrawingPaper *drawingPaper = new DrawingPaper(this);
 	drawingPaper->move(200, this->menuBar->height() + 5 + 32);
 	this->windows.Store(0, drawingPaper);
 
-	FlowChartTemplate* fTemplate = new FlowChartTemplate(this);
+	FlowChartTemplate *fTemplate = new FlowChartTemplate(this);
 	fTemplate->move(5, 5 + this->menuBar->height());
 	this->windows.Store(1, fTemplate);
 
@@ -67,7 +67,7 @@ FlowChartEditor::FlowChartEditor(QWidget* parent)
 	this->sketchBook = new SketchBook;
 
 	float height = 26.0F;
-	NShape* firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height - 4, 186.0F, height, QColor(102, 204, 204),
+	NShape *firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height - 4, 186.0F, height, QColor(102, 204, 204),
 		Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
 	Long current = this->sketchBook->Add(firstTitle, drawingPaper->flowChart->Clone());
 
@@ -80,7 +80,7 @@ FlowChartEditor::FlowChartEditor(QWidget* parent)
 	this->CreateStatusBar();
 }
 
-void FlowChartEditor::closeEvent(QCloseEvent* event) {
+void FlowChartEditor::closeEvent(QCloseEvent *event) {
 	QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("닫기"),
 		QString::fromLocal8Bit("데이터가 손실될 수 있습니다. 파일을 모두 저장했는지 확인하십시오. 정말로 종료하시겠습니까?"),
 		QMessageBox::Yes | QMessageBox::No, this);
@@ -112,7 +112,7 @@ void FlowChartEditor::closeEvent(QCloseEvent* event) {
 	}
 }
 
-void FlowChartEditor::resizeEvent(QResizeEvent* event) {
+void FlowChartEditor::resizeEvent(QResizeEvent *event) {
 	QRect frameRect = this->frameRect();
 
 	this->menuBar->resize(frameRect.width(), this->menuBar->height());
@@ -126,19 +126,19 @@ void FlowChartEditor::resizeEvent(QResizeEvent* event) {
 	this->windows[1]->repaint();
 }
 
-void FlowChartEditor::paintEvent(QPaintEvent* event) {
+void FlowChartEditor::paintEvent(QPaintEvent *event) {
 	QPainter painter(this);
 
 	QRect frameRect = this->frameRect();
 
 	this->painter->Resize(frameRect.width(), frameRect.height(), QColor(235, 235, 235));
 
-	DrawingPaper* canvas = dynamic_cast<DrawingPaper*>(this->windows[0]);
+	DrawingPaper *canvas = dynamic_cast<DrawingPaper *>(this->windows[0]);
 	QColor windowBorderColor = canvas->windowBorderColor;
 	//=======창 테두리=========
 	QtGObjectFactory factory;
-	GObject* pen = factory.MakePen(QBrush(windowBorderColor), 3);
-	GObject* oldPen = this->painter->SelectObject(*pen);
+	GObject *pen = factory.MakePen(QBrush(windowBorderColor), 3);
+	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
 	QPoint p1(canvas->x() + 1, canvas->y() - 2);
@@ -152,7 +152,7 @@ void FlowChartEditor::paintEvent(QPaintEvent* event) {
 	}
 	//=======창 테두리=========
 
-	FlowChartVisitor* visitor = new DrawVisitor(this->painter);
+	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
 
 	this->sketchBook->Draw(visitor);
 	//닫기
@@ -161,7 +161,7 @@ void FlowChartEditor::paintEvent(QPaintEvent* event) {
 	this->painter->Render(&painter, 0, 0);
 }
 
-void FlowChartEditor::mouseMoveEvent(QMouseEvent* event) {
+void FlowChartEditor::mouseMoveEvent(QMouseEvent *event) {
 	//윈도우 핀
 	QRectF pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
 	bool isContain = pinRect.contains(event->localPos());
@@ -174,8 +174,8 @@ void FlowChartEditor::mouseMoveEvent(QMouseEvent* event) {
 	this->repaint();
 }
 
-void FlowChartEditor::mouseReleaseEvent(QMouseEvent* event) {
-	DrawingPaper* canvas = static_cast<DrawingPaper*>(this->windows[0]);
+void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
+	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->windows[0]);
 	QRectF pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
 	bool isContain = pinRect.contains(event->localPos());
 	if (isContain == true) {
@@ -189,23 +189,31 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent* event) {
 		}
 	}
 	else {
+		VariableList *variableList = NULL;
+		if (canvas->variableList != NULL) {
+			variableList = new VariableList(*canvas->variableList);
+		}
 		//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
 		this->sketchBook->Unfold(canvas->flowChart->Clone(),
 			new Memory(*canvas->memoryController->GetUndoMemory()),
 			new Memory(*canvas->memoryController->GetRedoMemory()),
-			new VariableList(*canvas->variableList));
+			variableList);
 		//스케치북을 펼친다 : 현재 캔버스의 쪽 바꾸기
 		Long current = this->sketchBook->Fold(event->pos());
 		//스케치북을 펼친다 : 색깔 바꿔주기.
 		this->sketchBook->Update();
 		//스케치북을 펼친다 : 펼친 캔버스의 저장되어있던 순서도로 바꾼다. 메모리도 갈아준다.
 		canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
-		Memory* undoMemory = new Memory(*this->sketchBook->GetUndoMemory(this->sketchBook->GetCurrent()));
-		Memory* redoMemory = new Memory(*this->sketchBook->GetRedoMemory(this->sketchBook->GetCurrent()));
+		Memory *undoMemory = new Memory(*this->sketchBook->GetUndoMemory(this->sketchBook->GetCurrent()));
+		Memory *redoMemory = new Memory(*this->sketchBook->GetRedoMemory(this->sketchBook->GetCurrent()));
 		canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
-		canvas->variableList = new VariableList(*this->sketchBook->GetVariableList(this->sketchBook->GetCurrent()));
+		variableList = NULL;
+		if (this->sketchBook->GetVariableList(this->sketchBook->GetCurrent()) != NULL) {
+			variableList = new VariableList(*this->sketchBook->GetVariableList(this->sketchBook->GetCurrent()));
+		}
+		canvas->variableList = variableList;
 
-		NShape* currentTitle = this->sketchBook->GetCanvas(current);
+		NShape *currentTitle = this->sketchBook->GetCanvas(current);
 		float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 		float windowCloseY = currentTitle->GetY() + 4;
 		this->windowClose->Move(windowCloseX, windowCloseY);
@@ -214,7 +222,7 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent* event) {
 	canvas->repaint();
 }
 
-bool FlowChartEditor::eventFilter(QObject* o, QEvent* e) {
+bool FlowChartEditor::eventFilter(QObject *o, QEvent *e) {
 	if (o == this && e->type() == QEvent::ShortcutOverride) {
 		e->accept();
 	}
@@ -223,13 +231,13 @@ bool FlowChartEditor::eventFilter(QObject* o, QEvent* e) {
 
 void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선언해두고 쓰면 더 효율이 좋을까?
 	FlowChartCommandFactory commandFactory(this);
-	FlowChartCommand* command = commandFactory.Make(text); //action->text()
+	FlowChartCommand *command = commandFactory.Make(text); //action->text()
 	if (command != NULL) {
 		command->Execute();
 		delete command;
 	}
 
-	DrawingPaper* drawingPaper = static_cast<DrawingPaper*>(this->windows[0]);
+	DrawingPaper *drawingPaper = static_cast<DrawingPaper *>(this->windows[0]);
 	QString mode = drawingPaper->GetCurrentMode();
 	this->modeStatus->setText(mode);
 	this->statusBar->repaint();
@@ -238,7 +246,7 @@ void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선
 }
 
 void FlowChartEditor::UpdateEditMenu() {
-	DrawingPaper* canvas = static_cast<DrawingPaper*>(this->windows[0]);
+	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->windows[0]);
 
 	//복사, 잘라내기, 삭제
 	//선택 상태가 아니면 비활성화한다.
@@ -288,7 +296,7 @@ void FlowChartEditor::UpdateEditMenu() {
 }
 
 void FlowChartEditor::UpdateControlArchitectureMenu() {
-	DrawingPaper* canvas = static_cast<DrawingPaper*>(this->windows[0]);
+	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->windows[0]);
 
 	//순차구조
 	//선택된 기호가 1개 초과면 활성화한다.
@@ -306,9 +314,9 @@ void FlowChartEditor::UpdateControlArchitectureMenu() {
 	//선택된 기호가 1개 이상이면서 선택된 첫 번째 기호가 판단기호이면 활성화한다.
 	this->iterationArchitectureAction->setEnabled(false);
 	if (count > 1) {
-		NShape* shape = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->
+		NShape *shape = dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper *>(this->windows[0])->
 			flowChart)->GetAt(indexes[0]);
-		if (dynamic_cast<Decision*>(shape)) {
+		if (dynamic_cast<Decision *>(shape)) {
 			this->iterationArchitectureAction->setEnabled(true);
 		}
 	}
@@ -317,13 +325,13 @@ void FlowChartEditor::UpdateControlArchitectureMenu() {
 	//선택된 기호가 1개 이상이면서 선택된 첫 번째 기호가 판단기호이면서 판단기호 밑 왼쪽에 기호가 하나 이상 있으면 활성화한다.
 	this->selectionArchitectureAction->setEnabled(false);
 	if (count > 1) {
-		NShape* shape = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->
+		NShape *shape = dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper *>(this->windows[0])->
 			flowChart)->GetAt(indexes[0]);
-		if (dynamic_cast<Decision*>(shape)) {
+		if (dynamic_cast<Decision *>(shape)) {
 			Long leftCount = 0;
 			Long i = 1;
 			while (i < count) {
-				NShape* left = dynamic_cast<FlowChart*>(dynamic_cast<DrawingPaper*>(this->windows[0])->flowChart)->GetAt(indexes[i]);
+				NShape *left = dynamic_cast<FlowChart *>(dynamic_cast<DrawingPaper *>(this->windows[0])->flowChart)->GetAt(indexes[i]);
 				if (left->CenterOfGravityX() < shape->CenterOfGravityX()) {
 					leftCount++;
 				}
@@ -540,7 +548,7 @@ void FlowChartEditor::CreateStatusBar() {
 	this->yStatus = new QLabel(QString::fromLocal8Bit("Y: "));
 	this->statusBar->addPermanentWidget(this->yStatus, 2);
 
-	Long zoomRate = dynamic_cast<DrawingPaper*>(this->windows[0])->zoom->GetRate();
+	Long zoomRate = dynamic_cast<DrawingPaper *>(this->windows[0])->zoom->GetRate();
 	QString zoomString = QString::number(zoomRate);
 	zoomString += '%';
 	this->zoomStatus = new QLabel(zoomString);

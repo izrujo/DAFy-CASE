@@ -21,6 +21,7 @@
 #include "ZoomVisitor.h"
 #include "Label.h"
 #include "Line.h"
+#include "PreviewForm.h"
 
 #include <qfiledialog.h>
 #include <qtextstream.h>
@@ -909,10 +910,14 @@ void FCtrlOKeyAction::OnKeyDown() {
 		//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
 		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
 			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
+			VariableList *variableList = NULL;
+			if (canvas->variableList != NULL) {
+				variableList = new VariableList(*canvas->variableList);
+			}
 			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
 				new Memory(*canvas->memoryController->GetUndoMemory()),
 				new Memory(*canvas->memoryController->GetRedoMemory()),
-				new VariableList(*canvas->variableList));
+				variableList);
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
 			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
@@ -1196,7 +1201,9 @@ FCtrlPKeyAction& FCtrlPKeyAction::operator=(const FCtrlPKeyAction& source) {
 }
 
 void FCtrlPKeyAction::OnKeyDown() {
-	//아직
+	NShape *flowChart = dynamic_cast<DrawingPaper *>(this->editor->windows[0])->flowChart->Clone();
+	PreviewForm *previewForm = new PreviewForm(this->editor, flowChart);
+	previewForm->show();
 }
 
 //FAltF4KeyAction

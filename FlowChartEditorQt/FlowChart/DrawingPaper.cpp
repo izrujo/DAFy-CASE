@@ -173,6 +173,13 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 
 	this->painter->Resize(rect.width(), rect.height(), QColor(250, 250, 250));
 
+	//폰트
+	GObject *font = this->painter->CurrentObject("Font")->Clone();
+	int size = font->GetPointSize() * this->zoom->GetRate() / 100;
+	dynamic_cast<QFont *>(font)->setPointSize(size);
+	GObject *oldFont = this->painter->SelectObject(*font);
+	this->painter->Update();
+
 	//Visitor 패턴 적용	
 	FlowChartVisitor *drawVisitor = new DrawVisitor(this->painter, this->scrollController);
 	FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
@@ -180,7 +187,6 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 	cloneA4->Accept(zoomVisitor);
 	cloneA4->Accept(drawVisitor);
 
-	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(102, 102, 102));
 	NShape *cloneFlowChart = this->flowChart->Clone();
 	cloneFlowChart->Accept(zoomVisitor);
 	cloneFlowChart->Accept(drawVisitor);
@@ -190,6 +196,13 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 		NShape *cloneSelected = this->templateSelected->Clone();
 		cloneSelected->Accept(zoomVisitor);
 		cloneSelected->Accept(drawVisitor);
+	}
+
+	//폰트 해제
+	this->painter->SelectObject(*oldFont);
+	this->painter->Update();
+	if (font != 0) {
+		delete font;
 	}
 
 	if (this->drawSelectingAreaFlag == true) {
@@ -946,7 +959,7 @@ void DrawingPaper::Close() {
 			}
 		}
 		else { //현재 순서도가 저장되어 있으면 그대로 똑같은 경로와 이름으로 저장한다.
-			this->Save(fileOpenPath.toLocal8Bit().data());
+			this->Save(fileOpenPath);
 		}
 	}
 

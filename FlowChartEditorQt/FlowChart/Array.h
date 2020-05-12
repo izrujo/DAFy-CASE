@@ -81,6 +81,7 @@ Array<T>::~Array(){
 		delete[] this->front;
 	}
 }
+
 template <typename T>
 Long Array<T>::Store(Long index,T object){
 	//memcpy(this->front+index, &object, sizeof(T));	

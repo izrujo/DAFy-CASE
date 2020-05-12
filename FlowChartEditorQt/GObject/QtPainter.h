@@ -24,6 +24,8 @@ public:
 	virtual void Render(QPainter *painter, int x, int y); //painter : 실제 화면
 	virtual void Resize(Long width, Long height, QColor color = QColor(255, 255, 255));
 	virtual void Rotate(float angle);
+	virtual void Begin(QPaintDevice *device);
+	virtual void End();
 
 	virtual QRectF& BoundingRect(const QRectF& rectangle, int flags, const QString& text);
 	virtual QRect& BoundingRect(const QRect& rectangle, int flags, const QString& text);

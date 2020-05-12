@@ -5,10 +5,10 @@ A4Paper::A4Paper(float x, float y, float width, float height, QColor backGroundC
 	Qt::PenStyle borderLine, QColor borderColor, String contents)
 	: NShape(x, y, width, height, backGroundColor, borderLine, borderColor, contents) {
 	this->isMarking = true;
-	this->leftMargin = 40.0;
-	this->topMargin = 40.0;
-	this->rightMargin = 40.0;
-	this->bottomMargin = 40.0;
+	this->leftMargin = 50.0;
+	this->topMargin = 50.0;
+	this->rightMargin = 50.0;
+	this->bottomMargin = 50.0;
 }
 
 A4Paper::~A4Paper() {

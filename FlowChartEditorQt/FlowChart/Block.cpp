@@ -78,7 +78,7 @@ Long Block::Insert(Long index, NShape *shape) {
 	this->current = -1;
 	this->current = this->shapes.Insert(index, shape);
 	if (this->length >= this->capacity) {
-		this->capacity += 128;
+		this->capacity += 1;
 	}
 	this->length++;
 
