@@ -29,18 +29,6 @@ void EditorIntroForm::paintEvent(QPaintEvent *event) {
 	float y;
 	float width;
 	float height;
-	
-	/*
-	QImage image("icon ver.3.bmp");
-
-	x = rect.x() + sizeWidth * 3;
-	y = rect.y() + sizeHeight * 1;
-	width = sizeWidth * 2;
-	height = sizeHeight * 2;
-	QRect imageRect(x, y, width, height);
-
-	painter->DrawImage(rect, "icon ver.3.bmp", imageRect, Qt::AutoColor);
-	*/
 
 	QtGObjectFactory factory;
 	//==========Title of App==========

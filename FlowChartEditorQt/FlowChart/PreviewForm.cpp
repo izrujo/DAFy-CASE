@@ -78,11 +78,6 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 	Zoom zoom;
 	zoom.Set(30);
 
-	//this->painter->Resize(this);
-	//POINT points[5] = { {rect.left, rect.top}, {rect.right, rect.top}, {rect.right, rect.bottom}, {rect.left, rect.bottom}, {rect.left, rect.top} };
-	//this->painter->FillBackground(points, 5, RGB(235, 235, 235));
-	//this->painter->ChangeLineProperty(PS_SOLID, 2, PS_ENDCAP_FLAT, PS_JOIN_MITER, RGB(0, 0, 0));
-
 	QtGObjectFactory factory;
 	GObject *pen = factory.MakePen(QBrush(QColor(0, 0, 0)), 2);
 	GObject *oldPen = this->painter->SelectObject(*pen);
@@ -93,15 +88,6 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 	int size = font->GetPointSize() * zoom.GetRate() / 100;
 	dynamic_cast<QFont *>(font)->setPointSize(size);
 	GObject *oldFont = this->painter->SelectObject(*font);
-	//LOGFONT logFont = this->editor->font->GetFont();
-	//logFont.lfHeight = -6;
-	//logFont.lfWidth = -6;
-	//strcpy(logFont.lfFaceName, _T("Terminal"));
-	//COLORREF color = this->editor->font->GetColor();
-	//this->font = new FlowChartFont(this->editor, logFont, color);
-	//HFONT hFont = this->font->Create();
-	//this->painter->ChangeFont(hFont, this->font->GetColor());
-
 	this->painter->Update();
 
 	//Visitor 패턴 적용	
@@ -157,20 +143,88 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 
 void PreviewForm::CreateToolBar() {
 	this->toolBar = new QToolBar(this);
+	Long width = this->width();
+	Long height= this->toolBar->height() * 2;
+	this->toolBar->resize(width, height);
+	
+	float size = height / 16.0F;
 
-	this->print = this->toolBar->addAction("Print");
+	QColor color(255, 255, 255);
+	color.setAlpha(0);
+
+	QPixmap pixmap1(height, height);
+	pixmap1.fill(color);
+	QPainter painter1(&pixmap1);
+
+	painter1.setPen(QColor(0, 0, 0));
+	painter1.setBrush(QBrush(QColor(255, 255, 255)));
+	painter1.drawRect(QRectF((qreal)size * 4, (qreal)size * 2, (qreal)size * 8, (qreal)size * 4));
+	
+	painter1.setBrush(QBrush(QColor(0, 0, 0)));
+	QPointF points1[8];
+	points1[0] = QPointF((qreal)size * 2, (qreal)size * 6);
+	points1[1] = QPointF((qreal)size * 14, (qreal)size * 6);
+	points1[2] = QPointF((qreal)size * 14, (qreal)size * 10);
+	points1[3] = QPointF((qreal)size * 12, (qreal)size * 10);
+	points1[4] = QPointF((qreal)size * 12, (qreal)size * 8);
+	points1[5] = QPointF((qreal)size * 4, (qreal)size * 8);
+	points1[6] = QPointF((qreal)size * 4, (qreal)size * 10);
+	points1[7] = QPointF((qreal)size * 2, (qreal)size * 10);
+	painter1.drawPolygon(points1, 8);
+
+	painter1.setBrush(QBrush(QColor(255, 255, 255)));
+	painter1.drawRect(QRectF((qreal)size * 4, (qreal)size * 8, (qreal)size * 8, (qreal)size * 6));
+
+	QPointF points2[6];
+	points2[0] = QPointF((qreal)size * 5, (qreal)size * 9);
+	points2[1] = QPointF((qreal)size * 10, (qreal)size * 9);
+	points2[2] = QPointF((qreal)size * 5, (qreal)size * 11);
+	points2[3] = QPointF((qreal)size * 8, (qreal)size * 11);
+	points2[4] = QPointF((qreal)size * 5, (qreal)size * 13);
+	points2[5] = QPointF((qreal)size * 6, (qreal)size * 13);
+	painter1.drawLines(points2, 6);
+
+	QIcon printIcon(pixmap1);
+	this->print = this->toolBar->addAction(printIcon, "Print");
 	connect(this->print, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
-	this->exit = this->toolBar->addAction("Exit");
+
+	QPixmap pixmap2(height, height);
+	pixmap2.fill(color);
+	QPainter painter2(&pixmap2);
+
+	painter2.setPen(QColor(0, 0, 0));
+	QPointF points3[10];
+	points3[0] = QPointF((qreal)size * 12, (qreal)size * 5);
+	points3[1] = QPointF((qreal)size * 12, (qreal)size * 2);
+	points3[2] = QPointF((qreal)size * 12, (qreal)size * 2);
+	points3[3] = QPointF((qreal)size * 4, (qreal)size * 2);
+	points3[4] = QPointF((qreal)size * 4, (qreal)size * 2);
+	points3[5] = QPointF((qreal)size * 4, (qreal)size * 14);
+	points3[6] = QPointF((qreal)size * 4, (qreal)size * 14);
+	points3[7] = QPointF((qreal)size * 12, (qreal)size * 14);
+	points3[8] = QPointF((qreal)size * 12, (qreal)size * 14);
+	points3[9] = QPointF((qreal)size * 12, (qreal)size * 11);
+	painter2.drawLines(points3, 10);
+
+	painter2.setBrush(QBrush(QColor(0, 0, 0)));
+	QVector<QPointF> points4;
+	points4.append(QPointF((qreal)size * 6, (qreal)size * 7));
+	points4.append(QPointF((qreal)size * 10, (qreal)size * 7));
+	points4.append(QPointF((qreal)size * 10, (qreal)size * 5));
+	points4.append(QPointF((qreal)size * 13, (qreal)size * 8));
+	points4.append(QPointF((qreal)size * 10, (qreal)size * 11));
+	points4.append(QPointF((qreal)size * 10, (qreal)size * 9));
+	points4.append(QPointF((qreal)size * 6, (qreal)size * 9));
+	points4.append(QPointF((qreal)size * 6, (qreal)size * 7));
+	QPolygonF polygon(points4);
+	QPainterPath path;
+	path.addPolygon(polygon);
+	painter2.fillPath(path, QBrush(QColor(0, 0, 0)));
+
+	QIcon exitIcon(pixmap2);
+	this->exit = this->toolBar->addAction(exitIcon, "Exit");
 	connect(this->exit, &QAction::triggered, this, &QFrame::close);
 }
-
-/* 이거는 인쇄시 좌표 찾기 위해 임시 구현한 부분
-void PreviewForm::OnLButtonDown(UINT nFlags, CPoint point) {
-	CString message;
-	message.Format("%d, %d", point.x, point.y);
-	AfxMessageBox(message);
-}
-*/
 
 void PreviewForm::CommandRange(string text) {
 	if (text == "Print") {

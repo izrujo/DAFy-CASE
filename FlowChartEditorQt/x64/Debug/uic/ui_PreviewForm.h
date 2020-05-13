@@ -24,6 +24,8 @@ public:
         if (PreviewFormUi__PreviewFormClass->objectName().isEmpty())
             PreviewFormUi__PreviewFormClass->setObjectName(QString::fromUtf8("PreviewFormUi__PreviewFormClass"));
         PreviewFormUi__PreviewFormClass->resize(1200, 875);
+        PreviewFormUi__PreviewFormClass->setMinimumSize(QSize(1200, 875));
+        PreviewFormUi__PreviewFormClass->setMaximumSize(QSize(1200, 875));
 
         retranslateUi(PreviewFormUi__PreviewFormClass);
 

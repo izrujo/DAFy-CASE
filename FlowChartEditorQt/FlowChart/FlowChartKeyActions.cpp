@@ -418,6 +418,11 @@ void FOneKeyAction::OnKeyDown() {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(0);
+
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style(QString::fromLocal8Bit("    단말 기호"));
+		editor->messageStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 }
 
@@ -447,6 +452,11 @@ void FTwoKeyAction::OnKeyDown() {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(1);
+		
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style(QString::fromLocal8Bit("    준비 기호"));
+		editor->messageStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 }
 
@@ -477,6 +487,10 @@ void FThreeKeyAction::OnKeyDown() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(2);
 
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style(QString::fromLocal8Bit("    입출력 기호"));
+		editor->messageStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 }
 
@@ -507,6 +521,10 @@ void FFourKeyAction::OnKeyDown() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(3);
 
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style(QString::fromLocal8Bit("    처리 기호"));
+		editor->messageStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 }
 
@@ -537,6 +555,10 @@ void FFiveKeyAction::OnKeyDown() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(4);
 
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style(QString::fromLocal8Bit("    판단 기호"));
+		editor->messageStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 }
 
@@ -567,6 +589,10 @@ void FSixKeyAction::OnKeyDown() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(5);
 
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style(QString::fromLocal8Bit("    입출력 기호"));
+		editor->messageStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 }
 
@@ -597,6 +623,10 @@ void FSevenKeyAction::OnKeyDown() {
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(6);
 
+		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
+		QString style(QString::fromLocal8Bit("    단말 기호"));
+		editor->messageStatus->setText(style);
+		editor->statusBar->repaint();
 	}
 }
 
