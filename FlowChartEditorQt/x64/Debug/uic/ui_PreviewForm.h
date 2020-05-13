@@ -26,6 +26,7 @@ public:
         PreviewFormUi__PreviewFormClass->resize(1200, 875);
         PreviewFormUi__PreviewFormClass->setMinimumSize(QSize(1200, 875));
         PreviewFormUi__PreviewFormClass->setMaximumSize(QSize(1200, 875));
+        PreviewFormUi__PreviewFormClass->setStyleSheet(QString::fromUtf8(""));
 
         retranslateUi(PreviewFormUi__PreviewFormClass);
 

@@ -96,7 +96,11 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 
 	NShape *cloneA4 = this->a4Paper->Clone();
 	cloneA4->Accept(zoomVisitor);
-	cloneA4->Move(cloneA4->GetX() - 670, cloneA4->GetY() - 1347);
+
+	float newX = this->width() / 2 - cloneA4->GetWidth() / 2;
+	float gap = cloneA4->GetX() - newX;
+
+	cloneA4->Move(newX, cloneA4->GetY() - 1347);
 	dynamic_cast<A4Paper *>(cloneA4)->SetIsMarking(false);
 	cloneA4->Accept(drawVisitor);
 
@@ -107,7 +111,7 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 	Long i = 0;
 	while (i < cloneFlowChart->GetLength()) {
 		shape = cloneFlowChart->GetAt(i);
-		shape->Move(shape->GetX() - 670, shape->GetY() - 1347);
+		shape->Move(shape->GetX() - gap, shape->GetY() - 1347);
 		i++;
 	}
 	cloneFlowChart->Accept(drawVisitor);
@@ -143,10 +147,10 @@ void PreviewForm::paintEvent(QPaintEvent *event) {
 
 void PreviewForm::CreateToolBar() {
 	this->toolBar = new QToolBar(this);
-	Long width = this->width();
-	Long height= this->toolBar->height() * 2;
-	this->toolBar->resize(width, height);
-	
+	Long height = this->toolBar->height() * 2; //30 * 2
+	this->toolBar->resize(height * 2, height);
+	this->toolBar->move(this->width() / 2 - height + height/4, this->toolBar->y());
+
 	float size = height / 16.0F;
 
 	QColor color(255, 255, 255);
@@ -159,7 +163,7 @@ void PreviewForm::CreateToolBar() {
 	painter1.setPen(QColor(0, 0, 0));
 	painter1.setBrush(QBrush(QColor(255, 255, 255)));
 	painter1.drawRect(QRectF((qreal)size * 4, (qreal)size * 2, (qreal)size * 8, (qreal)size * 4));
-	
+
 	painter1.setBrush(QBrush(QColor(0, 0, 0)));
 	QPointF points1[8];
 	points1[0] = QPointF((qreal)size * 2, (qreal)size * 6);
@@ -187,6 +191,8 @@ void PreviewForm::CreateToolBar() {
 	QIcon printIcon(pixmap1);
 	this->print = this->toolBar->addAction(printIcon, "Print");
 	connect(this->print, &QAction::triggered, this, [=]() { this->CommandRange("Print"); });
+
+	this->toolBar->addSeparator();
 
 	QPixmap pixmap2(height, height);
 	pixmap2.fill(color);
@@ -238,12 +244,12 @@ void PreviewForm::CommandRange(string text) {
 			FlowChartVisitor *zoomVisitor = new ZoomVisitor(&zoom);
 			NShape *cloneA4 = this->a4Paper->Clone();
 			cloneA4->Accept(zoomVisitor);
-			
-			printer.setPageMargins(dynamic_cast<A4Paper*>(cloneA4)->GetLeftMargin(), 
-				dynamic_cast<A4Paper*>(cloneA4)->GetTopMargin(),
-				dynamic_cast<A4Paper*>(cloneA4)->GetRightMargin(),
+
+			printer.setPageMargins(dynamic_cast<A4Paper *>(cloneA4)->GetLeftMargin(),
+				dynamic_cast<A4Paper *>(cloneA4)->GetTopMargin(),
+				dynamic_cast<A4Paper *>(cloneA4)->GetRightMargin(),
 				dynamic_cast<A4Paper *>(cloneA4)->GetBottomMargin(), QPrinter::DevicePixel);
-			
+
 			NShape *cloneFlowChart = this->flowChart->Clone();
 			cloneFlowChart->Accept(zoomVisitor);
 
