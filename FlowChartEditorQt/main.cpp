@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 	EditorIntroForm flashWindow;
 	flashWindow.show();
 	QThread thread;
+	//thread.sleep(5);
 	thread.sleep(1);
 	flashWindow.close();
 

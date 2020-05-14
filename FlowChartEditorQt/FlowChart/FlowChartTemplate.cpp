@@ -323,7 +323,7 @@ void FlowChartTemplate::focusInEvent(QFocusEvent *event) {
 	FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
 	if (isPinned == false) {
-		this->resize(190, editor->frameRect().height() - editor->menuBar->height() - 20);
+		this->resize(190, editor->frameRect().height() - editor->menuBar->height() - editor->statusBar->height() - 20);
 		this->windowTitle->ReSize((this->windowTitle->GetHeight() - 20) * 2, this->windowTitle->GetWidth());
 		this->windowTitle->Move(this->windowTitle->GetX(), this->windowTitle->GetY() + 3);
 	}

@@ -430,16 +430,8 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 		this->scrollController = new ScrollController(this);
 
 		this->scrollController->GetScroll(0)->setValue(1283);
-		//Long previousPosition = this->SetScrollPos(SB_VERT, position, TRUE);
-		//position = this->GetScrollPos(SB_VERT);
-		//this->scrollController->MoveVerticalScroll(position);
-		//this->ScrollWindow(0, previousPosition - position);
 
 		this->scrollController->GetScroll(1)->setValue(427);
-		//previousPosition = this->SetScrollPos(SB_HORZ, position, TRUE);
-		//position = this->GetScrollPos(SB_HORZ);
-		//this->scrollController->MoveHorizontalScroll(position);
-		//this->ScrollWindow(previousPosition - position, 0);
 
 		this->scrollController->Update();
 	}
@@ -809,61 +801,46 @@ QCursor DrawingPaper::GetCursor(QPoint point) {
 }
 
 void DrawingPaper::OnSequenceMenuClick() {
-	float rate = this->zoom->GetRate();
-
 	this->tool->SequenceMake(this);
 
-	this->zoom->Set(rate);
+	this->flowChart->AscendingSort();
+	this->memoryController->Quadrate();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnIterationMenuClick() {
-	float rate = this->zoom->GetRate();
-
 	this->tool->IterationMake(this);
 
-	this->zoom->Set(rate);
+	this->flowChart->AscendingSort();
+	this->memoryController->Quadrate();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnSelectionMenuClick() {
-	float rate = this->zoom->GetRate();
-
 	this->tool->SelectionMake(this);
 
-	this->zoom->Set(rate);
+	this->flowChart->AscendingSort();
+	this->memoryController->Quadrate();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnMoveMakeMenuClick() {
-	float rate = this->zoom->GetRate();
-
 	this->tool->MoveMake(this);
-
-	this->zoom->Set(rate);
 
 	this->repaint();
 }
 
 void DrawingPaper::OnSizeMakeMenuClick() {
-	float rate = this->zoom->GetRate();
-
 	this->tool->SizeMake(this);
-
-	this->zoom->Set(rate);
 
 	this->repaint();
 }
 
 void DrawingPaper::OnIntervalMakeMenuClick() {
-	float rate = this->zoom->GetRate();
-
 	this->tool->IntervalMake(this);
-
-	this->zoom->Set(rate);
 
 	this->repaint();
 }

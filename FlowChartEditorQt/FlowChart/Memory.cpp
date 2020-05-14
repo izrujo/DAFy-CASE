@@ -114,7 +114,7 @@ void Memory::Quadrate(NShape *flowChart) {
 			NShape *shape = execution->GetShape(j);
 			Long k = 0;
 			while (k < dynamic_cast<FlowChart*>(flowChart)->GetLength() &&
-				dynamic_cast<FlowChart*>(flowChart)->GetAt(k)->GetContents() != shape->GetContents()) {
+				dynamic_cast<FlowChart*>(flowChart)->GetAt(k) != shape) {
 				k++;
 			}
 			if (k < dynamic_cast<FlowChart*>(flowChart)->GetLength()) {

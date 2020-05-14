@@ -788,6 +788,9 @@ FCtrlVKeyAction& FCtrlVKeyAction::operator=(const FCtrlVKeyAction& source) {
 void FCtrlVKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Paste(canvas);
+
+	canvas->flowChart->AscendingSort();
+	canvas->memoryController->Quadrate();
 }
 
 //FCtrlXKeyAction
