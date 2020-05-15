@@ -256,6 +256,11 @@ public:
 
 	int GetSymbolID(); //190903 DrawingPaper.LButtonDown에서 Creator.Create 사용하기 위함
 	int GetLineID(); //191227 Interpreter pattern 적용 중
+
+	//200515 실행 취소 관련
+	SHAPE GetIdentify();
+	void Register(Long registrationNumber);
+	Long GetRegistrationNumber() const;
 public:
 	static void MakeRectToPoint(QPointF point, QRectF *rect);
 
@@ -290,6 +295,9 @@ public: //Block virtual 선언
 	virtual void AscendingSort();
 	virtual void DescendingSort();
 
+	//200515 실행 취소 관련
+	virtual Long FindByRegistrationNumber(SHAPE id, Long registrationNumber);
+
 	virtual Long GetCapacity() const;
 	virtual Long GetLength() const;
 	virtual Long GetCurrent() const;
@@ -304,6 +312,8 @@ protected:
 	String contents;
 
 	bool isSelected;
+
+	Long registrationNumber;
 };
 
 inline float NShape::GetX() const {
@@ -367,6 +377,10 @@ inline float NShape::CenterOfGravityX() const {
 
 inline bool NShape::IsStyle(Long style) {
 	return (style == ALL) ? (true) : (false);
+}
+
+inline Long NShape::GetRegistrationNumber() const {
+	return this->registrationNumber;
 }
 
 

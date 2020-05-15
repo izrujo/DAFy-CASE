@@ -12,6 +12,7 @@
 #include "../GObject/Painter.h"
 #include "RuleKeeper.h"
 #include "ContentsAnalyzer.h"
+#include "Registrar.h"
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -70,6 +71,8 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 			contents.Remove(';');
 			shape = creator.Create(atof(tokenizer.GetAt(0)), atof(tokenizer.GetAt(1)), atof(tokenizer.GetAt(2)), atof(tokenizer.GetAt(3)),
 				atof(tokenizer.GetAt(4)), atof(tokenizer.GetAt(5)), atof(tokenizer.GetAt(6)), contents);
+			
+			canvas->registrar->Register(shape);
 			canvas->flowChart->Attach(shape);
 
 			//=====================intellisense========================

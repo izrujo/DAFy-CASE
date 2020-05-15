@@ -4,7 +4,7 @@
 
 #include "DrawingPaper.h"
 #include "FlowChart.h"
-#include "MemoryController.h"
+#include "Registrar.h"
 
 Clipboard::Clipboard() {
 	this->buffer = new FlowChart;
@@ -33,21 +33,18 @@ Long Clipboard::Paste(DrawingPaper *canvas) {
 	canvas->flowChart->UnSelectAll();
 	canvas->mode = DrawingPaper::IDLE;
 
-	Long(*positions) = new Long[this->buffer->GetLength()];
-	Long count = 0;
+	Long index;
 	Long j = 0;
-
 	for (Long i = 0; i < this->buffer->GetLength(); i++) {
 		float x, y;
 		shape = this->buffer->GetAt(i);
 		x = shape->GetX();
 		y = shape->GetY();
 		shape->Move(x + 50, y + 30);
-		positions[j++] = canvas->flowChart->Attach(shape->Clone());
-		count++;
+		index = canvas->flowChart->Attach(shape->Clone());
+		canvas->registrar->Register(canvas->flowChart->GetAt(index));
 		canvas->mode = DrawingPaper::SELECT;
 	}
-	canvas->memoryController->RememberAdd(positions, count);
 
 	return this->buffer->GetLength();
 }

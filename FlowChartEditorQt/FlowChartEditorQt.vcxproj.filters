@@ -62,9 +62,6 @@
     <ClCompile Include="FlowChart\DrawVisitor.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Executions.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\File.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -105,12 +102,6 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\Line.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Memory.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\MemoryController.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\MoveMake.cpp">
@@ -323,6 +314,18 @@
     <ClCompile Include="FlowChart\ContentsAnalyzer.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
+    <ClCompile Include="FlowChart\Historys.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\HistoryBook.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\HistoryController.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Registrar.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc">
@@ -358,9 +361,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\DrawVisitor.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Executions.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\File.h">
@@ -400,12 +400,6 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Line.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Memory.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\MemoryController.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\MoveMake.h">
@@ -614,6 +608,18 @@
     </ClInclude>
     <ClInclude Include="x64\Debug\uic\ui_EditorIntroForm.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Historys.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\HistoryBook.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\HistoryController.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Registrar.h">
+      <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

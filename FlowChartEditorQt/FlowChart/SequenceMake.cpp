@@ -13,7 +13,7 @@
 #include "RightDownJoin.h"
 #include "RepeatTrue.h"
 #include "RepeatFalse.h"
-#include "MemoryController.h"
+#include "Registrar.h"
 
 SequenceMake::SequenceMake() {
 }
@@ -71,8 +71,6 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 		}
 	}
 
-	Long(*positions) = new Long[buffer.GetLength() + arrows.GetLength()];
-	Long count = 0;
 	i = 0;
 	j = 0;
 	k = 0;
@@ -83,16 +81,11 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 			i++;
 		}
 		if (j < arrows.GetLength()) {
-			positions[j] = canvas->flowChart->Insert(index + k, arrows.GetAt(j)->Clone());
-			count++;
+			canvas->flowChart->Insert(index + k, arrows.GetAt(j)->Clone());
+			canvas->registrar->Register(canvas->flowChart->GetAt(index + k));
 			k++;
 			j++;
 		}
-	}
-	canvas->memoryController->RememberAdd(positions, count);
-
-	if (positions != 0) {
-		delete[] positions;
 	}
 
 	canvas->repaint();

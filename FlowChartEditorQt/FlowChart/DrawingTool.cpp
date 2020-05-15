@@ -10,13 +10,13 @@
 #include "ScrollController.h"
 #include "Scroll.h"
 
-#include "MemoryController.h"
-
 #include "Zoom.h"
 #include "ZoomVisitor.h"
 #include "CoordinateConverter.h"
 
 #include "../GObject/Painter.h"
+
+#include "Registrar.h"
 
 DrawingTool* DrawingTool::instance = 0;
 
@@ -123,9 +123,7 @@ void DrawingTool::OnLButtonUp(DrawingPaper *canvas, QPointF point) {
 
 	canvas->indexOfSelected = canvas->flowChart->Attach(canvas->templateSelected->Clone());
 
-	Long(*indexes) = new Long[canvas->flowChart->GetLength()];
-	indexes[0] = canvas->indexOfSelected;
-	canvas->memoryController->RememberAdd(indexes, 1);
+	canvas->registrar->Register(canvas->flowChart->GetAt(canvas->indexOfSelected));
 
 	if (canvas->templateSelected != NULL) {
 		delete canvas->templateSelected;
@@ -134,8 +132,4 @@ void DrawingTool::OnLButtonUp(DrawingPaper *canvas, QPointF point) {
 	canvas->tool = SelectingTool::Instance();
 	canvas->mode = DrawingPaper::SELECT;
 	canvas->repaint();
-
-	if (indexes != 0) {
-		delete[] indexes;
-	}
 }

@@ -12,6 +12,7 @@
 #include <QtWidgets/QFrame>
 #include "Array.h"
 #include "Shape.h"
+#include "../Notepad/Subject.h"
 
 typedef unsigned long int DWORD;
 typedef signed long int Long;
@@ -23,15 +24,15 @@ class Label;
 class Clipboard;
 
 class ScrollController;
-
-class MemoryController;
+class HistoryController;
+class Registrar;
 
 class Zoom;
 class QMenu;
 
 class VariableList;
 
-class DrawingPaper : public QFrame
+class DrawingPaper : public QFrame, public Subject
 {
 	Q_OBJECT
 
@@ -84,7 +85,8 @@ public:
 	Label *label;
 	Tool *tool;
 
-	MemoryController *memoryController;
+	HistoryController *historyController;
+	Registrar *registrar;
 
 	Clipboard *clipboard;
 	Zoom *zoom;

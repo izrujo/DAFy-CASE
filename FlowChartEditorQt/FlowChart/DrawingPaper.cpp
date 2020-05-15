@@ -2,7 +2,6 @@
 #include "../FlowChartEditor.h"
 #include "FlowChart.h"
 #include "Clipboard.h"
-#include "MemoryController.h"
 #include "Zoom.h"
 #include "A4Paper.h"
 #include "../GObject/QtPainter.h"
@@ -28,9 +27,10 @@
 #include "File.h"
 #include "WindowTitle.h"
 #include "SketchBook.h"
-#include "Memory.h"
 #include "VariableList.h"
 #include "Line.h"
+#include "HistoryController.h"
+#include "Registrar.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -74,8 +74,9 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 
 	this->scrollController = NULL;
 
-	this->memoryController = NULL;
+	this->historyController = NULL;
 
+	this->registrar = NULL;
 
 	this->zoom = NULL;
 
@@ -91,7 +92,9 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 
 	this->clipboard = new Clipboard;
 
-	this->memoryController = new MemoryController(this);
+	this->historyController = new HistoryController(this);
+
+	this->registrar = new Registrar;
 
 	this->zoom = new Zoom(100);
 
@@ -144,8 +147,12 @@ DrawingPaper::~DrawingPaper() {
 		delete this->scrollController;
 	}
 
-	if (this->memoryController != NULL) {
-		delete this->memoryController;
+	if (this->historyController != NULL) {
+		delete this->historyController;
+	}
+
+	if (this->registrar != NULL) {
+		delete this->registrar;
 	}
 
 	if (this->zoom != NULL) {
@@ -337,8 +344,6 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 		this->scrollController->Update();
 	}
 
-	this->memoryController->Quadrate();
-
 	this->setMouseTracking(true);
 }
 
@@ -386,17 +391,9 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 		this->label->Open(left, top, right - left, bottom - top);
 		this->label->show();
 
-		Long(*indexes) = new Long[this->flowChart->GetLength()];
-		indexes[0] = this->indexOfSelected;
-		this->memoryController->RememberOther(indexes, 1);
-
 		shape = this->flowChart->GetAt(this->indexOfSelected);
 		shape->Rewrite(String(""));
 		this->label->setFocus();
-
-		if (indexes != 0) {
-			delete[] indexes;
-		}
 	}
 }
 
@@ -803,26 +800,17 @@ QCursor DrawingPaper::GetCursor(QPoint point) {
 void DrawingPaper::OnSequenceMenuClick() {
 	this->tool->SequenceMake(this);
 
-	this->flowChart->AscendingSort();
-	this->memoryController->Quadrate();
-
 	this->repaint();
 }
 
 void DrawingPaper::OnIterationMenuClick() {
 	this->tool->IterationMake(this);
 
-	this->flowChart->AscendingSort();
-	this->memoryController->Quadrate();
-
 	this->repaint();
 }
 
 void DrawingPaper::OnSelectionMenuClick() {
 	this->tool->SelectionMake(this);
-
-	this->flowChart->AscendingSort();
-	this->memoryController->Quadrate();
 
 	this->repaint();
 }

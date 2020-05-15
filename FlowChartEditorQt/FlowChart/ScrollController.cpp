@@ -44,6 +44,8 @@ ScrollController::ScrollController(DrawingPaper *drawingPaper)
 	horizontalScroll->setValue(0);
 	horizontalScroll->SetFromConstructorFlag(false); //생성자에서 Scroll::Move 호출되면 안됨
 	this->scrolls.Store(this->scrolls.GetLength(), horizontalScroll);
+
+	this->drawingPaper->AttachObserver(this);
 }
 
 ScrollController::ScrollController(const ScrollController& source)
@@ -67,6 +69,8 @@ ScrollController::~ScrollController() {
 		delete this->scrolls[i];
 		i++;
 	}
+
+	this->drawingPaper->DetachObserver(this);
 }
 
 ScrollController& ScrollController::operator=(const ScrollController& source) {

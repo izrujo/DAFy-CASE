@@ -9,7 +9,7 @@
 #include "Process.h"
 #include "RightDownJoin.h"
 #include "Join.h"
-#include "MemoryController.h"
+#include "Registrar.h"
 
 IterationMake::IterationMake() {
 }
@@ -136,21 +136,12 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	shape->Select(true);
 	buffer.Attach(shape);
 
-	Long(*positions) = new Long[buffer.GetLength()];
 	j = 0;
-	Long count = 0;
-
 	for (i = 0; i < buffer.GetLength(); i++) {
-		Long position = canvas->flowChart->Insert(index + i, buffer.GetAt(i)->Clone());
+		canvas->flowChart->Insert(index + i, buffer.GetAt(i)->Clone());
 		if (dynamic_cast<Line*>(buffer.GetAt(i))) {
-			positions[j++] = position;
-			count++;
+			canvas->registrar->Register(canvas->flowChart->GetAt(index + i));
 		}
-	}
-	canvas->memoryController->RememberAdd(positions, count);
-
-	if (positions != 0) {
-		delete[] positions;
 	}
 
 	canvas->repaint();

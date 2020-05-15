@@ -94,7 +94,8 @@
     <ClCompile Include="FlowChart\DrawingTool.cpp" />
     <ClCompile Include="FlowChart\DrawVisitor.cpp" />
     <ClCompile Include="FlowChart\EditorIntroForm.cpp" />
-    <ClCompile Include="FlowChart\Executions.cpp" />
+    <ClCompile Include="FlowChart\HistoryController.cpp" />
+    <ClCompile Include="FlowChart\Historys.cpp" />
     <ClCompile Include="FlowChart\File.cpp" />
     <ClCompile Include="FlowChart\FlowChart.cpp" />
     <ClCompile Include="FlowChart\FlowChartCommandFactory.cpp" />
@@ -110,14 +111,14 @@
     <ClCompile Include="FlowChart\Label.cpp" />
     <ClCompile Include="FlowChart\LeftDown.cpp" />
     <ClCompile Include="FlowChart\Line.cpp" />
-    <ClCompile Include="FlowChart\Memory.cpp" />
-    <ClCompile Include="FlowChart\MemoryController.cpp" />
+    <ClCompile Include="FlowChart\HistoryBook.cpp" />
     <ClCompile Include="FlowChart\MoveMake.cpp" />
     <ClCompile Include="FlowChart\MovingTool.cpp" />
     <ClCompile Include="FlowChart\NumberBox.cpp" />
     <ClCompile Include="FlowChart\Preparation.cpp" />
     <ClCompile Include="FlowChart\PreviewForm.cpp" />
     <ClCompile Include="FlowChart\Process.cpp" />
+    <ClCompile Include="FlowChart\Registrar.cpp" />
     <ClCompile Include="FlowChart\RepeatFalse.cpp" />
     <ClCompile Include="FlowChart\RepeatTrue.cpp" />
     <ClCompile Include="FlowChart\ResizingTool.cpp" />
@@ -207,6 +208,8 @@
     <ClInclude Include="FlowChart\CoordinateConverter.h" />
     <ClInclude Include="FlowChart\Creator.h" />
     <ClInclude Include="FlowChart\Decision.h" />
+    <ClInclude Include="FlowChart\HistoryController.h" />
+    <ClInclude Include="FlowChart\Registrar.h" />
     <ClInclude Include="FlowChart\RuleKeeper.h" />
     <ClInclude Include="FlowChart\SketchBook.h" />
     <ClInclude Include="FlowChart\WindowClose.h" />
@@ -231,7 +234,7 @@
     <ClInclude Include="FlowChart\DrawingTool.h" />
     <ClInclude Include="FlowChart\DrawVisitor.h" />
     <QtMoc Include="FlowChart\EditorIntroForm.h" />
-    <ClInclude Include="FlowChart\Executions.h" />
+    <ClInclude Include="FlowChart\Historys.h" />
     <ClInclude Include="FlowChart\File.h" />
     <ClInclude Include="FlowChart\FlowChart.h" />
     <ClInclude Include="FlowChart\FlowChartCommandFactory.h" />
@@ -247,8 +250,7 @@
     <ClInclude Include="FlowChart\Label.h" />
     <ClInclude Include="FlowChart\LeftDown.h" />
     <ClInclude Include="FlowChart\Line.h" />
-    <ClInclude Include="FlowChart\Memory.h" />
-    <ClInclude Include="FlowChart\MemoryController.h" />
+    <ClInclude Include="FlowChart\HistoryBook.h" />
     <ClInclude Include="FlowChart\MoveMake.h" />
     <ClInclude Include="FlowChart\MovingTool.h" />
     <ClInclude Include="FlowChart\NumberBox.h" />

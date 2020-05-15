@@ -46,6 +46,9 @@ public:
 	virtual void AscendingSort();
 	virtual void DescendingSort();
 
+	//200515 실행 취소 관련
+	virtual Long FindByRegistrationNumber(SHAPE id, Long registrationNumber);
+
 	virtual Long GetCapacity() const;
 	virtual Long GetLength() const;
 	virtual Long GetCurrent() const;

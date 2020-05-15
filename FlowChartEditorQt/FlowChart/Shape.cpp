@@ -157,6 +157,7 @@ NShape::NShape()
 	this->height = 0.0F;
 	this->borderLine = Qt::SolidLine;
 	this->isSelected = false;
+	this->registrationNumber = 0;
 }
 
 NShape::NShape(float x, float y, float width, float height, QColor backGroundColor,
@@ -170,6 +171,7 @@ NShape::NShape(float x, float y, float width, float height, QColor backGroundCol
 	this->height = height;
 	this->borderLine = borderLine;
 	this->isSelected = false;
+	this->registrationNumber = 0;
 }
 
 NShape::~NShape() {}
@@ -184,6 +186,7 @@ NShape::NShape(const NShape& source)
 	this->height = source.height;
 	this->borderLine = source.borderLine;
 	this->isSelected = source.isSelected;
+	this->registrationNumber = source.registrationNumber;
 }
 
 NShape& NShape::operator=(const NShape& source)
@@ -202,6 +205,8 @@ NShape& NShape::operator=(const NShape& source)
 	this->contents = source.contents;
 
 	this->isSelected = source.isSelected;
+
+	this->registrationNumber = source.registrationNumber;
 
 	return *this;
 }
@@ -656,6 +661,52 @@ int NShape::GetLineID() {
 	return id;
 }
 
+SHAPE NShape::GetIdentify() {
+	SHAPE id;
+	if (dynamic_cast<InputOutput*>(this)) {
+		id = INPUTOUTPUT;
+	}
+	else if (dynamic_cast<Preparation*>(this)) {
+		id = PREPARATION;
+	}
+	else if (dynamic_cast<Terminal*>(this)) {
+		id = TERMINAL;
+	}
+	else if (dynamic_cast<Process*>(this)) {
+		id = PROCESS;
+	}
+	else if (dynamic_cast<Decision*>(this)) {
+		id = DECISION;
+	}
+	else if (dynamic_cast<Arrow*>(this)) {
+		id = ARROW;
+	}
+	else if (dynamic_cast<LeftDown*>(this)) {
+		id = LEFTDOWN;
+	}
+	else if (dynamic_cast<RightDown*>(this)) {
+		id = RIGHTDOWN;
+	}
+	else if (dynamic_cast<Join*>(this)) {
+		id = JOIN;
+	}
+	else if (dynamic_cast<RepeatTrue*>(this)) {
+		id = REPEATTRUE;
+	}
+	else if (dynamic_cast<RepeatFalse*>(this)) {
+		id = REPEATFALSE;
+	}
+	else if (dynamic_cast<RightDownJoin*>(this)) {
+		id = RIGHTDOWNJOIN;
+	}
+
+	return id;
+}
+
+void NShape::Register(Long registrationNumber) {
+	this->registrationNumber = registrationNumber;
+}
+
 //Block virtual Á¤ÀÇ
 Long NShape::Attach(NShape *shape) {
 	return -1;
@@ -742,6 +793,10 @@ void NShape::AscendingSort() {
 
 void NShape::DescendingSort() {
 
+}
+
+Long NShape::FindByRegistrationNumber(SHAPE id, Long registrationNumber) {
+	return -1;
 }
 
 Long NShape::GetCapacity() const {

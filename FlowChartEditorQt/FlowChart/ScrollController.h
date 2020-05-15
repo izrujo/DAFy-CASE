@@ -2,11 +2,12 @@
 #define _SCROLLCONTROLLER_H
 
 #include "../Notepad/Array.h"
+#include "../Notepad/Observer.h"
 #include <qpoint.h>
 class DrawingPaper;
 class Scroll;
 
-class ScrollController {
+class ScrollController : public Observer {
 public:
 	ScrollController(DrawingPaper *drawingPaper = 0);
 	ScrollController(const ScrollController& source);

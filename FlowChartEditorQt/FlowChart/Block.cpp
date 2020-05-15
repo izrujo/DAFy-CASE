@@ -350,3 +350,12 @@ void Block::DescendingSort() {
 		this->shapes[j] = temp->Clone();
 	}
 }
+
+Long Block::FindByRegistrationNumber(SHAPE id, Long registrationNumber) {
+	Long i = 0;
+	while (i < this->length && 
+		!(this->shapes[i]->Identify(id)) || this->registrationNumber != registrationNumber) {	
+		i++;
+	}
+	return (i < this->length) ? (i) : (-1);
+}
