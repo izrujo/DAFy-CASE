@@ -5,7 +5,7 @@
 
 class DrawingPaper;
 class HistoryBook;
-class Registrar;
+class NShape;
 
 class HistoryController : public Observer {
 public:
@@ -17,26 +17,26 @@ public:
 	void Update();
 	void Undo();
 	void Redo();
+	void ChangeAll(HistoryBook *undoHistoryBook, HistoryBook *redoHistoryBook, NShape *previosuFlowChart);
 
 	HistoryBook* GetUndoHistoryBook() const;
 	HistoryBook* GetRedoHistoryBook() const;
-	Registrar* GetRegistrar() const;
+	NShape* GetPreviousFlowChart() const;
 private:
 	DrawingPaper *canvas;
-	Registrar *registrar;
 	HistoryBook *undoHistoryBook;
 	HistoryBook *redoHistoryBook;
 	NShape *previousFlowChart;
 };
 
 inline HistoryBook* HistoryController::GetUndoHistoryBook() const {
-	return const_cast<HistoryBook*>(this->undoHistoryBook);
+	return this->undoHistoryBook;
 }
 inline HistoryBook* HistoryController::GetRedoHistoryBook() const {
-	return const_cast<HistoryBook*>(this->redoHistoryBook);
+	return this->redoHistoryBook;
 }
-inline Registrar* HistoryController::GetRegistrar() const {
-	return const_cast<Registrar*>(this->registrar);
+inline NShape* HistoryController::GetPreviousFlowChart() const {
+	return this->previousFlowChart;
 }
 
 #endif //_HISTORYCONTROLLER_H

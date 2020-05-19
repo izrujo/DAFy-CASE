@@ -131,9 +131,11 @@
     <ClCompile Include="FlowChart\SelectionMake.cpp" />
     <ClCompile Include="FlowChart\SequenceMake.cpp" />
     <ClCompile Include="FlowChart\Shape.cpp" />
+    <ClCompile Include="FlowChart\Sheet.cpp" />
+    <ClCompile Include="FlowChart\SheetBinder.cpp" />
+    <ClCompile Include="FlowChart\SheetManager.cpp" />
     <ClCompile Include="FlowChart\SizeController.cpp" />
     <ClCompile Include="FlowChart\SizeMake.cpp" />
-    <ClCompile Include="FlowChart\SketchBook.cpp" />
     <ClCompile Include="FlowChart\String.cpp" />
     <ClCompile Include="FlowChart\Symbol.cpp" />
     <ClCompile Include="FlowChart\Template.cpp" />
@@ -211,7 +213,9 @@
     <ClInclude Include="FlowChart\HistoryController.h" />
     <ClInclude Include="FlowChart\Registrar.h" />
     <ClInclude Include="FlowChart\RuleKeeper.h" />
-    <ClInclude Include="FlowChart\SketchBook.h" />
+    <ClInclude Include="FlowChart\Sheet.h" />
+    <ClInclude Include="FlowChart\SheetBinder.h" />
+    <ClInclude Include="FlowChart\SheetManager.h" />
     <ClInclude Include="FlowChart\WindowClose.h" />
     <ClInclude Include="FlowChart\WindowPin.h" />
     <ClInclude Include="FlowChart\WindowTitle.h" />

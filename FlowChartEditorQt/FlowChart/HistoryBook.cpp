@@ -52,8 +52,8 @@ HistoryBook& HistoryBook::operator=(const HistoryBook& source) {
 
 Long HistoryBook::Add(History *History) {
 	
-	//20개로 제한
-	if (this->length >= 20) {
+	//50개로 제한
+	if (this->length >= 50) {
 		if (this->historys[0] != 0) {
 			delete this->historys[0];
 		}
@@ -93,10 +93,14 @@ void HistoryBook::RemoveAll() {
 		this->historys.Delete(0);
 		i++;
 	}
-	this->capacity = 20;
+	this->capacity = 50;
 	this->length = 0;
 }
 
 History* HistoryBook::GetAt(Long index) {
 	return this->historys.GetAt(index);
+}
+
+HistoryBook* HistoryBook::Clone() {
+	return new HistoryBook(*this);
 }

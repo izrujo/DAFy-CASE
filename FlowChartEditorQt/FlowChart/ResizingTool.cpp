@@ -17,7 +17,6 @@
 
 #include "ScrollController.h"
 #include "Scroll.h"
-#include "MemoryController.h"
 
 #include "../FlowChartEditor.h"
 #pragma warning (disable : 4996)
@@ -48,7 +47,6 @@ void ResizingTool::OnLButtonDown(DrawingPaper *canvas, QPointF point) {
 	Long count;
 	Long(*indexes);
 	canvas->flowChart->GetSelecteds(&indexes, &count);
-	canvas->memoryController->RememberOther(indexes, count);
 	if (indexes != 0) {
 		delete[] indexes;
 	}

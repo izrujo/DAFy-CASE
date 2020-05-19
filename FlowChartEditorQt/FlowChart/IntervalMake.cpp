@@ -4,7 +4,6 @@
 #include "DrawingPaper.h"
 #include "Shape.h"
 #include "Symbol.h"
-#include "MemoryController.h"
 
 IntervalMake::IntervalMake(){
 }
@@ -19,7 +18,6 @@ void IntervalMake::Create(DrawingPaper *canvas){
 
 	Long it = canvas->flowChart->GetLength();
 	NShape* (*indexes) = new NShape* [it];
-	Long(*positions) = new Long[it];
 
 	Long i = 0;	
 	while ( i < it ){
@@ -28,7 +26,6 @@ void IntervalMake::Create(DrawingPaper *canvas){
 			//  선택된 기호들 중 연결 선을 제외한다.
 			if( dynamic_cast<Symbol *>(shape) ){
 				indexes[count] = shape->Clone();
-				positions[count] = i;
 				count++;
 			}
 			else{
@@ -72,7 +69,6 @@ void IntervalMake::Create(DrawingPaper *canvas){
 	float interval = height/(count-1);
 
 	// 4. 도형을 재 배치 한다.
-	canvas->memoryController->RememberOther(positions, count);
 
 	float previousHeight; // 이전까지의 길이
 	previousHeight = indexes[0]->GetY() + indexes[0]->GetHeight();
@@ -102,9 +98,5 @@ void IntervalMake::Create(DrawingPaper *canvas){
 
 	if ( indexes != 0 ){
 		delete[] indexes;
-	}
-
-	if (positions != 0) {
-		delete[] positions;
 	}
 }

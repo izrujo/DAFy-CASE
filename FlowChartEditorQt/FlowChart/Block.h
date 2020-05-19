@@ -20,6 +20,8 @@ public:
 	Block& operator=(const Block& source);
 	NShape* operator[](Long index);
 
+	virtual bool IsSame(const NShape& other);
+
 	virtual Long Attach(NShape *shape);
 	virtual Long Insert(Long index, NShape *shape);
 	virtual Long Detach(Long index);

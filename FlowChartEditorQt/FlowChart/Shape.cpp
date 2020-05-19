@@ -708,6 +708,10 @@ void NShape::Register(Long registrationNumber) {
 }
 
 //Block virtual Á¤ÀÇ
+bool NShape::IsSame(const NShape& other) {
+	return false;
+}
+
 Long NShape::Attach(NShape *shape) {
 	return -1;
 }

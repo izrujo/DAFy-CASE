@@ -3,50 +3,44 @@
 #include "HistoryBook.h"
 #include "Registrar.h"
 #include "Historys.h"
+#include "Block.h"
 
-HistoryController::HistoryController(DrawingPaper *canvas)
-	: registrar(),
-	undoHistoryBook(), redoHistoryBook() {
+#include "../FlowChartEditor.h"
+#include "Sheet.h"
+#include "SheetBinder.h"
+#include "SheetManager.h"
+
+HistoryController::HistoryController(DrawingPaper *canvas) {
 	this->canvas = canvas;
+	this->undoHistoryBook = new HistoryBook;
+	this->redoHistoryBook = new HistoryBook;
 	this->previousFlowChart = this->canvas->flowChart->Clone();
 	this->canvas->AttachObserver(this);
 }
 
-HistoryController::HistoryController(const HistoryController& source)
-	: registrar(source.registrar),
-	undoHistoryBook(source.undoHistoryBook), redoHistoryBook(source.redoHistoryBook) {
+HistoryController::HistoryController(const HistoryController& source) {
 	this->canvas = source.canvas;
-	this->previousFlowChart = this->canvas->flowChart->Clone();
+	this->undoHistoryBook = new HistoryBook(*const_cast<HistoryController&>(source).undoHistoryBook);
+	this->redoHistoryBook = new HistoryBook(*const_cast<HistoryController&>(source).redoHistoryBook);
+	this->previousFlowChart = const_cast<HistoryController&>(source).previousFlowChart->Clone();
 }
 
 HistoryController::~HistoryController() {
-	if (this->registrar != 0) {
-		delete this->registrar;
-	}
-	if (this->undoHistoryBook != 0) {
-		delete this->undoHistoryBook;
-	}
-	if (this->redoHistoryBook != 0) {
-		delete this->redoHistoryBook;
-	}
-	if (this->previousFlowChart != 0) {
-		delete this->previousFlowChart;
-	}
+	//HistoryBook, previousFlowChart 관리의 주체는 Sheet이다. 따라서 소멸시키지 않는다.
 	this->canvas->DetachObserver(this);
 }
 
 HistoryController& HistoryController::operator=(const HistoryController& source) {
 	this->canvas = source.canvas;
-	this->registrar = source.registrar;
-	this->undoHistoryBook = source.undoHistoryBook;
-	this->redoHistoryBook = source.redoHistoryBook;
-	this->previousFlowChart = this->canvas->flowChart->Clone();
+	this->undoHistoryBook = source.undoHistoryBook->Clone();
+	this->redoHistoryBook = source.redoHistoryBook->Clone();
+	this->previousFlowChart = source.previousFlowChart->Clone();
 
 	return *this;
 }
 
 void HistoryController::Update() {
-	History *history;
+	History *history = 0;
 
 	Long i;
 	NShape *shape;
@@ -72,7 +66,7 @@ void HistoryController::Update() {
 			index = this->previousFlowChart->FindByRegistrationNumber(id, registrationNumber);
 			//1.2.3.못찾았으면 역사에 추가하다.
 			if (index < 0) {
-				history->Add(shape);
+				history->Add(shape->Clone());
 			}
 			i++;
 		}
@@ -92,13 +86,13 @@ void HistoryController::Update() {
 			index = currentFlowChart->FindByRegistrationNumber(id, registrationNumber);
 			//2.2.3.못찾았으면 역사에 추가하다.
 			if (index < 0) {
-				history->Add(shape);
+				history->Add(shape->Clone());
 			}
 			i++;
 		}
 	}
-	//3. 직전 순서도의 개수가 현재 순서도의 개수와 같으면
-	else {
+	//3. 직전 순서도의 개수가 현재 순서도의 개수와 같고 직전 순서도와 현재 순서도가 같지 않으면
+	else if (!(this->previousFlowChart->IsSame(*currentFlowChart))) {
 		//3.1.기타 역사를 만들다.
 		history = new OtherHistory;
 		//3.2.직전 순서도 개수만큼 반복하다.
@@ -112,19 +106,23 @@ void HistoryController::Update() {
 			index = currentFlowChart->FindByRegistrationNumber(id, registrationNumber);
 			//3.2.3.shape와 찾은 shape가 동일하지 않으면 shape를 역사에 추가하다.
 			if (shape != currentFlowChart->GetAt(index)) {
-				history->Add(shape);
+				history->Add(shape->Clone());
 			}
 			i++;
 		}
 	}
-	//4. 실행 취소 역사책에 역사를 추가하다.
-	this->undoHistoryBook->Add(history);
-	//5. 다시 실행 역사책을 비운다.
-	if (this->redoHistoryBook->GetLength() > 0) {
-		this->redoHistoryBook->RemoveAll();
+	if (history != 0) {
+		//4. 실행 취소 역사책에 역사를 추가하다.
+		this->undoHistoryBook->Add(history);
+		//5. 다시 실행 역사책을 비운다.
+		if (this->redoHistoryBook->GetLength() > 0) {
+			this->redoHistoryBook->RemoveAll();
+		}
+		//6. 직전 순서도를 현재 순서도로 바꾸다.
+		this->previousFlowChart = currentFlowChart->Clone();
+		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->canvas->parentWidget());
+		editor->sheetManager->ModifyPreviousFlowChart(this->previousFlowChart);
 	}
-	//6. 직전 순서도를 현재 순서도로 바꾸다.
-	this->previousFlowChart = currentFlowChart->Clone();
 }
 
 void HistoryController::Undo() {
@@ -163,15 +161,21 @@ void HistoryController::Undo() {
 			index = this->canvas->flowChart->FindByRegistrationNumber(id, registrationNumber);
 			//2.4.2.찾은 shape를 shape와 서로 바꾸다.
 			temp = shape->Clone();
-			shape = this->canvas->flowChart->GetAt(index)->Clone();
+			lastHistory->Modify(i, this->canvas->flowChart->GetAt(index)->Clone());
 			this->canvas->flowChart->Swap(index, temp);
 		}
 		i++;
 	}
-	//3. 다시 실행 역사책에 역사를 추가하다.
-	this->redoHistoryBook->Add(lastHistory->Clone());
-	//4. 실행 취소 역사책에서 역사를 지우다.
-	this->undoHistoryBook->Remove(historyLength - 1);
+	if (historyLength > 0) {
+		//3. 다시 실행 역사책에 역사를 추가하다.
+		this->redoHistoryBook->Add(lastHistory->Clone());
+		//4. 실행 취소 역사책에서 역사를 지우다.
+		this->undoHistoryBook->Remove(historyLength - 1);
+
+		this->previousFlowChart = this->canvas->flowChart->Clone();
+		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->canvas->parentWidget());
+		editor->sheetManager->ModifyPreviousFlowChart(this->previousFlowChart);
+	}
 }
 
 void HistoryController::Redo() {
@@ -187,7 +191,7 @@ void HistoryController::Redo() {
 	History *lastHistory = this->redoHistoryBook->GetAt(historyLength - 1);
 	//2. 역사의 shape 개수만큼 반복하다.
 	i = 0;
-	while (i < historyLength) {
+	while (i < lastHistory->GetLength()) {
 		//2.1.shape를 가져오다.
 		shape = lastHistory->GetShape(i);
 		id = shape->GetIdentify();
@@ -210,13 +214,26 @@ void HistoryController::Redo() {
 			index = this->canvas->flowChart->FindByRegistrationNumber(id, registrationNumber);
 			//2.4.2.찾은 shape를 shape와 서로 바꾸다.
 			temp = shape->Clone();
-			shape = this->canvas->flowChart->GetAt(index)->Clone();
+			lastHistory->Modify(i, this->canvas->flowChart->GetAt(index)->Clone());
 			this->canvas->flowChart->Swap(index, temp);
 		}
 		i++;
 	}
-	//3. 실행 취소 역사책에 역사를 추가하다.
-	this->undoHistoryBook->Add(lastHistory);
-	//4. 다시 실행 역사책에서 역사를 지우다.
-	this->redoHistoryBook->Remove(historyLength - 1);
+	if (historyLength > 0) {
+		//3. 실행 취소 역사책에 역사를 추가하다.
+		this->undoHistoryBook->Add(lastHistory->Clone());
+		//4. 다시 실행 역사책에서 역사를 지우다.
+		this->redoHistoryBook->Remove(historyLength - 1);
+
+		this->previousFlowChart = this->canvas->flowChart->Clone();
+		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->canvas->parentWidget());
+		editor->sheetManager->ModifyPreviousFlowChart(this->previousFlowChart);
+	}
+}
+
+void HistoryController::ChangeAll(HistoryBook *undoHistoryBook, HistoryBook *redoHistoryBook, 
+	NShape *previousFlowChart) {
+	this->undoHistoryBook = undoHistoryBook;
+	this->redoHistoryBook = redoHistoryBook;
+	this->previousFlowChart = previousFlowChart;
 }

@@ -6,7 +6,7 @@ class History;
 
 class HistoryBook {
 public:
-	HistoryBook(Long capacity = 20);
+	HistoryBook(Long capacity = 50);
 	HistoryBook(const HistoryBook& source);
 	~HistoryBook();
 	HistoryBook& operator=(const HistoryBook& source);
@@ -16,6 +16,8 @@ public:
 	void RemoveAll();
 
 	History* GetAt(Long index);
+
+	HistoryBook* Clone();
 
 	Long GetCapacity() const;
 	Long GetLength() const;

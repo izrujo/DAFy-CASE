@@ -13,6 +13,7 @@ public:
 
 	Long Add(NShape *shape);
 	Long Remove(Long index);
+	Long Modify(Long index, NShape *shape);
 	
 	NShape* GetShape(Long index);
 

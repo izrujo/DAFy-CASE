@@ -8,7 +8,6 @@
 #include "RightDownJoin.h"
 #include "Join.h"
 #include "RepeatFalse.h"
-#include "MemoryController.h"
 
 MoveMake::MoveMake(){
 }
@@ -29,20 +28,15 @@ void MoveMake::Create(DrawingPaper *canvas){
 	it = canvas->flowChart->GetLength();
 	indexes = new NShape*[it];
 
-	Long(*positions) = new Long[it];
-
 	while ( i < it ){
 		shape = canvas->flowChart->GetAt(i);
 		if( shape->IsSelected() ){
 			indexes[j] = shape->Clone();
-			positions[j] = i;
 			count++;
 			j++;
 		}
 		i++;
 	}
-
-	canvas->memoryController->RememberOther(positions, count);
 
 	// 2. 가장 상단의 기호를 찾는다.	
 	float y = 0;
@@ -94,9 +88,5 @@ void MoveMake::Create(DrawingPaper *canvas){
 	// 7. Indexes 해제
 	if (indexes != 0) {
 		delete[] indexes;
-	}
-
-	if (positions != 0) {
-		delete[] positions;
 	}
 }

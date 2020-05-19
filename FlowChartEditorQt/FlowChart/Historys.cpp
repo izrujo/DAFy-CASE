@@ -76,6 +76,15 @@ Long History::Remove(Long index) {
 	return index;
 }
 
+Long History::Modify(Long index, NShape *shape) {
+	if (this->shapes[index] != 0) {
+		delete this->shapes[index];
+	}
+	this->shapes[index] = shape;
+
+	return index;
+}
+
 NShape* History::GetShape(Long index) {
 	return this->shapes.GetAt(index);
 }

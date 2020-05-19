@@ -35,7 +35,8 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 	Tokenizer tokenizer;
 	QString qContents("");
 
-	canvas->flowChart->Clear();
+	canvas->flowChart = new FlowChart;
+	canvas->registrar = new Registrar;
 	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
 	if (isOpen == true) {
 		//¡‹ √≥∏Æ

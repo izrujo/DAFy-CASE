@@ -76,7 +76,7 @@ Long Registrar::Register(NShape *shape) {
 		break;
 	}
 
-	registrationNumber = this->lastNumbers[index]++;
+	registrationNumber = ++(this->lastNumbers[index]);
 	shape->Register(registrationNumber);
 
 	return registrationNumber;

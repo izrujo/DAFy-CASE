@@ -6,7 +6,8 @@
 #include <qstring.h>
 class NShape;
 class FlowChartVisitor;
-class Memory;
+class HistoryController;
+class Registrar;
 class VariableList;
 
 class SketchBook {
@@ -27,14 +28,15 @@ public:
 
 	Long Fold(QPoint point); //set current
 	
-	void Unfold(NShape *flowChart, Memory *undoMemory, Memory *redoMemory, VariableList *variableList); //backup flowchart and memories on canvas window
+	void Unfold(NShape *flowChart, HistoryController *historyController, Registrar *registrar,
+		VariableList *variableList); //backup flowchart and historys on canvas window
 	Long ModifyFileOpenPath(QString fileName); //set full file path name
 
 	NShape* GetCanvas(Long index);
 	NShape* GetFlowChart(Long index);
 	QString& GetFileOpenPath(Long index);
-	Memory* GetUndoMemory(Long index);
-	Memory* GetRedoMemory(Long index);
+	HistoryController* GetHistoryController(Long index);
+	Registrar* GetRegistrar(Long index);
 	VariableList* GetVariableList(Long index);
 
 	void Draw(FlowChartVisitor *visitor); //draw canvas title
@@ -47,11 +49,11 @@ public:
 	Long GetCurrent() const;
 private:
 	Array<NShape*> canvasList;
-	Array<NShape*> flowChartList; //包府父! 函版 绝澜.
+	Array<NShape*> flowChartList;
 	Array<QString> fileOpenPathList;
-	Array<Memory*> undoMemoryList; //包府父.
-	Array<Memory*> redoMemoryList; //包府父.
-	Array<VariableList*> variableListList; //包府父.
+	Array<HistoryController*> historyControllerList;
+	Array<Registrar*> registrarList;
+	Array<VariableList*> variableListList; 
 	Long capacity;
 	Long length;
 	Long current;

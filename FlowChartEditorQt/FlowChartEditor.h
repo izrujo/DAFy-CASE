@@ -16,8 +16,8 @@ class QMenuBar;
 class QMenu;
 class QAction;
 class GObject;
-class SketchBook;
 class NShape;
+class SheetManager;
 class QStatusBar;
 class QLabel;
 
@@ -34,7 +34,7 @@ public:
 	Array<QFrame*> windows;
 	QMenuBar *menuBar;
 	GObject *painter;
-	SketchBook *sketchBook;
+	SheetManager *sheetManager;
 	NShape *windowClose;
 
 	//===Status Bar
@@ -58,18 +58,6 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event);
 	void mouseReleaseEvent(QMouseEvent *event);
 	bool eventFilter(QObject* o, QEvent* e);
-	/* 메뉴 컨트롤에 관한 처리
-	afx_msg void OnUpdateCopyCutDeleteCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdatePasteCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateUndoCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateRedoCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdatePositionCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateSizeCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateIntervalCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateSequenceCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateIterationCommand(CCmdUI *cCmdUI);
-	afx_msg void OnUpdateSelectionCommand(CCmdUI *cCmdUI);
-	*/
 
 	//메뉴
 private slots:

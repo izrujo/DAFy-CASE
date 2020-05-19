@@ -26,11 +26,12 @@
 #include "Decision.h"
 #include "File.h"
 #include "WindowTitle.h"
-#include "SketchBook.h"
 #include "VariableList.h"
 #include "Line.h"
 #include "HistoryController.h"
 #include "Registrar.h"
+#include "HistoryBook.h"
+#include "SheetManager.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -99,7 +100,7 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 	this->zoom = new Zoom(100);
 
 	this->a4Paper = new A4Paper(444, 615, 1653, 2338);
-	this->zoom->Set(40);
+	//this->zoom->Set(40);
 
 	this->variableList = new VariableList;
 
@@ -109,10 +110,7 @@ DrawingPaper::DrawingPaper(QWidget *parent)
 }
 
 DrawingPaper::~DrawingPaper() {
-	if (this->flowChart != NULL) {
-		delete this->flowChart;
-	}
-
+	//flowChart, registrar, variableList 관리의 주체는 Sheet이다. 따라서 소멸시키지 않는다.
 	if (this->painter != NULL) {
 		delete this->painter;
 		this->painter = NULL;
@@ -151,10 +149,6 @@ DrawingPaper::~DrawingPaper() {
 		delete this->historyController;
 	}
 
-	if (this->registrar != NULL) {
-		delete this->registrar;
-	}
-
 	if (this->zoom != NULL) {
 		delete this->zoom;
 	}
@@ -165,10 +159,6 @@ DrawingPaper::~DrawingPaper() {
 	if (this->popup != NULL) {
 		delete this->popup;
 		this->popup = NULL;
-	}
-
-	if (this->variableList != NULL) {
-		delete this->variableList;
 	}
 }
 
@@ -340,9 +330,7 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 			editor->statusBar->repaint();
 		}
 	}
-	if (this->scrollController != NULL) {
-		this->scrollController->Update();
-	}
+	this->Notify();
 
 	this->setMouseTracking(true);
 }
@@ -391,6 +379,8 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 		this->label->Open(left, top, right - left, bottom - top);
 		this->label->show();
 
+		this->Notify();
+
 		shape = this->flowChart->GetAt(this->indexOfSelected);
 		shape->Rewrite(String(""));
 		this->label->setFocus();
@@ -400,17 +390,9 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 void DrawingPaper::resizeEvent(QResizeEvent *event) {
 	//========================캔버스 타이틀 들========================
 	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
-	SketchBook *sketchBook = editor->sketchBook;
-	NShape *canvasTitle;
-	float width = 0;
-	Long i = 0;
-	while (i < sketchBook->GetLength()) {
-		canvasTitle = sketchBook->GetCanvas(i);
-		canvasTitle->Move(this->x() + width, canvasTitle->GetY());
-		width += canvasTitle->GetWidth();
-		i++;
-	}
-	NShape *currentTitle = sketchBook->GetCanvas(sketchBook->GetCurrent());
+	editor->sheetManager->ModifyTitles();
+	
+	NShape *currentTitle = editor->sheetManager->GetTitle(editor->sheetManager->GetBinderCurrent());
 	float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 	float windowCloseY = currentTitle->GetY() + 4;
 	editor->windowClose->Move(windowCloseX, windowCloseY);
@@ -426,7 +408,7 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 	if (this->scrollController == NULL) {
 		this->scrollController = new ScrollController(this);
 
-		this->scrollController->GetScroll(0)->setValue(1283);
+		this->scrollController->GetScroll(0)->setValue(583);
 
 		this->scrollController->GetScroll(1)->setValue(427);
 
@@ -799,36 +781,43 @@ QCursor DrawingPaper::GetCursor(QPoint point) {
 
 void DrawingPaper::OnSequenceMenuClick() {
 	this->tool->SequenceMake(this);
+	
+	this->Notify();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnIterationMenuClick() {
 	this->tool->IterationMake(this);
+	this->Notify();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnSelectionMenuClick() {
 	this->tool->SelectionMake(this);
+	this->Notify();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnMoveMakeMenuClick() {
 	this->tool->MoveMake(this);
+	this->Notify();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnSizeMakeMenuClick() {
 	this->tool->SizeMake(this);
+	this->Notify();
 
 	this->repaint();
 }
 
 void DrawingPaper::OnIntervalMakeMenuClick() {
 	this->tool->IntervalMake(this);
+	this->Notify();
 
 	this->repaint();
 }
@@ -836,32 +825,16 @@ void DrawingPaper::OnIntervalMakeMenuClick() {
 void DrawingPaper::New() {
 	FlowChartEditor *editor = static_cast<FlowChartEditor *>(this->parentWidget());
 
-	NShape *last = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength() - 1);
+	NShape *last = editor->sheetManager->GetTitle(editor->sheetManager->GetBinderLength() - 1);
 	float lastRight = last->GetX() + last->GetWidth();
 	//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
 	float right = this->x() + this->width();
 	if (lastRight + 186 < right) { //186은 캔버스 타이틀의 최소 너비
+		Long current = editor->sheetManager->New();
+		editor->sheetManager->Change(current);
+		editor->sheetManager->ModifyTitles();
 
-		editor->sketchBook->Unfold(this->flowChart->Clone(),
-			new Memory(*this->memoryController->GetUndoMemory()),
-			new Memory(*this->memoryController->GetRedoMemory()),
-			new VariableList(*this->variableList));
-
-		NShape *previousTitle = editor->sketchBook->GetCanvas(editor->sketchBook->GetLength() - 1);
-		NShape *newTitle = new WindowTitle(previousTitle->GetX() + previousTitle->GetWidth(),
-			previousTitle->GetY(), 186.0F, previousTitle->GetHeight(), QColor(102, 204, 204),
-			Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
-		NShape *newFlowChart = new FlowChart;
-		editor->sketchBook->Add(newTitle, newFlowChart);
-		editor->sketchBook->Update();
-
-		//비어 있는  순서도, 비어 있는 메모리들(-Add에서 빈 거 생성한거 가져와서 다시 넣는거임)
-		this->flowChart = newFlowChart->Clone();
-		Memory *undoMemory = new Memory(*editor->sketchBook->GetUndoMemory(editor->sketchBook->GetCurrent()));
-		Memory *redoMemory = new Memory(*editor->sketchBook->GetRedoMemory(editor->sketchBook->GetCurrent()));
-		this->memoryController->ChangeMemory(undoMemory, redoMemory);
-		this->variableList = new VariableList;
-
+		NShape *newTitle = editor->sheetManager->GetTitle(current);
 		float windowCloseX = newTitle->GetX() + newTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 		float windowCloseY = newTitle->GetY() + 4;
 		editor->windowClose->Move(windowCloseX, windowCloseY);
@@ -897,7 +870,7 @@ void DrawingPaper::Close() {
 		QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
 	int ret = messageBox.exec();
 	if (ret == QMessageBox::Yes) { //유저가 저장한다고 하면
-		QString fileOpenPath = editor->sketchBook->GetFileOpenPath(editor->sketchBook->GetCurrent());
+		QString fileOpenPath = editor->sheetManager->GetFileOpenPath(editor->sheetManager->GetBinderCurrent());
 		if (fileOpenPath.isEmpty()) { //현재 순서도가 저장되어 있지 않다면 새로 저장한다.
 			fileName = QFileDialog::getSaveFileName((QWidget*)editor,
 				QObject::tr("Save File"),
@@ -907,20 +880,8 @@ void DrawingPaper::Close() {
 			QFile file(fileName);
 			bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 			if (isOpen == true) {
-				editor->sketchBook->ModifyFileOpenPath(fileName); //빈 경로를 다이어로그에서 가져와서 고침.
+				editor->sheetManager->ModifyFileOpenPath(fileName); //빈 경로를 다이어로그에서 가져와서 고침.
 				this->Save(fileName.toLocal8Bit().data());
-
-				Long length = fileName.length();
-				Long i = length - 1;
-				while (i >= 0 && fileName[i] != '/') {
-					length--;
-					i--;
-				}
-				fileName.remove(0, length);
-				fileName.remove(fileName.length() - 4, 4);
-				fileName.insert(0, ' ');
-
-				editor->sketchBook->GetCanvas(editor->sketchBook->GetCurrent())->Rewrite(fileName.toLocal8Bit().data());
 			}
 		}
 		else { //현재 순서도가 저장되어 있으면 그대로 똑같은 경로와 이름으로 저장한다.
@@ -930,19 +891,16 @@ void DrawingPaper::Close() {
 
 	if (ret != QMessageBox::Cancel) { //유저가 한번 더 물어봐도 닫는 걸 선택함
 		//캔버스 윈도우를 비우다.
-		this->flowChart->Clear();
+		//this->flowChart->Clear();
 		this->mode = IDLE;
 		this->indexOfSelected = -1;
 
 		//현재 캔버스 지우고/새로운 현재 설정해주고/닫기버튼 옮겨주기.
-		editor->sketchBook->Remove(editor->sketchBook->GetCurrent());
+		editor->sheetManager->Close();
 
-		NShape *first = editor->sketchBook->GetCanvas(0); //새로운 현재 : 맨 앞에꺼
-		editor->sketchBook->Fold(QPoint(first->GetX(), first->GetY()));
-		editor->sketchBook->Update();
-		this->flowChart = editor->sketchBook->GetFlowChart(editor->sketchBook->GetCurrent())->Clone();
-
-		editor->sketchBook->Arrange(this->x());
+		NShape *first = editor->sheetManager->GetTitle(0); //새로운 현재 : 맨 앞에꺼
+		editor->sheetManager->Change(0);
+		editor->sheetManager->ModifyTitles();
 
 		float windowCloseX = first->GetX() + first->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 		float windowCloseY = first->GetY() + 4;

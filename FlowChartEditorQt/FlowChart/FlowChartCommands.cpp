@@ -1,8 +1,6 @@
 #include "FlowChartCommands.h"
 #include "../FlowChartEditor.h"
 #include "DrawingPaper.h"
-#include "Memory.h"
-#include "MemoryController.h"
 #include "PreviewForm.h"
 #include "A4Paper.h"
 #include "FlowChart.h"
@@ -15,9 +13,12 @@
 #include "Zoom.h"
 #include "Tool.h"
 #include "Shape.h"
-#include "SketchBook.h"
 #include "WindowTitle.h"
 #include "VariableList.h"
+#include "HistoryController.h"
+#include "HistoryBook.h"
+#include "Registrar.h"
+#include "SheetManager.h"
 
 #include "../GObject/QtPainter.h"
 #include "../GObject/QtGObjectFactory.h"
@@ -76,9 +77,10 @@ SaveCommand &SaveCommand::operator =(const SaveCommand &source) {
 }
 
 void SaveCommand::Execute() {
-	QString fileOpenPath = this->editor->sketchBook->GetFileOpenPath(this->editor->sketchBook->GetCurrent());
+	Long current = this->editor->sheetManager->GetBinderCurrent();
+	QString fileOpenPath = this->editor->sheetManager->GetFileOpenPath(current);
 	if (fileOpenPath.isEmpty()) {
-		NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+		NShape *canvasTitle = this->editor->sheetManager->GetTitle(current);
 		QString fileName;
 		QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
 		fileName_.remove(0, 1);
@@ -91,7 +93,7 @@ void SaveCommand::Execute() {
 		QFile file(fileName);
 		bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 		if (isOpen == true) {
-			this->editor->sketchBook->ModifyFileOpenPath(fileName);
+			this->editor->sheetManager->ModifyFileOpenPath(fileName);
 			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName);
 
 			Long length = fileName.length();
@@ -109,11 +111,11 @@ void SaveCommand::Execute() {
 			if (fileName.length() > 10) {
 				width = width + (fileName.length() - 10) * 10;
 				canvasTitle->ReSize(width, canvasTitle->GetHeight());
-				editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
+				this->editor->sheetManager->ModifyTitles();
 				//캔버스 닫는거 옮기기
 				float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 				float windowCloseY = canvasTitle->GetY() + 4;
-				editor->windowClose->Move(windowCloseX, windowCloseY);
+				this->editor->windowClose->Move(windowCloseX, windowCloseY);
 			}
 
 			canvasTitle->Rewrite(fileName.toLocal8Bit().data());
@@ -122,6 +124,9 @@ void SaveCommand::Execute() {
 	else {
 		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileOpenPath);
 	}
+	QString message = QString::fromLocal8Bit("    저장 성공");
+	this->editor->messageStatus->setText(message);
+	this->editor->statusBar->repaint();
 }
 
 //SaveAsCommand
@@ -145,7 +150,8 @@ SaveAsCommand &SaveAsCommand::operator =(const SaveAsCommand &source) {
 }
 
 void SaveAsCommand::Execute() {
-	NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+	Long current = this->editor->sheetManager->GetBinderCurrent();
+	NShape *canvasTitle = this->editor->sheetManager->GetTitle(current);
 	QString fileName;
 	QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
 	fileName_.remove(0, 1);
@@ -157,7 +163,7 @@ void SaveAsCommand::Execute() {
 	QFile file(fileName);
 	bool isOpen = file.open(QIODevice::WriteOnly | QIODevice::Text);
 	if (isOpen == true) {
-		this->editor->sketchBook->ModifyFileOpenPath(fileName);
+		this->editor->sheetManager->ModifyFileOpenPath(fileName);
 		(static_cast<DrawingPaper *>(this->editor->windows[0]))->Save(fileName);
 
 		Long length = fileName.length();
@@ -175,14 +181,18 @@ void SaveAsCommand::Execute() {
 		if (fileName.length() > 10) {
 			width = width + (fileName.length() - 10) * 10;
 			canvasTitle->ReSize(width, canvasTitle->GetHeight());
-			editor->sketchBook->Arrange((static_cast<DrawingPaper *>(this->editor->windows[0]))->x());
+			this->editor->sheetManager->ModifyTitles();
 			//캔버스 닫는거 옮기기
 			float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 			float windowCloseY = canvasTitle->GetY() + 4;
-			editor->windowClose->Move(windowCloseX, windowCloseY);
+			this->editor->windowClose->Move(windowCloseX, windowCloseY);
 		}
 
 		canvasTitle->Rewrite(fileName.toLocal8Bit().data());
+		
+		QString message = QString::fromLocal8Bit("    저장 성공");
+		this->editor->messageStatus->setText(message);
+		this->editor->statusBar->repaint();
 	}
 }
 
@@ -214,64 +224,27 @@ void OpenCommand::Execute() {
 	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
 	if (isOpen == true) {
 		//너무 많이 열지 못하게 방지하는 기능
-		NShape *last = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetLength() - 1);
+		NShape *last = this->editor->sheetManager->GetTitle(this->editor->sheetManager->GetBinderLength() - 1);
 		Long lastRight = last->GetX() + last->GetWidth();
 
 		DrawingPaper *canvas = static_cast<DrawingPaper *>(this->editor->windows[0]);
 		//마지막 캔버스 타이틀의 오른쪽이 윈도우의 오른쪽보다 작을 때만 추가로 열 수 있다.
 		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
-			//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
-			VariableList *variableList = NULL;
-			if (canvas->variableList != NULL) {
-				variableList = new VariableList(*canvas->variableList);
-			}
-			this->editor->sketchBook->Unfold(canvas->flowChart->Clone(),
-				new Memory(*canvas->memoryController->GetUndoMemory()),
-				new Memory(*canvas->memoryController->GetRedoMemory()),
-				variableList);
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
 			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
-			//경로를 포함한 파일이름을 수정해서 딱 파일이름만 남도록 처리
-			Long length = fileName.length();
-			Long i = length - 1;
-			while (i >= 0 && fileName[i] != '/') {
-				length--;
-				i--;
-			}
-			QString fileName_ = fileName;
-			fileName_.remove(0, length);
-			fileName_.remove(fileName_.length() - 4, 4);
-			fileName_.insert(0, ' ');
-			//파일이름이 10자가 넘으면 한 글자당 width 10씩 늘림
-			float width = 186.0F;
-			if (fileName_.length() > 10) {
-				width = width + (fileName_.length() - 10) * 10;
-			}
 			//새로운 캔버스 타이틀 만들기
-			NShape *canvasTitle = new WindowTitle(last->GetX() + last->GetWidth(), last->GetY(),
-				width, last->GetHeight(),
-				QColor(235, 235, 235), Qt::SolidLine, QColor(235, 235, 235), fileName_.toLocal8Bit().data());
-			NShape *flowChart = canvas->flowChart->Clone();
-			//새로운 캔버스 타이틀 맨 뒤에 추가하기
-			Long current = this->editor->sketchBook->Add(canvasTitle, flowChart, fileName);
-
-			//스케치북을 펼친다 : 현재 캔버스의 쪽과 캔버스 타이틀 색깔 바꾸기
-			this->editor->sketchBook->Fold(QPoint(canvasTitle->GetX(), canvasTitle->GetY()));
-			this->editor->sketchBook->Update();
+			Long current = this->editor->sheetManager->Open(fileName);
+			this->editor->sheetManager->Change(current);
+			//스케치북을 펼친다 : 캔버스 타이틀 색깔 바꾸기
+			this->editor->sheetManager->ModifyTitles();
 			//캔버스 닫는거 옮기기
+			NShape *canvasTitle = this->editor->sheetManager->GetTitle(current);
 			float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 			float windowCloseY = canvasTitle->GetY() + 4;
 			editor->windowClose->Move(windowCloseX, windowCloseY);
 
-			//순서도는 Load()에 의해 이미 바뀌어 있음.
-			//메모리는 Add에 의해서 비어있는 메모리가 생성되는데 바로 그걸 가져와서 바꿔치기
-			Memory *undoMemory = new Memory(*this->editor->sketchBook->GetUndoMemory(current));
-			Memory *redoMemory = new Memory(*this->editor->sketchBook->GetRedoMemory(current));
-			canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
-			//변수 목록은 Load()에 의해 바뀐다.
-
-			canvas->setFocus(); //focus message 찾아서
+			canvas->setFocus();
 			this->editor->repaint();
 		}
 		else {
@@ -331,9 +304,9 @@ UndoCommand &UndoCommand::operator =(const UndoCommand &source) {
 }
 
 void UndoCommand::Execute() {
-	if (static_cast<DrawingPaper *>(this->editor->windows[0])->memoryController->GetUndoMemory()->GetLength() > 0) {
-		static_cast<DrawingPaper *>(this->editor->windows[0])->memoryController->RememberUndo();
-		static_cast<DrawingPaper *>(this->editor->windows[0])->memoryController->Undo();
+	if (static_cast<DrawingPaper *>(this->editor->windows[0])
+		->historyController->GetUndoHistoryBook()->GetLength() > 0) {
+		static_cast<DrawingPaper *>(this->editor->windows[0])->historyController->Undo();
 		this->editor->windows[0]->repaint();
 	}
 }
@@ -359,9 +332,9 @@ RedoCommand &RedoCommand::operator =(const RedoCommand &source) {
 }
 
 void RedoCommand::Execute() {
-	if (static_cast<DrawingPaper *>(this->editor->windows[0])->memoryController->GetRedoMemory()->GetLength() > 0) {
-		static_cast<DrawingPaper *>(this->editor->windows[0])->memoryController->RememberRedo();
-		static_cast<DrawingPaper *>(this->editor->windows[0])->memoryController->Redo();
+	if (static_cast<DrawingPaper *>(this->editor->windows[0])
+		->historyController->GetRedoHistoryBook()->GetLength() > 0) {
+		static_cast<DrawingPaper *>(this->editor->windows[0])->historyController->Redo();
 		this->editor->windows[0]->repaint();
 	}
 }
@@ -460,7 +433,7 @@ SaveAsImageCommand &SaveAsImageCommand::operator =(const SaveAsImageCommand &sou
 }
 
 void SaveAsImageCommand::Execute() {
-	NShape *canvasTitle = this->editor->sketchBook->GetCanvas(this->editor->sketchBook->GetCurrent());
+	NShape *canvasTitle = this->editor->sheetManager->GetTitle(this->editor->sheetManager->GetBinderCurrent());
 	QString fileName;
 	QString fileName_(QString::fromLocal8Bit(canvasTitle->GetContents()));
 	fileName_.remove(0, 1);
@@ -623,6 +596,8 @@ PasteCommand &PasteCommand::operator =(const PasteCommand &source) {
 void PasteCommand::Execute() {
 	DrawingPaper *drawingPaper = static_cast<DrawingPaper *>(this->editor->windows[0]);
 	drawingPaper->clipboard->Paste(drawingPaper);
+
+	drawingPaper->Notify();
 }
 
 //CutCommand
@@ -646,7 +621,10 @@ CutCommand &CutCommand::operator =(const CutCommand &source) {
 }
 
 void CutCommand::Execute() {
-	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->clipboard->Cut(dynamic_cast<DrawingPaper *>(this->editor->windows[0]));
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+	canvas->clipboard->Cut(canvas);
+
+	canvas->Notify();
 }
 
 //DeleteCommand
@@ -670,29 +648,32 @@ DeleteCommand &DeleteCommand::operator =(const DeleteCommand &source) {
 }
 
 void DeleteCommand::Execute() {
+	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
+
 	Long it;
 	NShape *shape;
 
 	Long count;
 	Long(*indexes);
-	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->flowChart->GetSelecteds(&indexes, &count);
-	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->memoryController->RememberRemove(indexes, count);
+	canvas->flowChart->GetSelecteds(&indexes, &count);
 
-	it = dynamic_cast<DrawingPaper *>(this->editor->windows[0])->flowChart->GetLength() - 1;
+	it = canvas->flowChart->GetLength() - 1;
 	while (it >= 0) {
-		shape = dynamic_cast<DrawingPaper *>(this->editor->windows[0])->flowChart->GetAt(it);
+		shape = canvas->flowChart->GetAt(it);
 		if (shape->IsSelected()) {
-			dynamic_cast<DrawingPaper *>(this->editor->windows[0])->flowChart->Detach(it);
+			canvas->flowChart->Detach(it);
 		}
 		it--;
 	}
-	if (dynamic_cast<DrawingPaper *>(this->editor->windows[0])->flowChart->GetLength() < 1) {
-		dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::IDLE;
+	if (canvas->flowChart->GetLength() < 1) {
+		canvas->mode = DrawingPaper::IDLE;
 	}
 
 	if (indexes != 0) {
 		delete[] indexes;
 	}
+
+	canvas->Notify();
 }
 
 //SelectAllCommand

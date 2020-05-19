@@ -269,6 +269,8 @@ protected:
 	virtual void GetSelectionMarkerRect(int marker, QRectF *rect); //marker - 전처리 선언된 매크로: int로 구분하자.
 
 public: //Block virtual 선언
+	virtual bool IsSame(const NShape& other);
+
 	virtual Long Attach(NShape *shape);
 	virtual Long Insert(Long index, NShape *shape);
 	virtual Long Detach(Long index);

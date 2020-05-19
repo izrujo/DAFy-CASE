@@ -4,7 +4,6 @@
 #include "FlowChart.h"
 #include "Shape.h"
 #include "Symbol.h"
-#include "MemoryController.h"
 
 SizeMake::SizeMake() {
 }
@@ -25,7 +24,6 @@ void SizeMake::Create(DrawingPaper *canvas) {
 	if (it > 0) {
 		indexes = new NShape*[it];
 	}
-	Long(*positions) = new Long[it];
 
 	i = 0;
 	while (i < it) {
@@ -33,8 +31,6 @@ void SizeMake::Create(DrawingPaper *canvas) {
 		if (shape->IsSelected()) {
 			if (dynamic_cast<Symbol *>(shape)) {
 				indexes[j] = shape->Clone();
-				positions[j] = i;
-				count++;
 				j++;
 			}
 			else {
@@ -43,8 +39,6 @@ void SizeMake::Create(DrawingPaper *canvas) {
 		}
 		i++;
 	}
-
-	canvas->memoryController->RememberOther(positions, count);
 
 	// 2. 가장 상단의 기호를 찾는다.
 	Long index;

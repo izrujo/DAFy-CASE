@@ -7,17 +7,18 @@
 #include "GObject/GObject.h"
 #include "GObject/QtGObjectFactory.h"
 #include "GObject/QtPainter.h"
-#include "FlowChart/SketchBook.h"
 #include "FlowChart/WindowTitle.h"
 #include "FlowChart/FlowChartVisitor.h"
 #include "FlowChart/DrawVisitor.h"
 #include "FlowChart/WindowClose.h"
-#include "FlowChart/Memory.h"
-#include "FlowChart/MemoryController.h"
 #include "FlowChart/Zoom.h"
 #include "FlowChart/VariableList.h"
 #include "FlowChart/Clipboard.h"
 #include "FlowChart/Decision.h"
+#include "FlowChart/HistoryController.h"
+#include "FlowChart/HistoryBook.h"
+#include "FlowChart/Registrar.h"
+#include "FlowChart/SheetManager.h"
 
 #include <qmenubar.h>
 #include <qevent.h>
@@ -64,14 +65,9 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 
 	this->painter = new QtPainter((Long)frameRect.width(), (Long)frameRect.height(), QColor(235, 235, 235));
 
-	this->sketchBook = new SketchBook;
+	this->sheetManager = new SheetManager(drawingPaper);
 
-	float height = 26.0F;
-	NShape *firstTitle = new WindowTitle(drawingPaper->x(), drawingPaper->y() - height - 4, 186.0F, height, QColor(102, 204, 204),
-		Qt::SolidLine, QColor(102, 204, 204), String(" 제목없음"));
-	Long current = this->sketchBook->Add(firstTitle, drawingPaper->flowChart->Clone());
-
-	firstTitle = this->sketchBook->GetCanvas(current);
+	NShape *firstTitle = this->sheetManager->GetTitle(0);
 	float windowCloseX = firstTitle->GetX() + firstTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 	float windowCloseY = firstTitle->GetY() + 4;
 	this->windowClose = new WindowClose(windowCloseX, windowCloseY, 26.0F, 23.0F, QColor(102, 204, 204),
@@ -95,8 +91,8 @@ void FlowChartEditor::closeEvent(QCloseEvent *event) {
 		if (this->painter != NULL) {
 			delete this->painter;
 		}
-		if (this->sketchBook != NULL) {
-			delete this->sketchBook;
+		if (this->sheetManager != NULL) {
+			delete this->sheetManager;
 		}
 
 		Long i = 0;
@@ -154,7 +150,7 @@ void FlowChartEditor::paintEvent(QPaintEvent *event) {
 
 	FlowChartVisitor *visitor = new DrawVisitor(this->painter);
 
-	this->sketchBook->Draw(visitor);
+	this->sheetManager->Draw(visitor);
 	//닫기
 	this->windowClose->Accept(visitor);
 
@@ -179,7 +175,7 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 	QRectF pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
 	bool isContain = pinRect.contains(event->localPos());
 	if (isContain == true) {
-		if (this->sketchBook->GetLength() > 1) { //두 개 이상일 때만 닫을 수 있음.
+		if (this->sheetManager->GetBinderLength() > 1) { //두 개 이상일 때만 닫을 수 있음.
 			canvas->Close(); //현재 캔버스 저장하거나 안하거나 처리해줌.
 		}
 		else {
@@ -189,34 +185,16 @@ void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 		}
 	}
 	else {
-		VariableList *variableList = NULL;
-		if (canvas->variableList != NULL) {
-			variableList = new VariableList(*canvas->variableList);
-		}
-		//스케치북을 접는다 : 원래 펼쳐져 있던 캔버스의 순서도를 저장한다.
-		this->sketchBook->Unfold(canvas->flowChart->Clone(),
-			new Memory(*canvas->memoryController->GetUndoMemory()),
-			new Memory(*canvas->memoryController->GetRedoMemory()),
-			variableList);
-		//스케치북을 펼친다 : 현재 캔버스의 쪽 바꾸기
-		Long current = this->sketchBook->Fold(event->pos());
-		//스케치북을 펼친다 : 색깔 바꿔주기.
-		this->sketchBook->Update();
-		//스케치북을 펼친다 : 펼친 캔버스의 저장되어있던 순서도로 바꾼다. 메모리도 갈아준다.
-		canvas->flowChart = this->sketchBook->GetFlowChart(this->sketchBook->GetCurrent())->Clone();
-		Memory *undoMemory = new Memory(*this->sketchBook->GetUndoMemory(this->sketchBook->GetCurrent()));
-		Memory *redoMemory = new Memory(*this->sketchBook->GetRedoMemory(this->sketchBook->GetCurrent()));
-		canvas->memoryController->ChangeMemory(undoMemory, redoMemory);
-		variableList = NULL;
-		if (this->sketchBook->GetVariableList(this->sketchBook->GetCurrent()) != NULL) {
-			variableList = new VariableList(*this->sketchBook->GetVariableList(this->sketchBook->GetCurrent()));
-		}
-		canvas->variableList = variableList;
+		Long current = this->sheetManager->Select(event->pos());
+		if (current >= 0) {
+			this->sheetManager->Change(current);
+			this->sheetManager->ModifyTitles();
 
-		NShape *currentTitle = this->sketchBook->GetCanvas(current);
-		float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-		float windowCloseY = currentTitle->GetY() + 4;
-		this->windowClose->Move(windowCloseX, windowCloseY);
+			NShape *currentTitle = this->sheetManager->GetTitle(current);
+			float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+			float windowCloseY = currentTitle->GetY() + 4;
+			this->windowClose->Move(windowCloseX, windowCloseY);
+		}
 	}
 	this->repaint();
 	canvas->repaint();
@@ -236,8 +214,8 @@ void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선
 		command->Execute();
 		delete command;
 	}
-
 	DrawingPaper *drawingPaper = static_cast<DrawingPaper *>(this->windows[0]);
+
 	QString mode = drawingPaper->GetCurrentMode();
 	this->modeStatus->setText(mode);
 	this->statusBar->repaint();
@@ -270,12 +248,12 @@ void FlowChartEditor::UpdateEditMenu() {
 
 	//실행 취소
 	//UndoMemory에 아무것도 없으면 비활성화한다.
-	(canvas->memoryController->GetUndoMemory()->GetLength() < 1) ?
+	(canvas->historyController->GetUndoHistoryBook()->GetLength() < 1) ?
 		(this->undoAction->setEnabled(false)) : (this->undoAction->setEnabled(true));
 
 	//다시 실행
 	//RedoMemory에 아무것도 없으면 비활성화한다.
-	(canvas->memoryController->GetRedoMemory()->GetLength() < 1) ?
+	(canvas->historyController->GetRedoHistoryBook()->GetLength() < 1) ?
 		(this->redoAction->setEnabled(false)) : (this->redoAction->setEnabled(true));
 
 	//기호 위치 같게, 기호 크기 같게, 기호 간격 같게

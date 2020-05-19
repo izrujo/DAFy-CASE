@@ -61,6 +61,20 @@ NShape* Block::operator[](Long index) {
 	return this->shapes[index];
 }
 
+bool Block::IsSame(const NShape& other) {
+	bool ret = false;
+	Long i = 0;
+	while (i < this->length && 
+		this->shapes[i]->IsEqual(*dynamic_cast<Block&>(const_cast<NShape&>(other)).shapes[i])) {
+		i++;
+	}
+	if (i >= this->length) {
+		ret = true;
+	}
+
+	return ret;
+}
+
 Long Block::Attach(NShape *shape) {
 	if (this->length < this->capacity) {
 		this->current = this->shapes.Store(this->length, shape);
@@ -354,7 +368,7 @@ void Block::DescendingSort() {
 Long Block::FindByRegistrationNumber(SHAPE id, Long registrationNumber) {
 	Long i = 0;
 	while (i < this->length && 
-		!(this->shapes[i]->Identify(id)) || this->registrationNumber != registrationNumber) {	
+		(!(this->shapes[i]->Identify(id)) || this->shapes[i]->GetRegistrationNumber() != registrationNumber)) {	
 		i++;
 	}
 	return (i < this->length) ? (i) : (-1);

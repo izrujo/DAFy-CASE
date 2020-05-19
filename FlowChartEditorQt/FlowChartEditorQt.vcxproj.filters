@@ -302,9 +302,6 @@
     <ClCompile Include="x64\Debug\rcc\Notepad\qrc_Notepad.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\SketchBook.cpp">
-      <Filter>FlowChart</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\WindowClose.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -324,6 +321,15 @@
       <Filter>FlowChart</Filter>
     </ClCompile>
     <ClCompile Include="FlowChart\Registrar.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\Sheet.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\SheetBinder.cpp">
+      <Filter>FlowChart</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChart\SheetManager.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
   </ItemGroup>
@@ -585,9 +591,6 @@
     <ClInclude Include="FlowChart\WindowTitle.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\SketchBook.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\WindowClose.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -619,6 +622,15 @@
       <Filter>FlowChart</Filter>
     </ClInclude>
     <ClInclude Include="FlowChart\Registrar.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\SheetManager.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\Sheet.h">
+      <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChart\SheetBinder.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
   </ItemGroup>

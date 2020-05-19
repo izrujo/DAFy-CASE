@@ -7,9 +7,6 @@
 #include "Join.h"
 #include "LeftDown.h"
 #include "RightDown.h"
-#include "Memory.h"
-#include "MemoryController.h"
-#include "Executions.h"
 #include <cmath>
 #include "../GObject/Painter.h"
 #include "ScrollController.h"
