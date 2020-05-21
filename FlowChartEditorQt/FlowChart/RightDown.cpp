@@ -89,11 +89,11 @@ NShape* RightDown::Clone() {
 
 QRegion RightDown::GetRegion() {
 	QRectF rect(this->x, this->y - LINETHICKNESS,
-		this->width, LINETHICKNESS);
+		this->width, LINETHICKNESS*2);
 	QRegion region(rect.toRect());
 	
 	rect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
-		this->width + LINETHICKNESS, this->height);
+		LINETHICKNESS*2, this->height);
 	region += QRegion(rect.toRect());
 	
 	return region;
@@ -101,11 +101,11 @@ QRegion RightDown::GetRegion() {
 
 QRegion RightDown::GetRegion(Long thickness) {
 	QRectF rect(this->x, this->y - thickness,
-		this->width, thickness);
+		this->width, thickness*2);
 	QRegion region(rect.toRect());
 	
 	rect = QRectF(this->x + this->width - thickness, this->y,
-		this->width + thickness, this->height);
+		thickness*2, this->height);
 	region += QRegion(rect.toRect());
 	
 	return region;
@@ -116,12 +116,12 @@ bool RightDown::IsIncluded(QPointF point) {
 
 	QRegion region;
 	QRectF regionRect(this->x, this->y - LINETHICKNESS,
-		this->width, LINETHICKNESS);
+		this->width, LINETHICKNESS*2);
 	region = QRegion(regionRect.toRect());
 
 	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
-		this->width + LINETHICKNESS, this->height);
-	region = QRegion(regionRect.toRect());
+		LINETHICKNESS*2, this->height);
+	region += QRegion(regionRect.toRect());
 
 	ret = region.contains(point.toPoint());
 
@@ -133,12 +133,12 @@ bool RightDown::IsIncluded(const QRectF& rect) {
 
 	QRegion region;
 	QRectF regionRect(this->x, this->y - LINETHICKNESS,
-		this->width, LINETHICKNESS);
+		this->width, LINETHICKNESS*2);
 	region = QRegion(regionRect.toRect());
 
 	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
-		this->width + LINETHICKNESS, this->height);
-	region = QRegion(regionRect.toRect());
+		LINETHICKNESS*2, this->height);
+	region += QRegion(regionRect.toRect());
 
 	ret = region.contains(rect.toRect());
 

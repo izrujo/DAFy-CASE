@@ -38,7 +38,8 @@ void SequenceMake::Create(DrawingPaper *canvas) {
 
 	for (i = 0; i < length; i++) {
 		shape = canvas->flowChart->GetAt(indexes[i]);
-		if (dynamic_cast<Symbol *>(shape)) {
+		if (dynamic_cast<Symbol *>(shape) 
+			|| dynamic_cast<Join*>(shape) || dynamic_cast<RightDownJoin*>(shape)) {
 			buffer.Attach(shape->Clone());
 			if (index > indexes[i] || index == -1) {
 				index = indexes[i];

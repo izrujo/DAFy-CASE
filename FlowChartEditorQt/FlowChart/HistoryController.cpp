@@ -226,6 +226,7 @@ void HistoryController::Redo() {
 		this->redoHistoryBook->Remove(historyLength - 1);
 
 		this->previousFlowChart = this->canvas->flowChart->Clone();
+		
 		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->canvas->parentWidget());
 		editor->sheetManager->ModifyPreviousFlowChart(this->previousFlowChart);
 	}

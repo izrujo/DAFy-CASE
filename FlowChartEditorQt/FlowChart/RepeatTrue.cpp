@@ -103,40 +103,40 @@ NShape* RepeatTrue::Clone() {
 }
 
 QRegion RepeatTrue::GetRegion() {
-	QRectF rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS, this->height2);
+	QRectF rect(this->x - LINETHICKNESS, this->y, LINETHICKNESS * 2, this->height2);
 	QRegion region(rect.toRect());
 
-	rect = QRectF(this->x + 1, this->y + this->height2 - LINETHICKNESS,
-		this->width2, this->height2 + LINETHICKNESS);
+	rect = QRectF(this->x + this->width2, this->y + this->height2 - LINETHICKNESS,
+		this->width2 * -1, LINETHICKNESS * 2);
 	region += QRegion(rect.toRect());
 
-	rect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y + this->height2,
-		this->width2 + LINETHICKNESS, this->height);
+	rect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y + this->height,
+		LINETHICKNESS * 2, this->height2 - this->height);
 	region += QRegion(rect.toRect());
 
-	rect = QRectF(this->x + this->width2 - 1, this->y + this->height - LINETHICKNESS,
-		this->width, this->height + LINETHICKNESS);
+	rect = QRectF(this->x + this->width2, this->y + this->height - LINETHICKNESS,
+		this->width2 * -1, LINETHICKNESS * 2);
 	region += QRegion(rect.toRect());
 
 	return region;
 }
 
 QRegion RepeatTrue::GetRegion(Long thickness) {
-	QRectF rect(this->x - thickness, this->y, thickness, this->height2);
+	QRectF rect(this->x - thickness, this->y, thickness * 2, this->height2);
 	QRegion region(rect.toRect());
-	
-	rect = QRectF(this->x + 1, this->y + this->height2 - thickness, 
-		this->width2, this->height2 + thickness);
-	region += QRegion(rect.toRect());
-	
-	rect = QRectF(this->x + this->width2 - thickness, this->y + this->height2, 
-		this->width2 + thickness, this->height);
+
+	rect = QRectF(this->x + this->width2, this->y + this->height2 - thickness,
+		this->width2 * -1, thickness * 2);
 	region += QRegion(rect.toRect());
 
-	rect = QRectF(this->x + this->width2 - 1, this->y + this->height - thickness, 
-		this->width, this->height + thickness);
+	rect = QRectF(this->x + this->width2 - thickness, this->y + this->height,
+		thickness * 2, this->height2 - this->height);
 	region += QRegion(rect.toRect());
-	
+
+	rect = QRectF(this->x + this->width2, this->y + this->height - thickness,
+		this->width2 * -1, thickness * 2);
+	region += QRegion(rect.toRect());
+
 	return region;
 }
 
@@ -150,24 +150,24 @@ void RepeatTrue::ReSize(float width, float height, float width2, float height2) 
 bool RepeatTrue::IsIncluded(QPointF point) {
 	bool ret;
 
-	QRectF regionRect(this->x - LINETHICKNESS, this->y, 
-		LINETHICKNESS, this->height2);
+	QRectF regionRect(this->x - LINETHICKNESS, this->y,
+		LINETHICKNESS * 2, this->height2);
 	QRegion region(regionRect.toRect());
 
-	regionRect = QRectF(this->x, this->y + this->height2 - LINETHICKNESS, 
-		this->width2, this->height2 + LINETHICKNESS);
-	region = QRegion(regionRect.toRect());
-
-	regionRect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y + this->height2, 
-		this->width2 + LINETHICKNESS, this->height);
+	regionRect = QRectF(this->x + this->width2, this->y + this->height2 - LINETHICKNESS,
+		this->width2 * -1, LINETHICKNESS);
 	region += QRegion(regionRect.toRect());
 
-	regionRect = QRectF(this->x + this->width2, this->y + this->height - LINETHICKNESS, 
-		this->width, this->height + LINETHICKNESS);
+	regionRect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y + this->height,
+		LINETHICKNESS * 2, this->height2 - this->height);
 	region += QRegion(regionRect.toRect());
-	
+
+	regionRect = QRectF(this->x + this->width2, this->y + this->height - LINETHICKNESS,
+		this->width2 * -1, LINETHICKNESS*2);
+	region += QRegion(regionRect.toRect());
+
 	ret = region.contains(point.toPoint());
-	
+
 	return ret;
 }
 
@@ -175,19 +175,19 @@ bool RepeatTrue::IsIncluded(const QRectF& rect) {
 	bool ret;
 
 	QRectF regionRect(this->x - LINETHICKNESS, this->y,
-		LINETHICKNESS, this->height2);
+		LINETHICKNESS * 2, this->height2);
 	QRegion region(regionRect.toRect());
 
-	regionRect = QRectF(this->x, this->y + this->height2 - LINETHICKNESS,
-		this->width2, this->height2 + LINETHICKNESS);
-	region = QRegion(regionRect.toRect());
+	regionRect = QRectF(this->x + this->width2, this->y + this->height2 - LINETHICKNESS,
+		this->width2 * -1, LINETHICKNESS);
+	region += QRegion(regionRect.toRect());
 
-	regionRect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y + this->height2,
-		this->width2 + LINETHICKNESS, this->height);
+	regionRect = QRectF(this->x + this->width2 - LINETHICKNESS, this->y + this->height,
+		LINETHICKNESS * 2, this->height2 - this->height);
 	region += QRegion(regionRect.toRect());
 
 	regionRect = QRectF(this->x + this->width2, this->y + this->height - LINETHICKNESS,
-		this->width, this->height + LINETHICKNESS);
+		this->width2 * -1, LINETHICKNESS*2);
 	region += QRegion(regionRect.toRect());
 
 	ret = region.contains(rect.toRect());
@@ -238,17 +238,17 @@ QRegion RepeatTrue::GetSelectionMarkerAllRegion() {
 	float y = this->y;
 	QRectF rect(x - 5, y - 5, 6, 6);
 	QRegion region(rect.toRect());
-	
+
 	x = this->x + this->width2;
 	y = this->y + this->height2;
 	rect = QRectF(x - 5, y - 5, 6, 6);
 	region += QRegion(rect.toRect());
-	
+
 	x = this->x + this->width;
 	y = this->y + this->height;
 	rect = QRectF(x - 5, y - 5, 6, 6);
 	region += QRegion(rect.toRect());
-	
+
 	return region;
 }
 
@@ -321,8 +321,8 @@ void RepeatTrue::GetAttribute(Attribute *attribute) {
 }
 
 void RepeatTrue::GetLine(char(*line)) {
-	sprintf(line, "%d\t%f\t%f\t%f\t%f\t%f\t%f\t%s;\n", 
-		ID_REPEATTRUE, this->x, this->y, this->width, this->height, this->width2, this->height2, 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t%f\t%f\t%s;\n",
+		ID_REPEATTRUE, this->x, this->y, this->width, this->height, this->width2, this->height2,
 		this->contents.GetString());
 }
 

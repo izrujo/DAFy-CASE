@@ -78,6 +78,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	}
 
 	// lefts 와 rights를 적는다.
+	///0520 여기서 흐름선들은 추가하면 안된다.
 	for (i = 0; i < temp.GetLength(); i++) {
 		if (temp.GetAt(i)->CenterOfGravityX() < top->CenterOfGravityX()) {
 			lefts.Attach(temp.GetAt(i)->Clone());
@@ -177,6 +178,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	shape = new LeftDown(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("TRUE"));
 	shape->Select(true);
 	buffer.Attach(shape);
+	canvas->registrar->Register(shape);
 
 	//lefts 들을 buffer 로 옮긴다. 
 	for (i = 0; i < lefts.GetLength(); i++) {
@@ -198,6 +200,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		shape = new RightDown(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));
 		shape->Select(true);
 		buffer.Attach(shape);
+		canvas->registrar->Register(shape);
 
 		// rights 들을 buffer 로 옮긴다
 		for (i = 0; i < rights.GetLength(); i++) {
@@ -221,6 +224,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		shape = new Join(x, y, width, height, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String(" "));
 		shape->Select(true);
 		buffer.Attach(shape);
+		canvas->registrar->Register(shape);
 	}
 	else {
 		//RightDownJoin을 결정한다.
@@ -241,8 +245,9 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 		shape = new RightDownJoin(x, y, width, height, width2, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));
 		shape->Select(true);
 		buffer.Attach(shape);
+		canvas->registrar->Register(shape);
 	}
-
+#if 0
 	// Arrow를 그린다.	
 	attribute = initAttribute;
 	i = buffer.GetLength() - 1;
@@ -255,15 +260,12 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	shape = new Arrow(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String(" "));
 	shape->Select(true);
 	buffer.Attach(shape);
-
+#endif
 	j = 0;
 	buffer.AscendingSort();
 
 	for (i = 0; i < buffer.GetLength(); i++) {
 		canvas->flowChart->Insert(index + i, buffer.GetAt(i)->Clone());
-		if (dynamic_cast<Line*>(buffer.GetAt(i))) {
-			canvas->registrar->Register(canvas->flowChart->GetAt(index + i));
-		}
 	}
 
 	canvas->repaint();

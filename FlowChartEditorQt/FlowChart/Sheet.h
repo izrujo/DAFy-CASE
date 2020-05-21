@@ -9,6 +9,7 @@ class Registrar;
 class VariableList;
 
 class Sheet {
+	friend class SheetManager;
 public:
 	Sheet(NShape *title, QString fileOpenPath, NShape *flowChart, 
 		HistoryBook *undoHistoryBook, HistoryBook *redoHistoryBook, NShape *previousFlowChart,
@@ -28,14 +29,13 @@ public:
 	Registrar* GetRegistrar() const;
 	VariableList* GetVariableList() const;
 
-public:
-	QString fileOpenPath;
-	NShape *previousFlowChart;
 private:
 	NShape *title;
+	QString fileOpenPath;
 	NShape *flowChart;
 	HistoryBook *undoHistoryBook;
 	HistoryBook *redoHistoryBook;
+	NShape *previousFlowChart;
 	Registrar *registrar;
 	VariableList *variableList;
 };

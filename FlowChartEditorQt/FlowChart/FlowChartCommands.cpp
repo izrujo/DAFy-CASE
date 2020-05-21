@@ -242,7 +242,7 @@ void OpenCommand::Execute() {
 			NShape *canvasTitle = this->editor->sheetManager->GetTitle(current);
 			float windowCloseX = canvasTitle->GetX() + canvasTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 			float windowCloseY = canvasTitle->GetY() + 4;
-			editor->windowClose->Move(windowCloseX, windowCloseY);
+			this->editor->windowClose->Move(windowCloseX, windowCloseY);
 
 			canvas->setFocus();
 			this->editor->repaint();

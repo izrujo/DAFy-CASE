@@ -273,7 +273,6 @@ void DrawingPaper::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
-	this->flowChart->AscendingSort();
 
 	QPointF point = event->localPos();
 

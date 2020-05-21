@@ -24,7 +24,6 @@ public:
 
 	Long Open(QString fileOpenPath); //load and add sheet
 
-
 	void ModifyFileOpenPath(QString fileOpenPath);
 	void ModifyTitles();
 	void ModifyPreviousFlowChart(NShape *previousFlowChart);

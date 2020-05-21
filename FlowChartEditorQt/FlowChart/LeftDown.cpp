@@ -77,7 +77,7 @@ NShape* LeftDown::Clone() {
 
 void LeftDown::DrawActiveShape(GObject *painter) {
 	painter->DrawLine(QPointF(this->x, this->y), QPointF(this->x + this->width, this->y));
-	painter->DrawLine(QPointF(this->x + this->width, this->y), 
+	painter->DrawLine(QPointF(this->x + this->width, this->y),
 		QPointF(this->x + this->width, this->y + this->height - ARROW_SIZE));
 
 	QPointF arrow[3];
@@ -88,36 +88,36 @@ void LeftDown::DrawActiveShape(GObject *painter) {
 }
 
 QRegion LeftDown::GetRegion() {
-	QRectF rect(this->x, this->y - LINETHICKNESS, this->width, LINETHICKNESS);
+	QRectF rect(this->x + this->width, this->y - LINETHICKNESS, this->width * -1, LINETHICKNESS * 2);
 	QRegion region(rect.toRect());
 
-	rect = QRectF(this->x + this->width - LINETHICKNESS, this->y, 
-		this->width + LINETHICKNESS, this->height);
+	rect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
+		LINETHICKNESS * 2, this->height);
 	region = QRegion(rect.toRect());
 
 	return region;
 }
 
 QRegion LeftDown::GetRegion(Long thickness) {
-	QRectF rect(this->x, this->y - thickness,this->width, thickness);
+	QRectF rect(this->x + this->width, this->y - thickness, this->width * -1, thickness * 2);
 	QRegion region(rect.toRect());
-	
-	rect = QRectF(this->x + this->width - thickness, this->y, 
-		this->width + thickness, this->height);
+
+	rect = QRectF(this->x + this->width - thickness, this->y,
+		thickness * 2, this->height);
 	region += QRegion(rect.toRect());
-	
+
 	return region;
 }
 
 bool LeftDown::IsIncluded(QPointF point) {
 	bool ret;
 
-	QRectF regionRect(this->x, this->y - LINETHICKNESS,
-		this->width, LINETHICKNESS);
+	QRectF regionRect(this->x + this->width, this->y - LINETHICKNESS,
+		this->width * -1, LINETHICKNESS * 2);
 	QRegion region(regionRect.toRect());
 
 	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
-		this->width + LINETHICKNESS, this->height);
+		LINETHICKNESS * 2, this->height);
 	region += QRegion(regionRect.toRect());
 
 	ret = region.contains(point.toPoint());
@@ -128,12 +128,12 @@ bool LeftDown::IsIncluded(QPointF point) {
 bool LeftDown::IsIncluded(const QRectF& rect) {
 	bool ret;
 
-	QRectF regionRect(this->x, this->y - LINETHICKNESS,
-		this->width, LINETHICKNESS);
+	QRectF regionRect(this->x + this->width, this->y - LINETHICKNESS,
+		this->width * -1, LINETHICKNESS * 2);
 	QRegion region(regionRect.toRect());
 
 	regionRect = QRectF(this->x + this->width - LINETHICKNESS, this->y,
-		this->width + LINETHICKNESS, this->height);
+		LINETHICKNESS, this->height);
 	region += QRegion(regionRect.toRect());
 
 	ret = region.contains(rect.toRect());
@@ -165,7 +165,7 @@ QRegion LeftDown::GetSelectionMarkerAllRegion() {
 	float y = this->y;
 	QRectF rect(x - 6, y - 6, 7, 7);
 	QRegion region(rect.toRect());
-	
+
 	x = this->x + this->width;
 	y = this->y + this->height;
 	rect = QRectF(x - 6, y - 6, 7, 7);
@@ -234,7 +234,7 @@ void LeftDown::GetAttribute(Attribute *attribute) {
 }
 
 void LeftDown::GetLine(char(*line)) {
-	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", ID_LEFTDOWN, 
+	sprintf(line, "%d\t%f\t%f\t%f\t%f\t\t\t%s;\n", ID_LEFTDOWN,
 		this->x, this->y, this->width, this->height, this->contents.GetString());
 }
 
