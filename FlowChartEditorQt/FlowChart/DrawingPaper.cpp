@@ -479,6 +479,10 @@ void DrawingPaper::focusInEvent(QFocusEvent *event) {
 	QFrame::focusInEvent(event);
 }
 
+void DrawingPaper::enterEvent(QEvent *event) {
+	this->setFocus();
+}
+
 void DrawingPaper::OnContextMenu(const QPoint& pos) {
 	//HMENU hPopup;
 	this->popup = new QMenu(this);

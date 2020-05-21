@@ -60,7 +60,7 @@ void EditorIntroForm::paintEvent(QPaintEvent *event) {
 	height = sizeHeight * 1 / 3;
 	QRectF rect3(x, y, width, height);
 	
-	painter->DrawTextQ(rect3, Qt::AlignCenter, "ver 1.05");
+	painter->DrawTextQ(rect3, Qt::AlignCenter, "ver 1.01");
 	//==========Version of App==========
 
 	//==========Company Name of App==========

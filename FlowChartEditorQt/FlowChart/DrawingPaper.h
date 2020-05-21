@@ -145,6 +145,7 @@ protected:
 	void keyPressEvent(QKeyEvent *event);
 	void focusOutEvent(QFocusEvent *event);
 	void focusInEvent(QFocusEvent *event);
+	void enterEvent(QEvent *event);
 public slots:
 	void OnContextMenu(const QPoint &pos);
 	
