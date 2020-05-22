@@ -26,6 +26,7 @@
 #include <qmessagebox.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
+#include <qicon.h>
 
 FlowChartEditor::FlowChartEditor(QWidget *parent)
 	: QFrame(parent)
@@ -44,6 +45,8 @@ FlowChartEditor::FlowChartEditor(QWidget *parent)
 	);
 
 	this->setWindowTitle("Dafy Case");
+	QIcon icon("iconTrans_ver.3");
+	this->setWindowIcon(icon);
 
 	this->menuBar = NULL;
 	this->statusBar = NULL;

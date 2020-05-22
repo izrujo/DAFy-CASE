@@ -2,10 +2,14 @@
 #include "FlowChart/EditorIntroForm.h"
 #include <QtWidgets/QApplication>
 #include <qthread.h>
+#include <qicon.h>
 
 int main(int argc, char *argv[])
 {
 	QApplication a(argc, argv);
+
+	QIcon icon("iconTrans_ver.3");
+	a.setWindowIcon(icon);
 
 	EditorIntroForm flashWindow;
 	flashWindow.show();
