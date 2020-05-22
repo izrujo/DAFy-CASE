@@ -36,6 +36,9 @@
 #include <qstatusbar.h>
 #include <qaction.h>
 
+#include <windows.h>
+#include <htmlhelp.h>
+
 using namespace std;
 
 //FlowChartCommand
@@ -189,7 +192,7 @@ void SaveAsCommand::Execute() {
 		}
 
 		canvasTitle->Rewrite(fileName.toLocal8Bit().data());
-		
+
 		QString message = QString::fromLocal8Bit("    저장 성공");
 		this->editor->messageStatus->setText(message);
 		this->editor->statusBar->repaint();
@@ -1199,4 +1202,33 @@ void RuleKeepCommand::Execute() {
 			this->editor->statusBar->repaint();
 		}
 	}
+}
+
+//HelpCommand
+HelpCommand::HelpCommand(FlowChartEditor *editor)
+	: FlowChartCommand(editor) {
+
+}
+
+HelpCommand::HelpCommand(const HelpCommand &source)
+	: FlowChartCommand(source) {
+
+}
+
+HelpCommand::~HelpCommand() {
+}
+
+HelpCommand &HelpCommand::operator =(const HelpCommand &source) {
+	FlowChartCommand::operator=(source);
+
+	return *this;
+}
+
+void HelpCommand::Execute() {
+	QString helpFile("dafycasehelpdoc.chm::/dafycasehelpdoc.htm");
+	HWND hWnd = ::HtmlHelp(GetDesktopWindow(),
+		helpFile.toStdWString().c_str(),
+		HH_DISPLAY_TOPIC, NULL);
+	DWORD e = ::GetLastError();
+	Long i = 0;
 }

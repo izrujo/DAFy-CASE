@@ -109,6 +109,7 @@ private:
 	QAction *selectionArchitectureAction; //선택구조(E)
 
 	QMenu *helpMenu; //도움말(H)
+	QAction *helpAction; //도움말(H)
 
 	void CreateStatusBar();
 };

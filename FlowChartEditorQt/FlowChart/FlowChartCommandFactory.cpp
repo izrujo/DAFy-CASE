@@ -115,6 +115,9 @@ FlowChartCommand* FlowChartCommandFactory::Make(string text) {
 	else if (text == "RuleKeep") {
 		command = new RuleKeepCommand(this->editor);
 	}
+	else if (text == "Help") {
+		command = new HelpCommand(this->editor);
+	}
 
 	return command;
 }

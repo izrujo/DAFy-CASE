@@ -31,6 +31,7 @@ void SizeMake::Create(DrawingPaper *canvas) {
 		if (shape->IsSelected()) {
 			if (dynamic_cast<Symbol *>(shape)) {
 				indexes[j] = shape->Clone();
+				count++;
 				j++;
 			}
 			else {

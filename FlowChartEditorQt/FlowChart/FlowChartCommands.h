@@ -357,4 +357,15 @@ public:
 	virtual void Execute();
 };
 
+//HelpCommand
+class HelpCommand : public FlowChartCommand {
+public:
+	HelpCommand(FlowChartEditor *editor = 0);
+	HelpCommand(const HelpCommand& source);
+	virtual ~HelpCommand();
+	HelpCommand& operator=(const HelpCommand& source);
+
+	virtual void Execute();
+};
+
 #endif //_FLOWCHARTCOMMANDS_H

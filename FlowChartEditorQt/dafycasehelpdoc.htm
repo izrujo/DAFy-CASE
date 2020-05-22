@@ -1,0 +1,866 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=ks_c_5601-1987">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:굴림;
+	panose-1:2 11 6 0 0 1 1 1 1 1;}
+@font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"맑은 고딕";
+	panose-1:2 11 5 3 2 0 0 2 0 4;}
+@font-face
+	{font-family:"\@맑은 고딕";}
+@font-face
+	{font-family:"\@굴림";
+	panose-1:2 11 6 0 0 1 1 1 1 1;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:0cm;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:105%;
+	text-autospace:none;
+	word-break:break-hangul;
+	font-size:10.0pt;
+	font-family:"맑은 고딕";}
+a:link, span.MsoHyperlink
+	{font-family:"Times New Roman",serif;
+	color:#0563C1;
+	text-decoration:underline;}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:8.0pt;
+	margin-left:40.0pt;
+	text-align:justify;
+	text-justify:inter-ideograph;
+	line-height:105%;
+	text-autospace:none;
+	word-break:break-hangul;
+	font-size:10.0pt;
+	font-family:"맑은 고딕";}
+.MsoChpDefault
+	{font-family:"맑은 고딕";}
+ /* Page Definitions */
+ @page WordSection1
+	{size:595.3pt 841.9pt;
+	margin:36.0pt 36.0pt 36.0pt 36.0pt;}
+div.WordSection1
+	{page:WordSection1;}
+ /* List Definitions */
+ ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+
+</head>
+
+<body lang=KO link="#0563C1" vlink="#954F72">
+
+<div class=WordSection1>
+
+<p class=MsoNormal><span lang=EN-US>DAFy CASE</span>는 순서도를 이용한 설계 도구입니다<span
+lang=EN-US>. </span>구조화 프로그래밍<span lang=EN-US>(Structured Programming)</span>에 기반하여
+자체 정립한 순서도 작도법을 따르도록 구현했음을 알립니다<span lang=EN-US>.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal>아래는 순서도의 개념과 작도법을 간략히 설명한 문서로<span lang=EN-US>, </span>보다 자세한
+설명은<span lang=EN-US> &lt;</span>이렇게 하면 나도 프로그래밍을 잘 할 수 있다<span lang=EN-US>&gt; </span>노랑책을
+구입하여 공부하거나<span lang=EN-US>, </span>카카오톡 그룹오픈채팅방 <span lang=EN-US><a
+href="https://open.kakao.com/o/gP2iWZcc"><span style='font-family:"Times New Roman",serif'>https://open.kakao.com/o/gP2iWZcc</span></a></span>에
+방문하여 확인할 수 있습니다<span lang=EN-US>.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoNormal><img width=305 height=192
+src="dafycasehelpdoc.files/image003.png"
+alt="-목차-&#13;&#10;1. 순서도&#13;&#10;2. 토큰&#13;&#10;3. 제어구조&#13;&#10;4. 규칙&#13;&#10;"><br
+clear=ALL>
+</p>
+
+<p class=MsoListParagraph style='margin-left:38.0pt;text-indent:-18.0pt'><span
+lang=EN-US>1.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>순서도<span lang=EN-US>(Flow Chart)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>1.1.<span style='font:7.0pt "Times New Roman"'> </span></span>순서도의 정의</p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>컴퓨터로 처리하고자 하는 문제를 이해하여 그 처리
+순서를 단계화하고<span lang=EN-US>, </span>처리 단계 상호간의 관계를 일정한 기호를 사용하여 일처리 순서를 일목요연하게 나타낸
+그림입니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>1.2.<span style='font:7.0pt "Times New Roman"'> </span></span>순서도의 특징</p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>논리적인
+체계를 쉽게 이해할 수 있으므로<span lang=EN-US>, </span>업무의 전체적인 체계를 일목요연하게 파악할 수 있습니다<span
+lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>프로그램의
+설계도로 이용할 수 있어 순서도에 따라 프로그램을 코딩합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>프로그램의
+흐름에 대한 추적이 용이해 문제 해결의 정확성 여부를 쉽게 판단할 수 있습니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>프로그램을
+유지보수할 때 사용할 수 있습니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:38.0pt;text-indent:-18.0pt'><span
+lang=EN-US>2.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>토큰<span lang=EN-US>(Token)</span></p>
+
+<p class=MsoListParagraph style='margin-left:38.0pt'>언어의 어휘 구조 구성 요소로<span
+lang=EN-US>, </span>컴파일러 관점에서 의미가 있는 최소 구성 요소입니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>2.1.<span style='font:7.0pt "Times New Roman"'> </span></span>예약어<span
+lang=EN-US>(Keyword)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>순서도에서 이미 특별한 의미가 정해진<span
+lang=EN-US>, </span>예약된 단어로서 식별자로 사용할 수 없습니다<span lang=EN-US>. </span>다음은<span
+lang=EN-US> DAFy CASE</span>에서 제공하는 예약어 목록입니다<span lang=EN-US>.</span></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>번호</p>
+  </td>
+  <td width=142 style='width:106.3pt;border:solid windowtext 1.0pt;border-left:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>단어</p>
+  </td>
+  <td width=312 style='width:233.9pt;border:solid windowtext 1.0pt;border-left:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>의미</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>1</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>AND</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>논리곱 연산자</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>2</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>EOF</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>파일의 끝<span lang=EN-US>(End of File)</span>에 대한 값</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>3</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>FALSE</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>거짓에 대한 논리 값</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>4</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>NOT</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>논리 부정 연산자</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>5</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>OR</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>논리 합 연산자</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>6</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>PRINT</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>출력 명령어</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>7</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>READ</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>입력 명령어</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>8</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>START</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>순서도의 시작</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>9</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>STOP</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>순서도의 끝</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>10</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>TRUE</span></p>
+  </td>
+  <td width=312 style='width:233.9pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>참에 대한 논리 값</p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>2.2.<span style='font:7.0pt "Times New Roman"'> </span></span>식별자<span
+lang=EN-US>(Identifier)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>순서도에서 작성자에 의해 의미가 정해지는 명칭으로<span
+lang=EN-US>, </span>예약어는 사용할 수 없습니다<span lang=EN-US>. </span>순서도에서는 기억장소에 저장되는 값을
+정의하기 위해 사용됩니다<span lang=EN-US>. </span>변수<span lang=EN-US>(Variable) </span>명칭<span
+lang=EN-US>, </span>배열<span lang=EN-US>(Array) </span>명칭<span lang=EN-US>, </span>기호상수<span
+lang=EN-US>(Symbolic Constant) </span>명칭으로 구분됩니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>2.3.<span style='font:7.0pt "Times New Roman"'> </span></span>연산자<span
+lang=EN-US>(Operator)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>주어진 값에 대해서 실행되어지는 평가를 규정하는
+기호 또는 문자열<span lang=EN-US>. </span>산술<span lang=EN-US>, </span>관계<span
+lang=EN-US>, </span>논리 연산에서 연산의 종류를 나타내기 위해 사용됩니다<span lang=EN-US>. </span>다음은<span
+lang=EN-US> DAFy CASE</span>에서 제공하는 연산자 목록입니다<span lang=EN-US>.</span></p>
+
+<div align=center>
+
+<table class=MsoTableGrid border=1 cellspacing=0 cellpadding=0
+ style='border-collapse:collapse;border:none'>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>번호</p>
+  </td>
+  <td width=142 style='width:106.3pt;border:solid windowtext 1.0pt;border-left:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>단어</p>
+  </td>
+  <td width=625 style='width:468.55pt;border:solid windowtext 1.0pt;border-left:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>의미</p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>1</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>( )</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>배열요소에 저장된 값을 읽거나 쓰고자 할 때 주어지는 위치<span lang=EN-US>, </span>즉 첨자의 배열요소의
+  값을 나타내는 첨자 연산자라고 합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>2</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>=</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>처리기호에서는 치환 혹은 대입 연산자로 왼쪽에 적혀진 기억장소에 오른쪽에서 평가된 값을 저장합니다<span
+  lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>3</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>+</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>처리기호에서 주어진 두 개의 값에 대해 합을 구합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>4</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>-</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>처리기호에서 주어진 두 개의 값에 대해 차를 구합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>5</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>*</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>처리기호에서 주어진 두 개의 값에 대해 곱을 구합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>6</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>/</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>처리기호에서 주어진 두 개의 값에 대해 실수 값을 구합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>7</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>&gt;&nbsp;</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 왼쪽 값이 오른쪽 값보다 크면 참<span lang=EN-US>, </span>그렇지 않으면 거짓을 구합니다<span
+  lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>8</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>≥</p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 왼쪽 값이 오른쪽 값보다 크거나 같으면 참<span lang=EN-US>, </span>그렇지 않으면 거짓을 구합니다<span
+  lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>9</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>&lt;&nbsp;</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 왼쪽 값이 오른쪽 값보다 작으면 참<span lang=EN-US>, </span>그렇지 않으면 거짓을 구합니다<span
+  lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>10</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>≤</p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 왼쪽 값이 오른쪽 값보다 작거나 같으면 참<span lang=EN-US>, </span>그렇지 않으면 거짓을 구합니다<span
+  lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>11</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>=</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 왼쪽 값과 오른쪽 값이 같으면 참<span lang=EN-US>, </span>같지 않으면 거짓을 구합니다<span
+  lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>12</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'>≠<span lang=EN-US>, &lt;&gt;</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 왼쪽 값과 오른쪽 값이 같지 않으면 참<span lang=EN-US>, </span>같으면 거짓을 구합니다<span
+  lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>13</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>AND</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 두 개의 논리 값에 대해 모두 참일 때 참이고<span lang=EN-US>, </span>그렇지 않으면 거짓을
+  구합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>14</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>OR</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 두 개의 논리 값에 대해 모두 거짓일 때 거짓이고<span lang=EN-US>, </span>그렇지 않으면 참을
+  구합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td width=55 style='width:41.55pt;border:solid windowtext 1.0pt;border-top:
+  none;padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>15</span></p>
+  </td>
+  <td width=142 style='width:106.3pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph align=center style='margin:0cm;margin-bottom:.0001pt;
+  text-align:center;line-height:normal'><span lang=EN-US>NOT</span></p>
+  </td>
+  <td width=625 style='width:468.55pt;border-top:none;border-left:none;
+  border-bottom:solid windowtext 1.0pt;border-right:solid windowtext 1.0pt;
+  padding:0cm 5.4pt 0cm 5.4pt'>
+  <p class=MsoListParagraph style='margin:0cm;margin-bottom:.0001pt;line-height:
+  normal'>판단기호에서 참이면 거짓으로 거짓이면 참을 구합니다<span lang=EN-US>.</span></p>
+  </td>
+ </tr>
+</table>
+
+</div>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>2.4.<span style='font:7.0pt "Times New Roman"'> </span></span>기호<span
+lang=EN-US>(Symbol)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>단말
+기호<span lang=EN-US>(Terminal)</span></p>
+
+<p class=MsoNormal style='margin-left:40.0pt;text-indent:40.0pt'>순서도의 시작과 끝을 나타냅니다<span
+lang=EN-US>.</span></p>
+
+<p class=MsoNormal style='margin-left:120.0pt'><span lang=EN-US><img border=0
+width=111 height=111 id="그림 1" src="dafycasehelpdoc.files/image004.jpg"
+alt="그리기이(가) 표시된 사진&#10;&#10;자동 생성된 설명"></span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>준비
+기호<span lang=EN-US>(Preparation)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>순서도에서
+사용하는 모든 식별자를 정리하고<span lang=EN-US>, </span>초기값을 설정합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoNormal style='margin-left:80.0pt;text-indent:40.0pt'><span
+lang=EN-US><img border=0 width=379 height=94 id="그림 3"
+src="dafycasehelpdoc.files/image009.jpg"></span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>입출력
+기호<span lang=EN-US>(Input/Output)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>입력이나
+출력을 나타냅니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:96.0pt;text-indent:24.0pt'><span
+lang=EN-US><img border=0 width=387 height=109 id="그림 4"
+src="dafycasehelpdoc.files/image012.jpg"></span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>처리
+기호<span lang=EN-US>(Process)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>치환과
+산술 연산을 기술합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoNormal style='margin-left:80.0pt;text-indent:40.0pt'><span
+lang=EN-US><img border=0 width=265 height=61 id="그림 5"
+src="dafycasehelpdoc.files/image015.jpg"
+alt="플레이어, 방, 여자, 공이(가) 표시된 사진&#10;&#10;자동 생성된 설명"></span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>판단
+기호<span lang=EN-US>(Decision)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>주어진
+조건에 따라 어떠한 처리를 해야 하는지 결정합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img
+border=0 width=115 height=39 id="그림 6" src="dafycasehelpdoc.files/image017.jpg"
+alt="그리기이(가) 표시된 사진&#10;&#10;자동 생성된 설명"></span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='margin-left:38.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>제어구조<span lang=EN-US>(Control Structure)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.1.<span style='font:7.0pt "Times New Roman"'> </span></span>제어구조란</p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>제시된 문제를 해결하기 위해 어떤 문장들을 사용해야
+하는지<span lang=EN-US>, </span>그리고 결정된 문장들을 어떠한 순서로 실행해야 하는지<span lang=EN-US>, </span>그리고
+어떤 조건에 의해서 어떤 문장들을 몇 회 실행해야 하는지 아니면 실행하지 않아야 하는지를 결정해 주어야 합니다<span lang=EN-US>.
+</span>이러한 표현을 나타내는 문맥의 구조를 제어구조<span lang=EN-US>(Control Structure)</span>라고 합니다<span
+lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.2.<span style='font:7.0pt "Times New Roman"'> </span></span>제어논리란</p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>특별한 기능을 수행하기 위해서 또는 단일 연산식이나
+단일 부울 대수식으로 정의되는 필요한 단계나 사건 그리고 그들의 수행 순서를 기술해야 하는데 이것을 제어 논리<span lang=EN-US>(Control
+Logic)</span>라고 합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.3.<span style='font:7.0pt "Times New Roman"'> </span></span>구조화 프로그래밍<span
+lang=EN-US>(Structured Programming)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>1960</span>년대
+중반에 제창되기 시작한 프로그래밍 방법론으로 쉽게 이해할 수 있고 검증할 수 있는 프로그램 코드를 생성하는 것이 주목적입니다<span
+lang=EN-US>. </span>이에 따르면<span lang=EN-US>, </span>제어 논리를 작성하는 데에 순차구조<span
+lang=EN-US>(Sequence), </span>반복구조<span lang=EN-US>(Iteration), </span>선택구조<span
+lang=EN-US>(Selection)</span>의<span lang=EN-US> 3</span>가지 제어구조만으로 작성할 수 있습니다<span
+lang=EN-US>. </span>따라서<span lang=EN-US> DAFy CASE</span>에서는 이<span lang=EN-US>
+3</span>가지 제어구조만을 제공합니다<span lang=EN-US>. </span>또한 구조화 프로그래밍은<span lang=EN-US>
+GOTO</span>문을 지양하므로 선 검사 반복구조만을 제공합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.4.<span style='font:7.0pt "Times New Roman"'> </span></span>순차구조<span
+lang=EN-US>(Sequence)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>명령이 기재된 순서대로 위쪽에서 아래쪽으로 실행되는
+구조입니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:24.0pt'><span
+lang=EN-US><img border=0 width=231 height=253 id="그림 7"
+src="dafycasehelpdoc.files/image020.jpg" alt="시계이(가) 표시된 사진&#10;&#10;자동 생성된 설명"></span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.5.<span style='font:7.0pt "Times New Roman"'> </span></span>반복구조<span
+lang=EN-US>(Iteration)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>어떤 조건을 만족하는 동안 일정한 부분의 처리를
+계속하는 구조입니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:24.0pt'><span
+lang=EN-US><img border=0 width=343 height=393 id="그림 8"
+src="dafycasehelpdoc.files/image024.jpg" alt="시계이(가) 표시된 사진&#10;&#10;자동 생성된 설명"></span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>3.6.<span style='font:7.0pt "Times New Roman"'> </span></span>선택구조<span
+lang=EN-US>(Selection)</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'>조건에 따라 다음에 처리할 내용을 결정하는 구조입니다<span
+lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:24.0pt'><span
+lang=EN-US><img border=0 width=292 height=290 id="그림 9"
+src="dafycasehelpdoc.files/image025.jpg" alt="시계, 개체이(가) 표시된 사진&#10;&#10;자동 생성된 설명"></span></p>
+
+<p class=MsoNormal><span lang=EN-US>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='margin-left:38.0pt;text-indent:-18.0pt'><span
+lang=EN-US>4.<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;
+</span></span>규칙</p>
+
+<p class=MsoListParagraph style='margin-left:38.0pt'>규칙 검사 기능이 활성화되면<span
+lang=EN-US>, DAFy CASE</span>는 사용자가 정해진 규칙에 맞게 순서도를 작도하는지 검사합니다<span
+lang=EN-US>. </span>규칙에 맞지 않으면 하단 상태 표시줄의 왼쪽에 메시지를 표시합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:38.0pt'>다음에서 제시하는 규칙에 맞게 작도하십시오<span
+lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>①<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span>준비
+기호는 하나만 작도할 수 있으며<span lang=EN-US>, </span>준비 기호를 작도하기 전에 단말 기호를 제외한 어떤 기호도 작도할
+수 없습니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>②<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span>식별자를
+만드는 규칙을 따르십시오<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>반드시
+영문자를 조합하십시오<span lang=EN-US>. </span>한글을 사용하지 마십시오<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>기호상수의
+경우에는 모든 글자가 영문 대문자여야 합니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>첫
+글자는 영문 소문자로 시작하십시오<span lang=EN-US>. </span>음절이나 단어를 구분하는 글자만 대문자를 사용하십시오<span
+lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt'><span lang=EN-US>-</span>숫자와
+‘<span lang=EN-US>_</span>’ 또한 조합할 수 있습니다<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>③<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span>예약어<span
+lang=EN-US>, </span>연산자와 준비기호에서 정리한 식별자만 사용하십시오<span lang=EN-US>.</span></p>
+
+<p class=MsoListParagraph style='margin-left:56.0pt;text-indent:-18.0pt'><span
+lang=EN-US>④<span style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp; </span></span>‘≥’는
+‘<span lang=EN-US>&gt;=</span>’로<span lang=EN-US>, </span>‘≤’는 ‘<span
+lang=EN-US>&lt;=</span>’로<span lang=EN-US>, </span>‘≠’는 ‘<span lang=EN-US>!=</span>’로
+적으십시오<span lang=EN-US>. </span>자동으로 바뀝니다<span lang=EN-US>.</span></p>
+
+</div>
+
+</body>
+
+</html>

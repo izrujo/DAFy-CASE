@@ -451,7 +451,8 @@ void FlowChartEditor::CreateActions() {
 	//==================== ControlArchitecture Menu ====================
 
 	//==================== Help Menu ====================
-
+	this->helpAction = new QAction(QString::fromLocal8Bit(("도움말(&H)")), this); //도움말(H)
+	connect(this->helpAction, &QAction::triggered, this, [=]() { this->CommandRange("Help"); });
 	//==================== Help Menu ====================
 }
 
@@ -509,6 +510,7 @@ void FlowChartEditor::CreateMenus() {
 	connect(this->controlArchitectureMenu, &QMenu::aboutToShow, this, [=]() { this->UpdateControlArchitectureMenu(); });
 
 	this->helpMenu = this->menuBar->addMenu(QString::fromLocal8Bit(("도움말(&H)")));
+	this->helpMenu->addAction(this->helpAction); //도움말(H)
 }
 
 void FlowChartEditor::CreateStatusBar() {
