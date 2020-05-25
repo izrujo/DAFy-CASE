@@ -1,7 +1,7 @@
 #ifndef _HISTORYBOOK_H
 #define _HISTORYBOOK_H
 
-#include "Array.h"
+#include "../Utilities/Array.h"
 class History;
 
 class HistoryBook {

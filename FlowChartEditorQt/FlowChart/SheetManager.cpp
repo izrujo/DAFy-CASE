@@ -193,9 +193,8 @@ NShape* SheetManager::GetTitle(Long index) {
 
 QString& SheetManager::GetFileOpenPath(Long index) {
 	Sheet *sheet = this->sheetBinder->GetAt(index);
-	QString fileOpenPath = sheet->GetFileOpenPath();
 
-	return fileOpenPath;
+	return sheet->GetFileOpenPath();
 }
 
 Long SheetManager::GetBinderLength() {

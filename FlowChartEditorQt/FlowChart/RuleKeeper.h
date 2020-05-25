@@ -1,7 +1,7 @@
 #ifndef _RULEKEEPER_H
 #define _RULEKEEPER_H
 
-#include "../Notepad/Array.h"
+#include "../Utilities/Array.h"
 #include "String.h"
 
 #define ALLOWEDKEYCOUNT 79

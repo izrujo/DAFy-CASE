@@ -42,8 +42,8 @@ public:
 	virtual void Begin(QPaintDevice *device) {};
 	virtual void End() {};
 
-	virtual QRectF& BoundingRect(const QRectF& rectangle, int flags, const QString& text) { return QRectF(); };
-	virtual QRect& BoundingRect(const QRect& rectangle, int flags, const QString& text) { return QRect(); };
+	virtual QRectF BoundingRect(const QRectF& rectangle, int flags, const QString& text) { return QRectF(); };
+	virtual QRect BoundingRect(const QRect& rectangle, int flags, const QString& text) { return QRect(); };
 
 	virtual void DrawArc(const QRectF& rectangle, int startAngle, int spanAngle) {};
 	virtual void DrawArc(const QRect& rectangle, int startAngle, int spanAngle) {};
@@ -120,16 +120,16 @@ public:
 	virtual QPixmap* GetPixmap() const;
 	virtual QPainter* GetPainter() const;
 	//QtPen
-	virtual QBrush& GetBrush();
+	virtual QBrush GetBrush();
 	virtual float GetWidth();
 	virtual int GetPenStyle();
 	virtual int GetPenCapStyle();
 	virtual int GetPenJoinStyle();
 	//QtBrush
-	virtual QColor& GetColor();
+	virtual QColor GetColor();
 	virtual int GetStyle();
 	//QtFont
-	virtual QString& GetFamily();
+	virtual QString GetFamily();
 	virtual int GetPointSize();
 	virtual int GetWeight();
 	virtual bool GetItalic();

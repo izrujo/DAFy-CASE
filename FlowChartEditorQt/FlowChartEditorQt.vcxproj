@@ -78,6 +78,7 @@
       <SubSystem>Windows</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>Winmm.lib;Htmlhelp.lib;Advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -180,29 +181,15 @@
     <ClCompile Include="Notepad\Scanner.cpp" />
     <ClCompile Include="Notepad\Selector.cpp" />
     <ClCompile Include="Notepad\Subject.cpp" />
-    <ClCompile Include="x64\Debug\rcc\Notepad\qrc_Notepad.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </PrecompiledHeader>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="FlowChartEditor.h" />
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="FlowChartEditor.qrc" />
-    <QtRcc Include="Notepad\Notepad.qrc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlowChart\A4Paper.h" />
-    <ClInclude Include="FlowChart\Array.h" />
     <ClInclude Include="FlowChart\Arrow.h" />
     <ClInclude Include="FlowChart\Block.h" />
     <ClInclude Include="FlowChart\Clipboard.h" />
@@ -230,6 +217,7 @@
     <ClInclude Include="GObject\QtGObjectFactory.h" />
     <ClInclude Include="GObject\QtPainter.h" />
     <ClInclude Include="GObject\QtPen.h" />
+    <ClInclude Include="Utilities\Array.h" />
     <ClInclude Include="x64\Debug\uic\Notepad\ui_Notepad.h" />
     <ClInclude Include="x64\Debug\uic\ui_EditorIntroForm.h" />
     <ClInclude Include="x64\Debug\uic\ui_FlowChartEditor.h" />
@@ -286,7 +274,6 @@
     <ClInclude Include="FlowChart\VariableList.h" />
     <ClInclude Include="FlowChart\Zoom.h" />
     <ClInclude Include="FlowChart\ZoomVisitor.h" />
-    <ClInclude Include="Notepad\Array.h" />
     <QtMoc Include="Notepad\Caret.h" />
     <ClInclude Include="Notepad\CaretController.h" />
     <ClInclude Include="Notepad\Character.h" />

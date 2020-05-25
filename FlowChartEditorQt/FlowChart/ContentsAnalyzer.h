@@ -1,7 +1,7 @@
 #ifndef _CONTENTSANALYZER_H
 #define _CONTENTSANALYZER_H
 
-#include "../Notepad/Array.h"
+#include "../Utilities/Array.h"
 #include "String.h"
 
 class ContentsAnalyzer {

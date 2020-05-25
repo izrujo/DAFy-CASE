@@ -1,7 +1,7 @@
 #ifndef _SCROLLCONTROLLER_H
 #define _SCROLLCONTROLLER_H
 
-#include "../Notepad/Array.h"
+#include "../Utilities/Array.h"
 #include "../Notepad/Observer.h"
 #include <qpoint.h>
 class DrawingPaper;

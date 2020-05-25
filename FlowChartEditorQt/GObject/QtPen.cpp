@@ -32,7 +32,7 @@ GObject* QtPen::Clone() {
 	return new QtPen(*this);
 }
 
-QBrush& QtPen::GetBrush() {
+QBrush QtPen::GetBrush() {
 	return this->brush();
 }
 

@@ -27,6 +27,9 @@
     <Filter Include="Graphic Objects">
       <UniqueIdentifier>{22ea1544-72a8-4268-8f65-56da8c3d86e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{5198bf5b-a236-4107-aabe-ed2300768358}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FlowChartEditor.cpp">
@@ -191,9 +194,6 @@
     <ClCompile Include="FlowChart\Scroll.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="x64\Debug\rcc\qrc_FlowChartEditor.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\PreviewForm.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -299,9 +299,6 @@
     <ClCompile Include="FlowChart\WindowPin.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
-    <ClCompile Include="x64\Debug\rcc\Notepad\qrc_Notepad.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="FlowChart\WindowClose.cpp">
       <Filter>FlowChart</Filter>
     </ClCompile>
@@ -337,14 +334,8 @@
     <QtRcc Include="FlowChartEditor.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtRcc Include="Notepad\Notepad.qrc">
-      <Filter>Notepad</Filter>
-    </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FlowChart\Array.h">
-      <Filter>FlowChart</Filter>
-    </ClInclude>
     <ClInclude Include="FlowChart\A4Paper.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
@@ -498,9 +489,6 @@
     <ClInclude Include="FlowChart\Label.h">
       <Filter>FlowChart</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Array.h">
-      <Filter>Notepad</Filter>
-    </ClInclude>
     <ClInclude Include="Notepad\CaretController.h">
       <Filter>Notepad</Filter>
     </ClInclude>
@@ -632,6 +620,9 @@
     </ClInclude>
     <ClInclude Include="FlowChart\SheetBinder.h">
       <Filter>FlowChart</Filter>
+    </ClInclude>
+    <ClInclude Include="Utilities\Array.h">
+      <Filter>Utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

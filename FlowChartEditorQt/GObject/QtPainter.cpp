@@ -96,11 +96,11 @@ void QtPainter::End() {
 	this->qPainter->end();
 }
 
-QRectF &QtPainter::BoundingRect(const QRectF &rectangle, int flags, const QString &text) {
+QRectF QtPainter::BoundingRect(const QRectF &rectangle, int flags, const QString &text) {
 	return this->qPainter->boundingRect(rectangle, flags, text);
 }
 
-QRect &QtPainter::BoundingRect(const QRect &rectangle, int flags, const QString &text) {
+QRect QtPainter::BoundingRect(const QRect &rectangle, int flags, const QString &text) {
 	return this->qPainter->boundingRect(rectangle, flags, text);
 }
 

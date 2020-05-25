@@ -10,7 +10,7 @@
 #define _BLOCK_H
 
 #include "Shape.h"
-#include "Array.h"
+#include "../Utilities/Array.h"
 
 class Block : public NShape {
 public:

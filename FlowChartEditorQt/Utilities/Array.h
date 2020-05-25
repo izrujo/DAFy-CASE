@@ -31,6 +31,9 @@ public:
 	T& operator [](Long index);
 	T* operator +(Long index);
 	Array& operator =(const Array& source);
+
+	// 20160512 Ãß°¡
+	void Swap(Long toIndex, Long fromIndex);
 	
 	Long GetCapacity() const;
 	Long GetLength() const;
@@ -507,6 +510,25 @@ Array<T>& Array<T>::operator =(const Array& source) {
 	this->length = source.length;
 
 	return *this;
+}
+
+template <typename T>
+void Array<T>::Swap(Long toIndex, Long fromIndex) {
+	assert(toIndex >= 0 && toIndex < this->length);
+	assert(fromIndex >= 0 && fromIndex < this->length);
+	assert(toIndex != fromIndex);
+
+	T object = this->front[fromIndex];
+	Long count;
+	if (fromIndex > toIndex) {
+		count = fromIndex - toIndex;
+		memmove(this->front + toIndex + 1, this->front + toIndex, sizeof(T) * count);
+	}
+	else {
+		count = toIndex - fromIndex;
+		memmove(this->front + fromIndex, this->front + fromIndex + 1, sizeof(T) * count);
+	}
+	this->front[toIndex] = object;
 }
 
 #endif //_ARRAY_H

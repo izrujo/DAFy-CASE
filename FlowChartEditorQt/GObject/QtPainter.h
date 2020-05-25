@@ -27,8 +27,8 @@ public:
 	virtual void Begin(QPaintDevice *device);
 	virtual void End();
 
-	virtual QRectF& BoundingRect(const QRectF& rectangle, int flags, const QString& text);
-	virtual QRect& BoundingRect(const QRect& rectangle, int flags, const QString& text);
+	virtual QRectF BoundingRect(const QRectF& rectangle, int flags, const QString& text);
+	virtual QRect BoundingRect(const QRect& rectangle, int flags, const QString& text);
 
 	virtual void DrawArc(const QRectF& rectangle, int startAngle, int spanAngle);
 	virtual void DrawArc(const QRect& rectangle, int startAngle, int spanAngle);

@@ -15,7 +15,7 @@ public:
 
 	virtual GObject* Clone();
 
-	virtual QColor& GetColor();
+	virtual QColor GetColor();
 	virtual int GetStyle();
 };
 

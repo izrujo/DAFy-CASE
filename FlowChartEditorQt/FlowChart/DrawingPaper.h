@@ -10,7 +10,7 @@
 #define IDM_AE_INTERVALMAKE 1006
 
 #include <QtWidgets/QFrame>
-#include "Array.h"
+#include "../Utilities/Array.h"
 #include "Shape.h"
 #include "../Notepad/Subject.h"
 

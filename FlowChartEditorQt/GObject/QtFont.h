@@ -15,7 +15,7 @@ public:
 
 	virtual GObject* Clone();
 
-	virtual QString& GetFamily();
+	virtual QString GetFamily();
 	virtual int GetPointSize();
 	virtual int GetWeight();
 	virtual bool GetItalic();

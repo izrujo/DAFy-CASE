@@ -30,7 +30,7 @@ GObject* QtBrush::Clone() {
 	return new QtBrush(*this);
 }
 
-QColor& QtBrush::GetColor() {
+QColor QtBrush::GetColor() {
 	return const_cast<QColor&>(this->color()); //color() 함수가 const 형식 반환함.
 }
 

@@ -2,7 +2,7 @@
 #define _PAINTER_H
 
 #include "GObject.h"
-#include "../Notepad/Array.h"
+#include "../Utilities/Array.h"
 
 class Painter : public GObject {
 public:

@@ -1,7 +1,7 @@
 #ifndef _HISTORYS_H
 #define _HISTORYS_H
 
-#include "Array.h"
+#include "../Utilities/Array.h"
 #include "Shape.h"
 
 class History {

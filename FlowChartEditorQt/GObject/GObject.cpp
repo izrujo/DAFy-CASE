@@ -59,7 +59,7 @@ QPainter* GObject::GetPainter() const {
 	return 0;
 }
 //QtPen
-QBrush& GObject::GetBrush() {
+QBrush GObject::GetBrush() {
 	return QBrush(); //return empty QString instance
 }
 
@@ -80,7 +80,7 @@ int GObject::GetPenJoinStyle() {
 }
 
 //QtBrush
-QColor& GObject::GetColor() {
+QColor GObject::GetColor() {
 	return QColor(); //return empty QString instance
 }
 
@@ -89,7 +89,7 @@ int GObject::GetStyle() {
 }
 
 //QtFont
-QString& GObject::GetFamily() {
+QString GObject::GetFamily() {
 	return QString();  //return empty QString instance
 }
 

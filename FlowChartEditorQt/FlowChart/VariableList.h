@@ -1,7 +1,7 @@
 #ifndef _VARIABLELIST_H
 #define _VARIABLELIST_H
 
-#include "../Notepad/Array.h"
+#include "../Utilities/Array.h"
 #include "String.h"
 
 class VariableList {

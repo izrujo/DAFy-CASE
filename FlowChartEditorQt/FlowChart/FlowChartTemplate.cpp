@@ -13,7 +13,7 @@
 #include "../FlowChartEditor.h"
 #include "DrawingPaper.h"
 
-#include "Array.h"
+#include "../Utilities/Array.h"
 
 #include "Symbol.h"
 #include "Line.h"

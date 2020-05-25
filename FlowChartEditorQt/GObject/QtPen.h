@@ -18,7 +18,7 @@ public:
 
 	virtual GObject* Clone();
 
-	virtual QBrush& GetBrush();
+	virtual QBrush GetBrush();
 	virtual float GetWidth();
 	virtual int GetPenStyle();
 	virtual int GetPenCapStyle();

@@ -30,7 +30,7 @@ GObject* QtFont::Clone() {
 	return new QtFont(*this);
 }
 
-QString& QtFont::GetFamily() {
+QString QtFont::GetFamily() {
 	return this->family();
 }
 
