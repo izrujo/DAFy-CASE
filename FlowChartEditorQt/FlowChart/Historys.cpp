@@ -9,10 +9,10 @@ History::History(Long capacity)
 }
 
 History::History(const History& source)
-	: shapes(source.shapes) {
+	: shapes(source.capacity) {
 	Long i = 0;
 	while (i < source.length) {
-		this->shapes.Modify(i, (const_cast<History&>(source)).shapes[i]->Clone());
+		this->shapes.Store(i, (const_cast<History&>(source)).shapes[i]->Clone());
 		i++;
 	}
 

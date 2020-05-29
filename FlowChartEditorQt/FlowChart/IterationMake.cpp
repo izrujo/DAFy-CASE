@@ -91,6 +91,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	width = 0;
 	height = temp.GetAt(1)->GetY() - y;
 	shape = new Arrow(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("TRUE"));
+	canvas->registrar->Register(shape);
 	shape->Select(true);
 	Long position = buffer.Insert(1, shape);
 
@@ -119,6 +120,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	width2 = bufferRange.left() - 20 - x;
 	height2 = y - bufferRange.bottom() + 40;
 	repeatTrue = new RepeatTrue(x, y, width, height, width2, height2, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String(" "));
+	canvas->registrar->Register(repeatTrue);
 	repeatTrue->Select(true);
 	buffer.Attach(repeatTrue);
 
@@ -133,15 +135,13 @@ void IterationMake::Create(DrawingPaper *canvas) {
 
 	shape = new RepeatFalse(x, y, width, height, width2, height2, 
 		QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));
+	canvas->registrar->Register(shape);
 	shape->Select(true);
 	buffer.Attach(shape);
 
 	j = 0;
 	for (i = 0; i < buffer.GetLength(); i++) {
 		canvas->flowChart->Insert(index + i, buffer.GetAt(i)->Clone());
-		if (dynamic_cast<Line*>(buffer.GetAt(i))) {
-			canvas->registrar->Register(canvas->flowChart->GetAt(index + i));
-		}
 	}
 
 	canvas->repaint();

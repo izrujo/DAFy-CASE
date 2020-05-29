@@ -48,6 +48,8 @@
 #include <qlabel.h>
 #include <qstatusbar.h>
 
+#include <Windows.h>
+
 FlowChartTemplate::FlowChartTemplate(QWidget *parent)
 	: QFrame(parent) {
 	this->setMouseTracking(true);
@@ -118,6 +120,9 @@ FlowChartTemplate::~FlowChartTemplate() {
 	}
 	if (this->windowTitle != NULL) {
 		delete this->windowTitle;
+	}
+	if (this->windowPin != NULL) {
+		delete this->windowPin;
 	}
 }
 
@@ -294,16 +299,27 @@ void FlowChartTemplate::focusOutEvent(QFocusEvent *event) {
 
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
 	if (isPinned == false) { //°íÁ¤ ÇØÁ¦µÈ »óÅÂ¿¡¼­ Æ÷Ä¿½º ¾Æ¿ôµÊ.
-		this->windowTitle->ReSize(this->windowTitle->GetHeight(), this->windowTitle->GetWidth() / 2 + 20);
+		
+		QString verticalContent = QString::fromLocal8Bit(this->windowTitle->GetContents());
+		verticalContent.remove(QChar(' '));
+		Long i = 1;
+		while (i < verticalContent.size()) {
+			verticalContent.insert(i, '\n');
+			i += 2;
+		}
+		QRectF rectangle(0, 0, 500, 500);
+		QRectF rect = this->painter->BoundingRect(rectangle, Qt::AlignCenter, verticalContent);
+
+		this->windowTitle->ReSize(this->windowTitle->GetHeight(), rect.height());
 		this->windowTitle->Move(this->windowTitle->GetX(), this->windowTitle->GetY() - 3);
-		this->resize(this->windowTitle->GetWidth(), this->windowTitle->GetHeight() - 3);
+		this->resize(this->windowTitle->GetWidth(), rect.height() - 3);
 
 		dynamic_cast<WindowTitle*>(this->windowTitle)->SetIsFocusedAndPinned(false);
 
 		this->windowTitle->Paint(QColor(235, 235, 235), this->windowTitle->GetBorderLine(), QColor(255, 255, 255));
 		this->windowBorderColor = this->windowTitle->GetBorderColor();
 
-		//DrawingPaper
+		//DrawingPaper³ß?
 		FlowChartEditor *editor = (FlowChartEditor*)this->parentWidget();
 		DrawingPaper *canvas = (DrawingPaper*)editor->windows[0];
 		Long newX = this->x() * 2 + this->windowTitle->GetWidth();
@@ -324,7 +340,7 @@ void FlowChartTemplate::focusInEvent(QFocusEvent *event) {
 	bool isPinned = dynamic_cast<WindowPin*>(this->windowPin)->GetIsPinned();
 	if (isPinned == false) {
 		this->resize(190, editor->frameRect().height() - editor->menuBar->height() - editor->statusBar->height() - 20);
-		this->windowTitle->ReSize((this->windowTitle->GetHeight() - 20) * 2, this->windowTitle->GetWidth());
+		this->windowTitle->ReSize(186, 30);
 		this->windowTitle->Move(this->windowTitle->GetX(), this->windowTitle->GetY() + 3);
 	}
 	else {

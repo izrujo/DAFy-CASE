@@ -23,6 +23,7 @@
 #include "HistoryBook.h"
 #include "Registrar.h"
 #include "SheetManager.h"
+#include "ContentsAnalyzer.h"
 
 #include <qfiledialog.h>
 #include <qtextstream.h>
@@ -126,30 +127,32 @@ FEscapeKeyAction& FEscapeKeyAction::operator=(const FEscapeKeyAction& source) {
 
 void FEscapeKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
-	Long count;
-	Long(*indexes);
+	if (canvas->label == NULL) { //Label이 살아있을 때 기호 선택이 풀리면 안된다.
+		Long count;
+		Long(*indexes);
 
-	canvas->flowChart->GetSelecteds(&indexes, &count);
-	Long i;
-	for (i = 0; i < count; i++) {
-		NShape *shape = canvas->flowChart->GetAt(indexes[i]);
-		shape->Select(false);
-	}
+		canvas->flowChart->GetSelecteds(&indexes, &count);
+		Long i;
+		for (i = 0; i < count; i++) {
+			NShape *shape = canvas->flowChart->GetAt(indexes[i]);
+			shape->Select(false);
+		}
 
-	FlowChartTemplate *flowChartTemplate = static_cast<FlowChartTemplate*>(this->editor->windows[1]);
+		FlowChartTemplate *flowChartTemplate = static_cast<FlowChartTemplate*>(this->editor->windows[1]);
 
-	if (canvas->mode == DrawingPaper::DRAWING) {
-		canvas->templateSelected = NULL;
-		flowChartTemplate->shapeSelected = NULL;
-	}
+		if (canvas->mode == DrawingPaper::DRAWING) {
+			canvas->templateSelected = NULL;
+			flowChartTemplate->shapeSelected = NULL;
+		}
 
-	canvas->mode = DrawingPaper::IDLE;
+		canvas->mode = DrawingPaper::IDLE;
 
-	canvas->repaint();
-	canvas->indexOfSelected = -1;
+		canvas->repaint();
+		canvas->indexOfSelected = -1;
 
-	if (indexes != 0) {
-		delete[] indexes;
+		if (indexes != 0) {
+			delete[] indexes;
+		}
 	}
 }
 
@@ -458,7 +461,7 @@ void FTwoKeyAction::OnKeyDown() {
 		dynamic_cast<DrawingPaper*>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 		dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->shapeSelected =
 			dynamic_cast<FlowChartTemplate*>(this->editor->windows[1])->flowChartTemplate->GetAt(1);
-		
+
 		editor->modeStatus->setText(QString::fromLocal8Bit("DRAWING"));
 		QString style(QString::fromLocal8Bit("    준비 기호"));
 		editor->messageStatus->setText(style);
@@ -794,7 +797,7 @@ FCtrlVKeyAction& FCtrlVKeyAction::operator=(const FCtrlVKeyAction& source) {
 void FCtrlVKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Paste(canvas);
-	
+
 	canvas->Notify();
 }
 
@@ -1262,7 +1265,7 @@ FF2KeyAction& FF2KeyAction::operator=(const FF2KeyAction& source) {
 
 void FF2KeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
-	
+
 	NShape *shape;
 	float left, top, right, bottom, halfHeight;
 
@@ -1287,7 +1290,11 @@ void FF2KeyAction::OnKeyDown() {
 		canvas->clearFocus();
 
 		QColor color = shape->GetBackGroundColor();
-		canvas->label = Label::Instance(&(shape->GetContents()), color, canvas);
+		String contents = shape->GetContents();
+
+		ContentsAnalyzer analyzer;
+		contents = analyzer.RollBackOperators(contents);
+		canvas->label = Label::Instance(&contents, color, canvas);
 
 		halfHeight = shape->GetHeight() / 2;
 		left = shape->GetX() + halfHeight - positionX;
@@ -1302,7 +1309,7 @@ void FF2KeyAction::OnKeyDown() {
 		indexes[0] = canvas->indexOfSelected;
 
 		canvas->Notify();
-		
+
 		shape = canvas->flowChart->GetAt(canvas->indexOfSelected);
 		shape->Rewrite(String(""));
 		canvas->label->setFocus();

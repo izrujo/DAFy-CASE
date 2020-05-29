@@ -58,6 +58,7 @@ Long HistoryBook::Add(History *History) {
 			delete this->historys[0];
 		}
 		this->historys.Delete(0);
+		this->capacity--;
 		this->length--;
 	}
 	
@@ -79,6 +80,7 @@ Long HistoryBook::Remove(Long index) {
 		delete this->historys[index];
 	}
 	this->historys.Delete(index);
+	this->capacity--;
 	this->length--;
 
 	return index;

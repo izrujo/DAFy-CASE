@@ -73,7 +73,7 @@ GObject* Painter::SelectObject(const GObject& object) {
 	previous = 0;
 	Long index = i - 1;
 	if (index < this->length) { //찾았으면 수정한다.
-		previous = this->objects.GetAt(index)->Clone();
+		previous = this->objects.GetAt(index);
 		this->objects.Modify(index, &const_cast<GObject&>(object));
 	}
 	else if (this->length < this->capacity) { //못찾았으면 추가한다.

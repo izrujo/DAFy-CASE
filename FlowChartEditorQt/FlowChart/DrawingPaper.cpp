@@ -32,6 +32,7 @@
 #include "Registrar.h"
 #include "HistoryBook.h"
 #include "SheetManager.h"
+#include "ContentsAnalyzer.h"
 
 #include <qscrollbar.h>
 #include <qpainter.h>
@@ -116,8 +117,8 @@ DrawingPaper::~DrawingPaper() {
 		this->painter = NULL;
 	}
 
-	if (Label::Instance() != NULL) {
-		Label::Destroy();
+	if (this->label != NULL) {
+		this->label->Destroy();
 	}
 
 	if (DrawingTool::Instance() != NULL) {
@@ -193,6 +194,9 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 		NShape *cloneSelected = this->templateSelected->Clone();
 		cloneSelected->Accept(zoomVisitor);
 		cloneSelected->Accept(drawVisitor);
+		if (cloneSelected != 0) {
+			delete cloneSelected;
+		}
 	}
 
 	//폰트 해제
@@ -210,6 +214,7 @@ void DrawingPaper::paintEvent(QPaintEvent *event) {
 
 	if (cloneFlowChart != NULL) {
 		delete cloneFlowChart;
+		cloneFlowChart = NULL;
 	}
 
 	if (cloneA4 != NULL) {
@@ -277,7 +282,7 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 	QPointF point = event->localPos();
 
 
-	if (this->tool != NULL) {
+	if (this->tool != NULL && this->label==NULL) {
 		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 		//기호를 그리는 것이면
 		if (this->variableList != NULL && dynamic_cast<DrawingTool*>(this->tool)) {
@@ -335,54 +340,61 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 }
 
 void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
-	// 상태 패턴 : 텍스트 조작자 Manipulator
-	NShape *shape;
-	float left, top, right, bottom, halfHeight;
+	if (this->label == NULL) {
 
-	QRectF rect = this->frameRect();
-	QPointF point = event->localPos();
-	Long positionX = 0;
-	Long positionY = 0;
-	if (this->scrollController != NULL) {
-		positionX = this->scrollController->GetScroll(1)->value();
-		positionY = this->scrollController->GetScroll(0)->value();
-	}
-	point.setX(point.x() + positionX);
-	point.setY(point.y() + positionY);
-	NShape *holdA4Paper = this->a4Paper->Clone();
-	NShape *holdFlowChart = this->flowChart->Clone();
-	FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
-	holdA4Paper->Accept(zoomVisitor);
-	holdFlowChart->Accept(zoomVisitor);
+		// 상태 패턴 : 텍스트 조작자 Manipulator
+		NShape *shape;
+		float left, top, right, bottom, halfHeight;
 
-	this->indexOfSelected = holdFlowChart->Find(point);
+		QRectF rect = this->frameRect();
+		QPointF point = event->localPos();
+		Long positionX = 0;
+		Long positionY = 0;
+		if (this->scrollController != NULL) {
+			positionX = this->scrollController->GetScroll(1)->value();
+			positionY = this->scrollController->GetScroll(0)->value();
+		}
+		point.setX(point.x() + positionX);
+		point.setY(point.y() + positionY);
+		NShape *holdA4Paper = this->a4Paper->Clone();
+		NShape *holdFlowChart = this->flowChart->Clone();
+		FlowChartVisitor *zoomVisitor = new ZoomVisitor(this->zoom);
+		holdA4Paper->Accept(zoomVisitor);
+		holdFlowChart->Accept(zoomVisitor);
 
-	shape = holdFlowChart->GetAt(this->indexOfSelected);
+		this->indexOfSelected = holdFlowChart->Find(point);
 
-	if (this->indexOfSelected != -1 && 
-		(shape->GetSymbolID() != ID_TERMINAL && !dynamic_cast<Line*>(shape)) &&
-		((point.x() > shape->GetX() + 5 && point.x() < shape->GetX() + shape->GetWidth() - 5) ||
-		(point.y() > shape->GetY() + 5 && point.y() < shape->GetY() + shape->GetHeight() - 5))) {
+		shape = holdFlowChart->GetAt(this->indexOfSelected);
 
-		this->clearFocus();
+		if (this->indexOfSelected != -1 &&
+			(shape->GetSymbolID() != ID_TERMINAL && !dynamic_cast<Line*>(shape)) &&
+			((point.x() > shape->GetX() + 5 && point.x() < shape->GetX() + shape->GetWidth() - 5) ||
+				(point.y() > shape->GetY() + 5 && point.y() < shape->GetY() + shape->GetHeight() - 5))) {
 
-		QColor color = shape->GetBackGroundColor();
-		this->label = Label::Instance(&(shape->GetContents()), color, this);
+			this->clearFocus();
 
-		halfHeight = shape->GetHeight() / 2;
-		left = shape->GetX() + halfHeight - positionX;
-		top = shape->GetY() + 1 - positionY;
-		right = shape->GetX() + shape->GetWidth() - halfHeight + 5 - positionX;
-		bottom = shape->GetY() + shape->GetHeight() - 1 - positionY;
+			QColor color = shape->GetBackGroundColor();
+			String contents = shape->GetContents();
+			
+			ContentsAnalyzer analyzer;
+			contents = analyzer.RollBackOperators(contents);
+			this->label = Label::Instance(&contents, color, this);
 
-		this->label->Open(left, top, right - left, bottom - top);
-		this->label->show();
+			halfHeight = shape->GetHeight() / 2;
+			left = shape->GetX() + halfHeight - positionX;
+			top = shape->GetY() + 1 - positionY;
+			right = shape->GetX() + shape->GetWidth() - halfHeight + 5 - positionX;
+			bottom = shape->GetY() + shape->GetHeight() - 1 - positionY;
 
-		this->Notify();
+			this->label->Open(left, top, right - left, bottom - top);
+			this->label->show();
 
-		shape = this->flowChart->GetAt(this->indexOfSelected);
-		shape->Rewrite(String(""));
-		this->label->setFocus();
+			this->Notify();
+
+			shape = this->flowChart->GetAt(this->indexOfSelected);
+			shape->Rewrite(String(""));
+			this->label->setFocus();
+		}
 	}
 }
 
@@ -485,6 +497,7 @@ void DrawingPaper::enterEvent(QEvent *event) {
 
 void DrawingPaper::OnContextMenu(const QPoint& pos) {
 	//HMENU hPopup;
+	this->flowChart->AscendingSort();
 	this->popup = new QMenu(this);
 
 	QAction *moveMake = this->popup->addAction(QString::fromLocal8Bit("기호 위치 같게"), this, &DrawingPaper::OnMoveMakeMenuClick);

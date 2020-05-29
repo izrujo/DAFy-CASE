@@ -292,6 +292,8 @@ void Join::GetAttribute(Attribute *attribute) {
 	attribute->pointOut.setX(this->x + this->width / 2);
 	attribute->pointOut.setY(this->y + this->height2);
 
+	attribute->pointIn = attribute->pointOut;
+
 	attribute->pointTrue.setX(this->x);
 	attribute->pointTrue.setY(this->y);
 

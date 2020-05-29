@@ -142,6 +142,9 @@ void SelectingTool::OnLButtonUp(DrawingPaper *canvas, QPointF point) {
 	if (holdA4Paper != 0) {
 		delete holdA4Paper;
 	}
+	if (zoomVisitor != 0) {
+		delete zoomVisitor;
+	}
 
 	Long count;
 	Long(*indexes);

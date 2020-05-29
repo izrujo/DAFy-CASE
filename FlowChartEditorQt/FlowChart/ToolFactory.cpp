@@ -93,6 +93,12 @@ Tool* ToolFactory::Create(DrawingPaper *canvas, QPointF point) {
 			{
 				delete[] indexes;
 			}
+			if (holdA4Paper != 0) {
+				delete holdA4Paper;
+			}
+			if (zoomVisitor != 0) {
+				delete zoomVisitor;
+			}
 		}
 
 		if (tool == 0) {

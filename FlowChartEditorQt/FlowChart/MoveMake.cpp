@@ -18,12 +18,17 @@ MoveMake::~MoveMake(){
 void MoveMake::Create(DrawingPaper *canvas){
 	Long i;
 	Long j = 0;
-	Long count = 0;
+	//Long count = 0;
 	Long it;
 	NShape *shape;
-	NShape* (*indexes) = 0;
+	//NShape* (*indexes) = 0;
 
+	canvas->flowChart->AscendingSort();
 	// 1. 선택된 기호들을 찾는다.
+	Long count;
+	Long(*indexes);
+	canvas->flowChart->GetSelecteds(&indexes, &count);
+#if 0
 	i = 0;
 	it = canvas->flowChart->GetLength();
 	indexes = new NShape*[it];
@@ -37,7 +42,6 @@ void MoveMake::Create(DrawingPaper *canvas){
 		}
 		i++;
 	}
-
 	// 2. 가장 상단의 기호를 찾는다.	
 	float y = 0;
 	Long index;
@@ -49,15 +53,30 @@ void MoveMake::Create(DrawingPaper *canvas){
 		}
 		i++;
 	}
+#endif
 
 	// 3. 상단의 위치를 기억한다.
+	float y;
 	float x;
 	Attribute attribute;
 	Attribute attribute2;
 	float distance;
-	indexes[index]->GetAttribute(&attribute);	
+	//indexes[index]->GetAttribute(&attribute);	
+	shape = canvas->flowChart->GetAt(indexes[0]);
+	shape->GetAttribute(&attribute);
 
 	// 4. 선택된 기호들을 기준에 맞게 이동한다.
+	i = 0;
+	while (i < count) {
+		shape = canvas->flowChart->GetAt(indexes[i]);
+		y = shape->GetY();
+		x = shape->GetX();
+		shape->GetAttribute(&attribute2);
+		distance = attribute2.pointIn.x() - attribute.pointIn.x();
+		shape->Move(x - distance, y);
+		i++;
+	}
+#if 0
 	i = 0;
 	while ( i < count ){
 		y = indexes[i]->GetY();
@@ -67,7 +86,6 @@ void MoveMake::Create(DrawingPaper *canvas){
 		indexes[i]->Move(x-distance,y);
 		i++;
 	}
-
 	// 5. 순서도의 기호를 지우다.
 	i = it -1;
 	while ( i >= 0 ){
@@ -84,6 +102,7 @@ void MoveMake::Create(DrawingPaper *canvas){
 		canvas->flowChart->Attach(indexes[i]);
 		i++;
 	}
+#endif
 
 	// 7. Indexes 해제
 	if (indexes != 0) {

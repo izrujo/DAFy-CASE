@@ -12,6 +12,8 @@ public:
 	Array<String> MakeOperators(String contents);
 	Array<String> MakeVariables(String contents);
 	String CorrectOperators(String contents);
+	
+	String RollBackOperators(String contents);
 };
 
 #endif //_CONTENTSANALYZER_H

@@ -149,8 +149,8 @@ bool Attribute::operator != (const Attribute& other) {
 
 NShape::NShape()
 	: backGroundColor(QColor(255, 255, 255)),
-	borderColor(QColor(0, 0, 0)),
-	contents() {
+	borderColor(QColor(0, 0, 0))
+	{
 	this->x = 0.0F;
 	this->y = 0.0F;
 	this->width = 0.0F;

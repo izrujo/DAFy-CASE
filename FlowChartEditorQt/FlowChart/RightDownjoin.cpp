@@ -316,6 +316,8 @@ void RightDownJoin::GetAttribute(Attribute *attribute) {
 
 	attribute->pointOut.setX(this->x + (this->width + this->width2) / 2.0F);
 	attribute->pointOut.setY(this->y + this->height + this->height2);
+	
+	attribute->pointIn = attribute->pointOut;
 }
 
 void RightDownJoin::GetLine(char(*line)) {

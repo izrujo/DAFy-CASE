@@ -75,7 +75,8 @@ Array<String> ContentsAnalyzer::MakeVariables(String contents) {
 		//1.4. 영문자가 아닌 동안 또는 따옴표 안인 동안 반복하다.
 		// (따옴표 안이라면 영문자여도 반복한다.)
 		while (((!((character >= 65 && character <= 90) ||
-			(character >= 97 && character <= 122) || character == 95)) ||
+			(character >= 97 && character <= 122) ||
+			character == 95)) ||
 			isQuotes == true) &&
 			character != '\0') {
 			if (isQuotes == false && (character == 34 || character == 39)) { //따옴표를 다시 만나면 지금부터 따옴표 밖임.
@@ -89,11 +90,19 @@ Array<String> ContentsAnalyzer::MakeVariables(String contents) {
 		if (character != '\0') { //영문자를 찾았으면 영문자부터 시작할 수 있도록 첨자를 줄여준다.
 			i--;
 		}
+#if 0
+		//1.4. 쉼표까지 반복한다.
+		while (character != 44 && character != '\0') {
+			character = contents.GetAt(++i);
+		}
+#endif
 		i++;
 	}
+#if 0
 	if (isQuotes == true) { //닫는 따옴표가 없을 때
 		variables.Insert(0, String("ThereisMistake")); //규칙검사를 통과하지 못하도록 이상한 변수를 넣는다.
 	}
+#endif
 	//2. 변수들을 출력하다.
 	return variables;
 	//3. 끝내다.
@@ -126,6 +135,41 @@ String ContentsAnalyzer::CorrectOperators(String contents) {
 				break;
 			default:
 				break;
+			}
+		}
+		i++;
+	}
+	//2. 내용을 출력하다.
+	return contents;
+	//3. 끝내다.
+}
+
+String ContentsAnalyzer::RollBackOperators(String contents) {
+	//'≠' '≤' '≥'
+	string doubleByteCharacter;
+	char character;
+	//1. 내용의 처음부터 끝까지 반복하다.
+	Long i = 0;
+	while (i < contents.GetLength()) {
+		//1.1. 글자를 가져오다.
+		character = contents.GetAt(i);
+		if (character < 0) {
+			doubleByteCharacter = contents.GetDoubleByteAt(i);
+			//1.2. 글자가 '≠' 또는 '≤' 또는 '≥' 이면
+			if (doubleByteCharacter.compare("≠") ==0) {
+				contents.Delete(i, 2);
+				contents.Insert(i, '!');
+				contents.Insert(++i, '=');
+			}
+			else if (doubleByteCharacter.compare("≤") == 0) {
+				contents.Delete(i, 2);
+				contents.Insert(i, '<');
+				contents.Insert(++i, '=');
+			}
+			else if (doubleByteCharacter.compare("≥") == 0) {
+				contents.Delete(i, 2);
+				contents.Insert(i, '>');
+				contents.Insert(++i, '=');
 			}
 		}
 		i++;

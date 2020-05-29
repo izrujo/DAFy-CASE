@@ -72,14 +72,14 @@ Label::Label(QWidget *parent)
 
 	this->sizeController = new SizeController(this);
 
-	//공백 ! " ' ( ) * + , - . / 0~9 < = > A~Z ^ _ a~z
+	//공백 ! " ' ( ) * + , - . / 0~9 < = > A~Z _ a~z
 	char buffer;
 	Long number = 32;
 	Long i = 0;
 	while (number <= 122) {
 		if ((number >= 32 && number <= 34) || (number >= 39 && number <= 57) || // 공백문자 ~ " OR ' ~ 9 OR
 			(number >= 60 && number <= 62) || (number >= 65 && number <= 90) || // < ~ > OR A ~ Z OR
-			(number >= 94 && number <= 95) || (number >= 97 && number <= 122)) { // ^ ~ _ OR a ~ z
+			(number == 95) || (number >= 97 && number <= 122)) { // _ OR a ~ z
 			buffer = number;
 			this->allowedKeys[i++] = buffer;
 		}
@@ -103,14 +103,14 @@ Label::Label(String *text, QColor color, QWidget *parent)
 
 	this->sizeController = new SizeController(this);
 
-	//공백 ! " ' ( ) * + , - . / 0~9 < = > A~Z ^ _ a~z
+	//공백 ! " ' ( ) * + , - . / 0~9 < = > A~Z _ a~z
 	char buffer;
 	Long number = 32;
 	Long i = 0;
 	while (number <= 122) {
 		if ((number >= 32 && number <= 34) || (number >= 39 && number <= 57) || // 공백문자 ~ " OR ' ~ 9 OR
 			(number >= 60 && number <= 62) || (number >= 65 && number <= 90) || // < ~ > OR A ~ Z OR
-			(number >= 94 && number <= 95) || (number >= 97 && number <= 122)) { // ^ ~ _ OR a ~ z
+			(number == 95) || (number >= 97 && number <= 122)) { // _ OR a ~ z
 			buffer = number;
 			this->allowedKeys[i++] = buffer;
 		}
@@ -243,7 +243,7 @@ void Label::focusOutEvent(QFocusEvent *event) {
 			}
 		}
 
-		if (isKeptVariableRule == true && isKeptOperatorRule == true) {
+		if ((isKeptVariableRule == true && isKeptOperatorRule == true) || contents.GetLength() < 1) {
 			shape->Rewrite(contents);
 			this->Destroy();
 			canvas->label = NULL;

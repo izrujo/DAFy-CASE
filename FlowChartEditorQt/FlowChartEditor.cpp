@@ -97,6 +97,9 @@ void FlowChartEditor::closeEvent(QCloseEvent *event) {
 		if (this->sheetManager != NULL) {
 			delete this->sheetManager;
 		}
+		if (this->windowClose != NULL) {
+			delete this->windowClose;
+		}
 
 		Long i = 0;
 		while (i < 2) {
@@ -158,6 +161,10 @@ void FlowChartEditor::paintEvent(QPaintEvent *event) {
 	this->windowClose->Accept(visitor);
 
 	this->painter->Render(&painter, 0, 0);
+
+	if (visitor != 0) {
+		delete visitor;
+	}
 }
 
 void FlowChartEditor::mouseMoveEvent(QMouseEvent *event) {

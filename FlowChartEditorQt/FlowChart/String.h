@@ -10,7 +10,7 @@
 
 #include <string>
 // #define MAX 65536
-#define MAX 60000
+#define MAX 1000
 
 using namespace std;
 
@@ -76,6 +76,7 @@ class String{
 		void MakeReverse();
 
 		char GetAt(Long index);
+		string GetDoubleByteAt(Long index);
 		char* GetString();
 
 		bool IsEmpty() const;

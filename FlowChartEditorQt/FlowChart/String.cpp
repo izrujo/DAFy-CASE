@@ -1775,6 +1775,14 @@ char String::GetAt(Long index) {
 	return this->front[index];
 }
 
+string String::GetDoubleByteAt(Long index) {
+	char doubleByteCharacter[3];
+	doubleByteCharacter[0] = this->front[index];
+	doubleByteCharacter[1] = this->front[index + 1];
+	doubleByteCharacter[2] = '\0';
+	return string(doubleByteCharacter);
+}
+
 char* String::GetString() {
 	return (this->front);
 }

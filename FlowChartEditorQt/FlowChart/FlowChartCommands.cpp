@@ -307,10 +307,10 @@ UndoCommand &UndoCommand::operator =(const UndoCommand &source) {
 }
 
 void UndoCommand::Execute() {
-	if (static_cast<DrawingPaper *>(this->editor->windows[0])
-		->historyController->GetUndoHistoryBook()->GetLength() > 0) {
-		static_cast<DrawingPaper *>(this->editor->windows[0])->historyController->Undo();
-		this->editor->windows[0]->repaint();
+	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->editor->windows[0]);
+	if (canvas->historyController->GetUndoHistoryBook()->GetLength() > 0) {
+		canvas->historyController->Undo();
+		canvas->repaint();
 	}
 }
 
@@ -335,10 +335,10 @@ RedoCommand &RedoCommand::operator =(const RedoCommand &source) {
 }
 
 void RedoCommand::Execute() {
-	if (static_cast<DrawingPaper *>(this->editor->windows[0])
-		->historyController->GetRedoHistoryBook()->GetLength() > 0) {
-		static_cast<DrawingPaper *>(this->editor->windows[0])->historyController->Redo();
-		this->editor->windows[0]->repaint();
+	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->editor->windows[0]);
+	if (canvas->historyController->GetRedoHistoryBook()->GetLength() > 0) {
+		canvas->historyController->Redo();
+		canvas->repaint();
 	}
 }
 
@@ -380,9 +380,12 @@ void FontSetCommand::Execute() {
 	if (ok == true) {
 		QtGObjectFactory factory;
 		GObject *font = factory.MakeFont(userfont.family(), userfont.pointSize(), userfont.weight(), userfont.italic());
-		static_cast<DrawingPaper *>(this->editor->windows[0])->painter->SelectObject(*font);
+		GObject *oldFont = static_cast<DrawingPaper *>(this->editor->windows[0])->painter->SelectObject(*font);
 		static_cast<DrawingPaper *>(this->editor->windows[0])->painter->Update();
 		this->editor->windows[0]->repaint();
+		if (oldFont != 0) {
+			delete oldFont;
+		}
 	}
 }
 
@@ -927,10 +930,10 @@ void PageSetCommand::Execute() {
 			float paperWidth = a4Paper->GetWidth();
 			float paperHeight = a4Paper->GetHeight();
 
-			float leftMargin = left / 100 * paperWidth / 210;
-			float rightMargin = right / 100 * paperWidth / 210;
-			float topMargin = top / 100 * paperHeight / 297;
-			float bottomMargin = bottom / 100 * paperHeight / 297;
+			float leftMargin = left  * paperWidth / 210;
+			float rightMargin = right * paperWidth / 210;
+			float topMargin = top  * paperHeight / 297;
+			float bottomMargin = bottom * paperHeight / 297;
 
 			dynamic_cast<A4Paper *>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
 		}

@@ -76,11 +76,6 @@ void EditorIntroForm::paintEvent(QPaintEvent *event) {
 	
 	painter->DrawTextQ(rect4, Qt::AlignCenter, "NaA Coaching");
 	
-	painter->SelectObject(*oldFont);
-	painter->Update();
-	if (font != 0) {
-		delete font;
-	}
 	//==========Company Name of App==========
 
 	painter->Render(&dc, 0, 0);

@@ -364,6 +364,9 @@ void Notepad::paintEvent(QPaintEvent *event) {
 		if (brush != NULL) {
 			delete brush;
 		}
+		if (pen != NULL) {
+			delete pen;
+		}
 	}
 	this->painter->Render(&dc, 0, 0);
 

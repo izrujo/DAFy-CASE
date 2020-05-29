@@ -358,11 +358,11 @@ void DrawVisitor::Visit(LeftDown *element) {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
-	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 6));
+	this->painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
+	this->painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 6));
 
 	GObject *brush = factory.MakeBrush(QColor(166, 166, 166));
-	GObject *oldBrush = painter->SelectObject(*brush);
+	GObject *oldBrush = this->painter->SelectObject(*brush);
 	this->painter->Update();
 
 	float arrowSize = element->GetArrowSize();
@@ -412,11 +412,11 @@ void DrawVisitor::Visit(RightDown *element) {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
-	painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 6));
+	this->painter->DrawLine(QPointF(x, y), QPointF(x + width, y));
+	this->painter->DrawLine(QPointF(x + width, y), QPointF(x + width, y + height - 6));
 
 	GObject *brush = factory.MakeBrush(QColor(166, 166, 166), Qt::SolidPattern);
-	GObject *oldBrush = painter->SelectObject(*brush);
+	GObject *oldBrush = this->painter->SelectObject(*brush);
 	this->painter->Update();
 
 	float arrowSize = element->GetArrowSize();
@@ -472,7 +472,7 @@ void DrawVisitor::Visit(Join *element) {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	painter->DrawPolyline(points, 4);
+	this->painter->DrawPolyline(points, 4);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->Update();
@@ -514,7 +514,7 @@ void DrawVisitor::Visit(RightDownJoin *element) {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	painter->DrawPolyline(points, 5);
+	this->painter->DrawPolyline(points, 5);
 
 	this->painter->SelectObject(*oldPen);
 	this->painter->Update();
@@ -559,10 +559,10 @@ void DrawVisitor::Visit(RepeatTrue *element) {
 	GObject *oldPen = this->painter->SelectObject(*pen);
 	this->painter->Update();
 
-	painter->DrawPolyline(points, 5);
+	this->painter->DrawPolyline(points, 5);
 
 	GObject *brush = factory.MakeBrush(QColor(166, 166, 166), Qt::SolidPattern);
-	GObject *oldBrush = painter->SelectObject(*brush);
+	GObject *oldBrush = this->painter->SelectObject(*brush);
 	this->painter->Update();
 
 	float arrowSize = element->GetArrowSize();

@@ -8,10 +8,10 @@ Block::Block(Long capacity)
 }
 
 Block::Block(const Block& source)
-	: shapes(source.shapes) {
+	: shapes(source.capacity) {
 	Long i = 0;
 	while (i < source.length) {
-		this->shapes.Modify(i, (const_cast<Block&>(source)).shapes[i]->Clone());
+		this->shapes.Store(i, (const_cast<Block&>(source)).shapes[i]->Clone());
 		i++;
 	}
 	this->capacity = source.capacity;
@@ -89,23 +89,24 @@ Long Block::Attach(NShape *shape) {
 }
 
 Long Block::Insert(Long index, NShape *shape) {
-	this->current = -1;
-	this->current = this->shapes.Insert(index, shape);
-	if (this->length >= this->capacity) {
-		this->capacity += 1;
-	}
+	index = this->shapes.Insert(index, shape);
 	this->length++;
+	this->capacity++;
+	this->current = index + 1;
 
-	return this->current;
+	return index;
 }
 
 Long Block::Detach(Long index) {
-	if (index >= 0 && index < this->GetLength()) {
-		delete this->shapes[index];
-		this->current = this->shapes.Delete(index);
-		this->length--;
+	if (this->shapes[index] != 0) {
+		delete this->shapes.GetAt(index);
 	}
-	return this->current;
+	this->current = index;
+	index = this->shapes.Delete(index);
+	this->capacity--;
+	this->length--;
+
+	return index;
 }
 
 Long Block::Detach(SHAPE identify) {
@@ -115,6 +116,7 @@ Long Block::Detach(SHAPE identify) {
 		if (this->shapes[i - 1]->Identify(identify)) {
 			delete this->shapes[i - 1];
 			this->shapes.Delete(i - 1);
+			this->capacity--;
 			this->length--;
 			count++;
 		}
@@ -130,6 +132,7 @@ bool Block::DetachSelectedAll() {
 		if (this->shapes[i - 1]->IsSelected()) {
 			delete this->shapes[i - 1];
 			this->shapes.Delete(i - 1);
+			this->capacity--;
 			this->length--;
 			ret = true;
 		}

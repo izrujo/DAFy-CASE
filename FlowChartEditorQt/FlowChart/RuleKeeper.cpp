@@ -90,7 +90,7 @@ bool RuleKeeper::CheckOperatorRule(Array<String> operators) {
 		oper = operators.GetAt(i);
 		//1.2. 허용된 연산자가 아니면 규칙에 어긋난다.
 		if (!(oper == "(" || oper == ")" || oper == "*" || oper == "+" || oper == "-" || oper == "/" ||
-			oper == "<" || oper == "=" || oper == ">" || oper == "^" ||
+			oper == "<" || oper == "=" || oper == ">" ||
 			oper == "<>" || oper == "<=" || oper == ">=" || oper == "!=")) {
 			isKept = false;
 		}
