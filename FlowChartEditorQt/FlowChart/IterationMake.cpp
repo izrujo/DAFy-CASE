@@ -32,7 +32,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	QRectF rect;
 	QRectF bufferRange;
 
-	
+	Long arrowIndex = -1;
 
 	FlowChart buffer(canvas->flowChart->GetCapacity());
 
@@ -76,24 +76,37 @@ void IterationMake::Create(DrawingPaper *canvas) {
 			NShape::MakeRectToPoint(attribute.pointIn, &rect);
 		}
 		if (top->IsIncluded(rect)) {
-			buffer.Detach(indexes[i]);
+			if (!(dynamic_cast<Arrow*>(buffer.GetAt(indexes[i])))) {
+				buffer.Detach(indexes[i]);
+			}
+			else {
+				arrowIndex = indexes[i];
+			}
 		}
 	}
 
 	FlowChart temp(buffer);
 	temp.AscendingSort();
 
-	// Arrow를 그린다.
-	attribute = initAttribute;
-	top->GetAttribute(&attribute);
-	x = attribute.pointOut.x();
-	y = attribute.pointOut.y();
-	width = 0;
-	height = temp.GetAt(1)->GetY() - y;
-	shape = new Arrow(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("TRUE"));
-	canvas->registrar->Register(shape);
-	shape->Select(true);
-	Long position = buffer.Insert(1, shape);
+	//top에 붙은 Arrow를 찾는다.
+
+	//Arrow가 없으면 Arrow를 그린다.
+	if (arrowIndex == -1) {
+		attribute = initAttribute;
+		top->GetAttribute(&attribute);
+		x = attribute.pointOut.x();
+		y = attribute.pointOut.y();
+		width = 0;
+		height = temp.GetAt(1)->GetY() - y;
+		shape = new Arrow(x, y, width, height, QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("TRUE"));
+		canvas->registrar->Register(shape);
+		shape->Select(true);
+		Long position = buffer.Insert(1, shape);
+	}
+	else {
+		//Arrow가 있으면 TRUE를 적는다.
+		buffer.GetAt(arrowIndex)->Rewrite(String("TRUE"));
+	}
 
 	// 마지막이 Arrow이면 지운다.
 	j = temp.GetLength() - 1;
@@ -133,7 +146,7 @@ void IterationMake::Create(DrawingPaper *canvas) {
 	height2 = repeatTrue->GetY() + dynamic_cast<RepeatTrue *>(repeatTrue)->GetHeight2() - y + 35;
 	height = height2 + 40;
 
-	shape = new RepeatFalse(x, y, width, height, width2, height2, 
+	shape = new RepeatFalse(x, y, width, height, width2, height2,
 		QColor(0, 0, 0), Qt::SolidLine, QColor(0, 0, 0), String("FALSE"));
 	canvas->registrar->Register(shape);
 	shape->Select(true);

@@ -102,7 +102,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	FlowChart tempRights(rights);
 	tempLefts.AscendingSort();
 	tempRights.AscendingSort();
-
+#if 0
 	// 마지막 기호가 Arrow이면 삭제한다.
 	i = tempLefts.GetLength() - 1;
 	if (i >= 0 && dynamic_cast<Arrow *>(tempLefts.GetAt(i))) {
@@ -165,7 +165,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 			tempRights.Detach(j);
 		}
 	}
-
+#endif
 	// LeftDown을 그린다.	
 	top->GetAttribute(&decisionAttribute);
 	x = decisionAttribute.pointTrue.x();

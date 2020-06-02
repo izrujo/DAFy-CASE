@@ -240,7 +240,7 @@ void DrawingPaper::mousePressEvent(QMouseEvent *event) {
 	editor->modeStatus->setText(mode);
 	editor->statusBar->repaint();
 
-	if (this->tool != NULL) {
+	if (this->tool != NULL && this->label == NULL) {
 		this->tool->OnLButtonDown(this, point);
 		//this->SetCapture();
 	}
