@@ -9,6 +9,7 @@ class DrawingPaper;
 class NShape;
 class SheetBinder;
 class FlowChartVisitor;
+class VariableList;
 
 class SheetManager {
 public:
@@ -27,6 +28,7 @@ public:
 	void ModifyFileOpenPath(QString fileOpenPath);
 	void ModifyTitles();
 	void ModifyPreviousFlowChart(NShape *previousFlowChart);
+	void ModifyVariableList(VariableList *variableList);
 	void Draw(FlowChartVisitor *draw);
 
 	NShape* GetTitle(Long index);

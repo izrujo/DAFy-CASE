@@ -176,6 +176,11 @@ void SheetManager::ModifyPreviousFlowChart(NShape *previousFlowChart) {
 	sheet->previousFlowChart = previousFlowChart;
 }
 
+void SheetManager::ModifyVariableList(VariableList *variableList) {
+	Sheet *sheet = this->sheetBinder->GetAt(this->sheetBinder->GetCurrent());
+	sheet->variableList = variableList;
+}
+
 void SheetManager::Draw(FlowChartVisitor *draw) {
 	Long i = 0;
 	while (i < this->sheetBinder->GetLength()) {

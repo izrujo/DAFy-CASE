@@ -514,10 +514,6 @@ Array<T>& Array<T>::operator =(const Array& source) {
 
 template <typename T>
 void Array<T>::Swap(Long toIndex, Long fromIndex) {
-	assert(toIndex >= 0 && toIndex < this->length);
-	assert(fromIndex >= 0 && fromIndex < this->length);
-	assert(toIndex != fromIndex);
-
 	T object = this->front[fromIndex];
 	Long count;
 	if (fromIndex > toIndex) {

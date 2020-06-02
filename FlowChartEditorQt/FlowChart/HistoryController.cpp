@@ -4,6 +4,9 @@
 #include "Registrar.h"
 #include "Historys.h"
 #include "Block.h"
+#include "Preparation.h"
+#include "ContentsAnalyzer.h"
+#include "RuleKeeper.h"
 
 #include "../FlowChartEditor.h"
 #include "Sheet.h"
@@ -105,7 +108,7 @@ void HistoryController::Update() {
 			//3.2.2.현재 순서도에서 찾다.
 			index = currentFlowChart->FindByRegistrationNumber(id, registrationNumber);
 			//3.2.3.shape와 찾은 shape가 동일하지 않으면 shape를 역사에 추가하다.
-			if (shape != currentFlowChart->GetAt(index)) {
+			if (!(shape->IsEqual(*currentFlowChart->GetAt(index)))) {
 				history->Add(shape->Clone());
 			}
 			i++;
@@ -154,6 +157,18 @@ void HistoryController::Undo() {
 		else if (dynamic_cast<RemoveHistory*>(lastHistory)) {
 			//2.3.1.shape를 캔버스의 순서도에 추가하다.
 			this->canvas->flowChart->Attach(shape->Clone());
+			//=====================intellisense========================
+			if (this->canvas->variableList != NULL && dynamic_cast<Preparation*>(shape)) {
+				if (this->canvas->variableList != NULL) {
+					delete this->canvas->variableList;
+					this->canvas->variableList = NULL;
+				}
+				ContentsAnalyzer analyzer;
+				RuleKeeper ruleKeeper;
+				Array<String> variables = analyzer.MakeVariables(shape->GetContents());
+				this->canvas->variableList = ruleKeeper.CheckVariableNamingRule(variables);
+			}
+			//=========================================================
 		}
 		//2.4.기타 역사면
 		else if (dynamic_cast<OtherHistory*>(lastHistory)) {
@@ -200,6 +215,18 @@ void HistoryController::Redo() {
 		if (dynamic_cast<AddHistory*>(lastHistory)) {
 			//2.2.1.shape를 캔버스의 순서도에 추가하다.
 			this->canvas->flowChart->Attach(shape->Clone());
+			//=====================intellisense========================
+			if (this->canvas->variableList != NULL && dynamic_cast<Preparation*>(shape)) {
+				if (this->canvas->variableList != NULL) {
+					delete this->canvas->variableList;
+					this->canvas->variableList = NULL;
+				}
+				ContentsAnalyzer analyzer;
+				RuleKeeper ruleKeeper;
+				Array<String> variables = analyzer.MakeVariables(shape->GetContents());
+				this->canvas->variableList = ruleKeeper.CheckVariableNamingRule(variables);
+			}
+			//=========================================================
 		}
 		//2.3.삭제 역사면
 		else if (dynamic_cast<RemoveHistory*>(lastHistory)) {

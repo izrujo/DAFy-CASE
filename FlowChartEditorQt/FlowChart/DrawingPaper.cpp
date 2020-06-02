@@ -282,13 +282,13 @@ void DrawingPaper::mouseReleaseEvent(QMouseEvent *event) {
 	QPointF point = event->localPos();
 
 
-	if (this->tool != NULL && this->label==NULL) {
+	if (this->tool != NULL && this->label == NULL) {
 		FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 		//기호를 그리는 것이면
 		if (this->variableList != NULL && dynamic_cast<DrawingTool*>(this->tool)) {
 			//준비기호를 찾는다.
 			Long index = this->flowChart->Find(SHAPE::PREPARATION);
-			
+
 			//준비기호가 있으면 준비기호를 그릴 수 없고 준비기호가 없으면 준비기호만 그릴 수가 있다.
 			//위에서 단말 기호는 예외이다. 준비 기호가 있거나 없거나 상관 없다.
 			//준비기호를 찾았고 준비 기호를 그리는 것이 아니거나(준비 기호는 하나만)
@@ -375,7 +375,7 @@ void DrawingPaper::mouseDoubleClickEvent(QMouseEvent *event) {
 
 			QColor color = shape->GetBackGroundColor();
 			String contents = shape->GetContents();
-			
+
 			ContentsAnalyzer analyzer;
 			contents = analyzer.RollBackOperators(contents);
 			this->label = Label::Instance(&contents, color, this);
@@ -402,7 +402,7 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 	//========================캔버스 타이틀 들========================
 	FlowChartEditor *editor = static_cast<FlowChartEditor*>(this->parentWidget());
 	editor->sheetManager->ModifyTitles();
-	
+
 	NShape *currentTitle = editor->sheetManager->GetTitle(editor->sheetManager->GetBinderCurrent());
 	float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
 	float windowCloseY = currentTitle->GetY() + 4;
@@ -433,34 +433,36 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 }
 
 void DrawingPaper::wheelEvent(QWheelEvent *event) {
-	QPoint delta = event->angleDelta();
-	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
-	if (isControlPressed && this->scrollController->GetScroll(0) != NULL) { //zoom
-		Long oldRate = this->zoom->GetRate();
-		Long rate;
-		QString rateStatus;
-		if (delta.y() > 0 && oldRate < 150) {
-			rate = oldRate + 10;
-			this->zoom->Set(rate);
+	if (this->label == NULL) {
+		QPoint delta = event->angleDelta();
+		bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
+		if (isControlPressed && this->scrollController->GetScroll(0) != NULL) { //zoom
+			Long oldRate = this->zoom->GetRate();
+			Long rate;
+			QString rateStatus;
+			if (delta.y() > 0 && oldRate < 150) {
+				rate = oldRate + 10;
+				this->zoom->Set(rate);
 
-			rateStatus = QString::number(rate);
-			rateStatus += "%";
-			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
-		}
-		else if (delta.y() < 0 && oldRate > 40) {
-			rate = oldRate - 10;
-			this->zoom->Set(rate);
+				rateStatus = QString::number(rate);
+				rateStatus += "%";
+				dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
+			}
+			else if (delta.y() < 0 && oldRate > 40) {
+				rate = oldRate - 10;
+				this->zoom->Set(rate);
 
-			rateStatus = QString::number(rate);
-			rateStatus += "%";
-			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
+				rateStatus = QString::number(rate);
+				rateStatus += "%";
+				dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
+			}
+			dynamic_cast<FlowChartEditor*>(this->parentWidget())->statusBar->repaint();
+			this->scrollController->Update();
 		}
-		dynamic_cast<FlowChartEditor*>(this->parentWidget())->statusBar->repaint();
-		this->scrollController->Update();
-	}
-	else {
-		Long value = this->scrollController->Rotate(delta);
-		this->repaint();
+		else {
+			Long value = this->scrollController->Rotate(delta);
+			this->repaint();
+		}
 	}
 }
 
@@ -797,7 +799,7 @@ QCursor DrawingPaper::GetCursor(QPoint point) {
 
 void DrawingPaper::OnSequenceMenuClick() {
 	this->tool->SequenceMake(this);
-	
+
 	this->Notify();
 
 	this->repaint();

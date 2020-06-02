@@ -5,6 +5,9 @@
 #include "DrawingPaper.h"
 #include "FlowChart.h"
 #include "Registrar.h"
+#include "ContentsAnalyzer.h"
+#include "RuleKeeper.h"
+#include "Preparation.h"
 
 Clipboard::Clipboard() {
 	this->buffer = new FlowChart;
@@ -44,6 +47,18 @@ Long Clipboard::Paste(DrawingPaper *canvas) {
 		index = canvas->flowChart->Attach(shape->Clone());
 		canvas->registrar->Register(canvas->flowChart->GetAt(index));
 		canvas->mode = DrawingPaper::SELECT;
+		//=====================intellisense========================
+		if (canvas->variableList != NULL && dynamic_cast<Preparation*>(shape)) {
+			if (canvas->variableList != NULL) {
+				delete canvas->variableList;
+				canvas->variableList = NULL;
+			}
+			ContentsAnalyzer analyzer;
+			RuleKeeper ruleKeeper;
+			Array<String> variables = analyzer.MakeVariables(shape->GetContents());
+			canvas->variableList = ruleKeeper.CheckVariableNamingRule(variables);
+		}
+		//=========================================================
 	}
 
 	return this->buffer->GetLength();

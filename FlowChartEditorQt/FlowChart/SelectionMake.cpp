@@ -80,14 +80,14 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	// lefts 와 rights를 적는다.
 	///0520 여기서 흐름선들은 추가하면 안된다.
 	for (i = 0; i < temp.GetLength(); i++) {
-		if (temp.GetAt(i)->CenterOfGravityX() < top->CenterOfGravityX()) {
+		if (temp.GetAt(i)->GetX() < top->GetX()) {
 			lefts.Attach(temp.GetAt(i)->Clone());
 		}
 		else {
 			rights.Attach(temp.GetAt(i)->Clone());
 		}
 	}
-
+#if 0
 	//19.9.16 판단기호 좌우의 첫 번째 기호의 중앙x가 판단기호 양 끝점의 안쪽에 있으면 최적의 위치로 움직인다.
 	if (lefts.GetAt(0)->CenterOfGravityX() > top->GetX() - 40) {
 		lefts.GetAt(0)->Move(top->GetX() - 40 - lefts.GetAt(0)->GetWidth() / 2, lefts.GetAt(0)->GetY());
@@ -95,7 +95,7 @@ void SelectionMake::Create(DrawingPaper *canvas) {
 	if (rights.GetLength() > 0 && rights.GetAt(0)->CenterOfGravityX() < top->GetX() + top->GetWidth() + 40) {
 		rights.GetAt(0)->Move(top->GetX() + top->GetWidth() + 40 - rights.GetAt(0)->GetWidth() / 2, rights.GetAt(0)->GetY());
 	}
-
+#endif
 	// lefts 와 rights를 오름차순 정렬한다.
 	// 정렬과정에서 순서가 섞인다. tempLefts 와 tempRights를 이용해서 정렬하자
 	FlowChart tempLefts(lefts);

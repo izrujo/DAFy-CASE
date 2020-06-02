@@ -83,6 +83,7 @@ Long SheetBinder::Remove(Long index) {
 	if (this->sheets[index] != 0) {
 		delete this->sheets[index];
 		this->sheets.Delete(index);
+		this->capacity--;
 		this->length--;
 		this->current = 0; //Sheet를 닫으면 맨 앞의 시트를 연다.
 	}

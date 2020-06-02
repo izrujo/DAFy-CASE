@@ -29,11 +29,7 @@ FlowChartKeyAction* FlowChartKeyActionFactory::Make(int modifiers, int key) {
 	FlowChartKeyAction* keyAction = 0;
 
 	SHORT isCtrl = GetKeyState(VK_CONTROL) & 0X8000;
-
-	bool isAlt = false;
-	if (modifiers == Qt::AltModifier) {
-		isAlt = true;
-	}
+	SHORT isAlt = GetKeyState(VK_MENU) & 0X8000;
 
 	if (isCtrl && isAlt && key == Qt::Key_S) { //Ctrl + Alt + S
 		keyAction = new FCtrlAltSKeyAction(this->editor);

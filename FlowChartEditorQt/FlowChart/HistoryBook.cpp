@@ -50,7 +50,7 @@ HistoryBook& HistoryBook::operator=(const HistoryBook& source) {
 	return *this;
 }
 
-Long HistoryBook::Add(History *History) {
+Long HistoryBook::Add(History *history) {
 	
 	//50개로 제한
 	if (this->length >= 50) {
@@ -64,10 +64,10 @@ Long HistoryBook::Add(History *History) {
 	
 	Long index;
 	if (this->length < this->capacity) {
-		index = this->historys.Store(this->length, History);
+		index = this->historys.Store(this->length, history);
 	}
 	else {
-		index = this->historys.AppendFromRear(History);
+		index = this->historys.AppendFromRear(history);
 		this->capacity++;
 	}
 	this->length++;
@@ -93,9 +93,9 @@ void HistoryBook::RemoveAll() {
 			delete this->historys[0];
 		}
 		this->historys.Delete(0);
+		this->capacity--;
 		i++;
 	}
-	this->capacity = 50;
 	this->length = 0;
 }
 

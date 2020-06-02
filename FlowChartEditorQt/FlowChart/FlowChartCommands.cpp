@@ -235,7 +235,7 @@ void OpenCommand::Execute() {
 		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
-			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
+			canvas->Load(fileName);
 			//새로운 캔버스 타이틀 만들기
 			Long current = this->editor->sheetManager->Open(fileName);
 			this->editor->sheetManager->Change(current);
@@ -310,6 +310,15 @@ void UndoCommand::Execute() {
 	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->editor->windows[0]);
 	if (canvas->historyController->GetUndoHistoryBook()->GetLength() > 0) {
 		canvas->historyController->Undo();
+
+		//준비 기호가 삭제되면 변수 목록을 초기화한다.
+		Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+		if (canvas->variableList != NULL && index == -1) {
+			delete canvas->variableList;
+			canvas->variableList = new VariableList;
+			this->editor->sheetManager->ModifyVariableList(canvas->variableList);
+		}
+
 		canvas->repaint();
 	}
 }
@@ -338,6 +347,15 @@ void RedoCommand::Execute() {
 	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->editor->windows[0]);
 	if (canvas->historyController->GetRedoHistoryBook()->GetLength() > 0) {
 		canvas->historyController->Redo();
+
+		//준비 기호가 삭제되면 변수 목록을 초기화한다.
+		Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+		if (canvas->variableList != NULL && index == -1) {
+			delete canvas->variableList;
+			canvas->variableList = new VariableList;
+			this->editor->sheetManager->ModifyVariableList(canvas->variableList);
+		}
+
 		canvas->repaint();
 	}
 }
@@ -603,6 +621,8 @@ void PasteCommand::Execute() {
 	DrawingPaper *drawingPaper = static_cast<DrawingPaper *>(this->editor->windows[0]);
 	drawingPaper->clipboard->Paste(drawingPaper);
 
+	this->editor->sheetManager->ModifyVariableList(drawingPaper->variableList);
+
 	drawingPaper->Notify();
 }
 
@@ -629,6 +649,14 @@ CutCommand &CutCommand::operator =(const CutCommand &source) {
 void CutCommand::Execute() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Cut(canvas);
+
+	//준비 기호가 삭제되면 변수 목록을 초기화한다.
+	Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+	if (canvas->variableList != NULL && index == -1) {
+		delete canvas->variableList;
+		canvas->variableList = new VariableList;
+		this->editor->sheetManager->ModifyVariableList(canvas->variableList);
+	}
 
 	canvas->Notify();
 }
@@ -677,6 +705,14 @@ void DeleteCommand::Execute() {
 
 	if (indexes != 0) {
 		delete[] indexes;
+	}
+
+	//준비 기호가 삭제되면 변수 목록을 초기화한다.
+	Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+	if (canvas->variableList != NULL && index == -1) {
+		delete canvas->variableList;
+		canvas->variableList = new VariableList;
+		this->editor->sheetManager->ModifyVariableList(canvas->variableList);
 	}
 
 	canvas->Notify();
@@ -733,6 +769,9 @@ void StartCommand::Execute() {
 	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->shapeSelected =
 		dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->flowChartTemplate->GetAt(0);
+	QString style = QString::fromLocal8Bit("    단말 기호");
+	editor->messageStatus->setText(style);
+	editor->statusBar->repaint();
 }
 
 //PreparationCommand
@@ -759,6 +798,9 @@ void PreparationCommand::Execute() {
 	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->shapeSelected =
 		dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->flowChartTemplate->GetAt(1);
+	QString style = QString::fromLocal8Bit("    준비 기호");
+	editor->messageStatus->setText(style);
+	editor->statusBar->repaint();
 }
 
 //InputCommand
@@ -785,6 +827,9 @@ void InputCommand::Execute() {
 	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->shapeSelected =
 		dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->flowChartTemplate->GetAt(2);
+	QString style = QString::fromLocal8Bit("    입력 기호");
+	editor->messageStatus->setText(style);
+	editor->statusBar->repaint();
 }
 
 //ProcessCommand
@@ -811,6 +856,9 @@ void ProcessCommand::Execute() {
 	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->shapeSelected =
 		dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->flowChartTemplate->GetAt(3);
+	QString style = QString::fromLocal8Bit("    처리 기호");
+	editor->messageStatus->setText(style);
+	editor->statusBar->repaint();
 }
 
 //DecisionCommand
@@ -837,6 +885,9 @@ void DecisionCommand::Execute() {
 	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->shapeSelected =
 		dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->flowChartTemplate->GetAt(4);
+	QString style = QString::fromLocal8Bit("    판단 기호");
+	editor->messageStatus->setText(style);
+	editor->statusBar->repaint();
 }
 
 //OutputCommand
@@ -863,6 +914,9 @@ void OutputCommand::Execute() {
 	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->shapeSelected =
 		dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->flowChartTemplate->GetAt(5);
+	QString style = QString::fromLocal8Bit("    출력 기호");
+	editor->messageStatus->setText(style);
+	editor->statusBar->repaint();
 }
 
 //StopCommand
@@ -889,6 +943,9 @@ void StopCommand::Execute() {
 	dynamic_cast<DrawingPaper *>(this->editor->windows[0])->mode = DrawingPaper::DRAWING;
 	dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->shapeSelected =
 		dynamic_cast<FlowChartTemplate *>(this->editor->windows[1])->flowChartTemplate->GetAt(6);
+	QString style = QString::fromLocal8Bit("    단말 기호");
+	editor->messageStatus->setText(style);
+	editor->statusBar->repaint();
 }
 
 //PageSetCommand
@@ -930,9 +987,9 @@ void PageSetCommand::Execute() {
 			float paperWidth = a4Paper->GetWidth();
 			float paperHeight = a4Paper->GetHeight();
 
-			float leftMargin = left  * paperWidth / 210;
+			float leftMargin = left * paperWidth / 210;
 			float rightMargin = right * paperWidth / 210;
-			float topMargin = top  * paperHeight / 297;
+			float topMargin = top * paperHeight / 297;
 			float bottomMargin = bottom * paperHeight / 297;
 
 			dynamic_cast<A4Paper *>(a4Paper)->ChangeMargin(leftMargin, topMargin, rightMargin, bottomMargin);
@@ -1183,7 +1240,6 @@ void RuleKeepCommand::Execute() {
 		}
 		else {
 			if (canvas->variableList != NULL) {
-				delete canvas->variableList;
 				canvas->variableList = NULL;
 			}
 			QString message = QString::fromLocal8Bit("    규칙 검사 사용 해제");
@@ -1200,6 +1256,7 @@ void RuleKeepCommand::Execute() {
 		}
 		else {
 			canvas->variableList = new VariableList;
+			this->editor->sheetManager->ModifyVariableList(canvas->variableList);
 			QString message = QString::fromLocal8Bit("    규칙 검사 사용 설정");
 			this->editor->messageStatus->setText(message);
 			this->editor->statusBar->repaint();

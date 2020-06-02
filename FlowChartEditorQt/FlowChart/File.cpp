@@ -37,6 +37,7 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 
 	canvas->flowChart = new FlowChart;
 	canvas->registrar = new Registrar;
+
 	bool isOpen = file.open(QIODevice::ReadOnly | QIODevice::Text);
 	if (isOpen == true) {
 		//줌 처리
@@ -47,6 +48,7 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 		//변수 목록
 		qContents = textStream.readLine();
 		lineRead = qContents.toLocal8Bit().data();
+
 		if (lineRead == "TRUE") {
 			canvas->variableList = new VariableList;
 		}
@@ -72,7 +74,7 @@ Long File::Load(DrawingPaper *canvas, QString fileName) {
 			contents.Remove(';');
 			shape = creator.Create(atof(tokenizer.GetAt(0)), atof(tokenizer.GetAt(1)), atof(tokenizer.GetAt(2)), atof(tokenizer.GetAt(3)),
 				atof(tokenizer.GetAt(4)), atof(tokenizer.GetAt(5)), atof(tokenizer.GetAt(6)), contents);
-			
+
 			canvas->registrar->Register(shape);
 			canvas->flowChart->Attach(shape);
 

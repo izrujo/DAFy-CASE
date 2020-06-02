@@ -31,6 +31,7 @@
 #include "../Notepad/KeyActionFactory.h"
 #include "../Notepad/KeyActions.h"
 #include "InputOutput.h"
+#include "SheetManager.h"
 
 #include <qevent.h>
 #include <windows.h>
@@ -67,7 +68,8 @@ Label::Label(QWidget *parent)
 	this->sizeController = NULL;
 	this->color = QColor(255, 255, 255);
 
-	this->note->Last();
+	Long index = this->note->Last();
+	this->current = this->note->GetAt(index);
 	this->current->Last();
 
 	this->sizeController = new SizeController(this);
@@ -98,7 +100,8 @@ Label::Label(String *text, QColor color, QWidget *parent)
 	this->sizeController = NULL;
 	this->color = color;
 
-	this->note->Last();
+	Long index = this->note->Last();
+	this->current = this->note->GetAt(index);
 	this->current->Last();
 
 	this->sizeController = new SizeController(this);
@@ -230,6 +233,7 @@ void Label::focusOutEvent(QFocusEvent *event) {
 				canvas->variableList = NULL;
 			}
 			canvas->variableList = ruleKeeper.CheckVariableNamingRule(variables);
+			editor->sheetManager->ModifyVariableList(canvas->variableList);
 			isKeptVariableRule = (canvas->variableList->GetLength() > 0);
 		}
 		else {

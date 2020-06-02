@@ -67,7 +67,7 @@ FlowChartCommand* FlowChartCommandFactory::Make(string text) {
 	else if (text == "SelectAll") {
 		command = new SelectAllCommand(this->editor);
 	}
-	else if (text == "StartSymbol") {
+	else if (text == "StartTerminalSymbol") {
 		command = new StartCommand(this->editor);
 	}
 	else if (text == "PreparationSymbol") {

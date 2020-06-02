@@ -182,32 +182,36 @@ void FlowChartEditor::mouseMoveEvent(QMouseEvent *event) {
 
 void FlowChartEditor::mouseReleaseEvent(QMouseEvent *event) {
 	DrawingPaper *canvas = static_cast<DrawingPaper *>(this->windows[0]);
-	QRectF pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
-	bool isContain = pinRect.contains(event->localPos());
-	if (isContain == true) {
-		if (this->sheetManager->GetBinderLength() > 1) { //두 개 이상일 때만 닫을 수 있음.
-			canvas->Close(); //현재 캔버스 저장하거나 안하거나 처리해줌.
+	if (canvas->label == NULL) {
+		QRectF pinRect(this->windowClose->GetX(), this->windowClose->GetY(), this->windowClose->GetWidth(), this->windowClose->GetHeight());
+		bool isContain = pinRect.contains(event->localPos());
+		if (isContain == true) {
+			if (this->sheetManager->GetBinderLength() > 1) { //두 개 이상일 때만 닫을 수 있음.
+				canvas->Close(); //현재 캔버스 저장하거나 안하거나 처리해줌.
+			}
+			else {
+				QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("경고"),
+					QString::fromLocal8Bit("모두 닫을 수 없습니다."), QMessageBox::Ok, this);
+				int ret = messageBox.exec();
+			}
 		}
 		else {
-			QMessageBox messageBox(QMessageBox::Warning, QString::fromLocal8Bit("경고"),
-				QString::fromLocal8Bit("모두 닫을 수 없습니다."), QMessageBox::Ok, this);
-			int ret = messageBox.exec();
-		}
-	}
-	else {
-		Long current = this->sheetManager->Select(event->pos());
-		if (current >= 0) {
-			this->sheetManager->Change(current);
-			this->sheetManager->ModifyTitles();
+			Long current = this->sheetManager->Select(event->pos());
+			if (current >= 0) {
+				this->sheetManager->Change(current);
+				this->sheetManager->ModifyTitles();
 
-			NShape *currentTitle = this->sheetManager->GetTitle(current);
-			float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
-			float windowCloseY = currentTitle->GetY() + 4;
-			this->windowClose->Move(windowCloseX, windowCloseY);
+				NShape *currentTitle = this->sheetManager->GetTitle(current);
+				float windowCloseX = currentTitle->GetX() + currentTitle->GetWidth() - 26 - 3; //24=사각형길이,3=여유공간
+				float windowCloseY = currentTitle->GetY() + 4;
+				this->windowClose->Move(windowCloseX, windowCloseY);
+
+				canvas->indexOfSelected = -1;
+			}
 		}
+		this->repaint();
+		canvas->repaint();
 	}
-	this->repaint();
-	canvas->repaint();
 }
 
 bool FlowChartEditor::eventFilter(QObject *o, QEvent *e) {
@@ -218,19 +222,21 @@ bool FlowChartEditor::eventFilter(QObject *o, QEvent *e) {
 }
 
 void FlowChartEditor::CommandRange(string text) { //문자열이 아닌 #define으로 선언해두고 쓰면 더 효율이 좋을까?
-	FlowChartCommandFactory commandFactory(this);
-	FlowChartCommand *command = commandFactory.Make(text); //action->text()
-	if (command != NULL) {
-		command->Execute();
-		delete command;
-	}
 	DrawingPaper *drawingPaper = static_cast<DrawingPaper *>(this->windows[0]);
+	if (drawingPaper->label == NULL) {
+		FlowChartCommandFactory commandFactory(this);
+		FlowChartCommand *command = commandFactory.Make(text); //action->text()
+		if (command != NULL) {
+			command->Execute();
+			delete command;
+		}
 
-	QString mode = drawingPaper->GetCurrentMode();
-	this->modeStatus->setText(mode);
-	this->statusBar->repaint();
+		QString mode = drawingPaper->GetCurrentMode();
+		this->modeStatus->setText(mode);
+		this->statusBar->repaint();
 
-	this->repaint();
+		this->repaint();
+	}
 }
 
 void FlowChartEditor::UpdateEditMenu() {

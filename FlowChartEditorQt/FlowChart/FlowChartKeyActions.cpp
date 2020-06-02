@@ -101,6 +101,14 @@ void FDeleteKeyAction::OnKeyDown() {
 		delete[] indexes;
 	}
 
+	//준비 기호가 삭제되면 변수 목록을 초기화한다.
+	Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+	if (canvas->variableList != NULL && index == -1) {
+		delete canvas->variableList;
+		canvas->variableList = new VariableList;
+		this->editor->sheetManager->ModifyVariableList(canvas->variableList);
+	}
+
 	canvas->Notify();
 }
 
@@ -798,6 +806,8 @@ void FCtrlVKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Paste(canvas);
 
+	this->editor->sheetManager->ModifyVariableList(canvas->variableList);
+
 	canvas->Notify();
 }
 
@@ -825,6 +835,14 @@ FCtrlXKeyAction& FCtrlXKeyAction::operator=(const FCtrlXKeyAction& source) {
 void FCtrlXKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	canvas->clipboard->Cut(canvas);
+
+	//준비 기호가 삭제되면 변수 목록을 초기화한다.
+	Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+	if (canvas->variableList != NULL && index == -1) {
+		delete canvas->variableList;
+		canvas->variableList = new VariableList;
+		this->editor->sheetManager->ModifyVariableList(canvas->variableList);
+	}
 
 	canvas->Notify();
 }
@@ -854,6 +872,14 @@ void FCtrlZKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	if (canvas->historyController->GetUndoHistoryBook()->GetLength() > 0) {
 		canvas->historyController->Undo();
+
+		//준비 기호가 삭제되면 변수 목록을 초기화한다.
+		Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+		if (canvas->variableList != NULL && index == -1) {
+			delete canvas->variableList;
+			canvas->variableList = new VariableList;
+		}
+		this->editor->sheetManager->ModifyVariableList(canvas->variableList);
 	}
 }
 
@@ -882,6 +908,14 @@ void FCtrlYKeyAction::OnKeyDown() {
 	DrawingPaper *canvas = static_cast<DrawingPaper*>(this->editor->windows[0]);
 	if (canvas->historyController->GetRedoHistoryBook()->GetLength() > 0) {
 		canvas->historyController->Redo();
+
+		//준비 기호가 삭제되면 변수 목록을 초기화한다.
+		Long index = canvas->flowChart->Find(SHAPE::PREPARATION);
+		if (canvas->variableList != NULL && index == -1) {
+			delete canvas->variableList;
+			canvas->variableList = new VariableList;
+		}
+		this->editor->sheetManager->ModifyVariableList(canvas->variableList);
 	}
 }
 
@@ -948,7 +982,7 @@ void FCtrlOKeyAction::OnKeyDown() {
 		if (lastRight + 186 < canvas->x() + canvas->width()) { //186은 캔버스 타이틀의 최소 너비
 			//제일 끝에 있는 캔버스 타이틀 뒤에 새로운 캔버스 타이틀 붙이기
 			//열기
-			(static_cast<DrawingPaper *>(this->editor->windows[0]))->Load(fileName);
+			canvas->Load(fileName);
 			//새로운 캔버스 타이틀 만들기
 			Long current = this->editor->sheetManager->Open(fileName);
 			this->editor->sheetManager->Change(current);
