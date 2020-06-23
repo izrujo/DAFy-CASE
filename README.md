@@ -24,7 +24,7 @@ Algorithm Design Tool using FlowChart based on Structured Programming
  - Create Control Structure
 * * *
 ## Download
-[Setup](https://github.com/kch7990/DAFy-CASE/tree/master/Setup)
+[Setup](https://github.com/kch7990/DAFy-CASE/releases)
 * * *
 ## How to Use
 [Youtube Link(Korean)](https://youtu.be/2CAFjahI6IM)
