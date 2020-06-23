@@ -1242,6 +1242,7 @@ void RuleKeepCommand::Execute() {
 			if (canvas->variableList != NULL) {
 				canvas->variableList = NULL;
 			}
+			this->editor->ruleKeepAction->setChecked(false);
 			QString message = QString::fromLocal8Bit("    규칙 검사 사용 해제");
 			this->editor->messageStatus->setText(message);
 			this->editor->statusBar->repaint();
@@ -1257,6 +1258,7 @@ void RuleKeepCommand::Execute() {
 		else {
 			canvas->variableList = new VariableList;
 			this->editor->sheetManager->ModifyVariableList(canvas->variableList);
+			this->editor->ruleKeepAction->setChecked(true);
 			QString message = QString::fromLocal8Bit("    규칙 검사 사용 설정");
 			this->editor->messageStatus->setText(message);
 			this->editor->statusBar->repaint();

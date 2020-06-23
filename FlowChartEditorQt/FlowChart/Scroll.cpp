@@ -10,7 +10,7 @@ Scroll::Scroll(Qt::Orientation orientation, QWidget *parent)
 	this->isFromConstructor = false;
 }
 
-Scroll::Scroll(const Scroll& source) 
+Scroll::Scroll(const Scroll& source)
 	: QScrollBar(source.orientation(), parentWidget())
 {
 	QObject::connect(this, &QScrollBar::valueChanged, this, &Scroll::Move);
@@ -34,7 +34,7 @@ void Scroll::Move(Long value) {
 	this->setValue(value);
 
 	//ScrollController 생성자에서 불러짐 - value가 음수, 그리면 오류
-	if (this->isFromConstructor == false) { 
+	if (this->isFromConstructor == false) {
 		static_cast<QFrame*>(this->parent())->repaint();
 	}
 

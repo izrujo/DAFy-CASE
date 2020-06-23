@@ -39,7 +39,7 @@ VariableList* RuleKeeper::CheckVariableNamingRule(Array<String> variables) {
 		j = 1;
 		while (j < variable.GetLength() && ((character >= 65 && character <= 90) || character == 95)) {
 			//2.3.1. 글자를 가져오다.
-			character = variable.GetAt(++j);
+			character = variable.GetAt(j++);
 		}
 		//2.4. 첫 번째 글자가 대문자인데 대문자가 아닌 글자를 찾았으면 규칙에 어긋난다.
 		if (j < variable.GetLength() && (variable.GetAt(0) >= 65 && variable.GetAt(0) <= 90)) {

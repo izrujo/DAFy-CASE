@@ -433,36 +433,35 @@ void DrawingPaper::resizeEvent(QResizeEvent *event) {
 }
 
 void DrawingPaper::wheelEvent(QWheelEvent *event) {
-	if (this->label == NULL) {
-		QPoint delta = event->angleDelta();
-		bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
-		if (isControlPressed && this->scrollController->GetScroll(0) != NULL) { //zoom
-			Long oldRate = this->zoom->GetRate();
-			Long rate;
-			QString rateStatus;
-			if (delta.y() > 0 && oldRate < 150) {
-				rate = oldRate + 10;
-				this->zoom->Set(rate);
+	QPoint delta = event->angleDelta();
+	bool isControlPressed = ((::GetKeyState(VK_CONTROL) & 0x8000) != 0);
+	if (isControlPressed && this->scrollController->GetScroll(0) != NULL) { //zoom
+		Long oldRate = this->zoom->GetRate();
+		Long rate;
+		QString rateStatus;
+		if (delta.y() > 0 && oldRate < 150) {
+			rate = oldRate + 10;
+			this->zoom->Set(rate);
 
-				rateStatus = QString::number(rate);
-				rateStatus += "%";
-				dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
-			}
-			else if (delta.y() < 0 && oldRate > 40) {
-				rate = oldRate - 10;
-				this->zoom->Set(rate);
+			rateStatus = QString::number(rate);
+			rateStatus += "%";
+			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
+		}
+		else if (delta.y() < 0 && oldRate > 40) {
+			rate = oldRate - 10;
+			this->zoom->Set(rate);
 
-				rateStatus = QString::number(rate);
-				rateStatus += "%";
-				dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
-			}
-			dynamic_cast<FlowChartEditor*>(this->parentWidget())->statusBar->repaint();
-			this->scrollController->Update();
+			rateStatus = QString::number(rate);
+			rateStatus += "%";
+			dynamic_cast<FlowChartEditor*>(this->parentWidget())->zoomStatus->setText(rateStatus);
 		}
-		else {
-			Long value = this->scrollController->Rotate(delta);
-			this->repaint();
-		}
+
+		dynamic_cast<FlowChartEditor*>(this->parentWidget())->statusBar->repaint();
+		this->Notify();
+	}
+	else {
+		Long value = this->scrollController->Rotate(delta);
+		this->repaint();
 	}
 }
 

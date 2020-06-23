@@ -386,7 +386,8 @@ void DrawVisitor::Visit(LeftDown *element) {
 	// 텍스트를 출력한다.
 	String contents = element->GetContents();
 
-	QRectF rect(x + width * 2.0F, y - height, -width * 2.0F, height);
+	QRectF rect(x + width, y - height, -width * 2.0F, height);
+	rect = this->painter->BoundingRect(rect, Qt::AlignLeft | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 	this->painter->DrawTextQ(rect, Qt::AlignRight | Qt::AlignBottom, QString::fromLocal8Bit(contents));
 
 	if (element->IsSelected() == true) {
