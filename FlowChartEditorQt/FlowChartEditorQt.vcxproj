@@ -185,6 +185,18 @@
     <ClCompile Include="Notepad\Observer\Observer.cpp" />
     <ClCompile Include="Notepad\Observer\Subject.cpp" />
     <ClCompile Include="Utilities\String.cpp" />
+    <ClCompile Include="x64\Debug\rcc\Resource Files\qrc_FlowChartEditor.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\Resource Files\qrc_Notepad.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      </PrecompiledHeader>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FlowChartEditor\Commands\FlowChartCommandFactory.h" />

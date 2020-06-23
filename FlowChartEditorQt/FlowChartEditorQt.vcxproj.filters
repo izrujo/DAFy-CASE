@@ -428,6 +428,12 @@
     <ClCompile Include="Utilities\String.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\Resource Files\qrc_FlowChartEditor.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
+    <ClCompile Include="x64\Debug\rcc\Resource Files\qrc_Notepad.cpp">
+      <Filter>Generated Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="Resource Files\FlowChartEditor.qrc">
