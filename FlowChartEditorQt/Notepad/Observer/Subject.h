@@ -1,7 +1,7 @@
 #ifndef _SUBJECT_H
 #define _SUBJECT_H
 
-#include "../Utilities/Array.h"
+#include "../../Utilities/Array.h"
 
 typedef signed long int Long;
 class Observer;

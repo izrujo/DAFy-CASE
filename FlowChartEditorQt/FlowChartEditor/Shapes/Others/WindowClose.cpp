@@ -1,5 +1,5 @@
 #include "WindowClose.h"
-#include "FlowChartVisitor.h"
+#include "../../Paint/FlowChartVisitor.h"
 
 WindowClose::WindowClose(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

@@ -1,8 +1,8 @@
 #ifndef _COMPOSITE_H
 #define _COMPOSITE_H
 
-#include "Glyph.h"
-#include "../Utilities/Array.h"
+#include "../Glyph.h"
+#include "../../Utilities/Array.h"
 
 class Composite : public Glyph {
 public:

@@ -5,42 +5,35 @@
  * 작성일자 : 2015년 4월 10일
 *******************************************************************/
 
+#include "FlowChartEditor.h"
 #include "FlowChartTemplate.h"
-#include "Template.h"
-#include "Terminal.h"
-#include "Shape.h"
-//////////////////////////////////////////////////////////////
-#include "../FlowChartEditor.h"
 #include "DrawingPaper.h"
+#include "../Shapes/Shape.h"
+#include "../Shapes/Composite/Template.h"
+#include "../Shapes/Symbols/Symbol.h"
+#include "../Shapes/Symbols/Terminal.h"
+#include "../Shapes/Symbols/Decision.h"
+#include "../Shapes/Symbols/Preparation.h"
+#include "../Shapes/Symbols/Process.h"
+#include "../Shapes/Symbols/InputOutput.h"
+#include "../Shapes/Lines/Line.h"
+#include "../Shapes/Lines/Arrow.h"
+#include "../Shapes/Lines/Join.h"
+#include "../Shapes/Lines/LeftDown.h"
+#include "../Shapes/Lines/RepeatFalse.h"
+#include "../Shapes/Lines/RepeatTrue.h"
+#include "../Shapes/Lines/RightDown.h"
+#include "../Shapes/Lines/RightDownJoin.h"
+#include "../Shapes/Others/WindowTitle.h"
+#include "../Shapes/Others/WindowPin.h"
+#include "../Paint/Drawing/DrawVisitor.h"
+#include "../KeyActions/FlowChartKeyActionFactory.h"
+#include "../KeyActions/FlowChartKeyActions.h"
 
-#include "../Utilities/Array.h"
-
-#include "Symbol.h"
-#include "Line.h"
-
-#include "Decision.h"
-#include "Preparation.h"
-#include "Process.h"
-#include "Terminal.h"
-#include "InputOutput.h"
-
-#include "Arrow.h"
-#include "Join.h"
-#include "LeftDown.h"
-#include "RepeatFalse.h"
-#include "RepeatTrue.h"
-#include "RightDown.h"
-#include "RightDownJoin.h"
-#include "WindowTitle.h"
-#include "WindowPin.h"
-
-#include "../GObject/Painter.h"
-#include "DrawVisitor.h"
-#include "../GObject/QtPainter.h"
-#include "../GObject/QtGObjectFactory.h"
-
-#include "FlowChartKeyActionFactory.h"
-#include "FlowChartKeyActions.h"
+#include "../../Utilities/Array.h"
+#include "../../Graphic Objects/Composite/Painter.h"
+#include "../../Graphic Objects/Composite/Qt/QtPainter.h"
+#include "../../Graphic Objects/Factory/Qt/QtGObjectFactory.h"
 
 #include <qpainter.h>
 #include <qevent.h>

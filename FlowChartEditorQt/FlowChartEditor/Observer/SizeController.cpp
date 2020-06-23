@@ -1,13 +1,13 @@
 #include "SizeController.h"
-#include "Label.h"
-#include "../Notepad/CharacterMetrics.h"
-#include "../Notepad/Note.h"
-#include "Shape.h"
+#include "../Interface/Label.h"
+#include "../Interface/DrawingPaper.h"
+#include "../Shapes/Shape.h"
+#include "../Shapes/Composite/FlowChart.h"
+#include "../Paint/Zoom/ZoomVisitor.h"
+#include "../Paint/Zoom/Zoom.h"
 
-#include "DrawingPaper.h"
-#include "FlowChart.h"
-#include "ZoomVisitor.h"
-#include "Zoom.h"
+#include "../../Notepad/Data/Composite/Note.h"
+#include "../../Notepad/Data/CharacterMetrics.h"
 
 SizeController::SizeController(Label *label) {
 	this->label = label;

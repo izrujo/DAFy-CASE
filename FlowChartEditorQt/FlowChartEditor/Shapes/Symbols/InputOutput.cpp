@@ -6,12 +6,12 @@
 * 작성자 : 송윤창
 * 작성일자 : 2016년 2월 22일
 *******************************************************************/
+#pragma warning (disable : 4996)
 
 #include "InputOutput.h"
-#include "../GObject/Painter.h"
-#include "FlowChartVisitor.h"
+#include "../../Paint/FlowChartVisitor.h"
 
-#pragma warning (disable : 4996)
+#include "../../../Graphic Objects/Composite/Painter.h"
 
 InputOutput::InputOutput(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

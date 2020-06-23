@@ -1,7 +1,7 @@
 #ifndef _QTFONT_H
 #define _QTFONT_H
 
-#include "Font.h"
+#include "../Font.h"
 #include <qfont.h>
 
 class QtFont : public Font, public QFont {

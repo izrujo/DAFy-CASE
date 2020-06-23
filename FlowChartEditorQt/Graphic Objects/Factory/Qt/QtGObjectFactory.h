@@ -1,7 +1,7 @@
 #ifndef _QTGOBJECTFACTORY_H
 #define _QTGOBJECTFACTORY_H
 
-#include "GObjectFactory.h"
+#include "../GObjectFactory.h"
 
 class QtGObjectFactory : public GObjectFactory {
 public:

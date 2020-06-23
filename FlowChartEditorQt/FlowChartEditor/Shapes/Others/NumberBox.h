@@ -1,7 +1,7 @@
 #ifndef _NUMBERBOX_H
 #define _NUMBERBOX_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class NumberBox : public NShape {
 public:

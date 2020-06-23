@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QFrame>
 #include "ui_PreviewForm.h"
-#include "Shape.h"
+#include "../Shapes/Shape.h"
 
 class FlowChartEditor;
 class GObject;

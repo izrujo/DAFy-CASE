@@ -8,7 +8,7 @@
 #ifndef _NSHAPE_H
 #define _NSHAPE_H
 
-#include "String.h" //path 설정
+#include "../../Utilities/String.h" //path 설정
 
 #include <qpoint.h>
 #include <qcolor.h>

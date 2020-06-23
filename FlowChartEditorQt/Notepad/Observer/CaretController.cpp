@@ -1,11 +1,12 @@
 #include "CaretController.h"
-#include "Caret.h"
-#include "CharacterMetrics.h"
-#include "Notepad.h"
-#include "Glyph.h"
 #include "Observer.h"
-#include "../GObject/GObject.h"
-#include "../GObject/QtPainter.h"
+#include "../Interface/Notepad.h"
+#include "../Interface/Caret.h"
+#include "../Data/Glyph.h"
+#include "../Data/CharacterMetrics.h"
+
+#include "../../Graphic Objects/GObject.h"
+#include "../../Graphic Objects/Composite/Qt/QtPainter.h"
 
 #include <qpainter.h>
 #include <qmenubar.h>

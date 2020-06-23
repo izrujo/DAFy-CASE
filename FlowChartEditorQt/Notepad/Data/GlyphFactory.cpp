@@ -1,8 +1,8 @@
 #include "GlyphFactory.h"
 #include "Glyph.h"
-#include "Note.h"
-#include "Row.h"
-#include "Character.h"
+#include "Composite/Note.h"
+#include "Composite/Row.h"
+#include "Leaf/Character.h"
 
 GlyphFactory::GlyphFactory() {
 }

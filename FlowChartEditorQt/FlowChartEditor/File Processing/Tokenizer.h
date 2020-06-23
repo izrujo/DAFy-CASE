@@ -3,8 +3,8 @@
 #ifndef _TOKENIZER_H
 #define _TOKENIZER_H
 
-#include "../Utilities/Array.h"
-#include "String.h"
+#include "../../Utilities/Array.h"
+#include "../../Utilities/String.h"
 
 typedef signed long int Long;
 

@@ -2,7 +2,7 @@
 
 #include <QtWidgets/QFrame>
 #include "ui_Notepad.h"
-#include "Subject.h"
+#include "../Observer/Subject.h"
 #include <windows.h>
 
 class CaretController;

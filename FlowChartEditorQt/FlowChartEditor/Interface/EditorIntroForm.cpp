@@ -1,7 +1,7 @@
 #include "EditorIntroForm.h"
-#include "../GObject/GObject.h"
-#include "../GObject/QtPainter.h"
-#include "../GObject/QtGObjectFactory.h"
+#include "../../Graphic Objects/GObject.h"
+#include "../../Graphic Objects/Composite/Qt/QtPainter.h"
+#include "../../Graphic Objects/Factory/Qt/QtGObjectFactory.h"
 
 #include <qpainter.h>
 #include <qimage.h>

@@ -1,5 +1,5 @@
 #include "NumberBox.h"
-#include "FlowChartVisitor.h"
+#include "../../Paint/FlowChartVisitor.h"
 
 NumberBox::NumberBox(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

@@ -1,5 +1,5 @@
 #include "WindowPin.h"
-#include "FlowChartVisitor.h"
+#include "../../Paint/FlowChartVisitor.h"
 
 WindowPin::WindowPin(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

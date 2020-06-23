@@ -1,4 +1,4 @@
-#include "../GObject/Painter.h"
+#include "Painter.h"
 
 Painter::Painter(Long capacity)
 	: GObject(), objects(capacity) {

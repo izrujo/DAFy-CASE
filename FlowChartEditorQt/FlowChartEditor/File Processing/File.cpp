@@ -1,18 +1,19 @@
 // File.cpp
 
 #include "File.h"
-#include "DrawingPaper.h"
-#include "FlowChart.h"
-#include "Shape.h"
-#include "Creator.h"
 #include "Tokenizer.h"
-#include "Preparation.h"
-#include "VariableList.h"
-#include "Zoom.h"
-#include "../GObject/Painter.h"
-#include "RuleKeeper.h"
-#include "ContentsAnalyzer.h"
-#include "Registrar.h"
+#include "../Interface/DrawingPaper.h"
+#include "../Shapes/Composite/FlowChart.h"
+#include "../Shapes/Shape.h"
+#include "../Shapes/Creator.h"
+#include "../Shapes/Symbols/Preparation.h"
+#include "../Paint/Zoom/Zoom.h"
+#include "../Rule/VariableList.h"
+#include "../Rule/RuleKeeper.h"
+#include "../Rule/ContentsAnalyzer.h"
+#include "../History/Registrar.h"
+
+#include "../../Graphic Objects/Composite/Painter.h"
 
 #include <qfile.h>
 #include <qtextstream.h>

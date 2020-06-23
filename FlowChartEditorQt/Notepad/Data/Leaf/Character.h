@@ -1,7 +1,7 @@
 #ifndef _CHARACTER_H
 #define _CHARACTER_H
 
-#include "Glyph.h"
+#include "../Glyph.h"
 
 class Character : public Glyph {
 public:

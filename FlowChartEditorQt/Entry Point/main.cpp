@@ -1,5 +1,5 @@
-#include "FlowChartEditor.h"
-#include "FlowChart/EditorIntroForm.h"
+#include "../FlowChartEditor/Interface/FlowChartEditor.h"
+#include "../FlowChartEditor/Interface/EditorIntroForm.h"
 #include <QtWidgets/QApplication>
 #include <qthread.h>
 #include <qicon.h>

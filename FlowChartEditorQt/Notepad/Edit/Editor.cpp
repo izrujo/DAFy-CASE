@@ -1,10 +1,10 @@
 #include "Editor.h"
-#include "Notepad.h"
-#include "Glyph.h"
-#include "GlyphFactory.h"
-#include "Highlight.h"
 #include "Selector.h"
 #include "Scanner.h"
+#include "../Interface/Notepad.h"
+#include "../Data/Glyph.h"
+#include "../Data/GlyphFactory.h"
+#include "../Data/Composite/Highlight.h"
 
 #include <qclipboard.h>
 #include <qmimedata.h>

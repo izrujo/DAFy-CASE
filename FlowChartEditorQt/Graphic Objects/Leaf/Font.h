@@ -1,7 +1,7 @@
 #ifndef _FONT_H
 #define _FONT_H
 
-#include "GObject.h"
+#include "../GObject.h"
 
 class Font : public GObject {
 public:

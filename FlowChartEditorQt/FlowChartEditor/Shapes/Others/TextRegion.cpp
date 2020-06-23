@@ -1,7 +1,8 @@
 #include "TextRegion.h"
-#include "../GObject/Painter.h"
-#include "FlowChartVisitor.h"
-#include "../GObject/QtGObjectFactory.h"
+#include "../../Paint/FlowChartVisitor.h"
+#include "../../../Graphic Objects/Composite/Painter.h"
+#include "../../../Graphic Objects/Factory/Qt/QtGObjectFactory.h"
+
 
 TextRegion::TextRegion(float x, float y, float width, float height,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)

@@ -1,7 +1,7 @@
 #ifndef _BRUSH_H
 #define _BRUSH_H
 
-#include "GObject.h"
+#include "../GObject.h"
 
 class Brush : public GObject {
 public:

@@ -5,9 +5,9 @@
 * 작성일자 : 2015년 4월 13일
 *******************************************************************/
 #include "Template.h"
-#include "Terminal.h"
-#include "Decision.h"
-#include "FlowChartVisitor.h"
+#include "../Symbols/Terminal.h"
+#include "../Symbols/Decision.h"
+#include "../../Paint/FlowChartVisitor.h"
 
 /*
 Long CompareCoordinateForTemplate(void *one, void *other){

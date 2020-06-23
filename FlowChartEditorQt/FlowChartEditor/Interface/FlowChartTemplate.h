@@ -9,7 +9,7 @@
 #define _FLOWCHARTTEMPLATE_H
 
 #include <QtWidgets/QFrame>
-#include "Shape.h"
+#include "../Shapes/Shape.h"
 class GObject;
 
 typedef signed long int Long;

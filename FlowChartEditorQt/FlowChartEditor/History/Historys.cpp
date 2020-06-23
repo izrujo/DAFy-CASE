@@ -1,5 +1,5 @@
 #include "Historys.h"
-#include "Shape.h"
+#include "../Shapes/Shape.h"
 
 //History
 History::History(Long capacity)

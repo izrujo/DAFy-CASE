@@ -4,11 +4,12 @@
 * 작성자 : 송윤창
 * 작성일자 : 2015년 3월 31일
 *******************************************************************/
+#pragma warning (disable : 4996)
 
 #include "Terminal.h"
-#include "../GObject/Painter.h"
-#include "FlowChartVisitor.h"
-#pragma warning (disable : 4996)
+#include "../../Paint/FlowChartVisitor.h"
+
+#include "../../../Graphic Objects/Composite/Painter.h"
 
 Terminal::Terminal(float x, float y, float width, float height,
 	QColor backGroundColor, Qt::PenStyle borderLine, QColor borderColor, String contents)

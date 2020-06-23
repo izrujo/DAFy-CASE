@@ -8,7 +8,7 @@
 #ifndef _SYMBOL_H
 #define _SYMBOL_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class Symbol : public NShape {
 	public:		

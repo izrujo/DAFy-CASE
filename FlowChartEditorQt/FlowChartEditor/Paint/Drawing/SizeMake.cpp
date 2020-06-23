@@ -1,9 +1,9 @@
 // SizeMake.h
 #include "SizeMake.h"
-#include "DrawingPaper.h"
-#include "FlowChart.h"
-#include "Shape.h"
-#include "Symbol.h"
+#include "../../Interface/DrawingPaper.h"
+#include "../../Shapes/Shape.h"
+#include "../../Shapes/Composite/FlowChart.h"
+#include "../../Shapes/Symbols/Symbol.h"
 
 SizeMake::SizeMake() {
 }

@@ -1,7 +1,7 @@
 #ifndef _ZOOMVISITOR_H
 #define _ZOOMVISITOR_H
 
-#include "FlowChartVisitor.h"
+#include "../FlowChartVisitor.h"
 
 class Zoom;
 class CoordinateConverter;

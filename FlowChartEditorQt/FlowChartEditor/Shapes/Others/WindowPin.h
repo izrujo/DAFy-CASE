@@ -1,7 +1,7 @@
 #ifndef _WINDOWPIN_H
 #define _WINDOWPIN_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class WindowPin : public NShape {
 public:

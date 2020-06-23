@@ -10,9 +10,9 @@
 #define IDM_AE_INTERVALMAKE 1006
 
 #include <QtWidgets/QFrame>
-#include "../Utilities/Array.h"
-#include "Shape.h"
-#include "../Notepad/Subject.h"
+#include "../../Utilities/Array.h"
+#include "../Shapes/Shape.h"
+#include "../../Notepad/Observer/Subject.h"
 
 typedef unsigned long int DWORD;
 typedef signed long int Long;

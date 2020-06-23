@@ -8,7 +8,7 @@
 #ifndef _LINE_H
 #define _LINE_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class Line : public NShape {
 public:

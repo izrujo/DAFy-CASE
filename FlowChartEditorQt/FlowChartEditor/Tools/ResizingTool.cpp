@@ -1,24 +1,22 @@
 #include "ResizingTool.h"
-
-#include "DrawingPaper.h"
-#include "Shape.h"
-#include "Symbol.h"
-
-#include "Arrow.h"
-#include "LeftDown.h"
-#include "RightDown.h"
-#include "RightDownJoin.h"
-#include "Join.h"
-#include "RepeatTrue.h"
-#include "RepeatFalse.h"
-
 #include "SelectingTool.h"
+
+#include "../Interface/DrawingPaper.h"
+#include "../Interface/FlowChartEditor.h"
+#include "../Interface/Scroll.h"
+#include "../Observer/ScrollController.h"
+#include "../Shapes/Shape.h"
+#include "../Shapes/Symbols/Symbol.h"
+#include "../Shapes/Lines/Arrow.h"
+#include "../Shapes/Lines/LeftDown.h"
+#include "../Shapes/Lines/RightDown.h"
+#include "../Shapes/Lines/RightDownJoin.h"
+#include "../Shapes/Lines/Join.h"
+#include "../Shapes/Lines/RepeatTrue.h"
+#include "../Shapes/Lines/RepeatFalse.h"
+
 #include <stdio.h>
 
-#include "ScrollController.h"
-#include "Scroll.h"
-
-#include "../FlowChartEditor.h"
 #pragma warning (disable : 4996)
 
 ResizingTool* ResizingTool::instance = 0;

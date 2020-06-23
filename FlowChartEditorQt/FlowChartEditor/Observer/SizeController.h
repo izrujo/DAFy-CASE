@@ -1,7 +1,7 @@
 #ifndef _SIZECONTROLLER_H
 #define _SIZECONTROLLER_H
 
-#include "../Notepad/Observer.h"
+#include "../../Notepad/Observer/Observer.h"
 
 typedef signed long int Long;
 class Label;

@@ -1,18 +1,19 @@
 // SelectingTool.Cpp
 #include "SelectingTool.h"
 
-#include "DrawingPaper.h"
-#include "Shape.h"
-#include "../GObject/Painter.h"
-#include "Line.h"
-#include "Arrow.h"
-#include "Decision.h"
-#include "ScrollController.h"
-#include "Scroll.h"
-#include "ZoomVisitor.h"
-#include "Zoom.h"
-#include "CoordinateConverter.h"
-#include "../FlowChartEditor.h"
+#include "../Interface/DrawingPaper.h"
+#include "../Interface/FlowChartEditor.h"
+#include "../Interface/Scroll.h"
+#include "../Observer/ScrollController.h"
+#include "../Shapes/Shape.h"
+#include "../Shapes/Symbols/Decision.h"
+#include "../Shapes/Lines/Line.h"
+#include "../Shapes/Lines/Arrow.h"
+#include "../Paint/Zoom/Zoom.h"
+#include "../Paint/Zoom/ZoomVisitor.h"
+#include "../Paint/Coordinate/CoordinateConverter.h"
+
+#include "../../Graphic Objects/Composite/Painter.h"
 
 #include <windows.h>
 

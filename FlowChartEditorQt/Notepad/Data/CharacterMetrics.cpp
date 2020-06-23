@@ -1,8 +1,9 @@
 #include "CharacterMetrics.h"
-#include "Notepad.h"
 #include "Glyph.h"
-#include "Character.h"
-#include "../GObject/GObject.h"
+#include "Leaf/Character.h"
+#include "../Interface/Notepad.h"
+
+#include "../../Graphic Objects/GObject.h"
 
 #include <qfont.h>
 

@@ -1,6 +1,6 @@
 #include "KeyActionFactory.h"
 #include "KeyActions.h"
-#include "Notepad.h"
+#include "../Interface/Notepad.h"
 #include <windows.h>
 
 #include <qevent.h>

@@ -8,26 +8,24 @@
 
 
 #include "Shape.h"
-#include "../GObject/Painter.h"
 
-#include "InputOutput.h"
-#include "Preparation.h"
-#include "Terminal.h"
-#include "Process.h"
-#include "Decision.h"
-#include "ScrollController.h"
-#include "Scroll.h"
-#include "Arrow.h"
-#include "LeftDown.h"
-#include "RightDown.h"
-#include "Join.h"
-#include "RepeatTrue.h"
-#include "RepeatFalse.h"
-#include "RightDownJoin.h"
+#include "Symbols/InputOutput.h"
+#include "Symbols/Preparation.h"
+#include "Symbols/Terminal.h"
+#include "Symbols/Process.h"
+#include "Symbols/Decision.h"
+#include "Lines/Arrow.h"
+#include "Lines/LeftDown.h"
+#include "Lines/RightDown.h"
+#include "Lines/Join.h"
+#include "Lines/RepeatTrue.h"
+#include "Lines/RepeatFalse.h"
+#include "Lines/RightDownJoin.h"
+#include "../Observer/ScrollController.h"
+#include "../Interface/Scroll.h"
 
-#include "../GObject/QtGObjectFactory.h"
-
-//#include <qcursor.h>
+#include "../../Graphic Objects/Composite/Painter.h"
+#include "../../Graphic Objects/Factory/Qt/QtGObjectFactory.h"
 
 Attribute::Attribute() {
 	this->vertexIn = ' ';

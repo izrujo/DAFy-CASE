@@ -1,13 +1,13 @@
 //MoveMake.cpp
 
 #include "MoveMake.h"
-#include "DrawingPaper.h"
-#include "Shape.h"
-#include "RightDown.h"
-#include "LeftDown.h"
-#include "RightDownJoin.h"
-#include "Join.h"
-#include "RepeatFalse.h"
+#include "../../Interface/DrawingPaper.h"
+#include "../../Shapes/Shape.h"
+#include "../../Shapes/Lines/RightDown.h"
+#include "../../Shapes/Lines/LeftDown.h"
+#include "../../Shapes/Lines/RightDownJoin.h"
+#include "../../Shapes/Lines/Join.h"
+#include "../../Shapes/Lines/RepeatFalse.h"
 
 MoveMake::MoveMake(){
 }

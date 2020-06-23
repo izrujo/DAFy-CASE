@@ -1,7 +1,7 @@
 #ifndef _QTPAINTER_H
 #define _QTPAINTER_H
 
-#include "../GObject/Painter.h"
+#include "../Painter.h"
 
 class QPixmap;
 class QPainter;

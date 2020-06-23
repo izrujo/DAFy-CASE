@@ -1,6 +1,6 @@
 #include "QtPainter.h"
-#include "QtBrush.h"
-#include "QtGObjectFactory.h"
+#include "../../Leaf/Qt/QtBrush.h"
+#include "../../Factory/Qt/QtGObjectFactory.h"
 
 #include <qpainter.h>
 #include <qpixmap.h>

@@ -3,7 +3,7 @@
 
 #define SHAPECOUNT 12
 
-#include "Shape.h"
+#include "../Shapes/Shape.h"
 
 class Registrar {
 public:

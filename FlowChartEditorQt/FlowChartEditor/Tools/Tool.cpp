@@ -1,12 +1,12 @@
 #include "Tool.h"
 #include "SelectingTool.h"
-#include "IterationMake.h"
-#include "SelectionMake.h"
-#include "SequenceMake.h"
 #include "MovingTool.h"
-#include "MoveMake.h"
-#include "SizeMake.h"
-#include "IntervalMake.h"
+#include "../Paint/Drawing/IterationMake.h"
+#include "../Paint/Drawing/SelectionMake.h"
+#include "../Paint/Drawing/SequenceMake.h"
+#include "../Paint/Drawing/MoveMake.h"
+#include "../Paint/Drawing/SizeMake.h"
+#include "../Paint/Drawing/IntervalMake.h"
 
 Tool::Tool() {
 }

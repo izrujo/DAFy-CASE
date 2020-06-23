@@ -1,7 +1,7 @@
 #ifndef _HISTORYCONTROLLER_H
 #define _HISTORYCONTROLLER_H
 
-#include "../Notepad/Observer.h"
+#include "../../Notepad/Observer/Observer.h"
 
 class DrawingPaper;
 class HistoryBook;

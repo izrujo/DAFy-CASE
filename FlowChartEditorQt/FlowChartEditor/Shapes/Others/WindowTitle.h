@@ -1,7 +1,7 @@
 #ifndef _WINDOWTITLE_H
 #define _WINDOWTITLE_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class WindowTitle : public NShape {
 public:

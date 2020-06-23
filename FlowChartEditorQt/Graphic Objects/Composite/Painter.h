@@ -1,8 +1,8 @@
 #ifndef _PAINTER_H
 #define _PAINTER_H
 
-#include "GObject.h"
-#include "../Utilities/Array.h"
+#include "../GObject.h"
+#include "../../Utilities/Array.h"
 
 class Painter : public GObject {
 public:

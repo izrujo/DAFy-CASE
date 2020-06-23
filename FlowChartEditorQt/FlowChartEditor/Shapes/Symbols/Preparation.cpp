@@ -4,13 +4,12 @@
 * 작성자 : 송윤창
 * 작성일자 : 2015년 3월 30일
 *******************************************************************/
-
-#include "Preparation.h"
-#include "../GObject/Painter.h"
-#include "Preparation.h"
-#include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
+#include "Preparation.h"
+#include "../../Paint/FlowChartVisitor.h"
+
+#include "../../../Graphic Objects/Composite/Painter.h"
 
 Preparation::Preparation(float x, float y, float width, float height, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

@@ -1,9 +1,9 @@
 // IntervalMake.cpp
 
 #include "IntervalMake.h"
-#include "DrawingPaper.h"
-#include "Shape.h"
-#include "Symbol.h"
+#include "../../Interface/DrawingPaper.h"
+#include "../../Shapes/Shape.h"
+#include "../../Shapes/Symbols/Symbol.h"
 
 IntervalMake::IntervalMake(){
 }

@@ -1,13 +1,13 @@
 #include "SheetManager.h"
-#include "DrawingPaper.h"
 #include "SheetBinder.h"
 #include "Sheet.h"
-#include "WindowTitle.h"
-#include "HistoryController.h"
-#include "HistoryBook.h"
-#include "Registrar.h"
-#include "VariableList.h"
-#include "FlowChart.h"
+#include "../Interface/DrawingPaper.h"
+#include "../Observer/HistoryController.h"
+#include "../History/HistoryBook.h"
+#include "../History/Registrar.h"
+#include "../Rule/VariableList.h"
+#include "../Shapes/Composite/FlowChart.h"
+#include "../Shapes/Others/WindowTitle.h"
 
 SheetManager::SheetManager(DrawingPaper *canvas) {
 	this->canvas = canvas;

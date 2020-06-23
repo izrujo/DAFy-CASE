@@ -39,9 +39,6 @@
     <Filter Include="FlowChartEditor\File Processing">
       <UniqueIdentifier>{cccb5fb7-5281-44ba-931b-915e0d26c7c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FlowChartEditor\Form Files">
-      <UniqueIdentifier>{a39cb778-5296-4948-9880-6f6b92a7f9d8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="FlowChartEditor\Interface">
       <UniqueIdentifier>{9b5f74a8-7ea4-4531-84b9-c76bdd8f88c0}</UniqueIdentifier>
     </Filter>
@@ -57,642 +54,717 @@
     <Filter Include="FlowChartEditor\Tools">
       <UniqueIdentifier>{8c97ef29-a5b2-4031-8f8a-1fb746eb7984}</UniqueIdentifier>
     </Filter>
-    <Filter Include="FlowChartEditor\UnRedo">
+    <Filter Include="FlowChartEditor\Sheet">
+      <UniqueIdentifier>{74978d1e-87f6-4ba7-8c89-d54af8181b8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Rule">
+      <UniqueIdentifier>{0905a1da-8780-4089-aaf6-34399a2ad890}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Shapes">
+      <UniqueIdentifier>{1c919b52-dac4-4c55-80b9-1c52aaf8cdb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entry Point">
+      <UniqueIdentifier>{6adff1a6-68c3-4a30-8c79-7cd77de7def0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Shapes\Composite">
+      <UniqueIdentifier>{951213f6-dc10-4596-9b27-32f785a67e56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Shapes\Others">
+      <UniqueIdentifier>{e374be05-cda1-439c-98e1-185e056722ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Shapes\Lines">
+      <UniqueIdentifier>{a9b923e3-0ea6-4fb6-aabf-af5790468b0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Shapes\Symbols">
+      <UniqueIdentifier>{6a264233-7a05-439b-a4aa-eb33d8fc426a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Paint\Coordinate">
+      <UniqueIdentifier>{b1a39d33-3d91-4789-a94c-cafeeddcbbd1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Paint\Drawing">
+      <UniqueIdentifier>{f1c0cba4-e59a-4e05-83d9-539c6691f314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\Paint\Zoom">
+      <UniqueIdentifier>{1b7e5c99-15d8-40b5-897d-9c2d53acf830}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad\Edit">
+      <UniqueIdentifier>{cc74bd02-d858-4ef2-b776-2c1d855f5795}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad\Data">
+      <UniqueIdentifier>{bce40c9c-8a08-46d9-b48c-d794d489ede1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad\Interface">
+      <UniqueIdentifier>{1dd708e1-ab7f-4083-8971-114aab745121}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad\KeyActions">
+      <UniqueIdentifier>{3cba7e8d-5f58-4841-b4ea-69f8c625dad4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad\Observer">
+      <UniqueIdentifier>{e66c810b-3afb-4149-abbc-cc4eac8a317e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad\Data\Composite">
+      <UniqueIdentifier>{d1dfd7af-1429-4e58-a01e-20040381fdf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Notepad\Data\Leaf">
+      <UniqueIdentifier>{8352da1f-d2e5-408a-b197-3cec4226682e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FlowChartEditor\History">
       <UniqueIdentifier>{4be8963f-dedb-487e-93da-1fd72a89609c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic Objects\Composite">
+      <UniqueIdentifier>{96a5b316-4a89-46e8-8952-8d584667f9fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic Objects\Leaf">
+      <UniqueIdentifier>{52b1e974-5c74-405f-b662-fb366a8d2762}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic Objects\Factory">
+      <UniqueIdentifier>{65574cec-bfd7-4e1b-aad3-49550fdefb6e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic Objects\Composite\Qt">
+      <UniqueIdentifier>{e53b3415-5ecf-4e2d-b6bd-7ade23c52abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic Objects\Leaf\Qt">
+      <UniqueIdentifier>{08209045-13f4-4068-b884-a7687e36ed87}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphic Objects\Factory\Qt">
+      <UniqueIdentifier>{7697a39d-48b9-4a1f-b28b-aa578a9f27cd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>FlowChartEditor</Filter>
+    <ClCompile Include="Entry Point\main.cpp">
+      <Filter>Entry Point</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\A4Paper.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Arrow.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Creator.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Decision.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\FlowChart.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\InputOutput.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Join.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\LeftDown.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Line.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\NumberBox.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Preparation.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Process.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\RepeatFalse.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\RepeatTrue.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\RightDown.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\RightDownjoin.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Symbol.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Template.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Terminal.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\TextRegion.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\VariableList.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Block.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Caret.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\CaretController.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Character.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\CharacterMetrics.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Composite.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Editor.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Glyph.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\GlyphFactory.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Highlight.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\KeyActionFactory.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\KeyActions.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Note.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Notepad.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Observer.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Scanner.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Selector.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Subject.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="Notepad\Row.cpp">
-      <Filter>Notepad</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\Brush.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\Font.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\GObject.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\GObjectFactory.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\Painter.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\Pen.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\QtBrush.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\QtFont.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\QtGObjectFactory.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\QtPainter.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="GObject\QtPen.cpp">
-      <Filter>Graphic Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Shape.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\WindowTitle.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\WindowPin.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\WindowClose.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\RuleKeeper.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\ContentsAnalyzer.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\Sheet.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\SheetBinder.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\SheetManager.cpp">
-      <Filter>FlowChartEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\String.cpp">
-      <Filter>Utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="FlowChart\FlowChartCommandFactory.cpp">
+    <ClCompile Include="FlowChartEditor\Commands\FlowChartCommandFactory.cpp">
       <Filter>FlowChartEditor\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\FlowChartCommands.cpp">
+    <ClCompile Include="FlowChartEditor\Commands\FlowChartCommands.cpp">
       <Filter>FlowChartEditor\Commands</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Clipboard.cpp">
+    <ClCompile Include="FlowChartEditor\Edit\Clipboard.cpp">
       <Filter>FlowChartEditor\Edit</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\File.cpp">
+    <ClCompile Include="FlowChartEditor\File Processing\File.cpp">
       <Filter>FlowChartEditor\File Processing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Tokenizer.cpp">
+    <ClCompile Include="FlowChartEditor\File Processing\Tokenizer.cpp">
       <Filter>FlowChartEditor\File Processing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\DrawingPaper.cpp">
+    <ClCompile Include="FlowChartEditor\Interface\DrawingPaper.cpp">
       <Filter>FlowChartEditor\Interface</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\EditorIntroForm.cpp">
+    <ClCompile Include="FlowChartEditor\Interface\EditorIntroForm.cpp">
       <Filter>FlowChartEditor\Interface</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChartEditor.cpp">
+    <ClCompile Include="FlowChartEditor\Interface\FlowChartEditor.cpp">
       <Filter>FlowChartEditor\Interface</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\FlowChartTemplate.cpp">
+    <ClCompile Include="FlowChartEditor\Interface\FlowChartTemplate.cpp">
       <Filter>FlowChartEditor\Interface</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Label.cpp">
+    <ClCompile Include="FlowChartEditor\Interface\Label.cpp">
       <Filter>FlowChartEditor\Interface</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Scroll.cpp">
+    <ClCompile Include="FlowChartEditor\Interface\PreviewForm.cpp">
       <Filter>FlowChartEditor\Interface</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\PreviewForm.cpp">
+    <ClCompile Include="FlowChartEditor\Interface\Scroll.cpp">
       <Filter>FlowChartEditor\Interface</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\FlowChartKeyActionFactory.cpp">
+    <ClCompile Include="FlowChartEditor\KeyActions\FlowChartKeyActionFactory.cpp">
       <Filter>FlowChartEditor\KeyActions</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\FlowChartKeyActions.cpp">
+    <ClCompile Include="FlowChartEditor\KeyActions\FlowChartKeyActions.cpp">
       <Filter>FlowChartEditor\KeyActions</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\SizeController.cpp">
+    <ClCompile Include="FlowChartEditor\Observer\HistoryController.cpp">
       <Filter>FlowChartEditor\Observer</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\ScrollController.cpp">
+    <ClCompile Include="FlowChartEditor\Observer\ScrollController.cpp">
       <Filter>FlowChartEditor\Observer</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\CoordinateConverter.cpp">
+    <ClCompile Include="FlowChartEditor\Observer\SizeController.cpp">
+      <Filter>FlowChartEditor\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Paint\FlowChartVisitor.cpp">
       <Filter>FlowChartEditor\Paint</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\DrawVisitor.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Coordinate\CoordinateConverter.cpp">
+      <Filter>FlowChartEditor\Paint\Coordinate</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\FlowChartVisitor.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Drawing\DrawVisitor.cpp">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\IntervalMake.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Drawing\IntervalMake.cpp">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\IterationMake.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Drawing\IterationMake.cpp">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\MoveMake.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Drawing\MoveMake.cpp">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\ZoomVisitor.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Drawing\SelectionMake.cpp">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Zoom.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Drawing\SequenceMake.cpp">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\SizeMake.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Drawing\SizeMake.cpp">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\SequenceMake.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Zoom\Zoom.cpp">
+      <Filter>FlowChartEditor\Paint\Zoom</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\SelectionMake.cpp">
-      <Filter>FlowChartEditor\Paint</Filter>
+    <ClCompile Include="FlowChartEditor\Paint\Zoom\ZoomVisitor.cpp">
+      <Filter>FlowChartEditor\Paint\Zoom</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\DrawingTool.cpp">
+    <ClCompile Include="FlowChartEditor\Rule\ContentsAnalyzer.cpp">
+      <Filter>FlowChartEditor\Rule</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Rule\RuleKeeper.cpp">
+      <Filter>FlowChartEditor\Rule</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Rule\VariableList.cpp">
+      <Filter>FlowChartEditor\Rule</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Creator.cpp">
+      <Filter>FlowChartEditor\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Shape.cpp">
+      <Filter>FlowChartEditor\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Composite\Block.cpp">
+      <Filter>FlowChartEditor\Shapes\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Composite\FlowChart.cpp">
+      <Filter>FlowChartEditor\Shapes\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Composite\Template.cpp">
+      <Filter>FlowChartEditor\Shapes\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\Arrow.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\Join.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\LeftDown.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\Line.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\RepeatFalse.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\RepeatTrue.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\RightDown.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Lines\RightDownjoin.cpp">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Others\A4Paper.cpp">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Others\NumberBox.cpp">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Others\TextRegion.cpp">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Others\WindowClose.cpp">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Others\WindowPin.cpp">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Others\WindowTitle.cpp">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Symbols\Preparation.cpp">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Symbols\Decision.cpp">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Symbols\InputOutput.cpp">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Symbols\Process.cpp">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Symbols\Symbol.cpp">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Shapes\Symbols\Terminal.cpp">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Sheet\Sheet.cpp">
+      <Filter>FlowChartEditor\Sheet</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Sheet\SheetBinder.cpp">
+      <Filter>FlowChartEditor\Sheet</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Sheet\SheetManager.cpp">
+      <Filter>FlowChartEditor\Sheet</Filter>
+    </ClCompile>
+    <ClCompile Include="FlowChartEditor\Tools\DrawingTool.cpp">
       <Filter>FlowChartEditor\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\MovingTool.cpp">
+    <ClCompile Include="FlowChartEditor\Tools\MovingTool.cpp">
       <Filter>FlowChartEditor\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\ResizingTool.cpp">
+    <ClCompile Include="FlowChartEditor\Tools\ResizingTool.cpp">
       <Filter>FlowChartEditor\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\SelectingTool.cpp">
+    <ClCompile Include="FlowChartEditor\Tools\SelectingTool.cpp">
       <Filter>FlowChartEditor\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\ToolFactory.cpp">
+    <ClCompile Include="FlowChartEditor\Tools\Tool.cpp">
       <Filter>FlowChartEditor\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Tool.cpp">
+    <ClCompile Include="FlowChartEditor\Tools\ToolFactory.cpp">
       <Filter>FlowChartEditor\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\HistoryBook.cpp">
-      <Filter>FlowChartEditor\UnRedo</Filter>
+    <ClCompile Include="FlowChartEditor\History\HistoryBook.cpp">
+      <Filter>FlowChartEditor\History</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\HistoryController.cpp">
-      <Filter>FlowChartEditor\UnRedo</Filter>
+    <ClCompile Include="FlowChartEditor\History\Historys.cpp">
+      <Filter>FlowChartEditor\History</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Historys.cpp">
-      <Filter>FlowChartEditor\UnRedo</Filter>
+    <ClCompile Include="FlowChartEditor\History\Registrar.cpp">
+      <Filter>FlowChartEditor\History</Filter>
     </ClCompile>
-    <ClCompile Include="FlowChart\Registrar.cpp">
-      <Filter>FlowChartEditor\UnRedo</Filter>
+    <ClCompile Include="Graphic Objects\GObject.cpp">
+      <Filter>Graphic Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Composite\Painter.cpp">
+      <Filter>Graphic Objects\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Composite\Qt\QtPainter.cpp">
+      <Filter>Graphic Objects\Composite\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Leaf\Brush.cpp">
+      <Filter>Graphic Objects\Leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Leaf\Font.cpp">
+      <Filter>Graphic Objects\Leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Leaf\Pen.cpp">
+      <Filter>Graphic Objects\Leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Leaf\Qt\QtBrush.cpp">
+      <Filter>Graphic Objects\Leaf\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Leaf\Qt\QtFont.cpp">
+      <Filter>Graphic Objects\Leaf\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Leaf\Qt\QtPen.cpp">
+      <Filter>Graphic Objects\Leaf\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Factory\GObjectFactory.cpp">
+      <Filter>Graphic Objects\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphic Objects\Factory\Qt\QtGObjectFactory.cpp">
+      <Filter>Graphic Objects\Factory\Qt</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\CharacterMetrics.cpp">
+      <Filter>Notepad\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\Glyph.cpp">
+      <Filter>Notepad\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\GlyphFactory.cpp">
+      <Filter>Notepad\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\Composite\Composite.cpp">
+      <Filter>Notepad\Data\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\Composite\Highlight.cpp">
+      <Filter>Notepad\Data\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\Composite\Note.cpp">
+      <Filter>Notepad\Data\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\Composite\Row.cpp">
+      <Filter>Notepad\Data\Composite</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Data\Leaf\Character.cpp">
+      <Filter>Notepad\Data\Leaf</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Edit\Editor.cpp">
+      <Filter>Notepad\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Edit\Scanner.cpp">
+      <Filter>Notepad\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Edit\Selector.cpp">
+      <Filter>Notepad\Edit</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Interface\Caret.cpp">
+      <Filter>Notepad\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Interface\Notepad.cpp">
+      <Filter>Notepad\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\KeyAction\KeyActionFactory.cpp">
+      <Filter>Notepad\KeyActions</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\KeyAction\KeyActions.cpp">
+      <Filter>Notepad\KeyActions</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Observer\CaretController.cpp">
+      <Filter>Notepad\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Observer\Observer.cpp">
+      <Filter>Notepad\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Notepad\Observer\Subject.cpp">
+      <Filter>Notepad\Observer</Filter>
+    </ClCompile>
+    <ClCompile Include="Utilities\String.cpp">
+      <Filter>Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="FlowChartEditor.qrc">
+    <QtRcc Include="Resource Files\FlowChartEditor.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+    <QtRcc Include="Resource Files\Notepad.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FlowChart\A4Paper.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Commands\FlowChartCommandFactory.h">
+      <Filter>FlowChartEditor\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Arrow.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Commands\FlowChartCommands.h">
+      <Filter>FlowChartEditor\Commands</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Creator.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Edit\Clipboard.h">
+      <Filter>FlowChartEditor\Edit</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Decision.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\File Processing\File.h">
+      <Filter>FlowChartEditor\File Processing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\FlowChart.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\File Processing\Tokenizer.h">
+      <Filter>FlowChartEditor\File Processing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\InputOutput.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Interface\Label.h">
+      <Filter>FlowChartEditor\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Join.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\KeyActions\FlowChartKeyActionFactory.h">
+      <Filter>FlowChartEditor\KeyActions</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\LeftDown.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\KeyActions\FlowChartKeyActions.h">
+      <Filter>FlowChartEditor\KeyActions</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Line.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Observer\HistoryController.h">
+      <Filter>FlowChartEditor\Observer</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\NumberBox.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Observer\ScrollController.h">
+      <Filter>FlowChartEditor\Observer</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Preparation.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Observer\SizeController.h">
+      <Filter>FlowChartEditor\Observer</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Process.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\FlowChartVisitor.h">
+      <Filter>FlowChartEditor\Paint</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\RepeatFalse.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Coordinate\CoordinateConverter.h">
+      <Filter>FlowChartEditor\Paint\Coordinate</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\RepeatTrue.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Drawing\DrawVisitor.h">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\RightDown.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Drawing\IntervalMake.h">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\RightDownJoin.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Drawing\IterationMake.h">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Symbol.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Drawing\MoveMake.h">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Template.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Drawing\SelectionMake.h">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Terminal.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Drawing\SequenceMake.h">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\TextRegion.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Drawing\SizeMake.h">
+      <Filter>FlowChartEditor\Paint\Drawing</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\VariableList.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Zoom\Zoom.h">
+      <Filter>FlowChartEditor\Paint\Zoom</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Block.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="FlowChartEditor\Paint\Zoom\ZoomVisitor.h">
+      <Filter>FlowChartEditor\Paint\Zoom</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\CaretController.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Rule\ContentsAnalyzer.h">
+      <Filter>FlowChartEditor\Rule</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Character.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Rule\RuleKeeper.h">
+      <Filter>FlowChartEditor\Rule</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\CharacterMetrics.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Rule\VariableList.h">
+      <Filter>FlowChartEditor\Rule</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Composite.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Creator.h">
+      <Filter>FlowChartEditor\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Editor.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Shape.h">
+      <Filter>FlowChartEditor\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Glyph.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Composite\Block.h">
+      <Filter>FlowChartEditor\Shapes\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\GlyphFactory.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Composite\FlowChart.h">
+      <Filter>FlowChartEditor\Shapes\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Highlight.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Composite\Template.h">
+      <Filter>FlowChartEditor\Shapes\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\KeyActionFactory.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\Arrow.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\KeyActions.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\Join.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Note.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\LeftDown.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Observer.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\Line.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Scanner.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\RepeatFalse.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Selector.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\RepeatTrue.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Subject.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\RightDown.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="Notepad\Row.h">
-      <Filter>Notepad</Filter>
+    <ClInclude Include="FlowChartEditor\Shapes\Lines\RightDownJoin.h">
+      <Filter>FlowChartEditor\Shapes\Lines</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\Brush.h">
+    <ClInclude Include="FlowChartEditor\Shapes\Others\A4Paper.h">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Others\NumberBox.h">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Others\TextRegion.h">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Others\WindowClose.h">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Others\WindowPin.h">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Others\WindowTitle.h">
+      <Filter>FlowChartEditor\Shapes\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Symbols\Decision.h">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Symbols\InputOutput.h">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Symbols\Preparation.h">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Symbols\Process.h">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Symbols\Symbol.h">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Shapes\Symbols\Terminal.h">
+      <Filter>FlowChartEditor\Shapes\Symbols</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Sheet\Sheet.h">
+      <Filter>FlowChartEditor\Sheet</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Sheet\SheetBinder.h">
+      <Filter>FlowChartEditor\Sheet</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Sheet\SheetManager.h">
+      <Filter>FlowChartEditor\Sheet</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Tools\DrawingTool.h">
+      <Filter>FlowChartEditor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Tools\MovingTool.h">
+      <Filter>FlowChartEditor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Tools\ResizingTool.h">
+      <Filter>FlowChartEditor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Tools\SelectingTool.h">
+      <Filter>FlowChartEditor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Tools\Tool.h">
+      <Filter>FlowChartEditor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\Tools\ToolFactory.h">
+      <Filter>FlowChartEditor\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\History\HistoryBook.h">
+      <Filter>FlowChartEditor\History</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\History\Historys.h">
+      <Filter>FlowChartEditor\History</Filter>
+    </ClInclude>
+    <ClInclude Include="FlowChartEditor\History\Registrar.h">
+      <Filter>FlowChartEditor\History</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphic Objects\GObject.h">
       <Filter>Graphic Objects</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\Font.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Composite\Painter.h">
+      <Filter>Graphic Objects\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\GObject.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Composite\Qt\QtPainter.h">
+      <Filter>Graphic Objects\Composite\Qt</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\GObjectFactory.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Leaf\Brush.h">
+      <Filter>Graphic Objects\Leaf</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\Painter.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Leaf\Font.h">
+      <Filter>Graphic Objects\Leaf</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\Pen.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Leaf\Pen.h">
+      <Filter>Graphic Objects\Leaf</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\QtBrush.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Leaf\Qt\QtBrush.h">
+      <Filter>Graphic Objects\Leaf\Qt</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\QtFont.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Leaf\Qt\QtFont.h">
+      <Filter>Graphic Objects\Leaf\Qt</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\QtGObjectFactory.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Leaf\Qt\QtPen.h">
+      <Filter>Graphic Objects\Leaf\Qt</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\QtPainter.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Factory\GObjectFactory.h">
+      <Filter>Graphic Objects\Factory</Filter>
     </ClInclude>
-    <ClInclude Include="GObject\QtPen.h">
-      <Filter>Graphic Objects</Filter>
+    <ClInclude Include="Graphic Objects\Factory\Qt\QtGObjectFactory.h">
+      <Filter>Graphic Objects\Factory\Qt</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Shape.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\Data\CharacterMetrics.h">
+      <Filter>Notepad\Data</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\WindowPin.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\Data\Glyph.h">
+      <Filter>Notepad\Data</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\WindowTitle.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\Data\GlyphFactory.h">
+      <Filter>Notepad\Data</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\WindowClose.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\Data\Composite\Composite.h">
+      <Filter>Notepad\Data\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="x64\Debug\uic\ui_FlowChartEditor.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="Notepad\Data\Composite\Highlight.h">
+      <Filter>Notepad\Data\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="x64\Debug\uic\Notepad\ui_Notepad.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="Notepad\Data\Composite\Note.h">
+      <Filter>Notepad\Data\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="x64\Debug\uic\ui_PreviewForm.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="Notepad\Data\Composite\Row.h">
+      <Filter>Notepad\Data\Composite</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\RuleKeeper.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\Data\Leaf\Character.h">
+      <Filter>Notepad\Data\Leaf</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\ContentsAnalyzer.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\Edit\Editor.h">
+      <Filter>Notepad\Edit</Filter>
     </ClInclude>
-    <ClInclude Include="x64\Debug\uic\ui_EditorIntroForm.h">
-      <Filter>Generated Files</Filter>
+    <ClInclude Include="Notepad\Edit\Scanner.h">
+      <Filter>Notepad\Edit</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\SheetManager.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\Edit\Selector.h">
+      <Filter>Notepad\Edit</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Sheet.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\KeyAction\KeyActionFactory.h">
+      <Filter>Notepad\KeyActions</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\SheetBinder.h">
-      <Filter>FlowChartEditor</Filter>
+    <ClInclude Include="Notepad\KeyAction\KeyActions.h">
+      <Filter>Notepad\KeyActions</Filter>
+    </ClInclude>
+    <ClInclude Include="Notepad\Observer\CaretController.h">
+      <Filter>Notepad\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Notepad\Observer\Observer.h">
+      <Filter>Notepad\Observer</Filter>
+    </ClInclude>
+    <ClInclude Include="Notepad\Observer\Subject.h">
+      <Filter>Notepad\Observer</Filter>
     </ClInclude>
     <ClInclude Include="Utilities\Array.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Stack.h">
+    <ClInclude Include="Utilities\Stack.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\String.h">
+    <ClInclude Include="Utilities\String.h">
       <Filter>Utilities</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\FlowChartCommandFactory.h">
-      <Filter>FlowChartEditor\Commands</Filter>
+    <ClInclude Include="x64\Debug\uic\Form Files\ui_Notepad.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\FlowChartCommands.h">
-      <Filter>FlowChartEditor\Commands</Filter>
+    <ClInclude Include="x64\Debug\uic\Form Files\ui_PreviewForm.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\Clipboard.h">
-      <Filter>FlowChartEditor\Edit</Filter>
+    <ClInclude Include="x64\Debug\uic\Form Files\ui_EditorIntroForm.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="FlowChart\File.h">
-      <Filter>FlowChartEditor\File Processing</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Tokenizer.h">
-      <Filter>FlowChartEditor\File Processing</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Label.h">
-      <Filter>FlowChartEditor\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\FlowChartKeyActionFactory.h">
-      <Filter>FlowChartEditor\KeyActions</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\FlowChartKeyActions.h">
-      <Filter>FlowChartEditor\KeyActions</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\SizeController.h">
-      <Filter>FlowChartEditor\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\ScrollController.h">
-      <Filter>FlowChartEditor\Observer</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\CoordinateConverter.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\DrawVisitor.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\FlowChartVisitor.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\IntervalMake.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\IterationMake.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\MoveMake.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\ZoomVisitor.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Zoom.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\SizeMake.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\SequenceMake.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\SelectionMake.h">
-      <Filter>FlowChartEditor\Paint</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\DrawingTool.h">
-      <Filter>FlowChartEditor\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\MovingTool.h">
-      <Filter>FlowChartEditor\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\ResizingTool.h">
-      <Filter>FlowChartEditor\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\SelectingTool.h">
-      <Filter>FlowChartEditor\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\ToolFactory.h">
-      <Filter>FlowChartEditor\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Tool.h">
-      <Filter>FlowChartEditor\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\HistoryBook.h">
-      <Filter>FlowChartEditor\UnRedo</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\HistoryController.h">
-      <Filter>FlowChartEditor\UnRedo</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Historys.h">
-      <Filter>FlowChartEditor\UnRedo</Filter>
-    </ClInclude>
-    <ClInclude Include="FlowChart\Registrar.h">
-      <Filter>FlowChartEditor\UnRedo</Filter>
+    <ClInclude Include="x64\Debug\uic\Form Files\ui_FlowChartEditor.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="Notepad\Caret.h">
-      <Filter>Notepad</Filter>
-    </QtMoc>
-    <QtMoc Include="Notepad\Notepad.h">
-      <Filter>Notepad</Filter>
-    </QtMoc>
-    <QtMoc Include="FlowChart\DrawingPaper.h">
+    <QtMoc Include="FlowChartEditor\Interface\DrawingPaper.h">
       <Filter>FlowChartEditor\Interface</Filter>
     </QtMoc>
-    <QtMoc Include="FlowChart\EditorIntroForm.h">
+    <QtMoc Include="FlowChartEditor\Interface\EditorIntroForm.h">
       <Filter>FlowChartEditor\Interface</Filter>
     </QtMoc>
-    <QtMoc Include="FlowChartEditor.h">
+    <QtMoc Include="FlowChartEditor\Interface\FlowChartEditor.h">
       <Filter>FlowChartEditor\Interface</Filter>
     </QtMoc>
-    <QtMoc Include="FlowChart\FlowChartTemplate.h">
+    <QtMoc Include="FlowChartEditor\Interface\FlowChartTemplate.h">
       <Filter>FlowChartEditor\Interface</Filter>
     </QtMoc>
-    <QtMoc Include="FlowChart\Scroll.h">
+    <QtMoc Include="FlowChartEditor\Interface\PreviewForm.h">
       <Filter>FlowChartEditor\Interface</Filter>
     </QtMoc>
-    <QtMoc Include="FlowChart\PreviewForm.h">
+    <QtMoc Include="FlowChartEditor\Interface\Scroll.h">
       <Filter>FlowChartEditor\Interface</Filter>
+    </QtMoc>
+    <QtMoc Include="Notepad\Interface\Caret.h">
+      <Filter>Notepad\Interface</Filter>
+    </QtMoc>
+    <QtMoc Include="Notepad\Interface\Notepad.h">
+      <Filter>Notepad\Interface</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="Notepad\Notepad.ui">
+    <QtUic Include="Form Files\EditorIntroForm.ui">
       <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="EditorIntroForm.ui">
-      <Filter>FlowChartEditor\Form Files</Filter>
+    <QtUic Include="Form Files\FlowChartEditor.ui">
+      <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="FlowChartEditor.ui">
-      <Filter>FlowChartEditor\Form Files</Filter>
+    <QtUic Include="Form Files\Notepad.ui">
+      <Filter>Form Files</Filter>
     </QtUic>
-    <QtUic Include="PreviewForm.ui">
-      <Filter>FlowChartEditor\Form Files</Filter>
+    <QtUic Include="Form Files\PreviewForm.ui">
+      <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
 </Project>

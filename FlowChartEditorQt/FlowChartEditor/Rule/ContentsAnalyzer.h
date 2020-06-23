@@ -1,8 +1,8 @@
 #ifndef _CONTENTSANALYZER_H
 #define _CONTENTSANALYZER_H
 
-#include "../Utilities/Array.h"
-#include "String.h"
+#include "../../Utilities/Array.h"
+#include "../../Utilities/String.h"
 
 class ContentsAnalyzer {
 public:

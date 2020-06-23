@@ -4,17 +4,16 @@
 * 작성자 : 송윤창
 * 작성일자 : 2015년 3월 31일
 *******************************************************************/
-
-#include "Join.h"
-#include "../GObject/Painter.h"
-#include "Join.h"
-#include "FlowChartVisitor.h"
 #pragma warning (disable : 4996)
 
-#include "ScrollController.h"
-#include "Scroll.h"
+#include "Join.h"
+#include "../../Paint/FlowChartVisitor.h"
 
-#include "../GObject/QtGObjectFactory.h"
+#include "../../Interface/Scroll.h"
+#include "../../Observer/ScrollController.h"
+
+#include "../../../Graphic Objects/Composite/Painter.h"
+#include "../../../Graphic Objects/Factory/Qt/QtGObjectFactory.h"
 
 Join::Join(float x, float y, float width, float height, float height2, QColor backGroundColor,
 	Qt::PenStyle borderLine, QColor borderColor, String contents)

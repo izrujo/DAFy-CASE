@@ -3,7 +3,7 @@
 #ifndef _CLIPBOARD_H
 #define _CLIPBOARD_H
 
-#include "FlowChart.h"
+#include "../Shapes/Composite/FlowChart.h"
 class DrawingPaper;
 
 typedef signed long int Long;

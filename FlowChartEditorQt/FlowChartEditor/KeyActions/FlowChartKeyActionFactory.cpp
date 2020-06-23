@@ -1,10 +1,9 @@
 #include "FlowChartKeyActionFactory.h"
 #include "FlowChartKeyActions.h"
-#include "DrawingPaper.h"
-#include "../FlowChartEditor.h"
+#include "../Interface/DrawingPaper.h"
+#include "../Interface/FlowChartEditor.h"
 
 #include <windows.h>
-
 #include <qevent.h>
 
 FlowChartKeyActionFactory::FlowChartKeyActionFactory(FlowChartEditor *editor) {

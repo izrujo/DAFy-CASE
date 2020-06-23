@@ -1,7 +1,7 @@
 #ifndef _PEN_H
 #define _PEN_H
 
-#include "GObject.h"
+#include "../GObject.h"
 
 class Pen : public GObject {
 public:

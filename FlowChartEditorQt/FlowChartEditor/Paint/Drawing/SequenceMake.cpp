@@ -1,19 +1,19 @@
 //SequenceMake.cpp
 
 #include "SequenceMake.h"
-#include "DrawingPaper.h"
-#include "FlowChart.h"
-#include "Shape.h"
-#include "Symbol.h"
-#include "Decision.h"
-#include "Arrow.h"
-#include "LeftDown.h"
-#include "RightDown.h"
-#include "Join.h"
-#include "RightDownJoin.h"
-#include "RepeatTrue.h"
-#include "RepeatFalse.h"
-#include "Registrar.h"
+#include "../../Interface/DrawingPaper.h"
+#include "../../Shapes/Shape.h"
+#include "../../Shapes/Composite/FlowChart.h"
+#include "../../Shapes/Symbols/Symbol.h"
+#include "../../Shapes/Symbols/Decision.h"
+#include "../../Shapes/Lines/Arrow.h"
+#include "../../Shapes/Lines/LeftDown.h"
+#include "../../Shapes/Lines/RightDown.h"
+#include "../../Shapes/Lines/Join.h"
+#include "../../Shapes/Lines/RightDownJoin.h"
+#include "../../Shapes/Lines/RepeatTrue.h"
+#include "../../Shapes/Lines/RepeatFalse.h"
+#include "../../History/Registrar.h"
 
 SequenceMake::SequenceMake() {
 }

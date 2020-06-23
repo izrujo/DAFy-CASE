@@ -1,14 +1,14 @@
 #include "MovingTool.h"
-
-#include "DrawingPaper.h"
-#include "Shape.h"
 #include "SelectingTool.h"
-#include "ScrollController.h"
-#include "Scroll.h"
-#include "Zoom.h"
-#include "ZoomVisitor.h"
-#include "CoordinateConverter.h"
-#include "../FlowChartEditor.h"
+
+#include "../Interface/DrawingPaper.h"
+#include "../Interface/FlowChartEditor.h"
+#include "../Interface/Scroll.h"
+#include "../Observer/ScrollController.h"
+#include "../Shapes/Shape.h"
+#include "../Paint/Zoom/Zoom.h"
+#include "../Paint/Zoom/ZoomVisitor.h"
+#include "../Paint/Coordinate/CoordinateConverter.h"
 
 MovingTool* MovingTool::instance = 0;
 

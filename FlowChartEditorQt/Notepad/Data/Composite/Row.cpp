@@ -1,6 +1,6 @@
 #include "Row.h"
-#include "Glyph.h"
-#include "Character.h"
+#include "../Glyph.h"
+#include "../Leaf/Character.h"
 
 Row::Row(Long capacity)
 	: Composite(capacity) {

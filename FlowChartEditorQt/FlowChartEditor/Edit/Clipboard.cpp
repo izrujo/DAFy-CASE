@@ -2,12 +2,12 @@
 
 #include "Clipboard.h"
 
-#include "DrawingPaper.h"
-#include "FlowChart.h"
-#include "Registrar.h"
-#include "ContentsAnalyzer.h"
-#include "RuleKeeper.h"
-#include "Preparation.h"
+#include "../Interface/DrawingPaper.h"
+#include "../Shapes/Composite/FlowChart.h"
+#include "../History/Registrar.h"
+#include "../Rule/ContentsAnalyzer.h"
+#include "../Rule/RuleKeeper.h"
+#include "../Shapes/Symbols/Preparation.h"
 
 Clipboard::Clipboard() {
 	this->buffer = new FlowChart;

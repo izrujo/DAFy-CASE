@@ -4,18 +4,16 @@
 #include "ResizingTool.h"
 #include "SelectingTool.h"
 
-#include "Shape.h"
-#include "FlowChart.h"
-
-#include "DrawingPaper.h"
-
-#include "../FlowChartEditor.h"
-#include "FlowChartTemplate.h"
-#include "ScrollController.h"
-#include "Scroll.h"
-#include "Zoom.h"
-#include "ZoomVisitor.h"
-#include "CoordinateConverter.h"
+#include "../Interface/DrawingPaper.h"
+#include "../Interface/FlowChartEditor.h"
+#include "../Interface/FlowChartTemplate.h"
+#include "../Interface/Scroll.h"
+#include "../Observer/ScrollController.h"
+#include "../Shapes/Shape.h"
+#include "../Shapes/Composite/FlowChart.h"
+#include "../Paint/Zoom/Zoom.h"
+#include "../Paint/Zoom/ZoomVisitor.h"
+#include "../Paint/Coordinate/CoordinateConverter.h"
 
 #include <Windows.h>
 

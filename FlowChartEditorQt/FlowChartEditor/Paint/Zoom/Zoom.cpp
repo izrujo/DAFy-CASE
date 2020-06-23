@@ -1,16 +1,18 @@
 #include "Zoom.h"
-#include "FlowChart.h"
-#include "DrawingPaper.h"
-#include "RightDownJoin.h"
-#include "RepeatFalse.h"
-#include "RepeatTrue.h"
-#include "Join.h"
-#include "LeftDown.h"
-#include "RightDown.h"
+#include "../../Interface/DrawingPaper.h"
+#include "../../Interface/Scroll.h"
+#include "../../Shapes/Composite/FlowChart.h"
+#include "../../Shapes/Lines/RightDownJoin.h"
+#include "../../Shapes/Lines/RepeatFalse.h"
+#include "../../Shapes/Lines/RepeatTrue.h"
+#include "../../Shapes/Lines/Join.h"
+#include "../../Shapes/Lines/LeftDown.h"
+#include "../../Shapes/Lines/RightDown.h"
+#include "../../Observer/ScrollController.h"
+
+#include "../../../Graphic Objects/Composite/Painter.h"
+
 #include <cmath>
-#include "../GObject/Painter.h"
-#include "ScrollController.h"
-#include "Scroll.h"
 
 Zoom::Zoom(Long rate) {
 	this->rate = rate;

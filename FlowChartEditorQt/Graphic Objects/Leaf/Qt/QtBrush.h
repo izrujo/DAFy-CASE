@@ -1,7 +1,7 @@
 #ifndef _QTBRUSH_H
 #define _QTBRUSH_H
 
-#include "Brush.h"
+#include "../Brush.h"
 #include <qbrush.h>
 
 class QtBrush : public Brush, public QBrush {

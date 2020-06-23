@@ -1,5 +1,5 @@
 #include "Composite.h"
-#include "Glyph.h"
+#include "../Glyph.h"
 
 Composite::Composite(Long capacity)
 	: glyphs(capacity) {

@@ -1,7 +1,7 @@
 #ifndef _SHEETBINDER_H
 #define _SHEETBINDER_H
 
-#include "../Utilities/Array.h"
+#include "../../Utilities/Array.h"
 
 class Sheet;
 

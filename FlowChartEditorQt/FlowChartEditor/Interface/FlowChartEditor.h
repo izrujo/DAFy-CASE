@@ -4,7 +4,7 @@
 #include <QtWidgets/QFrame>
 #include <qstring.h>
 #include "ui_FlowChartEditor.h"
-#include "Utilities/Array.h"
+#include "../../Utilities/Array.h"
 #include <iostream>
 using namespace std;
 

@@ -1,7 +1,7 @@
 #ifndef _TEXTREGION_H
 #define _TEXTREGION_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class TextRegion : public NShape {
 public:

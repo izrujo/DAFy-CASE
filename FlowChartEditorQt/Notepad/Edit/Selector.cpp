@@ -1,7 +1,7 @@
 #include "Selector.h"
-#include "Notepad.h"
-#include "GlyphFactory.h"
-#include "Composite.h"
+#include "../Interface/Notepad.h"
+#include "../Data/GlyphFactory.h"
+#include "../Data/Composite/Composite.h"
 
 Selector::Selector(Notepad *notepad, Long noteStartPosition, Long lineStartPosition, Long noteEndPosition, Long lineEndPosition) {
 	this->notepad = notepad;

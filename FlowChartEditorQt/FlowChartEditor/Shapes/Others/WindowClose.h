@@ -1,7 +1,7 @@
 #ifndef _WINDOWCLOSE_H
 #define _WINDOWCLOSE_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class WindowClose : public NShape {
 public:

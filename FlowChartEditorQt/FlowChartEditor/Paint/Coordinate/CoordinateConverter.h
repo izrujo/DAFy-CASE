@@ -4,7 +4,7 @@
 #include <qpoint.h>
 
 typedef signed long int Long;
-#include "Shape.h"
+#include "../../Shapes/Shape.h"
 
 class CoordinateConverter {
 public:

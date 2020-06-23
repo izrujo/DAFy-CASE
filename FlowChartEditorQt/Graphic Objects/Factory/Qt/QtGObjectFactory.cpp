@@ -1,7 +1,7 @@
 #include "QtGObjectFactory.h"
-#include "QtPen.h"
-#include "QtBrush.h"
-#include "QtFont.h"
+#include "../../Leaf/Qt/QtPen.h"
+#include "../../Leaf/Qt/QtBrush.h"
+#include "../../Leaf/Qt/QtFont.h"
 
 QtGObjectFactory::QtGObjectFactory()
 	: GObjectFactory() {

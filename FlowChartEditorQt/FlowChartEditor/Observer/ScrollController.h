@@ -1,9 +1,11 @@
 #ifndef _SCROLLCONTROLLER_H
 #define _SCROLLCONTROLLER_H
 
-#include "../Utilities/Array.h"
-#include "../Notepad/Observer.h"
+#include "../../Utilities/Array.h"
+#include "../../Notepad/Observer/Observer.h"
+
 #include <qpoint.h>
+
 class DrawingPaper;
 class Scroll;
 

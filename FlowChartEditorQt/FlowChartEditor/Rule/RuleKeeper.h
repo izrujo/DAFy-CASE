@@ -1,8 +1,8 @@
 #ifndef _RULEKEEPER_H
 #define _RULEKEEPER_H
 
-#include "../Utilities/Array.h"
-#include "String.h"
+#include "../../Utilities/Array.h"
+#include "../../Utilities/String.h"
 
 #define ALLOWEDKEYCOUNT 79
 

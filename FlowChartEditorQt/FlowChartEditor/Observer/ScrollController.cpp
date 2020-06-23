@@ -1,6 +1,6 @@
 #include "ScrollController.h"
-#include "Scroll.h"
-#include "DrawingPaper.h"
+#include "../Interface/Scroll.h"
+#include "../Interface/DrawingPaper.h"
 
 #include <qDebug.h>
 

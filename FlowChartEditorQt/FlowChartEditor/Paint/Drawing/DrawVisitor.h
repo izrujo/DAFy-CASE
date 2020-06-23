@@ -1,7 +1,7 @@
 #ifndef _DRAWVISITOR_H
 #define _DRAWVISITOR_H
 
-#include "FlowChartVisitor.h"
+#include "../FlowChartVisitor.h"
 
 class GObject;
 class ScrollController;

@@ -7,7 +7,7 @@
 #ifndef _LABEL_H
 #define _LABEL_H
 
-#include "../Notepad/Notepad.h"
+#include "../../Notepad/Interface/Notepad.h"
 
 #define ALLOWEDKEYCOUNT 79
 

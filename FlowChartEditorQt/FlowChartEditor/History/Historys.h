@@ -1,8 +1,8 @@
 #ifndef _HISTORYS_H
 #define _HISTORYS_H
 
-#include "../Utilities/Array.h"
-#include "Shape.h"
+#include "../../Utilities/Array.h"
+class NShape;
 
 class History {
 public:

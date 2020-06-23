@@ -2,7 +2,7 @@
 #ifndef _A4PAPER_H
 #define _A4PAPER_H
 
-#include "Shape.h"
+#include "../Shape.h"
 
 class A4Paper : public NShape {
 public:

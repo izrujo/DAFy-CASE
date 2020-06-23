@@ -6,26 +6,26 @@
 *******************************************************************/
 
 #include "FlowChart.h"
-#include "Shape.h"
+#include "../Shape.h"
 
-#include "Symbol.h"
-#include "Line.h"
+#include "../Symbols/Symbol.h"
+#include "../Lines/Line.h"
 
-#include "Decision.h"
-#include "Preparation.h"
-#include "Process.h"
-#include "Terminal.h"
+#include "../Symbols/Decision.h"
+#include "../Symbols/Preparation.h"
+#include "../Symbols/Process.h"
+#include "../Symbols/Terminal.h"
+#include "../Symbols/InputOutput.h"
 
-#include "Arrow.h"
-#include "Join.h"
-#include "LeftDown.h"
-#include "RepeatFalse.h"
-#include "RepeatTrue.h"
-#include "RightDown.h"
-#include "RightDownJoin.h"
-#include "InputOutput.h"
+#include "../Lines/Arrow.h"
+#include "../Lines/Join.h"
+#include "../Lines/LeftDown.h"
+#include "../Lines/RepeatFalse.h"
+#include "../Lines/RepeatTrue.h"
+#include "../Lines/RightDown.h"
+#include "../Lines/RightDownJoin.h"
 
-#include "DrawVisitor.h"
+#include "../../Paint/Drawing/DrawVisitor.h"
 
 #if 0
 #include <stdio.h>

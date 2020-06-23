@@ -1,8 +1,8 @@
 #ifndef _VARIABLELIST_H
 #define _VARIABLELIST_H
 
-#include "../Utilities/Array.h"
-#include "String.h"
+#include "../../Utilities/Array.h"
+#include "../../Utilities/String.h"
 
 class VariableList {
 public:

@@ -1,7 +1,7 @@
 #ifndef _QTPEN_H
 #define _QTPEN_H
 
-#include "Pen.h"
+#include "../Pen.h"
 #include <qpen.h>
 #include <qbrush.h>
 
