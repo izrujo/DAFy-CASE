@@ -1,3 +1,4 @@
+_README for korean : [Here](https://blog.naver.com/terry7990/221990820421)_   
 # DAFy-CASE
 Algorithm Design Tool using FlowChart based on Structured Programming   
 [Release](https://github.com/kch7990/DAFy-CASE/releases/tag/1.01)
