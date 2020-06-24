@@ -10,14 +10,14 @@ Algorithm Design Tool using FlowChart based on Structured Programming
  - Library : Windows API, Qt
 * * *
 ## Introduction
- DAFy CASE is an algorithm design tool using flowchart. Remember to follow a self-established drawing scheme based on __Structured Programming__. For example, the user cannot draw the flow line arbitrarily, and only the control structure should be combined.
+ DAFy CASE is an algorithm design tool using __flowchart__. Note this application follow the self-established way of drawing based on __Structured Programming__. For example, the user cannot draw the flow line as his/her please. Instead, the user must combine control structures.
  #### Features
   - _Standardized_   
-  Flowcharts have no clear rules for constructing streamlines. Different ways of drawing may make the same idea seem different. Therefore, as described above, it follows a drawing method that has been established and standardized by itself. The user should express the control logic only with the combination of control structures. In addition, only reserved words, operators, and symbols should be used, and identifiers should be determined according to rules. This is limited to the rule checking capabilities built into the application. However, this function can be turned off.   
+  Flowchart has no clear rules for drawing flow lines. Different ways of drawing make the same idea seem different. Therefore, DAFy CASE follows the way of drawing which we have established and standardized. The user should express the control logic only with the combination of control structures. In addition, only certain keywords, operators, and symbols should be used, and identifiers should be declared according to rules. This is limited to the rule-checking function by DAFy CASE. However, this function can be turned off.   
   - _Intuitive_   
-  Intuitive operation allows you to get used to the application quickly and easily. One usage video below will suffice.   
+  Intuitive way to use allows you to get used to DAFy CASE quickly and easily. One lecture video below will suffice.   
   - _Clear_   
-  The flow charting method followed by the application is simple and allows the logic to be clearly expressed. The repeating structure repeats only when it is true, and the selection structure always applies consistent rules such as left to true and right to false. Even those who are new to flowcharts will be able to easily understand the control logic of this.
+  It is simple that the way of drawing flowchart followed by DAFy CASE. And it allows users clearly express his/her logic. DAFy CASE applies consistent rules: iteration structure iterates only when the result of its conditional expression is true, and selection structure goes left when the result of its conditional expression is true or goes right when the result is false, etc. So even those who are new to flowcharts will be able to easily understand the control logic of this.
   #### Functions  
  - File Processing
  - Edit
