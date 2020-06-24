@@ -1,8 +1,9 @@
 # DAFy-CASE
-Algorithm Design Tool using FlowChart based on Structured Programming
+Algorithm Design Tool using FlowChart based on Structured Programming   
+[Release](https://github.com/kch7990/DAFy-CASE/releases/tag/1.01)
 
 ## Development Environment
- - OS : Windows 10
+ - OS : Windows 10 64Bit
  - IDE : Visual Studio 2017/2019
  - Language : C++
  - Library : Windows API, Qt
@@ -23,11 +24,12 @@ Algorithm Design Tool using FlowChart based on Structured Programming
  - Insert Symbol
  - Create Control Structure
 * * *
-## Download
-[Setup](https://github.com/kch7990/DAFy-CASE/releases)
-* * *
 ## How to Use
 [Youtube Link(Korean)](https://youtu.be/2CAFjahI6IM)
 * * *
 ## Feedback
 [KakaoTalk Open Chat Link(Korean)](https://open.kakao.com/o/gP2iWZcc)
+* * *
+## License
+This program is based on the qt framework which is licensed under LGPL 
+(https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License).
