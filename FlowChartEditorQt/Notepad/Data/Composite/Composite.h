@@ -2,7 +2,7 @@
 #define _COMPOSITE_H
 
 #include "../Glyph.h"
-#include "../../Utilities/Array.h"
+#include "../../../Utilities/Array.h"
 
 class Composite : public Glyph {
 public:
